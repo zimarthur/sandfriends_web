@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Model/DrawerItem.dart';
 import 'package:sandfriends_web/View/Analytics/analytics_screen.dart';
 import 'package:sandfriends_web/View/Calendar/calendar_screen.dart';
+import 'package:sandfriends_web/View/Calendar/calendar_week.dart';
 import 'package:sandfriends_web/View/Dashboard/drawer_list_tile.dart';
 import 'package:sandfriends_web/View/Home/home_screen.dart';
 import 'package:sandfriends_web/View/Rewards/rewards_screen.dart';
@@ -72,5 +73,18 @@ class MenuController extends ChangeNotifier {
         break;
     }
     notifyListeners();
+  }
+
+  int _selectedCalendarStyle = 0;
+  int get selectedCalendarStyle => _selectedCalendarStyle;
+  set selectedCalendarStyle(int value) {
+    _selectedCalendarStyle = value;
+  }
+
+  bool isCalendarWeekly() {
+    if (selectedCalendarStyle == 0)
+      return true;
+    else
+      return false;
   }
 }

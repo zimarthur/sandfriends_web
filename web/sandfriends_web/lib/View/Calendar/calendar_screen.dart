@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Resources/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/View/Calendar/calendar_day.dart';
+import 'package:sandfriends_web/View/Calendar/calendar_toggle.dart';
 import 'package:sandfriends_web/View/Calendar/calendar_week.dart';
+import 'package:sandfriends_web/View/Calendar/date_picker.dart';
 import 'package:sandfriends_web/controllers/MenuController.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
 import '../../responsive.dart';
-
-var today = DateUtils.dateOnly(DateTime.now());
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -18,29 +17,19 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  late bool weekly;
-
-  List<DateTime?> initialDates = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    weekly = false;
-  }
-
   @override
   Widget build(BuildContext context) {
     double width =
         Provider.of<MenuController>(context).getDashboardWidth(context);
     double height =
         Provider.of<MenuController>(context).getDashboardHeigth(context);
+    double calendarFilterWidth = 300;
+    double calendarWidth = width - calendarFilterWidth - 8 * defaultPadding;
+
+    bool weekCalendar = Provider.of<MenuController>(context).isCalendarWeekly();
 
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
       color: secondaryBack,
-      height: height,
-      width: width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -50,92 +39,34 @@ class _CalendarScreenState extends State<CalendarScreen> {
               color: secondaryPaper,
             ),
             padding: const EdgeInsets.all(defaultPadding),
-            child: weekly ? SFCalendarWeek() : SFCalendarDay(),
+            margin: EdgeInsets.all(defaultPadding),
+            child: weekCalendar
+                ? SFCalendarWeek(height, calendarWidth)
+                : SFCalendarDay(height, calendarWidth),
           ),
-          SizedBox(
-            width: defaultPadding,
-          ),
-          Expanded(
-              child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    weekly = !weekly;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: textDisabled,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(defaultPadding),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: weekly ? primaryBlue : textDisabled,
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Semanal",
-                            style: TextStyle(
-                                color: weekly ? textWhite : textDarkGrey),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(defaultPadding),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: weekly ? textDisabled : primaryBlue,
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Diário",
-                            style: TextStyle(
-                                color: weekly ? textDarkGrey : textWhite),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          Container(
+              width: calendarFilterWidth,
+              height: height,
+              margin: EdgeInsets.all(defaultPadding),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CalendarToggle(
+                        ["Semanal", "Diário"],
+                        Provider.of<MenuController>(context)
+                            .selectedCalendarStyle, (index) {
+                      setState(() {
+                        Provider.of<MenuController>(context, listen: false)
+                            .selectedCalendarStyle = index;
+                      });
+                    }),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    DatePicker(),
+                  ],
                 ),
-              ),
-              CalendarDatePicker2(
-                  config: CalendarDatePicker2Config(
-                    weekdayLabels: [
-                      'Dom',
-                      'Seg',
-                      'Ter',
-                      'Qua',
-                      'Qui',
-                      'Sex',
-                      'Sáb'
-                    ],
-                    firstDate: DateTime(today.year, today.month, today.day),
-                    calendarType: CalendarDatePicker2Type.range,
-                    selectedDayHighlightColor: primaryBlue,
-                    weekdayLabelTextStyle: const TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    controlsTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  initialValue: initialDates,
-                  onValueChanged: (values) {
-                    setState(() {});
-                  }),
-            ],
-          )),
+              )),
         ],
       ),
     );

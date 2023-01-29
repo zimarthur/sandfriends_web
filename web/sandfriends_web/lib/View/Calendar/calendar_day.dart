@@ -4,8 +4,13 @@ import '../../Resources/constants.dart';
 import '../../controllers/MenuController.dart';
 import 'package:provider/provider.dart';
 
+import 'hour_widget.dart';
+
 class SFCalendarDay extends StatefulWidget {
-  const SFCalendarDay({super.key});
+  double height;
+  double width;
+
+  SFCalendarDay(this.height, this.width);
 
   @override
   State<SFCalendarDay> createState() => _SFCalendarDayState();
@@ -18,12 +23,6 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
     "quadra 3",
     "quadra 4",
     "quadra 5",
-    "quadra 5",
-    "quadra 5",
-    "quadra 5",
-    "quadra 5",
-    "quadra 5",
-    "quadra 5",
   ];
 
   ScrollController horizontalController = ScrollController(),
@@ -31,6 +30,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
       headerController = ScrollController();
 
   int hoveredHour = -1;
+  int hoveredCourt = -1;
 
   @override
   void initState() {
@@ -43,12 +43,8 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
 
   @override
   Widget build(BuildContext context) {
-    double width =
-        Provider.of<MenuController>(context).getDashboardWidth(context);
-    double height =
-        Provider.of<MenuController>(context).getDashboardHeigth(context);
-    double tableHeight = height * 0.95;
-    double tableWidth = width * 0.7;
+    double tableHeight = widget.height * 0.95;
+    double tableWidth = widget.width;
     double tableLineHeight =
         tableHeight * 0.036 < 25 ? 25 : tableHeight * 0.036;
     double tableColumnWidth = tableWidth * 0.105 < 70 ? 70 : tableWidth * 0.105;
@@ -150,126 +146,92 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                   ],
                 ),
                 Flexible(
-                  child: Container(
-                    child: Scrollbar(
-                      controller: verticalController,
-                      thumbVisibility: true,
-                      trackVisibility: true,
-                      child: Scrollbar(
-                        controller: horizontalController,
-                        thumbVisibility: true,
-                        trackVisibility: true,
-                        notificationPredicate: (notif) => notif.depth == 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: SingleChildScrollView(
-                            controller: verticalController,
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    for (int hourIndex = 0;
-                                        hourIndex < 24;
-                                        hourIndex++)
-                                      Container(
-                                        alignment: Alignment.center,
-                                        height: tableLineHeight,
-                                        child: Container(
-                                          width: tableColumnWidth,
-                                          height: tableLineHeight * 0.7,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              color: hoveredHour == hourIndex
-                                                  ? primaryBlue.withOpacity(0.3)
-                                                  : Colors.transparent,
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0)),
-                                          child: Text(
-                                            "${hourIndex.toString().padLeft(2, '0')}:00",
-                                            style: TextStyle(
-                                                color: hoveredHour == hourIndex
-                                                    ? primaryDarkBlue
-                                                    : textDarkGrey),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                Container(
-                                  width: tableDayWidth,
-                                  padding: EdgeInsets.only(right: 2, left: 2),
-                                  child: Flexible(
-                                    child: SingleChildScrollView(
-                                      controller: horizontalController,
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: [
-                                          for (int court = 0;
-                                              court < courts.length;
-                                              court++)
-                                            Column(
-                                              children: [
-                                                for (int hourIndex = 0;
-                                                    hourIndex < 24;
-                                                    hourIndex++)
-                                                  InkWell(
-                                                    onTap: () {},
-                                                    onFocusChange: (value) {
-                                                      setState(() {
-                                                        hoveredHour = -1;
-                                                      });
-                                                    },
-                                                    onHover: (value) {
-                                                      setState(() {
-                                                        if (value == false)
-                                                          hoveredHour = -1;
-                                                        else
-                                                          hoveredHour =
-                                                              hourIndex;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          border: Border(
-                                                              right: BorderSide(
-                                                                  color:
-                                                                      divider))),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: tableLineHeight,
-                                                      width:
-                                                          tableColumnDataWidth,
-                                                      child: Container(
-                                                        width:
-                                                            tableColumnWidth *
-                                                                0.6,
-                                                        height:
-                                                            tableLineHeight *
-                                                                0.7,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: divider,
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .all(
-                                                            Radius.circular(16),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    ),
+                  child: SingleChildScrollView(
+                    controller: verticalController,
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            for (int hourIndex = 0; hourIndex < 24; hourIndex++)
+                              Container(
+                                alignment: Alignment.center,
+                                height: tableLineHeight,
+                                child: Container(
+                                  width: tableColumnWidth,
+                                  height: tableLineHeight * 0.7,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: hoveredHour == hourIndex
+                                          ? primaryBlue.withOpacity(0.3)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  child: Text(
+                                    "${hourIndex.toString().padLeft(2, '0')}:00",
+                                    style: TextStyle(
+                                        color: hoveredHour == hourIndex
+                                            ? primaryDarkBlue
+                                            : textDarkGrey),
                                   ),
                                 ),
-                              ],
+                              ),
+                          ],
+                        ),
+                        Container(
+                          width: tableDayWidth,
+                          padding: EdgeInsets.only(right: 2, left: 2),
+                          child: Flexible(
+                            child: SingleChildScrollView(
+                              controller: horizontalController,
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for (int courtIndex = 0;
+                                      courtIndex < courts.length;
+                                      courtIndex++)
+                                    Column(
+                                      children: [
+                                        for (int hourIndex = 0;
+                                            hourIndex < 24;
+                                            hourIndex++)
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                right: BorderSide(
+                                                  color: divider,
+                                                ),
+                                              ),
+                                            ),
+                                            alignment: Alignment.center,
+                                            height: tableLineHeight,
+                                            width: tableColumnDataWidth,
+                                            child: HourWidget(
+                                              hourIndex,
+                                              courtIndex,
+                                              hoveredHour,
+                                              hoveredCourt,
+                                              tableLineHeight,
+                                              tableColumnWidth,
+                                              (value) {
+                                                setState(() {
+                                                  if (value == false) {
+                                                    hoveredHour = -1;
+                                                    hoveredCourt = -1;
+                                                  } else {
+                                                    hoveredHour = hourIndex;
+                                                    hoveredCourt = courtIndex;
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),

@@ -4,8 +4,13 @@ import '../../Resources/constants.dart';
 import '../../controllers/MenuController.dart';
 import 'package:provider/provider.dart';
 
+import 'hour_widget.dart';
+
 class SFCalendarWeek extends StatefulWidget {
-  const SFCalendarWeek({super.key});
+  double height;
+  double width;
+
+  SFCalendarWeek(this.height, this.width);
 
   @override
   State<SFCalendarWeek> createState() => _SFCalendarWeekState();
@@ -35,6 +40,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
       headerController = ScrollController();
 
   int hoveredHour = -1;
+  int hoveredDay = -1;
 
   @override
   void initState() {
@@ -47,12 +53,8 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
 
   @override
   Widget build(BuildContext context) {
-    double width =
-        Provider.of<MenuController>(context).getDashboardWidth(context);
-    double height =
-        Provider.of<MenuController>(context).getDashboardHeigth(context);
-    double tableHeight = height * 0.95;
-    double tableWidth = width * 0.7;
+    double tableHeight = widget.height * 0.95;
+    double tableWidth = widget.width;
     double tableLineHeight =
         tableHeight * 0.036 < 25 ? 25 : tableHeight * 0.036;
     double tableColumnSpacing = tableWidth * 0.01;
@@ -82,12 +84,6 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                               width: tableColumnWidth,
                               margin: EdgeInsets.symmetric(
                                   horizontal: tableColumnSpacing),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(16)),
-                                border:
-                                    Border.all(color: primaryBlue, width: 0),
-                              ),
                               child: Container(
                                 height: tableHeaderHeight,
                                 alignment: Alignment.center,
@@ -117,121 +113,102 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
             ],
           ),
           Flexible(
-            child: Scrollbar(
+            child: SingleChildScrollView(
               controller: verticalController,
-              thumbVisibility: true,
-              trackVisibility: true,
-              child: Scrollbar(
-                controller: horizontalController,
-                thumbVisibility: true,
-                trackVisibility: true,
-                notificationPredicate: (notif) => notif.depth == 1,
-                child: SingleChildScrollView(
-                  controller: verticalController,
-                  child: Row(
-                    children: [
-                      Container(
-                        child: Column(
-                          children: [
-                            for (int hourIndex = 0; hourIndex < 24; hourIndex++)
-                              Container(
-                                alignment: Alignment.center,
-                                height: tableLineHeight,
-                                child: Container(
-                                  width: tableColumnWidth,
-                                  height: tableLineHeight * 0.7,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: hoveredHour == hourIndex
-                                          ? primaryBlue.withOpacity(0.3)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: Text(
-                                    "${hourIndex.toString().padLeft(2, '0')}:00",
-                                    style: TextStyle(
-                                        color: hoveredHour == hourIndex
-                                            ? primaryDarkBlue
-                                            : textDarkGrey),
-                                  ),
+              child: Row(
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        for (int hourIndex = 0; hourIndex < 24; hourIndex++)
+                          Container(
+                            alignment: Alignment.center,
+                            height: tableLineHeight,
+                            child: Container(
+                              width: tableColumnWidth,
+                              height: tableLineHeight * 0.7,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: hoveredHour == hourIndex
+                                      ? primaryBlue.withOpacity(0.3)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: Text(
+                                "${hourIndex.toString().padLeft(2, '0')}:00",
+                                style: TextStyle(
+                                    color: hoveredHour == hourIndex
+                                        ? primaryDarkBlue
+                                        : textDarkGrey),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      controller: horizontalController,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (int dayIndex = 0;
+                              dayIndex < days.length;
+                              dayIndex++)
+                            Container(
+                              width: tableColumnWidth,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: tableColumnSpacing),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  right:
+                                      BorderSide(color: primaryBlue, width: 2),
+                                  left:
+                                      BorderSide(color: primaryBlue, width: 2),
                                 ),
                               ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: SingleChildScrollView(
-                          controller: horizontalController,
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (var day in days)
-                                Container(
-                                  width: tableColumnWidth,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: tableColumnSpacing),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      right: BorderSide(
-                                        color: primaryBlue,
-                                      ),
-                                      left: BorderSide(
-                                        color: primaryBlue,
+                              child: Column(
+                                children: [
+                                  for (int hourIndex = 0;
+                                      hourIndex < 24;
+                                      hourIndex++)
+                                    Padding(
+                                      padding: hourIndex == 0
+                                          ? EdgeInsets.only(top: 5)
+                                          : hourIndex == 23
+                                              ? EdgeInsets.only(bottom: 5)
+                                              : EdgeInsets.all(0),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: tableLineHeight,
+                                        child: HourWidget(
+                                          hourIndex,
+                                          dayIndex,
+                                          hoveredHour,
+                                          hoveredDay,
+                                          tableLineHeight,
+                                          tableColumnWidth,
+                                          (value) {
+                                            setState(() {
+                                              if (value == false) {
+                                                hoveredHour = -1;
+                                                hoveredDay = -1;
+                                              } else {
+                                                hoveredHour = hourIndex;
+                                                hoveredDay = dayIndex;
+                                              }
+                                            });
+                                          },
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      for (int hourIndex = 0;
-                                          hourIndex < 24;
-                                          hourIndex++)
-                                        Padding(
-                                          padding: hourIndex == 0
-                                              ? EdgeInsets.only(top: 5)
-                                              : hourIndex == 23
-                                                  ? EdgeInsets.only(bottom: 5)
-                                                  : EdgeInsets.all(0),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            onFocusChange: (value) {
-                                              setState(() {
-                                                hoveredHour = -1;
-                                              });
-                                            },
-                                            onHover: (value) {
-                                              setState(() {
-                                                if (value == false)
-                                                  hoveredHour = -1;
-                                                else
-                                                  hoveredHour = hourIndex;
-                                              });
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              height: tableLineHeight,
-                                              child: Container(
-                                                width: tableColumnWidth * 0.6,
-                                                height: tableLineHeight * 0.7,
-                                                decoration: BoxDecoration(
-                                                  color: divider,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(16),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -260,7 +237,8 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                       horizontal: tableColumnSpacing),
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
-                                    border: Border.all(color: primaryBlue),
+                                    border: Border.all(
+                                        color: primaryBlue, width: 2),
                                     borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(8),
                                       bottomRight: Radius.circular(8),
@@ -271,7 +249,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                 ),
                                 Container(
                                   height: 2,
-                                  width: tableColumnWidth - 2,
+                                  width: tableColumnWidth - 4,
                                   margin: EdgeInsets.symmetric(
                                       horizontal: tableColumnSpacing),
                                   color: secondaryPaper,
