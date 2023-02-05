@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/View/Dashboard/dashboard_screen.dart';
+import 'package:sandfriends_web/View/Components/dashboard_screen.dart';
 import 'package:provider/provider.dart';
 import 'Resources/constants.dart';
 import 'controllers/MenuController.dart';

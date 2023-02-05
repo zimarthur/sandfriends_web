@@ -20,6 +20,7 @@ const divider = Color.fromRGBO(218, 219, 223, 1);
 const error = Color.fromRGBO(248, 113, 113, 1);
 
 const defaultPadding = 16.0;
+const defaultBorderRadius = 16.0;
 
 const TextStyle titleStyle = TextStyle(
   color: textDarkGrey,
