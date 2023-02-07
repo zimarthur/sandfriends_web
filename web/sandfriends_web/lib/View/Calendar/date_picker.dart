@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 
 var today = DateUtils.dateOnly(DateTime.now());
 

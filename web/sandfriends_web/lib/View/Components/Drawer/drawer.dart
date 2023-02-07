@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/View/Components/Drawer/drawer_user_widget.dart';

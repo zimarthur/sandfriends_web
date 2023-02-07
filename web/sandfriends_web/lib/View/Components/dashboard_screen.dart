@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/View/Components/Drawer/drawer.dart';
 
@@ -48,8 +48,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           )
                         : Container(),
                     Expanded(
-                        child: Provider.of<MenuController>(context)
-                            .currentDashboardWidget)
+                        child: Padding(
+                      padding: const EdgeInsets.all(2 * defaultPadding),
+                      child: Provider.of<MenuController>(context)
+                          .currentDashboardWidget,
+                    ))
                   ],
                 ),
               ),

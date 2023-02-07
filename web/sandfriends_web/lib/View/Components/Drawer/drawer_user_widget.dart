@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 import 'package:sandfriends_web/View/Components/SF_Avatar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -63,7 +63,7 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                     Text(
                       "Beach Brasil",
                       style: TextStyle(color: textWhite),
-                    )
+                    ),
                   ],
                 ),
               )

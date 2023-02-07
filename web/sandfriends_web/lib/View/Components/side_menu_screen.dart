@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/View/Components/drawer_list_tile.dart';
 import 'package:sandfriends_web/controllers/MenuController.dart';

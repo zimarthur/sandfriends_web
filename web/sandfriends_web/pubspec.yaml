@@ -74,6 +74,17 @@ flutter:
     - assets/icon/star.svg
     - assets/icon/analytics.svg
     - assets/icon/help.svg
+    - assets/icon/finance.svg
+    - assets/icon/court.svg
+    - assets/icon/config.svg
+    - assets/icon/eye_closed.svg
+    - assets/icon/eye_open.svg
+    - assets/icon/lock.svg
+    - assets/icon/email.svg
+    - assets/icon/arrow_left.svg
+    - assets/icon/happy_face.svg
+    - assets/icon/sad_face.svg
+    
     - assets/Arthur.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see

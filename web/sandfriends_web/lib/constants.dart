@@ -15,6 +15,7 @@ const textDarkGrey = Color.fromRGBO(107, 114, 128, 1);
 const textDisabled = Color.fromRGBO(230, 235, 239, 1);
 const textWhite = Color.fromRGBO(255, 255, 255, 1);
 const textLightGrey = Color.fromRGBO(187, 194, 208, 1);
+const textBlack = Color.fromRGBO(0, 0, 0, 1);
 
 const divider = Color.fromRGBO(218, 219, 223, 1);
 const error = Color.fromRGBO(248, 113, 113, 1);

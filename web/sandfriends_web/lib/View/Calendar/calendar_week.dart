@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Resources/constants.dart';
+import '../../constants.dart';
 import '../../controllers/MenuController.dart';
 import 'package:provider/provider.dart';
 

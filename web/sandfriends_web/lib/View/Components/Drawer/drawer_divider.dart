@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 
 class SFDrawerDivider extends StatelessWidget {
   const SFDrawerDivider({super.key});

@@ -2,18 +2,18 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 
 import '../../controllers/MenuController.dart';
 
-class AnalyticsScreen extends StatefulWidget {
-  const AnalyticsScreen({super.key});
+class FinanceScreen extends StatefulWidget {
+  const FinanceScreen({super.key});
 
   @override
-  State<AnalyticsScreen> createState() => _AnalyticsScreenState();
+  State<FinanceScreen> createState() => _FinanceScreenState();
 }
 
-class _AnalyticsScreenState extends State<AnalyticsScreen> {
+class _FinanceScreenState extends State<FinanceScreen> {
   List<String> days = [
     "segunda",
     "terça",

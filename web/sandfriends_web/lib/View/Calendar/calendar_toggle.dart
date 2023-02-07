@@ -1,7 +1,7 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/widgets/container.dart';
-import 'package:sandfriends_web/Resources/constants.dart';
+import 'package:sandfriends_web/constants.dart';
 import 'package:sandfriends_web/controllers/MenuController.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +33,8 @@ class _CalendarToggleState extends State<CalendarToggle> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    widget.onChanged(labelIndex);
                     widget.selectedIndex = labelIndex;
+                    widget.onChanged(labelIndex);
                   });
                 },
                 child: Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Model/DrawerItem.dart';
-import 'package:sandfriends_web/View/Analytics/analytics_screen.dart';
+import 'package:sandfriends_web/View/Finance/finance_screen.dart';
 import 'package:sandfriends_web/View/Calendar/calendar_screen.dart';
 import 'package:sandfriends_web/View/Calendar/calendar_week.dart';
 import 'package:sandfriends_web/View/Components/drawer_list_tile.dart';
@@ -28,7 +28,7 @@ class MenuController extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = CalendarScreen();
+  Widget _currentDashboardWidget = HomeScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {
@@ -57,8 +57,12 @@ class MenuController extends ChangeNotifier {
       icon: r"assets/icon/star.svg",
     ),
     DrawerItem(
-      title: "Indicadores",
-      icon: r"assets/icon/analytics.svg",
+      title: "Financeiro",
+      icon: r"assets/icon/finance.svg",
+    ),
+    DrawerItem(
+      title: "Minhas quadras",
+      icon: r"assets/icon/court.svg",
     ),
   ];
   List<DrawerItem> get drawerItems => _drawerItems;
@@ -76,7 +80,7 @@ class MenuController extends ChangeNotifier {
         _currentDashboardWidget = RewardsScreen();
         break;
       case 3:
-        _currentDashboardWidget = AnalyticsScreen();
+        _currentDashboardWidget = FinanceScreen();
         break;
     }
     notifyListeners();
