@@ -15,6 +15,7 @@ class SFTextField extends StatefulWidget {
   final int? maxLines;
   final int? minLines;
   final Function(String)? onChanged;
+  final bool enable;
 
   const SFTextField({
     required this.labelText,
@@ -27,6 +28,7 @@ class SFTextField extends StatefulWidget {
     this.maxLines,
     this.onChanged,
     this.minLines,
+    this.enable = true,
   });
 
   @override
@@ -39,6 +41,7 @@ class _SFTextFieldState extends State<SFTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: widget.enable,
       validator: widget.validator,
       controller: widget.controller,
       textInputAction: TextInputAction.next,
@@ -67,7 +70,7 @@ class _SFTextFieldState extends State<SFTextField> {
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: secondaryPaper,
+        fillColor: widget.enable ? secondaryPaper : disabled,
         contentPadding: const EdgeInsets.all(16),
         labelText: widget.labelText,
         labelStyle: TextStyle(
@@ -97,6 +100,13 @@ class _SFTextFieldState extends State<SFTextField> {
                 ),
               ),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            width: 2,
+            color: divider,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
             width: 2,

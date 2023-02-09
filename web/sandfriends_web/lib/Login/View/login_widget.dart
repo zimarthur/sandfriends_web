@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/constants.dart';
@@ -22,7 +23,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Container(
       padding: EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.8,
+      height: height * 0.85,
       width: width * 0.3 < 350 ? 350 : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -41,6 +42,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               children: [
                 SvgPicture.asset(
                   r'assets/icon/full_logo_positive.svg',
+                  height: height * 0.2,
                 ),
                 SizedBox(
                   height: defaultPadding * 2,
@@ -139,18 +141,23 @@ class _LoginWidgetState extends State<LoginWidget> {
                 SizedBox(
                   height: defaultPadding,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Ainda não cadastrou sua quadra? "),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "Cadastre já!",
-                        style: TextStyle(color: textBlue),
-                      ),
-                    )
-                  ],
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                        text: 'Ainda não cadastrou sua quadra? ',
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Cadastre já!',
+                              style: TextStyle(
+                                  color: textBlue, fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Provider.of<LoginViewModel>(context,
+                                          listen: false)
+                                      .onTapCreateAccount();
+                                })
+                        ]),
+                  ),
                 ),
               ],
             ),
