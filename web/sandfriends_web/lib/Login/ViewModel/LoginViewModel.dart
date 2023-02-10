@@ -72,6 +72,13 @@ class LoginViewModel extends ChangeNotifier {
   TextEditingController addressNumberController = TextEditingController();
   bool noCnpj = false;
 
+  TextEditingController ownerNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController telephoneController = TextEditingController();
+  TextEditingController telephonePersonalController = TextEditingController();
+  bool isAbove18 = false;
+  bool termsAgree = false;
+
   ApiResponse<CnpjStore> cnpjInfo = ApiResponse.loading();
 
   void onTapSearchCnpj() {
@@ -127,6 +134,22 @@ class LoginViewModel extends ChangeNotifier {
     const CreateAccountCourtWidget(),
     const CreateAccountOwnerWidget()
   ];
+
+  String missingCourtFormFields() {
+    String missingFields = "";
+    if (noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
+    if (!noCnpj && cnpjController.text.isEmpty) missingFields += "CNPJ\n";
+    if (storeNameController.text.isEmpty)
+      missingFields += "Nome do Estabelecimento\n";
+    if (cepController.text.isEmpty) missingFields += "CEP\n";
+    if (neighbourhoodController.text.isEmpty) missingFields += "Bairro\n";
+    if (stateController.text.isEmpty) missingFields += "Estado\n";
+    if (cityController.text.isEmpty) missingFields += "Cidade\n";
+    if (addressController.text.isEmpty) missingFields += "Enderaço\n";
+    if (addressNumberController.text.isEmpty) missingFields += "Nº\n";
+    return missingFields;
+  }
+
   int _currentCreateAccountFormIndex = 0;
   Widget get createAccountForm =>
       _createAccountForms[_currentCreateAccountFormIndex];
@@ -143,8 +166,30 @@ class LoginViewModel extends ChangeNotifier {
   void nextForm() {
     if (_currentCreateAccountFormIndex == _createAccountForms.length - 1) {
     } else {
+      if (_currentCreateAccountFormIndex == 0) {
+        String missingfields = missingCourtFormFields();
+        if (missingfields.isNotEmpty) {
+          modalWidget = SFErrorWidget(
+              title: "Para posseguir, preencha:",
+              description: missingfields,
+              onTap: () {
+                showModal = false;
+                notifyListeners();
+              });
+          showModal = true;
+          notifyListeners();
+          return;
+        }
+      }
       _currentCreateAccountFormIndex++;
     }
     notifyListeners();
+  }
+
+  void onTapTermosDeUso() {
+    //TODO
+  }
+  void onTapPoliticaDePrivacidade() {
+    //TODO
   }
 }

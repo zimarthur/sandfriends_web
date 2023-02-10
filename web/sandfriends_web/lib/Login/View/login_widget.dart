@@ -144,19 +144,21 @@ class _LoginWidgetState extends State<LoginWidget> {
                 Flexible(
                   child: RichText(
                     text: TextSpan(
-                        text: 'Ainda não cadastrou sua quadra? ',
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Cadastre já!',
-                              style: TextStyle(
-                                  color: textBlue, fontWeight: FontWeight.bold),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Provider.of<LoginViewModel>(context,
-                                          listen: false)
-                                      .onTapCreateAccount();
-                                })
-                        ]),
+                      text: 'Ainda não cadastrou sua quadra? ',
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Cadastre já!',
+                          style: TextStyle(
+                              color: textBlue, fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Provider.of<LoginViewModel>(context,
+                                      listen: false)
+                                  .onTapCreateAccount();
+                            },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
