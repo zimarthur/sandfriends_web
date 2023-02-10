@@ -35,20 +35,27 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               child: Provider.of<LoginViewModel>(context).createAccountForm),
           Row(
             children: [
-              SFButton(
-                  buttonLabel: "Voltar",
-                  buttonType: ButtonType.Secondary,
-                  onTap: () {
-                    Provider.of<LoginViewModel>(context, listen: false)
-                        .returnForm();
-                  }),
-              SFButton(
-                  buttonLabel: "Próximo",
-                  buttonType: ButtonType.Primary,
-                  onTap: () {
-                    Provider.of<LoginViewModel>(context, listen: false)
-                        .nextForm();
-                  }),
+              Expanded(
+                child: SFButton(
+                    buttonLabel: "Voltar",
+                    buttonType: ButtonType.Secondary,
+                    onTap: () {
+                      Provider.of<LoginViewModel>(context, listen: false)
+                          .returnForm();
+                    }),
+              ),
+              SizedBox(
+                width: defaultPadding,
+              ),
+              Expanded(
+                child: SFButton(
+                    buttonLabel: "Próximo",
+                    buttonType: ButtonType.Primary,
+                    onTap: () {
+                      Provider.of<LoginViewModel>(context, listen: false)
+                          .nextForm();
+                    }),
+              ),
             ],
           ),
         ],

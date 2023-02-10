@@ -4,17 +4,22 @@ import 'package:sandfriends_web/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../View/Components/SF_Button.dart';
-import '../../View/Components/SF_Textfield.dart';
+import 'SF_Button.dart';
+import 'SF_Textfield.dart';
 
-class LoginErrorWidget extends StatefulWidget {
-  const LoginErrorWidget({super.key});
+class SFErrorWidget extends StatefulWidget {
+  String title;
+  String description;
+  VoidCallback onTap;
+
+  SFErrorWidget(
+      {required this.title, required this.description, required this.onTap});
 
   @override
-  State<LoginErrorWidget> createState() => _LoginErrorWidgetState();
+  State<SFErrorWidget> createState() => _SFErrorWidgetState();
 }
 
-class _LoginErrorWidgetState extends State<LoginErrorWidget> {
+class _SFErrorWidgetState extends State<SFErrorWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -43,14 +48,14 @@ class _LoginErrorWidgetState extends State<LoginErrorWidget> {
             height: 2 * defaultPadding,
           ),
           Text(
-            "Não foi possível enviar o e-mail",
+            widget.title,
             style: TextStyle(color: textBlack, fontSize: 24),
           ),
           SizedBox(
             height: defaultPadding / 2,
           ),
           Text(
-            "Por favor, tente novamente",
+            widget.description,
             style: TextStyle(color: textDarkGrey, fontSize: 16),
           ),
           SizedBox(
@@ -62,10 +67,7 @@ class _LoginErrorWidgetState extends State<LoginErrorWidget> {
             child: SFButton(
                 buttonLabel: "Voltar",
                 buttonType: ButtonType.Primary,
-                onTap: () {
-                  Provider.of<LoginViewModel>(context, listen: false)
-                      .onTapGoToLoginWidget();
-                }),
+                onTap: widget.onTap),
           )
         ],
       ),

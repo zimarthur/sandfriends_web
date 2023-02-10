@@ -21,13 +21,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          color: primaryBlue.withOpacity(0.4),
-          height: height,
-          width: width,
-          child: Center(
-            child: Provider.of<LoginViewModel>(context).loginWidget,
-          ),
+        child: Stack(
+          children: [
+            Container(
+              color: primaryBlue.withOpacity(0.4),
+              height: height,
+              width: width,
+              child: Center(
+                child: Provider.of<LoginViewModel>(context).loginWidget,
+              ),
+            ),
+            Provider.of<LoginViewModel>(context).showModal
+                ? Container(
+                    color: primaryBlue.withOpacity(0.4),
+                    height: height,
+                    width: width,
+                    child: Center(
+                      child: Provider.of<LoginViewModel>(context).modalWidget!,
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );

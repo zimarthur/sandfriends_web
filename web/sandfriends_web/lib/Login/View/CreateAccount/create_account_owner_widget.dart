@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../View/Components/SF_Textfield.dart';
-import '../ViewModel/LoginViewModel.dart';
+import '../../../View/Components/SF_Textfield.dart';
+import '../../ViewModel/LoginViewModel.dart';
 
 class CreateAccountOwnerWidget extends StatefulWidget {
   const CreateAccountOwnerWidget({super.key});
