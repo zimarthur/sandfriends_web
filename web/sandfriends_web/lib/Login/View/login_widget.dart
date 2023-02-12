@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../View/Components/SF_Button.dart';
 import '../../View/Components/SF_Textfield.dart';
+import 'package:http/http.dart' as http;
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});

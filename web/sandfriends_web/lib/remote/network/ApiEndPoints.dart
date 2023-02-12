@@ -1,3 +1,3 @@
 class ApiEndPoints {
-  final String getMovies = "movies_list";
+  final String createAccount = "AddStore";
 }

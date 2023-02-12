@@ -75,7 +75,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           labelText: "Telefone da Quadra",
                           pourpose: TextFieldPourpose.Numeric,
                           controller: Provider.of<LoginViewModel>(context)
-                              .ownerNameController,
+                              .telephoneController,
                           validator: (_) {},
                         ),
                       ),
@@ -87,7 +87,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           labelText: "Telefone Pessoal",
                           pourpose: TextFieldPourpose.Numeric,
                           controller: Provider.of<LoginViewModel>(context)
-                              .ownerNameController,
+                              .telephoneOwnerController,
                           validator: (_) {},
                         ),
                       ),

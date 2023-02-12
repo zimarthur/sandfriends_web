@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
+import 'package:sandfriends_web/Login/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/create_account_court_widget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/create_account_owner_widget.dart';
@@ -9,6 +12,7 @@ import 'package:sandfriends_web/Login/View/login_success_widget.dart';
 import 'package:sandfriends_web/View/Components/SFLoading.dart';
 import 'package:sandfriends_web/View/Components/dashboard_screen.dart';
 import 'package:sandfriends_web/remote/response/Status.dart';
+import 'package:http/http.dart' as http;
 
 import '../../remote/response/ApiResponse.dart';
 import '../View/forgot_password_widget.dart';
@@ -29,10 +33,22 @@ class LoginViewModel extends ChangeNotifier {
   bool keepConnected = true;
 
   void onTapLogin(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardScreen()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => DashboardScreen()),
+    // );
+    fetchDebug();
+  }
+
+  Future<void> fetchDebug() async {
+    try {
+      var response = await http.get(
+        Uri.parse("https://www.sandfriends.com.br/debug"),
+      );
+      print(response.statusCode);
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   void onTapForgotPassword() {
@@ -75,7 +91,7 @@ class LoginViewModel extends ChangeNotifier {
   TextEditingController ownerNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
-  TextEditingController telephonePersonalController = TextEditingController();
+  TextEditingController telephoneOwnerController = TextEditingController();
   bool isAbove18 = false;
   bool termsAgree = false;
 
@@ -150,6 +166,18 @@ class LoginViewModel extends ChangeNotifier {
     return missingFields;
   }
 
+  String missingOwnerFormFields() {
+    String missingFields = "";
+    if (!noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
+    if (ownerNameController.text.isEmpty) missingFields += "Nome\n";
+    if (emailController.text.isEmpty) missingFields += "Email\n";
+    if (telephoneController.text.isEmpty)
+      missingFields += "Telefone da Quadra\n";
+    if (!isAbove18) missingFields += "Confirmação de maioridade\n";
+    if (!termsAgree) missingFields += "Confirmação dos Termos\n";
+    return missingFields;
+  }
+
   int _currentCreateAccountFormIndex = 0;
   Widget get createAccountForm =>
       _createAccountForms[_currentCreateAccountFormIndex];
@@ -164,26 +192,53 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void nextForm() {
+    String missingfields;
     if (_currentCreateAccountFormIndex == _createAccountForms.length - 1) {
+      missingfields = missingOwnerFormFields();
     } else {
-      if (_currentCreateAccountFormIndex == 0) {
-        String missingfields = missingCourtFormFields();
-        if (missingfields.isNotEmpty) {
-          modalWidget = SFErrorWidget(
-              title: "Para posseguir, preencha:",
-              description: missingfields,
-              onTap: () {
-                showModal = false;
-                notifyListeners();
-              });
-          showModal = true;
-          notifyListeners();
-          return;
-        }
-      }
+      missingfields = missingCourtFormFields();
+    }
+
+    if (missingfields.isNotEmpty) {
+      modalWidget = SFErrorWidget(
+          title: "Para posseguir, preencha:",
+          description: missingfields,
+          onTap: () {
+            showModal = false;
+            notifyListeners();
+          });
+      showModal = true;
+      notifyListeners();
+      return;
+    }
+
+    if (_currentCreateAccountFormIndex == _createAccountForms.length - 1) {
+      submitCreateAccount();
+    } else {
       _currentCreateAccountFormIndex++;
     }
+
     notifyListeners();
+  }
+
+  void submitCreateAccount() {
+    _loginRepo
+        .createAccount(CreateAccountStore(
+          cnpj: cnpjController.text.isEmpty ? "" : cnpjController.text,
+          name: storeNameController.text,
+          cep: cepController.text,
+          state: stateController.text,
+          city: cityController.text,
+          neighborhood: neighbourhoodController.text,
+          street: addressController.text,
+          number: addressNumberController.text,
+          ownerName: ownerNameController.text,
+          email: emailController.text,
+          cpf: cpfController.text,
+          telephone: telephoneController.text,
+          telephoneOwner: telephoneOwnerController.text,
+        ))
+        .then((value) => null);
   }
 
   void onTapTermosDeUso() {
