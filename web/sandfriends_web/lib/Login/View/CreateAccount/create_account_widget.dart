@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
-import 'package:sandfriends_web/View/Components/SF_Button.dart';
-import 'package:sandfriends_web/View/Components/SF_Textfield.dart';
-import 'package:sandfriends_web/constants.dart';
+import 'package:sandfriends_web/SharedComponents/SF_Button.dart';
+import 'package:sandfriends_web/SharedComponents/SF_Textfield.dart';
+import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class CreateAccountWidget extends StatefulWidget {
@@ -18,7 +18,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      padding: EdgeInsets.all(2 * defaultPadding),
+      padding: const EdgeInsets.all(2 * defaultPadding),
       height: height * 0.85,
       width: width * 0.5 < 350 ? 350 : width * 0.5,
       decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                           .returnForm();
                     }),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

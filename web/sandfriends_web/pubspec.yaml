@@ -52,6 +52,7 @@ dev_dependencies:
   calendar_date_picker2: ^0.3.6
   loading_animation_widget: ^1.2.0+4
   http: ^0.13.5
+  extended_masked_text: ^2.3.1
   
 
 # For information on the generic Dart part of this file, see the

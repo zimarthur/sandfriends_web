@@ -1,11 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
-import 'package:sandfriends_web/View/Components/dashboard_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Dashboard/View/dashboard_screen.dart';
 import 'package:sandfriends_web/Login/View/login_screen.dart';
-import 'constants.dart';
-import 'controllers/MenuController.dart';
+import 'Utils/constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      scrollBehavior: MaterialScrollBehavior().copyWith(
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
           PointerDeviceKind.touch,
@@ -31,17 +28,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: secondaryBack,
         fontFamily: "Lexend",
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => MenuController(),
-          ),
-          ChangeNotifierProvider(
-            create: (context) => LoginViewModel(),
-          ),
-        ],
-        child: LoginScreen(),
-      ),
+      routes: {
+        '/login': (BuildContext context) => const LoginScreen(),
+        '/dashboard': (BuildContext context) => const DashboardScreen(),
+      },
+      initialRoute: '/login',
     );
   }
 }

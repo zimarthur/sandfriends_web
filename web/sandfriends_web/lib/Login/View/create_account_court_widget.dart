@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/View/Components/SF_Button.dart';
-import 'package:sandfriends_web/constants.dart';
+import 'package:sandfriends_web/SharedComponents/SF_Button.dart';
+import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../View/Components/SF_Textfield.dart';
+import '../../SharedComponents/SF_Textfield.dart';
 import '../ViewModel/LoginViewModel.dart';
 
 class CreateAccountCourtWidget extends StatefulWidget {
@@ -20,18 +20,18 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Cadastre seu estabelecimento!",
           style: TextStyle(color: textBlack, fontSize: 24),
         ),
-        SizedBox(
+        const SizedBox(
           height: defaultPadding / 2,
         ),
-        Text(
+        const Text(
           "Você está a poucos cliques de gerenciar suas quadras com sandfriends!",
           style: TextStyle(color: textDarkGrey, fontSize: 16),
         ),
-        SizedBox(
+        const SizedBox(
           height: defaultPadding * 2,
         ),
         Column(
@@ -56,13 +56,13 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                           validator: (_) {},
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: defaultPadding,
                       ),
                       SFButton(
                           buttonLabel: "Buscar",
                           buttonType: ButtonType.Primary,
-                          textPadding: EdgeInsets.symmetric(
+                          textPadding: const EdgeInsets.symmetric(
                               horizontal: 2 * defaultPadding,
                               vertical: defaultPadding),
                           onTap: () {})
@@ -79,7 +79,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                             .noCnpj = value!;
                       });
                     }),
-                Text(
+                const Text(
                   "Não tenho CNPJ",
                   style: TextStyle(color: textDarkGrey),
                 ),
@@ -88,7 +88,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
           ],
         ),
         Container(
-          margin: EdgeInsets.symmetric(vertical: defaultPadding * 2),
+          margin: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
           width: double.infinity,
           height: 1,
           color: divider,
@@ -100,7 +100,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
               .storeNameController,
           validator: (_) {},
         ),
-        SizedBox(
+        const SizedBox(
           height: defaultPadding,
         ),
         Row(
@@ -114,7 +114,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                 validator: (_) {},
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
             Expanded(
@@ -126,7 +126,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                 validator: (_) {},
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
             Expanded(
@@ -140,7 +140,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: defaultPadding,
         ),
         Row(
@@ -155,7 +155,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                 validator: (_) {},
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
             Expanded(

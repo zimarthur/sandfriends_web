@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:extended_masked_text/extended_masked_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
@@ -7,25 +7,22 @@ import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/create_account_court_widget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/create_account_owner_widget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/create_account_widget.dart';
-import 'package:sandfriends_web/View/Components/SFErrorWidget.dart';
+import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Login/View/login_success_widget.dart';
-import 'package:sandfriends_web/View/Components/SFLoading.dart';
-import 'package:sandfriends_web/View/Components/dashboard_screen.dart';
-import 'package:sandfriends_web/remote/response/Status.dart';
-import 'package:http/http.dart' as http;
-
-import '../../remote/response/ApiResponse.dart';
+import 'package:sandfriends_web/Dashboard/View/dashboard_screen.dart';
 import '../View/forgot_password_widget.dart';
 import '../View/login_widget.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final _loginRepo = LoginRepoImp();
 
-  Widget _loginWidget = LoginWidget();
-  Widget get loginWidget => _loginWidget;
+  PageStatus pageStatus = PageStatus.SUCCESS;
+  String modalTitle = "";
+  String modalDescription = "";
+  VoidCallback modalCallback = () {};
 
-  bool showModal = false;
-  Widget? modalWidget;
+  Widget _loginWidget = const LoginWidget();
+  Widget get loginWidget => _loginWidget;
 
   //LOGIN SCREEN
   TextEditingController userController = TextEditingController();
@@ -33,36 +30,44 @@ class LoginViewModel extends ChangeNotifier {
   bool keepConnected = true;
 
   void onTapLogin(BuildContext context) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => DashboardScreen()),
-    // );
-    fetchDebug();
-  }
-
-  Future<void> fetchDebug() async {
-    try {
-      var response = await http.get(
-        Uri.parse("https://www.sandfriends.com.br/debug"),
-      );
-      print(response.statusCode);
-    } catch (e) {
-      print("Error: $e");
-    }
+    // pageStatus = PageStatus.LOADING;
+    // notifyListeners();
+    // _loginRepo
+    //     .login(userController.text, passwordController.text)
+    //     .then(
+    //       (value) => Navigator.push(
+    //         context,
+    //         MaterialPageRoute(builder: (context) => const DashboardScreen()),
+    //       ),
+    //     )
+    //     .onError((error, stackTrace) {
+    //   modalTitle = error.toString();
+    //   modalDescription = "";
+    //   modalCallback = () {
+    //     pageStatus = PageStatus.SUCCESS;
+    //     notifyListeners();
+    //   };
+    //   pageStatus = PageStatus.ERROR;
+    //   notifyListeners();
+    // });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DashboardScreen()),
+    );
   }
 
   void onTapForgotPassword() {
-    _loginWidget = ForgotPasswordWidget();
+    _loginWidget = const ForgotPasswordWidget();
     notifyListeners();
   }
 
   void onTapCreateAccount() {
-    _loginWidget = CreateAccountWidget();
+    _loginWidget = const CreateAccountWidget();
     notifyListeners();
   }
 
   void onTapGoToLoginWidget() {
-    _loginWidget = LoginWidget();
+    _loginWidget = const LoginWidget();
     notifyListeners();
   }
 
@@ -72,17 +77,19 @@ class LoginViewModel extends ChangeNotifier {
   void sendForgotPassword() {
     //TODO
 
-    _loginWidget = LoginSuccessWidget();
+    _loginWidget = const LoginSuccessWidget();
     notifyListeners();
   }
 
   //CREATE ACCOUNT
-  TextEditingController cnpjController = TextEditingController();
-  TextEditingController cpfController = TextEditingController();
+  TextEditingController cnpjController =
+      MaskedTextController(mask: '00.000.000/0000-00');
+  TextEditingController cpfController =
+      MaskedTextController(mask: '000.000.000-00');
   TextEditingController storeNameController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  TextEditingController cepController = TextEditingController();
+  TextEditingController cepController = MaskedTextController(mask: '00000-000');
   TextEditingController neighbourhoodController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController addressNumberController = TextEditingController();
@@ -90,60 +97,48 @@ class LoginViewModel extends ChangeNotifier {
 
   TextEditingController ownerNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController telephoneController = TextEditingController();
-  TextEditingController telephoneOwnerController = TextEditingController();
-  bool isAbove18 = false;
-  bool termsAgree = false;
-
-  ApiResponse<CnpjStore> cnpjInfo = ApiResponse.loading();
+  TextEditingController telephoneController =
+      MaskedTextController(mask: '(00) 00000-0000');
+  TextEditingController telephoneOwnerController =
+      MaskedTextController(mask: '(00) 00000-0000');
+  bool isAbove18 = true;
+  bool termsAgree = true;
 
   void onTapSearchCnpj() {
     if (cnpjController.text.isNotEmpty) {
-      modalWidget = Container(
-        height: 300,
-        width: 300,
-        child: SFLoading(size: 80),
-      );
-      showModal = true;
+      pageStatus = PageStatus.LOADING;
+      notifyListeners();
       fetchCnpj(cnpjController.text);
     }
   }
 
-  void _setCnpjInfo(ApiResponse<CnpjStore> response) {
-    print("MARAJ :: $response");
-    cnpjInfo = response;
-    if (response.status == Status.COMPLETED) {
-      setCourtFormFields();
-      showModal = false;
-    } else if (response.status == Status.ERROR) {
-      modalWidget = SFErrorWidget(
-          title: "CNPJ não encontrado",
-          description: "Verifique se digitou corretamente",
-          onTap: () {
-            showModal = false;
-            notifyListeners();
-          });
-    }
-    notifyListeners();
-  }
-
   Future<void> fetchCnpj(String cnpj) async {
-    _setCnpjInfo(ApiResponse.loading());
-    _loginRepo
-        .getStoreFromCnpj(cnpj)
-        .then((value) => _setCnpjInfo(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            _setCnpjInfo(ApiResponse.error(error.toString())));
+    _loginRepo.getStoreFromCnpj(cnpj).then((value) {
+      setCourtFormFields(value!);
+      pageStatus = PageStatus.SUCCESS;
+      notifyListeners();
+    }).onError(
+      (error, stackTrace) {
+        modalTitle = "CNPJ não encontrado";
+        modalDescription = "Verifique se digitou corretamente";
+        modalCallback = () {
+          pageStatus = PageStatus.SUCCESS;
+          notifyListeners();
+        };
+        pageStatus = PageStatus.ERROR;
+        notifyListeners();
+      },
+    );
   }
 
-  void setCourtFormFields() {
-    storeNameController.text = cnpjInfo.data!.name;
-    stateController.text = cnpjInfo.data!.state;
-    cityController.text = cnpjInfo.data!.city;
-    cepController.text = cnpjInfo.data!.cep;
-    neighbourhoodController.text = cnpjInfo.data!.neighborhood;
-    addressController.text = cnpjInfo.data!.street;
-    addressNumberController.text = cnpjInfo.data!.number;
+  void setCourtFormFields(CnpjStore cnpjInfo) {
+    storeNameController.text = cnpjInfo.name;
+    stateController.text = cnpjInfo.state;
+    cityController.text = cnpjInfo.city;
+    cepController.text = cnpjInfo.cep;
+    neighbourhoodController.text = cnpjInfo.neighborhood;
+    addressController.text = cnpjInfo.street;
+    addressNumberController.text = cnpjInfo.number;
   }
 
   final List<Widget> _createAccountForms = [
@@ -155,8 +150,9 @@ class LoginViewModel extends ChangeNotifier {
     String missingFields = "";
     if (noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
     if (!noCnpj && cnpjController.text.isEmpty) missingFields += "CNPJ\n";
-    if (storeNameController.text.isEmpty)
+    if (storeNameController.text.isEmpty) {
       missingFields += "Nome do Estabelecimento\n";
+    }
     if (cepController.text.isEmpty) missingFields += "CEP\n";
     if (neighbourhoodController.text.isEmpty) missingFields += "Bairro\n";
     if (stateController.text.isEmpty) missingFields += "Estado\n";
@@ -171,8 +167,9 @@ class LoginViewModel extends ChangeNotifier {
     if (!noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
     if (ownerNameController.text.isEmpty) missingFields += "Nome\n";
     if (emailController.text.isEmpty) missingFields += "Email\n";
-    if (telephoneController.text.isEmpty)
+    if (telephoneController.text.isEmpty) {
       missingFields += "Telefone da Quadra\n";
+    }
     if (!isAbove18) missingFields += "Confirmação de maioridade\n";
     if (!termsAgree) missingFields += "Confirmação dos Termos\n";
     return missingFields;
@@ -192,7 +189,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void nextForm() {
-    String missingfields;
+    String missingfields = "";
     if (_currentCreateAccountFormIndex == _createAccountForms.length - 1) {
       missingfields = missingOwnerFormFields();
     } else {
@@ -200,14 +197,13 @@ class LoginViewModel extends ChangeNotifier {
     }
 
     if (missingfields.isNotEmpty) {
-      modalWidget = SFErrorWidget(
-          title: "Para posseguir, preencha:",
-          description: missingfields,
-          onTap: () {
-            showModal = false;
-            notifyListeners();
-          });
-      showModal = true;
+      modalTitle = "Para posseguir, preencha:";
+      modalDescription = missingfields;
+      modalCallback = () {
+        pageStatus = PageStatus.SUCCESS;
+        notifyListeners();
+      };
+      pageStatus = PageStatus.ERROR;
       notifyListeners();
       return;
     }
@@ -222,23 +218,49 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void submitCreateAccount() {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
     _loginRepo
-        .createAccount(CreateAccountStore(
-          cnpj: cnpjController.text.isEmpty ? "" : cnpjController.text,
-          name: storeNameController.text,
-          cep: cepController.text,
-          state: stateController.text,
-          city: cityController.text,
-          neighborhood: neighbourhoodController.text,
-          street: addressController.text,
-          number: addressNumberController.text,
-          ownerName: ownerNameController.text,
-          email: emailController.text,
-          cpf: cpfController.text,
-          telephone: telephoneController.text,
-          telephoneOwner: telephoneOwnerController.text,
-        ))
-        .then((value) => null);
+        .createAccount(
+      CreateAccountStore(
+        cnpj: cnpjController.text.isEmpty
+            ? ""
+            : cnpjController.text.replaceAll(RegExp('[^0-9]'), ''),
+        name: storeNameController.text,
+        cep: cepController.text.replaceAll(RegExp('[^0-9]'), ''),
+        state: stateController.text,
+        city: cityController.text,
+        neighborhood: neighbourhoodController.text,
+        street: addressController.text,
+        number: addressNumberController.text,
+        ownerName: ownerNameController.text,
+        email: emailController.text,
+        cpf: cpfController.text.replaceAll(RegExp('[^0-9]'), ''),
+        telephone: telephoneController.text.replaceAll(RegExp('[^0-9]'), ''),
+        telephoneOwner: telephoneOwnerController.text.isEmpty
+            ? ""
+            : telephoneOwnerController.text.replaceAll(RegExp('[^0-9]'), ''),
+      ),
+    )
+        .then((value) {
+      modalTitle = "feito";
+      modalDescription = "feito";
+      modalCallback = () {
+        pageStatus = PageStatus.SUCCESS;
+        notifyListeners();
+      };
+      pageStatus = PageStatus.ACCOMPLISHED;
+      notifyListeners();
+    }).onError((error, stackTrace) {
+      modalTitle = error.toString();
+      modalDescription = "";
+      modalCallback = () {
+        pageStatus = PageStatus.SUCCESS;
+        notifyListeners();
+      };
+      pageStatus = PageStatus.ERROR;
+      notifyListeners();
+    });
   }
 
   void onTapTermosDeUso() {
@@ -247,4 +269,20 @@ class LoginViewModel extends ChangeNotifier {
   void onTapPoliticaDePrivacidade() {
     //TODO
   }
+
+  final fakeStore = CreateAccountStore(
+    cnpj: "12",
+    name: "12",
+    cep: "12",
+    state: "RS",
+    city: "Porto Alegre",
+    neighborhood: "12",
+    street: "12",
+    number: "12",
+    ownerName: "12",
+    email: "12",
+    cpf: "12",
+    telephone: "12",
+    telephoneOwner: "12",
+  );
 }

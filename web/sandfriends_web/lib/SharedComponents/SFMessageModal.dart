@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../SharedComponents/SF_Button.dart';
-import '../../SharedComponents/SF_Textfield.dart';
+import 'SFButton.dart';
 
-class LoginSuccessWidget extends StatefulWidget {
-  const LoginSuccessWidget({super.key});
+class SFMessageModal extends StatefulWidget {
+  String title;
+  String description;
+  VoidCallback onTap;
+  String buttonText;
+  bool isHappy;
+
+  SFMessageModal({
+    required this.title,
+    required this.description,
+    required this.onTap,
+    this.buttonText = "Voltar",
+    required this.isHappy,
+  });
 
   @override
-  State<LoginSuccessWidget> createState() => _LoginSuccessWidgetState();
+  State<SFMessageModal> createState() => _SFMessageModalState();
 }
 
-class _LoginSuccessWidgetState extends State<LoginSuccessWidget> {
+class _SFMessageModalState extends State<SFMessageModal> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -35,22 +45,24 @@ class _LoginSuccessWidgetState extends State<LoginSuccessWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SvgPicture.asset(
-            r"assets/icon/happy_face.svg",
+            widget.isHappy
+                ? r"assets/icon/happy_face.svg"
+                : r"assets/icon/sad_face.svg",
             height: 100,
           ),
           const SizedBox(
             height: 2 * defaultPadding,
           ),
-          const Text(
-            "Email enviado!",
-            style: TextStyle(color: textBlack, fontSize: 24),
+          Text(
+            widget.title,
+            style: const TextStyle(color: textBlack, fontSize: 24),
           ),
           const SizedBox(
             height: defaultPadding / 2,
           ),
-          const Text(
-            "Verifique sua caixa de email e crie uma nova senha",
-            style: TextStyle(color: textDarkGrey, fontSize: 16),
+          Text(
+            widget.description,
+            style: const TextStyle(color: textDarkGrey, fontSize: 16),
           ),
           const SizedBox(
             height: defaultPadding * 2,
@@ -59,12 +71,9 @@ class _LoginSuccessWidgetState extends State<LoginSuccessWidget> {
             padding: EdgeInsets.symmetric(
                 horizontal: width * 0.3 < 350 ? 35 : width * 0.03),
             child: SFButton(
-                buttonLabel: "Voltar",
+                buttonLabel: widget.buttonText,
                 buttonType: ButtonType.Primary,
-                onTap: () {
-                  Provider.of<LoginViewModel>(context, listen: false)
-                      .onTapGoToLoginWidget();
-                }),
+                onTap: widget.onTap),
           )
         ],
       ),

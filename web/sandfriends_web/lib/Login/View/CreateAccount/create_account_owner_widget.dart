@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/constants.dart';
+import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../View/Components/SF_Textfield.dart';
+import '../../../SharedComponents/SF_Textfield.dart';
 import '../../ViewModel/LoginViewModel.dart';
 
 class CreateAccountOwnerWidget extends StatefulWidget {
@@ -28,11 +28,11 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Conte-nos mais sobre você",
                     style: TextStyle(color: textBlack, fontSize: 24),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: defaultPadding * 2,
                   ),
                   SFTextField(
@@ -41,7 +41,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       controller: Provider.of<LoginViewModel>(context)
                           .ownerNameController,
                       validator: (_) {}),
-                  SizedBox(
+                  const SizedBox(
                     height: defaultPadding,
                   ),
                   SFTextField(
@@ -50,7 +50,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       controller:
                           Provider.of<LoginViewModel>(context).emailController,
                       validator: (_) {}),
-                  SizedBox(
+                  const SizedBox(
                     height: defaultPadding,
                   ),
                   !Provider.of<LoginViewModel>(context).noCnpj
@@ -62,7 +62,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                 controller: Provider.of<LoginViewModel>(context)
                                     .cpfController,
                                 validator: (_) {}),
-                            SizedBox(
+                            const SizedBox(
                               height: defaultPadding,
                             ),
                           ],
@@ -79,7 +79,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           validator: (_) {},
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: defaultPadding,
                       ),
                       Expanded(
@@ -93,13 +93,13 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: defaultPadding,
                   ),
                 ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: defaultPadding),
+                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
                 child: Column(
                   children: [
                     Row(
@@ -116,7 +116,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                               });
                             }),
                         RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             text: 'Declaro que tenho acima de 18 anos',
                             style: TextStyle(
                               color: textDarkGrey,
@@ -143,14 +143,14 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           child: RichText(
                             text: TextSpan(
                               text: 'Li e concordo com os ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: textDarkGrey,
                                 fontWeight: FontWeight.bold,
                               ),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Termos de Uso ',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: textBlue,
                                       fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
@@ -160,12 +160,12 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                           .onTapCreateAccount();
                                     },
                                 ),
-                                TextSpan(
+                                const TextSpan(
                                   text: 'e ',
                                 ),
                                 TextSpan(
                                   text: 'Política de Privacidade',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: textBlue,
                                       fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()

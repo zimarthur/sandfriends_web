@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
-import 'package:sandfriends_web/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../View/Components/SF_Button.dart';
-import '../../View/Components/SF_Textfield.dart';
-import 'package:http/http.dart' as http;
+import '../../SharedComponents/SF_Button.dart';
+import '../../SharedComponents/SF_Textfield.dart';
+
+import '../../Dashboard/View/dashboard_screen.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -23,7 +24,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     var loginViewModel = Provider.of<LoginViewModel>(context);
 
     return Container(
-      padding: EdgeInsets.all(2 * defaultPadding),
+      padding: const EdgeInsets.all(2 * defaultPadding),
       height: height * 0.85,
       width: width * 0.3 < 350 ? 350 : width * 0.3,
       decoration: BoxDecoration(
@@ -45,7 +46,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   r'assets/icon/full_logo_positive.svg',
                   height: height * 0.2,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: defaultPadding * 2,
                 ),
                 Column(
@@ -58,7 +59,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       controller: loginViewModel.userController,
                       validator: (value) {},
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: defaultPadding,
                     ),
                     SFTextField(
@@ -72,7 +73,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       pourpose: TextFieldPourpose.Password,
                       validator: (value) {},
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: defaultPadding,
                     ),
                     InkWell(
@@ -98,7 +99,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       .keepConnected = value!;
                                 });
                               }),
-                          Text(
+                          const Text(
                             "Mantenha-me conectado",
                             style: TextStyle(color: textDarkGrey),
                           ),
@@ -107,7 +108,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2 * defaultPadding,
                 ),
                 Column(
@@ -121,16 +122,21 @@ class _LoginWidgetState extends State<LoginWidget> {
                             .onTapLogin(context);
                       }),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: defaultPadding,
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          loginViewModel.onTapForgotPassword();
-                        });
+                        // setState(() {
+                        //   loginViewModel.onTapForgotPassword();
+                        // });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DashboardScreen()),
+                        );
                       },
-                      child: Text(
+                      child: const Text(
                         "Esqueci minha senha",
                         style: TextStyle(
                             color: textDarkGrey,
@@ -139,7 +145,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: defaultPadding,
                 ),
                 Flexible(
@@ -149,7 +155,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Cadastre já!',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: textBlue, fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
