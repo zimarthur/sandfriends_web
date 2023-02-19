@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
-import 'package:sandfriends_web/SharedComponents/SF_Avatar.dart';
+import 'package:sandfriends_web/SharedComponents/SFAvatar.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {
   bool fullSize;

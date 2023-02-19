@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/View/dashboard_screen.dart';
-import 'package:sandfriends_web/Login/View/login_screen.dart';
+import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
+import 'package:sandfriends_web/Login/View/LoginScreen.dart';
 import 'Utils/constants.dart';
 
 void main() {

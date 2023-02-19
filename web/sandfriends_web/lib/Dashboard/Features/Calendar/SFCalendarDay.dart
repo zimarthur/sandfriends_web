@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../Utils/constants.dart';
 
-import 'hour_widget.dart';
+import 'HourWidget.dart';
 
 class SFCalendarDay extends StatefulWidget {
   double height;
@@ -112,7 +112,8 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                           scrollDirection: Axis.horizontal,
                           child: Flexible(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 2),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
                               child: Row(
                                 children: [
                                   for (var court in courts)

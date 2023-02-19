@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Calendar/calendar_screen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Calendar/CalendarScreen.dart';
 import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/finance_screen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/home_screen.dart';
-import 'package:sandfriends_web/Dashboard/Features/Rewards/rewards_screen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Rewards/View/rewards_screen.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 
 class DashboardViewModel extends ChangeNotifier {

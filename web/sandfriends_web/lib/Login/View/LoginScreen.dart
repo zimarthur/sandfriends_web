@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
-import 'package:sandfriends_web/SharedComponents/SF_Button.dart';
-import 'package:sandfriends_web/SharedComponents/SF_Textfield.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/SharedComponents/SFButton.dart';
+import 'package:sandfriends_web/SharedComponents/SFTextfield.dart';
 import 'package:provider/provider.dart';
 import '../../SharedComponents/SFMessageModal.dart';
 import '../../SharedComponents/SFLoading.dart';
@@ -46,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: width,
                           child: Center(
                               child: viewModel.pageStatus == PageStatus.LOADING
-                                  ? SizedBox(
+                                  ? Container(
                                       height: 300,
                                       width: 300,
                                       child: SFLoading(size: 80),

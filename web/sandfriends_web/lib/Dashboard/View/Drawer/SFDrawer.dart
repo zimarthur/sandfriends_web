@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Dashboard/View/Drawer/drawer_user_widget.dart';
-import 'package:sandfriends_web/Dashboard/View/Drawer/drawer_list_tile.dart';
+import 'package:sandfriends_web/Dashboard/View/Drawer/SFDrawerUserWidget.dart';
+import 'package:sandfriends_web/Dashboard/View/Drawer/SFDrawerListTile.dart';
 
 import '../../../Utils/Responsive.dart';
 import '../../ViewModel/DashboardViewModel.dart';
-import 'drawer_divider.dart';
+import 'SFDrawerDivider.dart';
 
 class SFDrawer extends StatefulWidget {
   const SFDrawer({super.key});
@@ -59,7 +59,7 @@ class _SFDrawerState extends State<SFDrawer> {
                           menuController.onTabClick(index);
                         },
                         onHover: (value) {},
-                        child: DrawerListTile(
+                        child: SFDrawerListTile(
                           title: menuController.drawerItems[index].title,
                           svgSrc: menuController.drawerItems[index].icon,
                           isSelected:
@@ -75,7 +75,7 @@ class _SFDrawerState extends State<SFDrawer> {
                 InkWell(
                   onTap: () {},
                   onHover: (value) {},
-                  child: DrawerListTile(
+                  child: SFDrawerListTile(
                     title: "Ajuda",
                     svgSrc: r"assets/icon/help.svg",
                     fullSize: fullSize,

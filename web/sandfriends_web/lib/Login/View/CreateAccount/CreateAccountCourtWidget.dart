@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/SharedComponents/SF_Button.dart';
+import 'package:sandfriends_web/SharedComponents/SFButton.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../SharedComponents/SF_Textfield.dart';
+import '../../../SharedComponents/SFTextfield.dart';
 import '../../ViewModel/LoginViewModel.dart';
 
 class CreateAccountCourtWidget extends StatefulWidget {
@@ -99,7 +99,8 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                 ],
               ),
               Container(
-                margin: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
+                margin:
+                    const EdgeInsets.symmetric(vertical: defaultPadding * 2),
                 width: double.infinity,
                 height: 1,
                 color: divider,

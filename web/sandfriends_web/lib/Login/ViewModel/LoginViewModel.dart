@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
 import 'package:sandfriends_web/Login/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
-import 'package:sandfriends_web/Login/View/CreateAccount/create_account_court_widget.dart';
-import 'package:sandfriends_web/Login/View/CreateAccount/create_account_owner_widget.dart';
-import 'package:sandfriends_web/Login/View/CreateAccount/create_account_widget.dart';
+import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountCourtWidget.dart';
+import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountOwnerWidget.dart';
+import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountWidget.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
-import 'package:sandfriends_web/Login/View/login_success_widget.dart';
-import 'package:sandfriends_web/Dashboard/View/dashboard_screen.dart';
-import '../View/forgot_password_widget.dart';
-import '../View/login_widget.dart';
+import 'package:sandfriends_web/Login/View/LoginSuccessWidget.dart';
+import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
+import '../View/ForgotPasswordWidget.dart';
+import '../View/LoginWidget.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final _loginRepo = LoginRepoImp();

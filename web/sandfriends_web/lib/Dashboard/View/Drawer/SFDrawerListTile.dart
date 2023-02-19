@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 
-class DrawerListTile extends StatelessWidget {
-  DrawerListTile({
+class SFDrawerListTile extends StatelessWidget {
+  SFDrawerListTile({
     Key? key,
     required this.title,
     required this.svgSrc,

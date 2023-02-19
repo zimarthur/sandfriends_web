@@ -3,8 +3,9 @@ import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../SharedComponents/SF_Button.dart';
-import '../../SharedComponents/SF_Textfield.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../SharedComponents/SFButton.dart';
+import '../../SharedComponents/SFTextfield.dart';
 
 class LoginSuccessWidget extends StatefulWidget {
   const LoginSuccessWidget({super.key});
@@ -21,7 +22,7 @@ class _LoginSuccessWidgetState extends State<LoginSuccessWidget> {
     LoginViewModel loginViewModel = LoginViewModel();
 
     return Container(
-      padding: const EdgeInsets.all(2 * defaultPadding),
+      padding: EdgeInsets.all(2 * defaultPadding),
       width: width * 0.3 < 350 ? 350 : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -38,21 +39,21 @@ class _LoginSuccessWidgetState extends State<LoginSuccessWidget> {
             r"assets/icon/happy_face.svg",
             height: 100,
           ),
-          const SizedBox(
+          SizedBox(
             height: 2 * defaultPadding,
           ),
-          const Text(
+          Text(
             "Email enviado!",
             style: TextStyle(color: textBlack, fontSize: 24),
           ),
-          const SizedBox(
+          SizedBox(
             height: defaultPadding / 2,
           ),
-          const Text(
+          Text(
             "Verifique sua caixa de email e crie uma nova senha",
             style: TextStyle(color: textDarkGrey, fontSize: 16),
           ),
-          const SizedBox(
+          SizedBox(
             height: defaultPadding * 2,
           ),
           Padding(

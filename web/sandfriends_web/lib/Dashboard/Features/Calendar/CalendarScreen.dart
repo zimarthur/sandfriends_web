@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sandfriends_web/SharedComponents/SF_Header.dart';
-import 'package:sandfriends_web/SharedComponents/SF_tabs.dart';
+import 'package:sandfriends_web/SharedComponents/SFHeader.dart';
+import 'package:sandfriends_web/SharedComponents/SFTabs.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 
-import 'calendar_day.dart';
-import 'calendar_toggle.dart';
-import 'calendar_week.dart';
-import 'date_picker.dart';
+import '../../../Utils/Responsive.dart';
+import 'SFCalendarDay.dart';
+import 'CalendarToggle.dart';
+import 'SFCalendarWeek.dart';
+import 'DatePicker.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -60,12 +61,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 Container(
                     width: calendarFilterWidth,
                     height: height,
-                    margin: const EdgeInsets.all(defaultPadding),
+                    margin: EdgeInsets.all(defaultPadding),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
                           CalendarToggle(
-                              const ["Semanal", "Diário"],
+                              ["Semanal", "Diário"],
                               Provider.of<DashboardViewModel>(context)
                                   .selectedCalendarStyle, (index) {
                             setState(() {
@@ -74,10 +75,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   .selectedCalendarStyle = index;
                             });
                           }),
-                          const SizedBox(
+                          SizedBox(
                             height: defaultPadding,
                           ),
-                          const DatePicker(),
+                          DatePicker(),
                         ],
                       ),
                     )),

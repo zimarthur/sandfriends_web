@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Dashboard/View/Drawer/drawer.dart';
+import 'package:sandfriends_web/Dashboard/View/Drawer/SFDrawer.dart';
 import '../ViewModel/DashboardViewModel.dart';
 import '../../Utils/Responsive.dart';
 
