@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sandfriends_web/Utils/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 
 enum ButtonType {
   Primary,
@@ -41,6 +41,9 @@ class _SFButtonState extends State<SFButton> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
+        padding: widget.textPadding == null
+            ? const EdgeInsets.all(0)
+            : widget.textPadding!,
         decoration: BoxDecoration(
           color: widget.buttonType == ButtonType.Primary
               ? primaryBlue
@@ -79,24 +82,19 @@ class _SFButtonState extends State<SFButton> {
                                   : textWhite,
                     ),
                   ),
-            Padding(
-              padding: widget.textPadding == null
-                  ? const EdgeInsets.all(0)
-                  : widget.textPadding!,
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Text(
-                  widget.buttonLabel,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: widget.buttonType == ButtonType.Secondary
-                        ? primaryBlue
-                        : widget.buttonType == ButtonType.YellowSecondary
-                            ? secondaryYellow
-                            : widget.buttonType == ButtonType.LightBlueSecondary
-                                ? secondaryLightBlue
-                                : textWhite,
-                  ),
+            FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                widget.buttonLabel,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: widget.buttonType == ButtonType.Secondary
+                      ? primaryBlue
+                      : widget.buttonType == ButtonType.YellowSecondary
+                          ? secondaryYellow
+                          : widget.buttonType == ButtonType.LightBlueSecondary
+                              ? secondaryLightBlue
+                              : textWhite,
                 ),
               ),
             ),

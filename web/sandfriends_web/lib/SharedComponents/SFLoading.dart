@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:sandfriends_web/Utils/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFLoading extends StatelessWidget {
   double size;

@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Utils/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/SFTextfield.dart';

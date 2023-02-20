@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
-import 'package:sandfriends_web/Utils/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/SharedComponents/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/SFTextfield.dart';

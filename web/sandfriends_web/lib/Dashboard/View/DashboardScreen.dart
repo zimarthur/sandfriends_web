@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Utils/constants.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/View/Drawer/SFDrawer.dart';
 import '../ViewModel/DashboardViewModel.dart';

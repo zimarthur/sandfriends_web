@@ -53,6 +53,7 @@ dev_dependencies:
   loading_animation_widget: ^1.2.0+4
   http: ^0.13.5
   extended_masked_text: ^2.3.1
+  syncfusion_flutter_datagrid: ^20.4.50
   
 
 # For information on the generic Dart part of this file, see the
@@ -87,6 +88,7 @@ flutter:
     - assets/icon/arrow_left.svg
     - assets/icon/happy_face.svg
     - assets/icon/sad_face.svg
+    - assets/icon/plus.svg
     
     - assets/Arthur.jpg
 

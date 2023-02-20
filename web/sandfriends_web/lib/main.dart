@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
 import 'package:sandfriends_web/Login/View/LoginScreen.dart';
-import 'Utils/constants.dart';
+import 'Utils/Constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/login': (BuildContext context) => const LoginScreen(),
         '/dashboard': (BuildContext context) => const DashboardScreen(),
       },
-      initialRoute: '/login',
+      initialRoute: '/dashboard',
     );
   }
 }

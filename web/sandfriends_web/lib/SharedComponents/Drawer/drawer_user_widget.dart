@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/SharedComponents/SFAvatar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {
   bool fullSize;
@@ -19,16 +20,15 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
         onTap: () {},
         onHover: (value) {
           setState(() {
-            if (value == true) {
+            if (value == true)
               isOnHover = true;
-            } else {
+            else
               isOnHover = false;
-            }
           });
         },
         child: widget.fullSize
             ? Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                     horizontal: defaultPadding, vertical: defaultPadding / 2),
                 decoration: BoxDecoration(
                   color: isOnHover
@@ -57,10 +57,10 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: defaultPadding,
                     ),
-                    const Text(
+                    Text(
                       "Beach Brasil",
                       style: TextStyle(color: textWhite),
                     ),
