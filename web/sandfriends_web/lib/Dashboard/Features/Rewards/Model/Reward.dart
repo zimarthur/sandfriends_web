@@ -1,12 +1,16 @@
+import '../../../../SharedComponents/Model/player.dart';
+import 'package:intl/intl.dart';
+
 class Reward {
   String reward;
-  String date;
-  String hour;
-  String player;
+  DateTime date;
+  Player player;
 
-  Reward(
-      {required this.reward,
-      required this.date,
-      required this.hour,
-      required this.player});
+  Reward({
+    required this.reward,
+    required this.date,
+    required this.player,
+  });
+
+  String get hour => DateFormat.Hm().format(date);
 }

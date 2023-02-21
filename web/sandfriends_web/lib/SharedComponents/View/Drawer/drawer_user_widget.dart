@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:sandfriends_web/SharedComponents/SFAvatar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {

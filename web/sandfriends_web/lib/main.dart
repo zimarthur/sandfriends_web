@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Dashboard/Features/Rewards/ViewModel/RewardsViewModel.dart';
 import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/Login/View/LoginScreen.dart';
+import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'Utils/Constants.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,26 +17,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => DashboardViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RewardsViewModel(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown
+          },
+        ),
+        title: 'Sandfriends Web',
+        theme: ThemeData(
+          scaffoldBackgroundColor: secondaryBack,
+          fontFamily: "Lexend",
+        ),
+        routes: {
+          '/login': (BuildContext context) => const LoginScreen(),
+          '/dashboard': (BuildContext context) => const DashboardScreen(),
         },
+        initialRoute: '/dashboard',
       ),
-      title: 'Sandfriends Web',
-      theme: ThemeData(
-        scaffoldBackgroundColor: secondaryBack,
-        fontFamily: "Lexend",
-      ),
-      routes: {
-        '/login': (BuildContext context) => const LoginScreen(),
-        '/dashboard': (BuildContext context) => const DashboardScreen(),
-      },
-      initialRoute: '/dashboard',
     );
   }
 }

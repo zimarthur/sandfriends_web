@@ -4,8 +4,9 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../SharedComponents/SFButton.dart';
-import '../../SharedComponents/SFTextfield.dart';
+
+import '../../SharedComponents/View/SFButton.dart';
+import '../../SharedComponents/View/SFTextfield.dart';
 
 class ForgotPasswordWidget extends StatefulWidget {
   const ForgotPasswordWidget({super.key});

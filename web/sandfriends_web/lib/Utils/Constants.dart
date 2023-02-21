@@ -29,3 +29,12 @@ const TextStyle titleStyle = TextStyle(
   fontWeight: FontWeight.w700,
   fontSize: 20,
 );
+
+List<Color> sfColors = [
+  primaryBlue,
+  secondaryYellow,
+  primaryDarkBlue,
+  primaryLightBlue,
+  secondaryGreen,
+  textDarkGrey,
+];

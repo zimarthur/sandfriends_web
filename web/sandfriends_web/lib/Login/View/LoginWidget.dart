@@ -4,10 +4,10 @@ import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../SharedComponents/SFButton.dart';
-import '../../SharedComponents/SFTextfield.dart';
 
 import '../../Dashboard/View/DashboardScreen.dart';
+import '../../SharedComponents/View/SFButton.dart';
+import '../../SharedComponents/View/SFTextfield.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});

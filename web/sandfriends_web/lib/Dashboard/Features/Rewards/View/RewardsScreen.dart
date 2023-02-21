@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/SharedComponents/SFCard.dart';
-import 'package:sandfriends_web/SharedComponents/SFTable.dart';
+import 'package:sandfriends_web/SharedComponents/Model/player.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
+import 'package:sandfriends_web/SharedComponents/View/Table/SFTable.dart';
+import 'package:sandfriends_web/SharedComponents/View/Table/SFTableHeader.dart';
+import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../SharedComponents/SFButton.dart';
-import '../../../../SharedComponents/SFHeader.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import '../../../../SharedComponents/View/SFButton.dart';
+import '../../../../SharedComponents/View/SFCard.dart';
+import '../../../../SharedComponents/View/SFHeader.dart';
+import '../../../../SharedComponents/View/SFToggle.dart';
 import '../../../../Utils/Constants.dart';
+import '../../../ViewModel/DashboardViewModel.dart';
 import '../Model/Reward.dart';
 import '../Model/RewardDataSource.dart';
+import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+import '../ViewModel/RewardsViewModel.dart';
 
 class RewardsScreen extends StatefulWidget {
   const RewardsScreen({super.key});
@@ -17,108 +27,138 @@ class RewardsScreen extends StatefulWidget {
 }
 
 class _RewardsScreenState extends State<RewardsScreen> {
-  List<Reward> rewards = <Reward>[];
-
-  late RewardsDataSource rewardsDataSource;
+  final RewardsViewModel viewModel = RewardsViewModel();
+  final DashboardViewModel dashboardViewModel = DashboardViewModel();
 
   @override
   void initState() {
+    viewModel.setRewardDataSource();
     super.initState();
-    rewards = getRewards();
-    rewardsDataSource = RewardsDataSource(rewards: rewards);
-  }
-
-  List<Reward> getRewards() {
-    return [
-      Reward(
-          reward: "Agua", date: "20/02/2023", hour: "09:35", player: "Arthur"),
-      Reward(
-          reward: "Agua", date: "20/02/2023", hour: "09:35", player: "Arthur"),
-      Reward(
-          reward: "Agua", date: "20/02/2023", hour: "09:35", player: "Arthur"),
-      Reward(
-          reward: "Agua", date: "20/02/2023", hour: "09:35", player: "Arthur"),
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Expanded(
-                child: SFHeader(
-                    header: "Recompensas",
-                    description:
-                        "Confira as recompensas que os jogadores já retiraram no seu estabelecimento!"),
-              ),
-              SFButton(
-                buttonLabel: "Adic. Recompensa",
-                buttonType: ButtonType.Primary,
-                onTap: () {},
-                iconFirst: true,
-                iconPath: r"assets/icon/plus.svg",
-                textPadding: const EdgeInsets.symmetric(
-                  vertical: defaultPadding,
-                  horizontal: defaultPadding * 2,
+    double width =
+        Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
+    double height =
+        Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
+    return ChangeNotifierProvider<RewardsViewModel>(
+      create: (BuildContext context) => viewModel,
+      child: Consumer<RewardsViewModel>(builder: (context, viewModel, _) {
+        return SizedBox(
+          height: height,
+          width: width,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  children: [
+                    const Expanded(
+                      child: SFHeader(
+                          header: "Recompensas",
+                          description:
+                              "Confira as recompensas que os jogadores já retiraram no seu estabelecimento!"),
+                    ),
+                    SFButton(
+                      buttonLabel: "Adic. Recompensa",
+                      buttonType: ButtonType.Primary,
+                      onTap: () {
+                        viewModel.addReward(context);
+                      },
+                      iconFirst: true,
+                      iconPath: r"assets/icon/plus.svg",
+                      textPadding: const EdgeInsets.symmetric(
+                        vertical: defaultPadding,
+                        horizontal: defaultPadding * 2,
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          Row(
-            children: [
-              SfDataGrid(
-                source: rewardsDataSource,
-                columns: <GridColumn>[
-                  GridColumn(
-                      columnName: 'date',
-                      label: Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'date',
-                          ))),
-                  GridColumn(
-                      columnName: 'hour',
-                      label: Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text('hour'))),
-                  GridColumn(
-                      columnName: 'player',
-                      width: 120,
-                      label: Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text('player'))),
-                  GridColumn(
-                      columnName: 'reward',
-                      label: Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.centerRight,
-                          child: Text('reward'))),
-                ],
-              ),
-              const SizedBox(
-                width: 2 * defaultPadding,
-              ),
-              SFCard(
-                height: 200,
-                width: 200,
-                title: "Recompensas",
-                child: Text(
-                  "oiu",
+                SizedBox(
+                  height: height * 0.02,
                 ),
-              ),
-            ],
+                SFToggle(
+                  ["Hoje", "Mês atual", "Sempre"],
+                  viewModel.selectedFilterIndex,
+                  (value) {
+                    viewModel.selectedFilterIndex = value;
+                  },
+                  55,
+                  350,
+                ),
+                const SizedBox(
+                  height: defaultPadding,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Recompensas recolhidas:",
+                      style: TextStyle(color: textDarkGrey),
+                    ),
+                    const SizedBox(
+                      width: defaultPadding,
+                    ),
+                    Text(
+                      "${viewModel.rewardsCounter}",
+                      textScaleFactor: 1.5,
+                      style: TextStyle(
+                          color: textBlue, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: defaultPadding,
+                ),
+                Row(
+                  children: [
+                    SFTable(
+                      height: height * 0.7,
+                      width: width * 0.5,
+                      headers: [
+                        SFTableHeader("date", "Data"),
+                        SFTableHeader("hour", "Hora"),
+                        SFTableHeader("player", "Jogador"),
+                        SFTableHeader("reward", "Recompensa"),
+                      ],
+                      source: viewModel.rewardsDataSource!,
+                    ),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          SFCard(
+                            height: height * 0.35 - defaultPadding / 2,
+                            width: width * 0.5,
+                            title: "Recompensas mais recolhidas",
+                            child: SFPieChart(
+                              pieChartItems: viewModel.pieChartItems,
+                            ),
+                          ),
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          SFCard(
+                            height: height * 0.35 - defaultPadding / 2,
+                            width: width * 0.5,
+                            title: "Recompensas recolhidas por data",
+                            child: BarChart(
+                              viewModel.barChartData,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        );
+      }),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:sandfriends_web/Dashboard/Features/Home/home_screen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/RewardsScreen.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 
+import '../../Utils/PageStatus.dart';
+
 class DashboardViewModel extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
@@ -14,6 +16,37 @@ class DashboardViewModel extends ChangeNotifier {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     }
+  }
+
+  void setModalLoading() {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+  }
+
+  void setModalSuccess() {
+    pageStatus = PageStatus.SUCCESS;
+    notifyListeners();
+  }
+
+  void setModalError(String title, String description) {
+    modalTitle = title;
+    modalDescription = description;
+    modalCallback = () {
+      setModalSuccess();
+    };
+    pageStatus = PageStatus.ERROR;
+    notifyListeners();
+  }
+
+  void setModalAccomplished() {
+    pageStatus = PageStatus.ACCOMPLISHED;
+    notifyListeners();
+  }
+
+  void setModalForm(Widget widget) {
+    modalFormWidget = widget;
+    pageStatus = PageStatus.FORM;
+    notifyListeners();
   }
 
   bool _isDrawerOpened = false;
@@ -83,6 +116,12 @@ class DashboardViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  PageStatus pageStatus = PageStatus.SUCCESS;
+  String modalTitle = "";
+  String modalDescription = "";
+  VoidCallback modalCallback = () {};
+  Widget? modalFormWidget;
 
   int _selectedCalendarStyle = 0;
   int get selectedCalendarStyle => _selectedCalendarStyle;

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sandfriends_web/SharedComponents/SFHeader.dart';
-import 'package:sandfriends_web/SharedComponents/SFTabs.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 
+import '../../../SharedComponents/View/SFHeader.dart';
+import '../../../SharedComponents/View/SFTabs.dart';
 import '../../../Utils/Responsive.dart';
 import 'SFCalendarDay.dart';
 import 'CalendarToggle.dart';

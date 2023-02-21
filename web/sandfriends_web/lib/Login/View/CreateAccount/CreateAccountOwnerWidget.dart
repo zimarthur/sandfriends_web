@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../SharedComponents/SFTextfield.dart';
+import '../../../SharedComponents/View/SFTextfield.dart';
 import '../../ViewModel/LoginViewModel.dart';
 
 class CreateAccountOwnerWidget extends StatefulWidget {

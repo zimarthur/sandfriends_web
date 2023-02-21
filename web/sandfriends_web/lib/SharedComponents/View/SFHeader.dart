@@ -23,11 +23,16 @@ class SFHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(
+            height: defaultPadding / 2,
+          ),
           Text(
             description,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: textDarkGrey,
-              fontSize: 18,
+              fontWeight: FontWeight.w300,
+              fontSize: 16,
             ),
           ),
         ],
