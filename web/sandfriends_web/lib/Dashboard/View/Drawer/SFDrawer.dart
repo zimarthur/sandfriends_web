@@ -72,18 +72,15 @@ class _SFDrawerState extends State<SFDrawer> {
                     },
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  onHover: (value) {},
-                  child: SFDrawerListTile(
-                    title: "Ajuda",
-                    svgSrc: r"assets/icon/help.svg",
-                    fullSize: fullSize,
-                    isSelected: false,
-                  ),
-                ),
                 const SFDrawerDivider(),
-                SFDrawerUserWidget(fullSize: fullSize),
+                InkWell(
+                    onTap: () => menuController.onTabClick(-1),
+                    child: SFDrawerUserWidget(
+                      fullSize: fullSize,
+                      onTap: () {
+                        menuController.onTabClick(-1);
+                      },
+                    )),
               ],
             ),
           );

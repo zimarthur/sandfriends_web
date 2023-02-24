@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/CalendarScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
-import 'package:sandfriends_web/Dashboard/Features/Finances/finance_screen.dart';
-import 'package:sandfriends_web/Dashboard/Features/Home/home_screen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Finances/FinanceScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Home/HomeScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/RewardsScreen.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 
@@ -59,7 +60,7 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const RewardsScreen();
+  Widget _currentDashboardWidget = const SettingsScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {
@@ -113,6 +114,8 @@ class DashboardViewModel extends ChangeNotifier {
       case 3:
         _currentDashboardWidget = const FinanceScreen();
         break;
+      case -1:
+        _currentDashboardWidget = const SettingsScreen();
     }
     notifyListeners();
   }

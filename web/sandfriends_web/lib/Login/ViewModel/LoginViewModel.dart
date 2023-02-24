@@ -1,5 +1,4 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
-
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
 import 'package:sandfriends_web/Login/Model/CreateAccountStore.dart';

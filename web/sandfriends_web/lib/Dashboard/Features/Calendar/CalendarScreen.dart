@@ -40,7 +40,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
               header: "Calendário",
               description:
                   "Acompanhe as partidas agendadas e veja seus mensalistas"),
-          SFTabs(tabs: ["Partidas", "Mensalistas"]),
+          SFTabs(
+            tabs: ["Partidas", "Mensalistas"],
+            onTap: (p0) {},
+          ),
           const SizedBox(
             height: defaultPadding,
           ),

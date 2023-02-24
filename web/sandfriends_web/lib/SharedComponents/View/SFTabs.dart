@@ -3,8 +3,9 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFTabs extends StatefulWidget {
   List<String> tabs;
+  Function(int) onTap;
 
-  SFTabs({required this.tabs});
+  SFTabs({required this.tabs, required this.onTap});
 
   @override
   State<SFTabs> createState() => _SFTabsState();
@@ -29,9 +30,8 @@ class _SFTabsState extends State<SFTabs> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (() {
-                    setState(() {
-                      selectedTab = index;
-                    });
+                    widget.onTap(index);
+                    selectedTab = index;
                   }),
                   child: Container(
                     alignment: Alignment.center,

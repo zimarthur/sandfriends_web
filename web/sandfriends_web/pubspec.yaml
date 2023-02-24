@@ -55,8 +55,7 @@ dev_dependencies:
   extended_masked_text: ^2.3.1
   syncfusion_flutter_datagrid: ^20.4.50
   fl_chart: ^0.60.0
-  intl: ^0.18.0
-  
+  intl: ^0.18.0  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +90,8 @@ flutter:
     - assets/icon/happy_face.svg
     - assets/icon/sad_face.svg
     - assets/icon/plus.svg
+    - assets/icon/three_dots.svg
+
     
     - assets/Arthur.jpg
 

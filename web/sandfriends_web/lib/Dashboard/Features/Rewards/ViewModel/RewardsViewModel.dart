@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/Model/Reward.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/Model/RewardDataSource.dart';
+import 'package:sandfriends_web/Dashboard/Features/Rewards/View/AddRewardWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/Model/player.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
@@ -21,18 +22,69 @@ class RewardsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addReward(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalForm(
-      Container(
-        height: 300,
-        width: 300,
-        color: primaryBlue,
-      ),
-    );
+  void returnMainView(BuildContext context) {
+    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
   }
 
   int get rewardsCounter => rewards.length;
 
+  List<Reward> _rewards = [
+    Reward(reward: "Agua", date: DateTime.now(), player: arthur),
+    Reward(
+        reward: "Agua",
+        date: DateTime.now().subtract(Duration(days: 5)),
+        player: pietro),
+    Reward(
+        reward: "Gatorade",
+        date: DateTime.now().subtract(Duration(days: 15)),
+        player: arthur),
+    Reward(
+        reward: "Bolinha",
+        date: DateTime.now().subtract(Duration(days: 20)),
+        player: pietro),
+    Reward(
+        reward: "Agua",
+        date: DateTime.now().subtract(Duration(days: 50)),
+        player: arthur),
+  ];
+  List<Reward> get rewards {
+    if (selectedFilterIndex == 0) {
+      return _rewards
+          .where((element) => isSameDate(element.date, DateTime.now()))
+          .toList();
+    } else if (selectedFilterIndex == 1) {
+      return _rewards
+          .where((element) => isInCurrentMonth(element.date))
+          .toList();
+    } else {
+      return _rewards;
+    }
+  }
+
+  /////////////ADD REWARD //////////////////////////////
+  void addReward(BuildContext context) {
+    Provider.of<DashboardViewModel>(context, listen: false).setModalForm(
+      AddRewardWidget(context),
+    );
+  }
+
+  TextEditingController addRewardController = TextEditingController();
+
+  void validateAddReward(BuildContext context) {
+    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+  }
+
+  ///////////////////////////////////////////////////////
+
+  //////// TABLE ////////////////////////////////////////
+  RewardsDataSource? rewardsDataSource;
+
+  void setRewardDataSource() {
+    rewardsDataSource = RewardsDataSource(rewards: rewards);
+  }
+  ///////////////////////////////////////////////////////
+
+  //////// PIE CHART ////////////////////////////////////
   List<PieChartItem> get pieChartItems {
     List<PieChartItem> items = [];
     Map<String, int> nameCount = LinkedHashMap<String, int>();
@@ -49,6 +101,9 @@ class RewardsViewModel extends ChangeNotifier {
     return items;
   }
 
+  ///////////////////////////////////////////////////////
+
+  //////// BAR CHART ////////////////////////////////////
   BarChartData get barChartData {
     List<BarChartGroupData> chartData = [];
     BarTouchTooltipData barTouchTooltipData = BarTouchTooltipData(
@@ -168,45 +223,8 @@ class RewardsViewModel extends ChangeNotifier {
       barGroups: chartData,
     );
   }
+///////////////////////////////////////////////////////
 
-  List<Reward> _rewards = [
-    Reward(reward: "Agua", date: DateTime.now(), player: arthur),
-    Reward(
-        reward: "Agua",
-        date: DateTime.now().subtract(Duration(days: 5)),
-        player: pietro),
-    Reward(
-        reward: "Gatorade",
-        date: DateTime.now().subtract(Duration(days: 15)),
-        player: arthur),
-    Reward(
-        reward: "Bolinha",
-        date: DateTime.now().subtract(Duration(days: 20)),
-        player: pietro),
-    Reward(
-        reward: "Agua",
-        date: DateTime.now().subtract(Duration(days: 50)),
-        player: arthur),
-  ];
-  List<Reward> get rewards {
-    if (selectedFilterIndex == 0) {
-      return _rewards
-          .where((element) => isSameDate(element.date, DateTime.now()))
-          .toList();
-    } else if (selectedFilterIndex == 1) {
-      return _rewards
-          .where((element) => isInCurrentMonth(element.date))
-          .toList();
-    } else {
-      return _rewards;
-    }
-  }
-
-  RewardsDataSource? rewardsDataSource;
-
-  void setRewardDataSource() {
-    rewardsDataSource = RewardsDataSource(rewards: rewards);
-  }
 }
 
 Player arthur = Player(

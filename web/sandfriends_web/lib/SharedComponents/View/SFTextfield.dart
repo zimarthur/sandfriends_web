@@ -16,20 +16,21 @@ class SFTextField extends StatefulWidget {
   final int? minLines;
   final Function(String)? onChanged;
   final bool enable;
+  final String hintText;
 
-  const SFTextField({
-    required this.labelText,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.suffixIconPressed,
-    required this.pourpose,
-    required this.controller,
-    required this.validator,
-    this.maxLines,
-    this.onChanged,
-    this.minLines,
-    this.enable = true,
-  });
+  const SFTextField(
+      {required this.labelText,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.suffixIconPressed,
+      required this.pourpose,
+      required this.controller,
+      required this.validator,
+      this.maxLines,
+      this.onChanged,
+      this.minLines,
+      this.enable = true,
+      this.hintText = ""});
 
   @override
   State<SFTextField> createState() => _SFTextFieldState();
@@ -70,6 +71,7 @@ class _SFTextFieldState extends State<SFTextField> {
       ),
       decoration: InputDecoration(
         filled: true,
+        hintText: widget.hintText,
         fillColor: widget.enable ? secondaryPaper : disabled,
         contentPadding: const EdgeInsets.all(16),
         labelText: widget.labelText,

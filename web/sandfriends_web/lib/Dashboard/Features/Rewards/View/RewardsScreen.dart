@@ -28,7 +28,6 @@ class RewardsScreen extends StatefulWidget {
 
 class _RewardsScreenState extends State<RewardsScreen> {
   final RewardsViewModel viewModel = RewardsViewModel();
-  final DashboardViewModel dashboardViewModel = DashboardViewModel();
 
   @override
   void initState() {
