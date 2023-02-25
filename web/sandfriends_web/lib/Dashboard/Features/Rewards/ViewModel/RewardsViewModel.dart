@@ -12,6 +12,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class RewardsViewModel extends ChangeNotifier {
   int _selectedFilterIndex = 0;
@@ -98,12 +99,51 @@ class RewardsViewModel extends ChangeNotifier {
     nameCount.forEach((key, value) {
       items.add(PieChartItem(name: key, value: value.toDouble()));
     });
+    if (hoveredItem >= 0) {
+      PieChartItem auxItem;
+      auxItem = items[0];
+      items[0] = items[hoveredItem];
+      items[hoveredItem] = auxItem;
+    }
     return items;
+  }
+
+  int _hoveredItem = -1;
+  int get hoveredItem => _hoveredItem;
+  set hoveredItem(int value) {
+    _hoveredItem = value;
+    notifyListeners();
   }
 
   ///////////////////////////////////////////////////////
 
   //////// BAR CHART ////////////////////////////////////
+
+  Widget bottomTitles(double value, TitleMeta meta) {
+    final Widget text = Transform.rotate(
+      angle: -math.pi / 3,
+      child: Text(
+        selectedFilterIndex == 0
+            ? '${value}\n'
+            : selectedFilterIndex == 1
+                ? '${value}\n'
+                : getMonthYear(
+                        DateTime.parse(monthsOnChartData[value.toInt()])) +
+                    '\n',
+        style: const TextStyle(
+          color: textDarkGrey,
+        ),
+      ),
+    );
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 16, //margin top
+      child: text,
+    );
+  }
+
+  List<String> monthsOnChartData = [];
   BarChartData get barChartData {
     List<BarChartGroupData> chartData = [];
     BarTouchTooltipData barTouchTooltipData = BarTouchTooltipData(
@@ -113,7 +153,8 @@ class RewardsViewModel extends ChangeNotifier {
               ? '${group.x}:00\n'
               : selectedFilterIndex == 1
                   ? 'Dia ${group.x}\n'
-                  : 'b\n',
+                  : getMonthYear(DateTime.parse(monthsOnChartData[group.x])) +
+                      '\n',
           const TextStyle(
             color: textWhite,
             fontWeight: FontWeight.bold,
@@ -205,12 +246,29 @@ class RewardsViewModel extends ChangeNotifier {
               ],
             ),
           );
+          monthsOnChartData.add(key.toString());
         });
         break;
     }
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: barTouchTooltipData,
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        // Add your x axis labels here
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: bottomTitles,
+            reservedSize: 42,
+          ),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
       ),
       borderData: FlBorderData(
           border: const Border(
@@ -223,6 +281,7 @@ class RewardsViewModel extends ChangeNotifier {
       barGroups: chartData,
     );
   }
+
 ///////////////////////////////////////////////////////
 
 }

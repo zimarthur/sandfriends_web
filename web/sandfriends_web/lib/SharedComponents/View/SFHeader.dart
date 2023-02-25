@@ -12,6 +12,7 @@ class SFHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: defaultPadding),
       width: double.infinity,
+      height: 80,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

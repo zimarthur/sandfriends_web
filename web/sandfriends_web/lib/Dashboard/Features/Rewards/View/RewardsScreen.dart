@@ -47,50 +47,50 @@ class _RewardsScreenState extends State<RewardsScreen> {
         return SizedBox(
           height: height,
           width: width,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  children: [
-                    const Expanded(
-                      child: SFHeader(
-                          header: "Recompensas",
-                          description:
-                              "Confira as recompensas que os jogadores já retiraram no seu estabelecimento!"),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: SFHeader(
+                        header: "Recompensas",
+                        description:
+                            "Confira as recompensas que os jogadores já retiraram no seu estabelecimento!"),
+                  ),
+                  SFButton(
+                    buttonLabel: "Adic. Recompensa",
+                    buttonType: ButtonType.Primary,
+                    onTap: () {
+                      viewModel.addReward(context);
+                    },
+                    iconFirst: true,
+                    iconPath: r"assets/icon/plus.svg",
+                    textPadding: const EdgeInsets.symmetric(
+                      vertical: defaultPadding,
+                      horizontal: defaultPadding * 2,
                     ),
-                    SFButton(
-                      buttonLabel: "Adic. Recompensa",
-                      buttonType: ButtonType.Primary,
-                      onTap: () {
-                        viewModel.addReward(context);
-                      },
-                      iconFirst: true,
-                      iconPath: r"assets/icon/plus.svg",
-                      textPadding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding,
-                        horizontal: defaultPadding * 2,
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                SFToggle(
-                  ["Hoje", "Mês atual", "Sempre"],
-                  viewModel.selectedFilterIndex,
-                  (value) {
-                    viewModel.selectedFilterIndex = value;
-                  },
-                  55,
-                  350,
-                ),
-                const SizedBox(
-                  height: defaultPadding,
-                ),
-                Row(
+                  )
+                ],
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              SFToggle(
+                ["Hoje", "Esse mês", "Histórico"],
+                viewModel.selectedFilterIndex,
+                (value) {
+                  viewModel.selectedFilterIndex = value;
+                },
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              Container(
+                height: 60,
+                constraints: BoxConstraints(minHeight: 60),
+                child: Row(
                   children: [
                     Text(
                       "Recompensas recolhidas:",
@@ -107,54 +107,66 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: defaultPadding,
-                ),
-                Row(
-                  children: [
-                    SFTable(
-                      height: height * 0.7,
-                      width: width * 0.5,
-                      headers: [
-                        SFTableHeader("date", "Data"),
-                        SFTableHeader("hour", "Hora"),
-                        SFTableHeader("player", "Jogador"),
-                        SFTableHeader("reward", "Recompensa"),
-                      ],
-                      source: viewModel.rewardsDataSource!,
-                    ),
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Expanded(
-                      child: Column(
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    final double remainingHeight = height - 200;
+                    final double widgetHeight =
+                        constraints.maxHeight < remainingHeight
+                            ? constraints.maxHeight
+                            : remainingHeight;
+                    return Container(
+                      height: widgetHeight,
+                      child: Row(
                         children: [
-                          SFCard(
-                            height: height * 0.35 - defaultPadding / 2,
+                          SFTable(
+                            height: widgetHeight,
                             width: width * 0.5,
-                            title: "Recompensas mais recolhidas",
-                            child: SFPieChart(
-                              pieChartItems: viewModel.pieChartItems,
-                            ),
+                            headers: [
+                              SFTableHeader("date", "Data"),
+                              SFTableHeader("hour", "Hora"),
+                              SFTableHeader("player", "Jogador"),
+                              SFTableHeader("reward", "Recompensa"),
+                            ],
+                            source: viewModel.rewardsDataSource!,
                           ),
                           SizedBox(
-                            height: defaultPadding,
+                            width: defaultPadding,
                           ),
-                          SFCard(
-                            height: height * 0.35 - defaultPadding / 2,
-                            width: width * 0.5,
-                            title: "Recompensas recolhidas por data",
-                            child: BarChart(
-                              viewModel.barChartData,
-                            ),
+                          Column(
+                            children: [
+                              SFCard(
+                                height: (widgetHeight - defaultPadding) / 2,
+                                width: width * 0.5 - defaultPadding,
+                                title: "Recompensas mais recolhidas",
+                                child: SFPieChart(
+                                  pieChartItems: viewModel.pieChartItems,
+                                ),
+                              ),
+                              SizedBox(
+                                height: defaultPadding,
+                              ),
+                              SFCard(
+                                height: (widgetHeight - defaultPadding) / 2,
+                                width: width * 0.5 - defaultPadding,
+                                title: "Recompensas recolhidas por data",
+                                child: BarChart(
+                                  viewModel.barChartData,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       }),

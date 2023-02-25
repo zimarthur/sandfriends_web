@@ -5,6 +5,7 @@ import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/FinanceScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/HomeScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/RewardsScreen.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 
 import '../../Utils/PageStatus.dart';
@@ -60,19 +61,23 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const SettingsScreen();
+  Widget _currentDashboardWidget = const RewardsScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    if (Responsive.isDesktop(context)) {
-      width = width * 5 / 6;
+    if (Responsive.isMobile(context)) {
+      width = width - 4 * defaultPadding;
+    } else if (Responsive.isDesktop(context) || isDrawerOpened) {
+      width = width - 250 - 4 * defaultPadding;
+    } else {
+      width = width - 80 - 4 * defaultPadding;
     }
     return width;
   }
 
   double getDashboardHeigth(BuildContext context) {
-    return MediaQuery.of(context).size.height - 60; //header = 60
+    return MediaQuery.of(context).size.height - 2 * defaultPadding;
   }
 
   final List<DrawerItem> _drawerItems = [

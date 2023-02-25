@@ -5,11 +5,8 @@ class SFToggle extends StatefulWidget {
   List<String> labels;
   int selectedIndex = 0;
   Function(int) onChanged;
-  double height;
-  double width;
 
-  SFToggle(
-      this.labels, this.selectedIndex, this.onChanged, this.height, this.width);
+  SFToggle(this.labels, this.selectedIndex, this.onChanged);
   @override
   State<SFToggle> createState() => _SFToggleState();
 }
@@ -18,8 +15,8 @@ class _SFToggleState extends State<SFToggle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      width: widget.width,
+      height: 55,
+      width: 350,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(

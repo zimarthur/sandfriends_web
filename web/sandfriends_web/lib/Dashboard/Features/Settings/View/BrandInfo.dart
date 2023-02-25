@@ -68,15 +68,18 @@ Widget BrandInfo(SettingsViewModel viewModel) {
       Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 flex: 2,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Descrição",
                       style: TextStyle(
                         color: textDarkGrey,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
@@ -91,16 +94,54 @@ Widget BrandInfo(SettingsViewModel viewModel) {
               Expanded(
                 flex: 3,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SFTextField(
                       labelText: "",
-                      pourpose: TextFieldPourpose.Standard,
+                      pourpose: TextFieldPourpose.Multiline,
                       controller: viewModel.descriptionController,
                       validator: (a) {},
                       minLines: 5,
                       maxLines: 5,
                       hintText:
                           "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
+                      onChanged: (p0) => viewModel.onDescriptionTextChanged(),
+                    ),
+                    Text(
+                      "${viewModel.descriptionLength}/255",
+                      style: TextStyle(color: textDarkGrey),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  "Instagram",
+                  style: TextStyle(
+                    color: textDarkGrey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SFTextField(
+                        controller: viewModel.instagramController,
+                        labelText: "",
+                        pourpose: TextFieldPourpose.Standard,
+                        validator: (value) {},
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
                     )
                   ],
                 ),
@@ -108,6 +149,12 @@ Widget BrandInfo(SettingsViewModel viewModel) {
             ],
           ),
         ],
+      ),
+      Container(
+        width: double.infinity,
+        height: 1,
+        color: divider,
+        margin: EdgeInsets.symmetric(vertical: defaultPadding),
       ),
     ],
   );

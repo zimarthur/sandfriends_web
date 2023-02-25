@@ -11,3 +11,22 @@ bool isSameDate(DateTime a, DateTime b) {
 bool isInCurrentMonth(DateTime a) {
   return a.month == DateTime.now().month && a.year == DateTime.now().year;
 }
+
+List monthsPortuguese = [
+  'Jan',
+  'Fev',
+  'Mar',
+  'Abr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Set',
+  'Out',
+  'Nov',
+  'Dez'
+];
+
+String getMonthYear(DateTime datetime) {
+  return "${monthsPortuguese[datetime.month - 1]}/${datetime.year.toString().substring(datetime.year.toString().length - 2)}";
+}

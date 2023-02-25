@@ -30,4 +30,16 @@ class SettingsViewModel extends ChangeNotifier {
   TextEditingController telephoneOwnerController =
       MaskedTextController(mask: '(00) 00000-0000');
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController instagramController = TextEditingController();
+
+  int _decriptionLength = 0;
+  int get descriptionLength => _decriptionLength;
+  set descriptionLength(int value) {
+    _decriptionLength = value;
+    notifyListeners();
+  }
+
+  void onDescriptionTextChanged() {
+    descriptionLength = descriptionController.text.length;
+  }
 }
