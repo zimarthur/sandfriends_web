@@ -7,7 +7,10 @@ import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 import 'BasicInfo.dart';
-import 'SettingsViewModel.dart';
+import '../ViewModel/SettingsViewModel.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -61,7 +64,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             : Provider.of<SettingsViewModel>(context)
                                         .currentForm ==
                                     1
-                                ? BrandInfo(viewModel)
+                                ? BrandInfo(
+                                    viewModel: viewModel,
+                                  )
                                 : FinanceInfo(),
                       ),
                     ],

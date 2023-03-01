@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   int _currentForm = 0;
@@ -41,5 +44,13 @@ class SettingsViewModel extends ChangeNotifier {
 
   void onDescriptionTextChanged() {
     descriptionLength = descriptionController.text.length;
+  }
+
+  Uint8List? _storePhoto;
+  Uint8List? get storePhoto => _storePhoto;
+  set storePhoto(Uint8List? newFile) {
+    _storePhoto = newFile;
+    print(_storePhoto);
+    notifyListeners();
   }
 }

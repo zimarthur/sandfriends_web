@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/FormItem.dart';
-import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsViewModel.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
