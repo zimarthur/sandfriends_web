@@ -6,6 +6,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_cropper_platform_interface/src/models/settings.dart';
 import '../ViewModel/SettingsViewModel.dart';
 import 'package:image/image.dart' as IMG;
 
@@ -60,6 +61,13 @@ class _BrandInfoState extends State<BrandInfo> {
           boundary: CroppieBoundary(
             height: resized.height,
             width: resized.width,
+          ),
+          translations: WebTranslations(
+            title: "Redimensione sua imagem",
+            cancelButton: "Cancelar",
+            cropButton: "Ok",
+            rotateLeftTooltip: "",
+            rotateRightTooltip: "",
           ),
         ),
       ],
