@@ -95,6 +95,8 @@ flutter:
     - assets/icon/sad_face.svg
     - assets/icon/plus.svg
     - assets/icon/three_dots.svg
+    - assets/icon/double_arrow_left.svg
+    - assets/icon/double_arrow_right.svg
 
     
     - assets/Arthur.jpg

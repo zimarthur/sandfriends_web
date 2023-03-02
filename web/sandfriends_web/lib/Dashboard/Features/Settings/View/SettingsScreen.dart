@@ -32,7 +32,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       create: (BuildContext context) => viewModel,
       child: Consumer<SettingsViewModel>(
         builder: (context, viewModel, _) {
-          print("build ${viewModel.currentForm}");
           return Container(
             color: secondaryBack,
             child: Column(

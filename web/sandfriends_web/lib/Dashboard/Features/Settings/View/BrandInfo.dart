@@ -20,65 +20,6 @@ class BrandInfo extends StatefulWidget {
 }
 
 class _BrandInfoState extends State<BrandInfo> {
-  Uint8List? _image;
-  Uint8List? resizedImg;
-
-  Future _pickImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(
-      source: source,
-    );
-
-    if (image == null) return;
-    IMG.Image? img = IMG.decodeImage(await image.readAsBytes());
-    double aspectRatio = img!.data!.height / img.data!.width;
-    IMG.Image resized;
-    if (aspectRatio > 1.0) {
-      resized =
-          IMG.copyResize(img, width: (400 / aspectRatio).toInt(), height: 400);
-    } else {
-      resized =
-          IMG.copyResize(img, width: 400, height: (400 * aspectRatio).toInt());
-    }
-    resizedImg = Uint8List.fromList(IMG.encodePng(resized));
-
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-      ],
-      uiSettings: [
-        WebUiSettings(
-          context: context,
-          showZoomer: true,
-          enableZoom: true,
-          viewPort: CroppieViewPort(
-            type: 'circle',
-            height:
-                resized.height > resized.width ? resized.width : resized.height,
-            width:
-                resized.height > resized.width ? resized.width : resized.height,
-          ),
-          boundary: CroppieBoundary(
-            height: resized.height,
-            width: resized.width,
-          ),
-          translations: WebTranslations(
-            title: "Redimensione sua imagem",
-            cancelButton: "Cancelar",
-            cropButton: "Ok",
-            rotateLeftTooltip: "",
-            rotateRightTooltip: "",
-          ),
-        ),
-      ],
-    );
-
-    if (croppedFile != null) {
-      _image = await croppedFile.readAsBytes();
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -104,8 +45,7 @@ class _BrandInfoState extends State<BrandInfo> {
                         buttonLabel: "Escolher arquivo",
                         buttonType: ButtonType.Secondary,
                         onTap: () {
-                          _pickImage(ImageSource.gallery);
-                          //viewModel.pickFiles();
+                          widget.viewModel.setStoreAvatar(context);
                         },
                       ),
                     ),
@@ -120,7 +60,7 @@ class _BrandInfoState extends State<BrandInfo> {
               flex: 3,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: _image == null
+                child: widget.viewModel.storeAvatar == null
                     ? CircleAvatar(
                         radius: 80,
                         child: AspectRatio(
@@ -134,17 +74,10 @@ class _BrandInfoState extends State<BrandInfo> {
                           ),
                         ),
                       )
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Image.memory(
-                              _image!,
-                              height: 160,
-                              width: 160,
-                            ),
-                          ],
-                        ),
+                    : Image.memory(
+                        widget.viewModel.storeAvatar!,
+                        height: 160,
+                        width: 160,
                       ),
               ),
             ),
@@ -248,6 +181,69 @@ class _BrandInfoState extends State<BrandInfo> {
           color: divider,
           margin: EdgeInsets.symmetric(vertical: defaultPadding),
         ),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Fotos da sua quadra (min 2)",
+                    style: TextStyle(color: textDarkGrey),
+                  ),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
+                  Row(children: [
+                    Expanded(
+                      child: SFButton(
+                        buttonLabel: "Adicionar foto",
+                        buttonType: ButtonType.Secondary,
+                        onTap: () {
+                          widget.viewModel.addStorePhoto(context);
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                  ]),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: widget.viewModel.storePhotos.isEmpty
+                  ? Text("Sem fotos")
+                  : SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: widget.viewModel.storePhotos.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                right: 2 * defaultPadding),
+                            child: Stack(
+                              children: [
+                                Image.memory(
+                                  widget.viewModel.storePhotos[index],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 2 * defaultPadding,
+        )
       ],
     );
   }

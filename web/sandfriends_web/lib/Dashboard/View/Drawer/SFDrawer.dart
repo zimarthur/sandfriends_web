@@ -24,7 +24,7 @@ class _SFDrawerState extends State<SFDrawer> {
     DashboardViewModel menuController =
         Provider.of<DashboardViewModel>(context);
     bool fullSize =
-        Responsive.isDesktop(context) || menuController.isDrawerOpened;
+        Responsive.isDesktop(context) && menuController.isDrawerOpened;
     return Responsive.isMobile(context) &&
             menuController.isDrawerOpened == false
         ? Container()
@@ -43,6 +43,24 @@ class _SFDrawerState extends State<SFDrawer> {
             padding: const EdgeInsets.all(defaultPadding),
             child: Column(
               children: [
+                InkWell(
+                  onTap: () => menuController.isDrawerOpened =
+                      !menuController.isDrawerOpened,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    width: double.infinity,
+                    alignment:
+                        fullSize ? Alignment.centerRight : Alignment.center,
+                    child: SvgPicture.asset(
+                      fullSize
+                          ? r'assets/icon/double_arrow_left.svg'
+                          : r'assets/icon/double_arrow_right.svg',
+                      height: 25,
+                      width: 25,
+                      color: secondaryPaper,
+                    ),
+                  ),
+                ),
                 SvgPicture.asset(
                   fullSize
                       ? r'assets/icon/full_logo_negative.svg'

@@ -51,7 +51,7 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isDrawerOpened = false;
+  bool _isDrawerOpened = true;
   bool get isDrawerOpened => _isDrawerOpened;
   set isDrawerOpened(bool value) {
     _isDrawerOpened = value;
