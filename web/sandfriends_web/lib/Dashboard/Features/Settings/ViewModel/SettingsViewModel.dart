@@ -28,14 +28,59 @@ class SettingsViewModel extends ChangeNotifier {
   TextEditingController neighbourhoodController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController addressNumberController = TextEditingController();
-  bool noCnpj = false;
-
   TextEditingController ownerNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController telephoneOwnerController =
       MaskedTextController(mask: '(00) 00000-0000');
   TextEditingController descriptionController = TextEditingController();
   TextEditingController instagramController = TextEditingController();
+
+  String nameRef = "";
+  String telephoneRef = "";
+  String telephoneOwnerRef = "";
+  String cnpjRef = "";
+  String cpfRef = "";
+  String storeNameRef = "";
+  String stateRef = "";
+  String cityRef = "";
+  String cepRef = "";
+  String neighbourhoodRef = "";
+  String addressRef = "";
+  String addressNumberRef = "";
+  String descriptionRef = "";
+  String instagramRef = "";
+
+  bool _storeInfoDif = false;
+  bool get storeInfoDif => _storeInfoDif;
+  void storeInfoChanged() {
+    _storeInfoDif = nameController.text != nameRef ||
+        telephoneController.text != telephoneRef ||
+        telephoneOwnerController.text != telephoneOwnerRef ||
+        cepController.text != cepRef ||
+        neighbourhoodController.text != neighbourhoodRef ||
+        addressController.text != addressRef ||
+        addressNumberController.text != addressNumberRef ||
+        cityController.text != cityRef ||
+        stateController.text != stateRef ||
+        descriptionController.text != descriptionRef ||
+        instagramController.text != instagramRef;
+    notifyListeners();
+  }
+
+  void saveStoreDifChanges() {
+    nameRef = nameController.text;
+    telephoneRef = telephoneController.text;
+    telephoneOwnerRef = telephoneOwnerController.text;
+    cepRef = cepController.text;
+    neighbourhoodRef = neighbourhoodController.text;
+    addressRef = addressController.text;
+    addressNumberRef = addressNumberController.text;
+    cityRef = cityController.text;
+    stateRef = stateController.text;
+    descriptionRef = descriptionController.text;
+    instagramRef = instagramController.text;
+    storeInfoChanged();
+  }
 
   int _decriptionLength = 0;
   int get descriptionLength => _decriptionLength;

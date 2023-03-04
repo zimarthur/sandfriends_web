@@ -3,7 +3,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 
 import '../../../../SharedComponents/View/SFTextfield.dart';
 
-class FormItem extends StatelessWidget {
+class FormItem extends StatefulWidget {
   String name;
   TextEditingController controller;
   bool controllerEnabled;
@@ -11,10 +11,12 @@ class FormItem extends StatelessWidget {
   String? secondName;
   TextEditingController? secondController;
   Widget? customWidget;
+  final Function(String)? onChanged;
 
   FormItem({
     required this.name,
     required this.controller,
+    required this.onChanged,
     this.controllerEnabled = true,
     this.hasSecondItem = false,
     this.secondName,
@@ -22,6 +24,11 @@ class FormItem extends StatelessWidget {
     this.customWidget,
   });
 
+  @override
+  State<FormItem> createState() => _FormItemState();
+}
+
+class _FormItemState extends State<FormItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,7 +38,7 @@ class FormItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(
-              name,
+              widget.name,
               style: TextStyle(
                 color: textDarkGrey,
               ),
@@ -41,26 +48,27 @@ class FormItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: SFTextField(
-              controller: controller,
+              controller: widget.controller,
               labelText: '',
               pourpose: TextFieldPourpose.Standard,
               validator: (String? value) {},
-              enable: controllerEnabled,
+              enable: widget.controllerEnabled,
+              onChanged: widget.onChanged,
             ),
           ),
           Expanded(
             flex: 3,
-            child: hasSecondItem
+            child: widget.hasSecondItem
                 ? Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 2 * defaultPadding),
-                    child: customWidget ??
+                    child: widget.customWidget ??
                         Row(
                           children: [
                             Expanded(
                               flex: 1,
                               child: Text(
-                                secondName!,
+                                widget.secondName!,
                                 style: TextStyle(
                                   color: textDarkGrey,
                                 ),
@@ -70,10 +78,11 @@ class FormItem extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: SFTextField(
-                                controller: secondController!,
+                                controller: widget.secondController!,
                                 labelText: '',
                                 pourpose: TextFieldPourpose.Standard,
-                                validator: (String? value) {},
+                                validator: (a) {},
+                                onChanged: widget.onChanged,
                               ),
                             ),
                           ],

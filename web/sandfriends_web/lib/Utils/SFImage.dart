@@ -42,10 +42,10 @@ Future<Uint8List?> cropImage(
           width: viewPortWidth,
         ),
         boundary: CroppieBoundary(
-          height: height,
-          width: width,
+          height: 400,
+          width: 400,
         ),
-        translations: WebTranslations(
+        translations: const WebTranslations(
           title: "Redimensione sua imagem",
           cancelButton: "Cancelar",
           cropButton: "Ok",

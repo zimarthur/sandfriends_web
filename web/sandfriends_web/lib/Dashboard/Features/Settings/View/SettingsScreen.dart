@@ -3,6 +3,7 @@ import 'package:sandfriends_web/Dashboard/Features/Settings/View/BrandInfo.dart'
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
+import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
@@ -36,10 +37,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             color: secondaryBack,
             child: Column(
               children: [
-                SFHeader(
-                  header: "Configurações",
-                  description:
-                      "Gerencie as informações e a identidade visual do seu negócio, bem como seus dados financeiros",
+                Row(
+                  children: [
+                    const Expanded(
+                      child: SFHeader(
+                        header: "Configurações",
+                        description:
+                            "Gerencie as informações e a identidade visual do seu negócio, bem como seus dados financeiros",
+                      ),
+                    ),
+                    viewModel.storeInfoDif
+                        ? SFButton(
+                            buttonLabel: "Salvar",
+                            buttonType: ButtonType.Primary,
+                            onTap: () {
+                              viewModel.saveStoreDifChanges();
+                            },
+                            textPadding: const EdgeInsets.symmetric(
+                              vertical: defaultPadding,
+                              horizontal: defaultPadding * 2,
+                            ),
+                          )
+                        : Container()
+                  ],
                 ),
                 SFTabs(
                   tabs: ["Dados básicos", "Sua marca", "Dados financeiros"],
@@ -59,7 +79,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Provider.of<SettingsViewModel>(context)
                                     .currentForm ==
                                 0
-                            ? BasicInfo(viewModel)
+                            ? BasicInfo(
+                                viewModel: viewModel,
+                              )
                             : Provider.of<SettingsViewModel>(context)
                                         .currentForm ==
                                     1

@@ -18,7 +18,7 @@ class SFTextField extends StatefulWidget {
   final bool enable;
   final String hintText;
 
-  const SFTextField(
+  SFTextField(
       {required this.labelText,
       this.prefixIcon,
       this.suffixIcon,
@@ -58,7 +58,7 @@ class _SFTextFieldState extends State<SFTextField> {
           : _passwordVisible
               ? false
               : true,
-      onChanged: widget.onChanged ?? (value) {},
+      onChanged: widget.onChanged,
       minLines: widget.minLines ?? 1,
       maxLines:
           widget.pourpose == TextFieldPourpose.Multiline ? widget.maxLines : 1,

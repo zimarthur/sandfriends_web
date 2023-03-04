@@ -51,10 +51,17 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isDrawerOpened = true;
+  bool _isDrawerOpened = false;
   bool get isDrawerOpened => _isDrawerOpened;
   set isDrawerOpened(bool value) {
     _isDrawerOpened = value;
+    notifyListeners();
+  }
+
+  bool _isDrawerExpanded = true;
+  bool get isDrawerExpanded => _isDrawerExpanded;
+  set isDrawerExpanded(bool value) {
+    _isDrawerExpanded = value;
     notifyListeners();
   }
 
@@ -68,7 +75,7 @@ class DashboardViewModel extends ChangeNotifier {
     double width = MediaQuery.of(context).size.width;
     if (Responsive.isMobile(context)) {
       width = width - 4 * defaultPadding;
-    } else if (Responsive.isDesktop(context) || isDrawerOpened) {
+    } else if (Responsive.isDesktop(context) || isDrawerExpanded) {
       width = width - 250 - 4 * defaultPadding;
     } else {
       width = width - 80 - 4 * defaultPadding;

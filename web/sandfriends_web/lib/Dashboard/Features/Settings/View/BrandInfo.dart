@@ -121,17 +121,15 @@ class _BrandInfoState extends State<BrandInfo> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       SFTextField(
-                        labelText: "",
-                        pourpose: TextFieldPourpose.Multiline,
-                        controller: widget.viewModel.descriptionController,
-                        validator: (a) {},
-                        minLines: 5,
-                        maxLines: 5,
-                        hintText:
-                            "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
-                        onChanged: (p0) =>
-                            widget.viewModel.onDescriptionTextChanged(),
-                      ),
+                          labelText: "",
+                          pourpose: TextFieldPourpose.Multiline,
+                          controller: widget.viewModel.descriptionController,
+                          validator: (a) {},
+                          minLines: 5,
+                          maxLines: 5,
+                          hintText:
+                              "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
+                          onChanged: (a) {}),
                       Text(
                         "${widget.viewModel.descriptionLength}/255",
                         style: TextStyle(color: textDarkGrey),
@@ -224,15 +222,19 @@ class _BrandInfoState extends State<BrandInfo> {
                         itemCount: widget.viewModel.storePhotos.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                right: 2 * defaultPadding),
-                            child: Stack(
-                              children: [
-                                Image.memory(
-                                  widget.viewModel.storePhotos[index],
-                                ),
-                              ],
+                          return Container(
+                            margin: const EdgeInsets.only(
+                              right: 2 * defaultPadding,
+                            ),
+                            height: 170,
+                            width: 300,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                              defaultBorderRadius,
+                            )),
+                            child: Image.memory(
+                              widget.viewModel.storePhotos[index],
+                              fit: BoxFit.cover,
                             ),
                           );
                         },
