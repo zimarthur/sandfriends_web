@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:image/image.dart' as IMG;
 import 'package:image_picker/image_picker.dart';
 import '../../../../Utils/SFImage.dart';
+import 'package:flutter/foundation.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   int _currentForm = 0;
@@ -52,6 +53,27 @@ class SettingsViewModel extends ChangeNotifier {
 
   bool _storeInfoDif = false;
   bool get storeInfoDif => _storeInfoDif;
+
+  int _decriptionLength = 0;
+  int get descriptionLength => _decriptionLength;
+  set descriptionLength(int value) {
+    _decriptionLength = value;
+    notifyListeners();
+  }
+
+  Uint8List? storeAvatarRef;
+
+  Uint8List? _storeAvatar;
+  Uint8List? get storeAvatar => _storeAvatar;
+  set storeAvatar(Uint8List? newFile) {
+    _storeAvatar = newFile;
+    notifyListeners();
+  }
+
+  List<Uint8List> storePhotosRef = [];
+  List<Uint8List> _storePhotos = [];
+  List<Uint8List> get storePhotos => _storePhotos;
+
   void storeInfoChanged() {
     _storeInfoDif = nameController.text != nameRef ||
         telephoneController.text != telephoneRef ||
@@ -63,7 +85,9 @@ class SettingsViewModel extends ChangeNotifier {
         cityController.text != cityRef ||
         stateController.text != stateRef ||
         descriptionController.text != descriptionRef ||
-        instagramController.text != instagramRef;
+        instagramController.text != instagramRef ||
+        storeAvatar != storeAvatarRef ||
+        listEquals(storePhotos, storePhotosRef) == false;
     notifyListeners();
   }
 
@@ -79,26 +103,10 @@ class SettingsViewModel extends ChangeNotifier {
     stateRef = stateController.text;
     descriptionRef = descriptionController.text;
     instagramRef = instagramController.text;
+    storeAvatarRef = storeAvatar;
+    storePhotosRef = List.from(storePhotos);
     storeInfoChanged();
   }
-
-  int _decriptionLength = 0;
-  int get descriptionLength => _decriptionLength;
-  set descriptionLength(int value) {
-    _decriptionLength = value;
-    notifyListeners();
-  }
-
-  Uint8List? _storeAvatar;
-  Uint8List? get storeAvatar => _storeAvatar;
-  set storeAvatar(Uint8List? newFile) {
-    _storeAvatar = newFile;
-    print(_storeAvatar);
-    notifyListeners();
-  }
-
-  List<Uint8List> _storePhotos = [];
-  List<Uint8List> get storePhotos => _storePhotos;
 
   void onDescriptionTextChanged() {
     descriptionLength = descriptionController.text.length;
@@ -135,6 +143,7 @@ class SettingsViewModel extends ChangeNotifier {
     );
     if (croppedImage == null) return;
     storeAvatar = croppedImage;
+    storeInfoChanged();
   }
 
   Future addStorePhoto(BuildContext context) async {
@@ -160,6 +169,13 @@ class SettingsViewModel extends ChangeNotifier {
     );
     if (croppedImage == null) return;
     _storePhotos.add(croppedImage);
+    storeInfoChanged();
+    notifyListeners();
+  }
+
+  void deleteStorePhoto(int index) {
+    _storePhotos.removeAt(index);
+    storeInfoChanged();
     notifyListeners();
   }
 }

@@ -29,6 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
     double height =
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
+    print("Arthur ${width}");
     return ChangeNotifierProvider<SettingsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<SettingsViewModel>(

@@ -39,9 +39,6 @@ class _FormItemState extends State<FormItem> {
             flex: 2,
             child: Text(
               widget.name,
-              style: TextStyle(
-                color: textDarkGrey,
-              ),
               textAlign: TextAlign.start,
             ),
           ),
@@ -69,9 +66,6 @@ class _FormItemState extends State<FormItem> {
                               flex: 1,
                               child: Text(
                                 widget.secondName!,
-                                style: TextStyle(
-                                  color: textDarkGrey,
-                                ),
                                 textAlign: TextAlign.start,
                               ),
                             ),

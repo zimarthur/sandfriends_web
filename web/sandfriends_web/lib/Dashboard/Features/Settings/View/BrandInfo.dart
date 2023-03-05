@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/View/SFStorePhoto.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -7,9 +8,9 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_cropper_platform_interface/src/models/settings.dart';
+import '../../../../SharedComponents/View/SFDivider.dart';
 import '../ViewModel/SettingsViewModel.dart';
 import 'package:image/image.dart' as IMG;
-import 'package:flutter_svg/flutter_svg.dart';
 
 class BrandInfo extends StatefulWidget {
   SettingsViewModel viewModel;
@@ -34,8 +35,8 @@ class _BrandInfoState extends State<BrandInfo> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Seu logo",
-                    style: TextStyle(color: textDarkGrey),
+                    "Logo do seu estabelecimento",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: defaultPadding,
@@ -84,12 +85,7 @@ class _BrandInfoState extends State<BrandInfo> {
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          height: 1,
-          color: divider,
-          margin: EdgeInsets.symmetric(vertical: defaultPadding),
-        ),
+        SFDivider(),
         Column(
           children: [
             Row(
@@ -103,7 +99,6 @@ class _BrandInfoState extends State<BrandInfo> {
                       Text(
                         "Descrição",
                         style: TextStyle(
-                          color: textDarkGrey,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -122,15 +117,16 @@ class _BrandInfoState extends State<BrandInfo> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       SFTextField(
-                          labelText: "",
-                          pourpose: TextFieldPourpose.Multiline,
-                          controller: widget.viewModel.descriptionController,
-                          validator: (a) {},
-                          minLines: 5,
-                          maxLines: 5,
-                          hintText:
-                              "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
-                          onChanged: (a) {}),
+                        labelText: "",
+                        pourpose: TextFieldPourpose.Multiline,
+                        controller: widget.viewModel.descriptionController,
+                        validator: (a) {},
+                        minLines: 5,
+                        maxLines: 5,
+                        hintText:
+                            "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
+                        onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+                      ),
                       Text(
                         "${widget.viewModel.descriptionLength}/255",
                         style: TextStyle(color: textDarkGrey),
@@ -144,12 +140,22 @@ class _BrandInfoState extends State<BrandInfo> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: Text(
-                    "Instagram",
-                    style: TextStyle(
-                      color: textDarkGrey,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Instagram",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "(Link para sua página)",
+                        style: TextStyle(
+                          color: textDarkGrey,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -162,6 +168,8 @@ class _BrandInfoState extends State<BrandInfo> {
                           labelText: "",
                           pourpose: TextFieldPourpose.Standard,
                           validator: (value) {},
+                          onChanged: (p0) =>
+                              widget.viewModel.storeInfoChanged(),
                         ),
                       ),
                       Expanded(
@@ -174,12 +182,7 @@ class _BrandInfoState extends State<BrandInfo> {
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          height: 1,
-          color: divider,
-          margin: EdgeInsets.symmetric(vertical: defaultPadding),
-        ),
+        SFDivider(),
         Row(
           children: [
             Expanded(
@@ -189,7 +192,11 @@ class _BrandInfoState extends State<BrandInfo> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Fotos da sua quadra (min 2)",
+                    "Fotos da sua quadra",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "(mín. 2)",
                     style: TextStyle(color: textDarkGrey),
                   ),
                   SizedBox(
@@ -223,49 +230,10 @@ class _BrandInfoState extends State<BrandInfo> {
                         itemCount: widget.viewModel.storePhotos.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Container(
-                                height: 190,
-                                width: 320,
-                                child: Stack(
-                                  alignment: Alignment.bottomLeft,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          defaultBorderRadius),
-                                      child: Image.memory(
-                                        widget.viewModel.storePhotos[index],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: primaryBlue,
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: SvgPicture.asset(
-                                            r'assets/icon/x.svg',
-                                            color: secondaryPaper,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 2 * defaultPadding,
-                              )
-                            ],
+                          return SFStorePhoto(
+                            image: widget.viewModel.storePhotos[index],
+                            delete: () =>
+                                widget.viewModel.deleteStorePhoto(index),
                           );
                         },
                       ),

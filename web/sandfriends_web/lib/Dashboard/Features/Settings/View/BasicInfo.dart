@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/FormItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
@@ -20,7 +21,6 @@ class _BasicInfoState extends State<BasicInfo> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           children: [
@@ -41,12 +41,7 @@ class _BasicInfoState extends State<BasicInfo> {
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          height: 1,
-          color: divider,
-          margin: EdgeInsets.symmetric(vertical: defaultPadding),
-        ),
+        SFDivider(),
         Column(
           children: [
             FormItem(
@@ -75,12 +70,7 @@ class _BasicInfoState extends State<BasicInfo> {
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          height: 1,
-          color: divider,
-          margin: EdgeInsets.symmetric(vertical: defaultPadding),
-        ),
+        SFDivider(),
         FormItem(
           name: "Email",
           controller: widget.viewModel.emailController,

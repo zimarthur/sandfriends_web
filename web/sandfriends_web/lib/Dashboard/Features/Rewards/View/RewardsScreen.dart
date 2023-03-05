@@ -43,11 +43,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
     return ChangeNotifierProvider<RewardsViewModel>(
       create: (BuildContext context) => viewModel,
-      child: Consumer<RewardsViewModel>(builder: (context, viewModel, _) {
-        return SizedBox(
-          height: height,
-          width: width,
-          child: Column(
+      child: Consumer<RewardsViewModel>(
+        builder: (context, viewModel, _) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -167,9 +165,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 ),
               ),
             ],
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }
