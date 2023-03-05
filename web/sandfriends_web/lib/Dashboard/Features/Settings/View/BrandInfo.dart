@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_cropper_platform_interface/src/models/settings.dart';
 import '../ViewModel/SettingsViewModel.dart';
 import 'package:image/image.dart' as IMG;
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BrandInfo extends StatefulWidget {
   SettingsViewModel viewModel;
@@ -33,7 +34,7 @@ class _BrandInfoState extends State<BrandInfo> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "O logo da sua marca",
+                    "Seu logo",
                     style: TextStyle(color: textDarkGrey),
                   ),
                   SizedBox(
@@ -214,28 +215,57 @@ class _BrandInfoState extends State<BrandInfo> {
             Expanded(
               flex: 3,
               child: widget.viewModel.storePhotos.isEmpty
-                  ? Text("Sem fotos")
+                  ? Container()
                   : SizedBox(
-                      height: 200,
+                      height: 220,
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: widget.viewModel.storePhotos.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.only(
-                              right: 2 * defaultPadding,
-                            ),
-                            height: 170,
-                            width: 300,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                              defaultBorderRadius,
-                            )),
-                            child: Image.memory(
-                              widget.viewModel.storePhotos[index],
-                              fit: BoxFit.cover,
-                            ),
+                          return Row(
+                            children: [
+                              Container(
+                                height: 190,
+                                width: 320,
+                                child: Stack(
+                                  alignment: Alignment.bottomLeft,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          defaultBorderRadius),
+                                      child: Image.memory(
+                                        widget.viewModel.storePhotos[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: primaryBlue,
+                                          ),
+                                          padding: EdgeInsets.all(10),
+                                          child: SvgPicture.asset(
+                                            r'assets/icon/x.svg',
+                                            color: secondaryPaper,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 2 * defaultPadding,
+                              )
+                            ],
                           );
                         },
                       ),
