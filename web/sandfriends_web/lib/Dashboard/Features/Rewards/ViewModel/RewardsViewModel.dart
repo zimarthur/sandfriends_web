@@ -283,7 +283,6 @@ class RewardsViewModel extends ChangeNotifier {
   }
 
 ///////////////////////////////////////////////////////
-
 }
 
 Player arthur = Player(

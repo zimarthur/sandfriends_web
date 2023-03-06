@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     const Expanded(
                       child: SFHeader(
-                        header: "Configurações",
+                        header: "Meu perfil",
                         description:
                             "Gerencie as informações e a identidade visual do seu negócio, bem como seus dados financeiros",
                       ),

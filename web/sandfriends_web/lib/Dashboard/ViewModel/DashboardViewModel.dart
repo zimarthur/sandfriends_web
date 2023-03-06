@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/CalendarScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Help/View/HelpScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/FinanceScreen.dart';
@@ -127,6 +128,9 @@ class DashboardViewModel extends ChangeNotifier {
         break;
       case 3:
         _currentDashboardWidget = const FinanceScreen();
+        break;
+      case 4:
+        _currentDashboardWidget = const MyCourtsScreen();
         break;
       case -1:
         _currentDashboardWidget = const SettingsScreen();

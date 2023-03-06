@@ -20,7 +20,6 @@ class LoginRepoImp implements LoginRepo {
       return jsonData;
     } catch (e) {
       rethrow;
-      print("MARAJ-E $e}");
     }
   }
 
