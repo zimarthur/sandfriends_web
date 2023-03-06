@@ -26,7 +26,6 @@ class _SFDrawerState extends State<SFDrawer> {
     bool fullSize =
         !Responsive.isMobile(context) && menuController.isDrawerExpanded ||
             Responsive.isMobile(context);
-    print(MediaQuery.of(context).size.width);
     return Responsive.isMobile(context) &&
             menuController.isDrawerOpened == false
         ? Container()

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/CalendarScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/FinanceScreen.dart';
@@ -68,14 +69,15 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const SettingsScreen();
+  Widget _currentDashboardWidget = const HomeScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     if (Responsive.isMobile(context)) {
       width = width - 4 * defaultPadding;
-    } else if (Responsive.isDesktop(context) || isDrawerExpanded) {
+    } else if ((Responsive.isDesktop(context) && isDrawerExpanded) ||
+        isDrawerExpanded) {
       width = width - 250 - 4 * defaultPadding;
     } else {
       width = width - 82 - 4 * defaultPadding;
@@ -128,6 +130,10 @@ class DashboardViewModel extends ChangeNotifier {
         break;
       case -1:
         _currentDashboardWidget = const SettingsScreen();
+        break;
+      case -2:
+        _currentDashboardWidget = const HelpScreen();
+        break;
     }
     notifyListeners();
   }

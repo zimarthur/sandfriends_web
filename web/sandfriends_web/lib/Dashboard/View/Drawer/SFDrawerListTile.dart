@@ -28,7 +28,7 @@ class SFDrawerListTile extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   svgSrc,
-                  color: isSelected ? Colors.white : textLightGrey,
+                  color: Colors.white,
                   height: 16,
                 ),
                 const SizedBox(
@@ -38,7 +38,7 @@ class SFDrawerListTile extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: isSelected ? Colors.white : textLightGrey,
+                      color: Colors.white,
                     ),
                   ),
                 )
@@ -46,7 +46,7 @@ class SFDrawerListTile extends StatelessWidget {
             )
           : SvgPicture.asset(
               svgSrc,
-              color: isSelected ? Colors.white : textLightGrey,
+              color: Colors.white,
               height: 16,
             ),
     );
