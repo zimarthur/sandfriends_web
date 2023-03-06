@@ -78,7 +78,7 @@ class DashboardViewModel extends ChangeNotifier {
     } else if (Responsive.isDesktop(context) || isDrawerExpanded) {
       width = width - 250 - 4 * defaultPadding;
     } else {
-      width = width - 80 - 4 * defaultPadding;
+      width = width - 82 - 4 * defaultPadding;
     }
     return width;
   }

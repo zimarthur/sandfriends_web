@@ -98,6 +98,8 @@ flutter:
     - assets/icon/double_arrow_left.svg
     - assets/icon/double_arrow_right.svg
     - assets/icon/x.svg
+    - assets/icon/profile.svg
+    - assets/icon/logout.svg
 
     
     - assets/Arthur.jpg

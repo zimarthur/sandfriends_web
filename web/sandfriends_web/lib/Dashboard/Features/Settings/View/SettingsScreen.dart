@@ -29,7 +29,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
     double height =
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
-    print("Arthur ${width}");
     return ChangeNotifierProvider<SettingsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<SettingsViewModel>(
@@ -65,7 +64,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SFTabs(
                   tabs: ["Dados básicos", "Sua marca", "Dados financeiros"],
                   onTap: (index) {
-                    print(index);
                     viewModel.currentForm = index;
                   },
                 ),

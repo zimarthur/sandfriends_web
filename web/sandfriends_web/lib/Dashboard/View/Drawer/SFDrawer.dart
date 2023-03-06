@@ -40,7 +40,7 @@ class _SFDrawerState extends State<SFDrawer> {
                 ),
               ),
             ),
-            width: fullSize ? 250 : 80,
+            width: fullSize ? 250 : 82,
             height: height,
             padding: const EdgeInsets.all(defaultPadding),
             child: Column(
@@ -96,14 +96,12 @@ class _SFDrawerState extends State<SFDrawer> {
                   ),
                 ),
                 const SFDrawerDivider(),
-                InkWell(
-                    onTap: () => menuController.onTabClick(-1),
-                    child: SFDrawerUserWidget(
-                      fullSize: fullSize,
-                      onTap: () {
-                        menuController.onTabClick(-1);
-                      },
-                    )),
+                SFDrawerUserWidget(
+                  fullSize: fullSize,
+                  onTap: (value) {
+                    menuController.onTabClick(value);
+                  },
+                )
               ],
             ),
           );
