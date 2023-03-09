@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/SharedComponents/Model/player.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTable.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTableHeader.dart';

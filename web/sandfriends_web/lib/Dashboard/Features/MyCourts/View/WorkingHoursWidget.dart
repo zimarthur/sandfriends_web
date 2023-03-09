@@ -4,9 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 
+import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
+import 'HourSelector.dart';
 
 class WorkingHoursWidget extends StatefulWidget {
   const WorkingHoursWidget({super.key});
@@ -28,21 +30,23 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
     "domingo"
   ];
 
-  List<String> hours = [
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
+  Hour startHour = Hour(hour: 8, hourString: "08:00");
+  Hour endHour = Hour(hour: 21, hourString: "21:00");
+  List<Hour> availableHours = [
+    Hour(hourString: "08:00", hour: 8),
+    Hour(hourString: "09:00", hour: 9),
+    Hour(hourString: "10:00", hour: 10),
+    Hour(hourString: "11:00", hour: 11),
+    Hour(hourString: "12:00", hour: 12),
+    Hour(hourString: "13:00", hour: 13),
+    Hour(hourString: "14:00", hour: 14),
+    Hour(hourString: "15:00", hour: 15),
+    Hour(hourString: "16:00", hour: 16),
+    Hour(hourString: "17:00", hour: 17),
+    Hour(hourString: "18:00", hour: 18),
+    Hour(hourString: "19:00", hour: 19),
+    Hour(hourString: "20:00", hour: 20),
+    Hour(hourString: "21:00", hour: 21),
   ];
   String hourvalue = "08:00";
   @override
@@ -97,47 +101,11 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                             children: [
                               for (int i = 0; i < weeKDays.length; i++)
                                 Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: defaultPadding / 2),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            weeKDays[i],
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 100,
-                                          child: SFDropdown(
-                                            labelText: "",
-                                            controller: hourvalue,
-                                            items: hours,
-                                            validator: (a) {},
-                                            onChanged: (a) {},
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: defaultPadding),
-                                          child: Text(
-                                            "até",
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 100,
-                                          child: SFDropdown(
-                                            labelText: "",
-                                            controller: hourvalue,
-                                            items: hours,
-                                            validator: (a) {},
-                                            onChanged: (a) {},
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  child: HourSelector(
+                                    availableHours: availableHours,
+                                    title: weeKDays[i],
+                                    startHour: startHour,
+                                    endHour: endHour,
                                   ),
                                 )
                             ],

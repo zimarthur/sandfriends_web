@@ -70,7 +70,7 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const HomeScreen();
+  Widget _currentDashboardWidget = const MyCourtsScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {

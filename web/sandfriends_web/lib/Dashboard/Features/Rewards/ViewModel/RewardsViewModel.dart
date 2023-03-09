@@ -3,7 +3,7 @@ import 'package:sandfriends_web/Dashboard/Features/Rewards/Model/Reward.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/Model/RewardDataSource.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/AddRewardWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
-import 'package:sandfriends_web/SharedComponents/Model/player.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';

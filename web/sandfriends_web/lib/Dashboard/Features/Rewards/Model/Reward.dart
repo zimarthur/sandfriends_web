@@ -1,4 +1,4 @@
-import '../../../../SharedComponents/Model/player.dart';
+import '../../../../SharedComponents/Model/Player.dart';
 import 'package:intl/intl.dart';
 
 class Reward {
