@@ -10,7 +10,6 @@ class SFDivider extends StatelessWidget {
       width: double.infinity,
       height: 1,
       color: divider,
-      margin: EdgeInsets.symmetric(vertical: 2 * defaultPadding),
     );
   }
 }

@@ -85,7 +85,10 @@ class _BrandInfoState extends State<BrandInfo> {
             ),
           ],
         ),
-        SFDivider(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: defaultPadding),
+          child: SFDivider(),
+        ),
         Column(
           children: [
             Row(
@@ -182,7 +185,10 @@ class _BrandInfoState extends State<BrandInfo> {
             ),
           ],
         ),
-        SFDivider(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: defaultPadding),
+          child: SFDivider(),
+        ),
         Row(
           children: [
             Expanded(
