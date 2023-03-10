@@ -1,0 +1,17 @@
+[
+    {
+        "IdSport": 1,
+        "Description": "Beach Tennis",
+        "SportPhoto": "url"
+    },
+    {
+        "IdSport": 2,
+        "Description": "Volei",
+        "SportPhoto": "url"
+    },
+    {
+        "IdSport": 3,
+        "Description": "Futevolei",
+        "SportPhoto": "url"
+    }
+]

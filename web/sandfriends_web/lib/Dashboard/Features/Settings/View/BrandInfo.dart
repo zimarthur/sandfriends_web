@@ -125,7 +125,8 @@ class _BrandInfoState extends State<BrandInfo> {
                         maxLines: 5,
                         hintText:
                             "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
-                        onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+                        onChanged: (p0) =>
+                            widget.viewModel.storeInfoChanged(context),
                       ),
                       Text(
                         "${widget.viewModel.descriptionLength}/255",
@@ -169,7 +170,7 @@ class _BrandInfoState extends State<BrandInfo> {
                           pourpose: TextFieldPourpose.Standard,
                           validator: (value) {},
                           onChanged: (p0) =>
-                              widget.viewModel.storeInfoChanged(),
+                              widget.viewModel.storeInfoChanged(context),
                         ),
                       ),
                       Expanded(
@@ -232,8 +233,8 @@ class _BrandInfoState extends State<BrandInfo> {
                         itemBuilder: (context, index) {
                           return SFStorePhoto(
                             image: widget.viewModel.storePhotos[index],
-                            delete: () =>
-                                widget.viewModel.deleteStorePhoto(index),
+                            delete: () => widget.viewModel
+                                .deleteStorePhoto(context, index),
                           );
                         },
                       ),

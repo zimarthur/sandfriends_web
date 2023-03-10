@@ -1,0 +1,29 @@
+[
+    {
+        "IdStoreCourt": 1,
+        "Description": "Quadra 1",
+        "IsIndoor": true,
+        "Sports": [
+            {
+                "IdSport": 1,
+                "Description": "Beach Tennis",
+                "SportPhoto": "url"
+            },
+            {
+                "IdSport": 2,
+                "Description": "Volei",
+                "SportPhoto": "url"
+            }
+        ],
+        "Prices": [
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            }
+        ]
+    }
+]

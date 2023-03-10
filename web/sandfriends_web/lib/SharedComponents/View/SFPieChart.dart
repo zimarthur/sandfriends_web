@@ -32,7 +32,6 @@ class _SFPieChartState extends State<SFPieChart> {
     }
     return LayoutBuilder(
       builder: (layoutContext, layoutConstaints) {
-        print("Arthur ${layoutConstaints.maxHeight}");
         return Row(
           children: [
             Expanded(

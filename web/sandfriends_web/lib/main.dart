@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/ViewModel/RewardsViewModel.dart';
 import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Login/View/LoginScreen.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
+import 'Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => RewardsViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DataProvider(),
         ),
       ],
       child: MaterialApp(
@@ -45,7 +50,7 @@ class MyApp extends StatelessWidget {
           '/login': (BuildContext context) => const LoginScreen(),
           '/dashboard': (BuildContext context) => const DashboardScreen(),
         },
-        initialRoute: '/dashboard',
+        initialRoute: '/login',
       ),
     );
   }

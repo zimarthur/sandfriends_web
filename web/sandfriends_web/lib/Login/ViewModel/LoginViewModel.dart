@@ -1,16 +1,25 @@
+import 'dart:convert';
+
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
 import 'package:sandfriends_web/Login/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountCourtWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountOwnerWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountWidget.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Login/View/LoginSuccessWidget.dart';
 import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
+import '../../SharedComponents/Model/Store.dart';
 import '../View/ForgotPasswordWidget.dart';
 import '../View/LoginWidget.dart';
+import 'package:provider/provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final _loginRepo = LoginRepoImp();
@@ -28,9 +37,42 @@ class LoginViewModel extends ChangeNotifier {
   TextEditingController passwordController = TextEditingController();
   bool keepConnected = true;
 
-  void onTapLogin(BuildContext context) {
-    // pageStatus = PageStatus.LOADING;
-    // notifyListeners();
+  void onTapLogin(BuildContext context) async {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+    final String responseStore =
+        await rootBundle.loadString(r"assets/fakeJson/store.json");
+    final dataStore = await json.decode(responseStore);
+    Provider.of<DataProvider>(context, listen: false).store =
+        Store.fromJson(dataStore);
+
+    String responseCourt =
+        await rootBundle.loadString(r"assets/fakeJson/court.json");
+    List<dynamic> dataCourt = json.decode(responseCourt);
+    for (var court in dataCourt) {
+      Provider.of<DataProvider>(context, listen: false)
+          .courts
+          .add(Court.fromJson(court));
+
+      String responseSport =
+          await rootBundle.loadString(r"assets/fakeJson/sport.json");
+      List<dynamic> dataSport = json.decode(responseSport);
+      for (var sport in dataSport) {
+        Provider.of<DataProvider>(context, listen: false)
+            .sports
+            .add(Sport.fromJson(sport));
+
+        String responseHour =
+            await rootBundle.loadString(r"assets/fakeJson/availableHours.json");
+        List<dynamic> dataHour = json.decode(responseHour);
+        for (var hour in dataHour) {
+          Provider.of<DataProvider>(context, listen: false)
+              .hours
+              .add(Hour.fromJson(hour));
+        }
+      }
+    }
+
     // _loginRepo
     //     .login(userController.text, passwordController.text)
     //     .then(

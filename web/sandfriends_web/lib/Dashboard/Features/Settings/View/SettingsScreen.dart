@@ -24,6 +24,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final SettingsViewModel viewModel = SettingsViewModel();
 
   @override
+  void initState() {
+    super.initState();
+    viewModel.setFields(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width =
         Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
@@ -51,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             buttonLabel: "Salvar",
                             buttonType: ButtonType.Primary,
                             onTap: () {
-                              viewModel.saveStoreDifChanges();
+                              viewModel.saveStoreDifChanges(context);
                             },
                             textPadding: const EdgeInsets.symmetric(
                               vertical: defaultPadding,

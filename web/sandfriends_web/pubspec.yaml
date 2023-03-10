@@ -103,6 +103,12 @@ flutter:
     - assets/icon/whatsapp.svg
 
 
+    - assets/fakeJson/store.json
+    - assets/fakeJson/court.json
+    - assets/fakeJson/sport.json
+    - assets/fakeJson/availableHours.json
+
+
     
     - assets/Arthur.jpg
 

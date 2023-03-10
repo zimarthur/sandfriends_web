@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image/image.dart' as IMG;
 import 'package:image_picker/image_picker.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import '../../../../Utils/SFImage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   int _currentForm = 0;
@@ -36,21 +38,6 @@ class SettingsViewModel extends ChangeNotifier {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController instagramController = TextEditingController();
 
-  String nameRef = "";
-  String telephoneRef = "";
-  String telephoneOwnerRef = "";
-  String cnpjRef = "";
-  String cpfRef = "";
-  String storeNameRef = "";
-  String stateRef = "";
-  String cityRef = "";
-  String cepRef = "";
-  String neighbourhoodRef = "";
-  String addressRef = "";
-  String addressNumberRef = "";
-  String descriptionRef = "";
-  String instagramRef = "";
-
   bool _storeInfoDif = false;
   bool get storeInfoDif => _storeInfoDif;
 
@@ -74,38 +61,112 @@ class SettingsViewModel extends ChangeNotifier {
   List<Uint8List> _storePhotos = [];
   List<Uint8List> get storePhotos => _storePhotos;
 
-  void storeInfoChanged() {
-    _storeInfoDif = nameController.text != nameRef ||
-        telephoneController.text != telephoneRef ||
-        telephoneOwnerController.text != telephoneOwnerRef ||
-        cepController.text != cepRef ||
-        neighbourhoodController.text != neighbourhoodRef ||
-        addressController.text != addressRef ||
-        addressNumberController.text != addressNumberRef ||
-        cityController.text != cityRef ||
-        stateController.text != stateRef ||
-        descriptionController.text != descriptionRef ||
-        instagramController.text != instagramRef ||
+  void setFields(BuildContext context) {
+    nameController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.name;
+    telephoneController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.phoneNumber;
+    telephoneOwnerController.text =
+        Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .ownerPhoneNumber ??
+            "";
+    cepController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.cep;
+    neighbourhoodController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.neighbourhood;
+    addressController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.address;
+    addressNumberController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.addressNumber;
+    cityController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.city.name;
+    stateController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.city.state.uf;
+    descriptionController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.description ??
+            "";
+    instagramController.text =
+        Provider.of<DataProvider>(context, listen: false).store!.instagram ??
+            "";
+    storeAvatarRef = storeAvatar;
+    storePhotosRef = List.from(storePhotos);
+    notifyListeners();
+  }
+
+  void storeInfoChanged(BuildContext context) {
+    _storeInfoDif = nameController.text !=
+            Provider.of<DataProvider>(context, listen: false).store!.name ||
+        telephoneController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .phoneNumber ||
+        telephoneOwnerController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .ownerPhoneNumber ||
+        cepController.text !=
+            Provider.of<DataProvider>(context, listen: false).store!.cep ||
+        neighbourhoodController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .neighbourhood ||
+        addressController.text !=
+            Provider.of<DataProvider>(context, listen: false).store!.address ||
+        addressNumberController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .addressNumber ||
+        cityController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .city
+                .name ||
+        stateController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .city
+                .state
+                .uf ||
+        descriptionController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .description ||
+        instagramController.text !=
+            Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .instagram ||
         storeAvatar != storeAvatarRef ||
         listEquals(storePhotos, storePhotosRef) == false;
     notifyListeners();
   }
 
-  void saveStoreDifChanges() {
-    nameRef = nameController.text;
-    telephoneRef = telephoneController.text;
-    telephoneOwnerRef = telephoneOwnerController.text;
-    cepRef = cepController.text;
-    neighbourhoodRef = neighbourhoodController.text;
-    addressRef = addressController.text;
-    addressNumberRef = addressNumberController.text;
-    cityRef = cityController.text;
-    stateRef = stateController.text;
-    descriptionRef = descriptionController.text;
-    instagramRef = instagramController.text;
+  void saveStoreDifChanges(BuildContext context) {
+    Provider.of<DataProvider>(context, listen: false).store!.name =
+        nameController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.phoneNumber =
+        telephoneController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.ownerPhoneNumber =
+        telephoneOwnerController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.cep =
+        cepController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.neighbourhood =
+        neighbourhoodController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.address =
+        addressController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.addressNumber =
+        addressNumberController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.city.name =
+        cityController.text; //tem q chegar do servidor a classe city certa
+    Provider.of<DataProvider>(context, listen: false).store!.city.state.uf =
+        stateController.text; //tem q chegar do servidor a classe state certa
+    Provider.of<DataProvider>(context, listen: false).store!.description =
+        descriptionController.text;
+    Provider.of<DataProvider>(context, listen: false).store!.instagram =
+        instagramController.text;
     storeAvatarRef = storeAvatar;
     storePhotosRef = List.from(storePhotos);
-    storeInfoChanged();
+    storeInfoChanged(context);
   }
 
   void onDescriptionTextChanged() {
@@ -143,7 +204,7 @@ class SettingsViewModel extends ChangeNotifier {
     );
     if (croppedImage == null) return;
     storeAvatar = croppedImage;
-    storeInfoChanged();
+    storeInfoChanged(context);
   }
 
   Future addStorePhoto(BuildContext context) async {
@@ -169,13 +230,13 @@ class SettingsViewModel extends ChangeNotifier {
     );
     if (croppedImage == null) return;
     _storePhotos.add(croppedImage);
-    storeInfoChanged();
+    storeInfoChanged(context);
     notifyListeners();
   }
 
-  void deleteStorePhoto(int index) {
+  void deleteStorePhoto(BuildContext context, int index) {
     _storePhotos.removeAt(index);
-    storeInfoChanged();
+    storeInfoChanged(context);
     notifyListeners();
   }
 }

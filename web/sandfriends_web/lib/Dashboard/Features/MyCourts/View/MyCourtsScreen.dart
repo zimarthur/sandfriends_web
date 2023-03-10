@@ -8,6 +8,8 @@ import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 import 'dart:io';
 
+import '../../../ViewModel/DataProvider.dart';
+
 class MyCourtsScreen extends StatefulWidget {
   const MyCourtsScreen({super.key});
 
@@ -54,6 +56,49 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       ),
                     )
                   ],
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                Row(
+                  children: [
+                    ClipPath(
+                        clipper: ShapeBorderClipper(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(defaultBorderRadius),
+                              topRight: Radius.circular(defaultBorderRadius),
+                            ),
+                          ),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 2 * defaultPadding,
+                              vertical: defaultPadding),
+                          decoration: BoxDecoration(
+                            color: secondaryPaper,
+                            border: Border(
+                              left: BorderSide(color: divider, width: 2),
+                              right: BorderSide(color: divider, width: 2),
+                              top: BorderSide(color: divider, width: 2),
+                            ),
+                          ),
+                          child: Text("Nova Quadra"),
+                        ))
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: secondaryPaper,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(defaultBorderRadius),
+                        bottomRight: Radius.circular(defaultBorderRadius),
+                        topRight: Radius.circular(defaultBorderRadius),
+                      ),
+                      border: Border.all(color: divider, width: 2),
+                    ),
+                  ),
                 ),
               ],
             ),

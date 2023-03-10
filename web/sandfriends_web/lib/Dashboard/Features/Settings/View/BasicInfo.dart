@@ -27,17 +27,17 @@ class _BasicInfoState extends State<BasicInfo> {
             FormItem(
               name: "Nome",
               controller: widget.viewModel.nameController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
             FormItem(
               name: "Telefone da empresa",
               controller: widget.viewModel.telephoneController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
             FormItem(
               name: "Telefone pessoal",
               controller: widget.viewModel.telephoneOwnerController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
           ],
         ),
@@ -50,7 +50,7 @@ class _BasicInfoState extends State<BasicInfo> {
               hasSecondItem: true,
               secondName: "Bairro",
               secondController: widget.viewModel.neighbourhoodController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
             FormItem(
               name: "Rua",
@@ -58,7 +58,7 @@ class _BasicInfoState extends State<BasicInfo> {
               hasSecondItem: true,
               secondName: "N°",
               secondController: widget.viewModel.addressNumberController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
             FormItem(
               name: "Cidade",
@@ -66,7 +66,7 @@ class _BasicInfoState extends State<BasicInfo> {
               hasSecondItem: true,
               secondName: "Estado(UF)",
               secondController: widget.viewModel.stateController,
-              onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+              onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
             ),
           ],
         ),
@@ -74,7 +74,7 @@ class _BasicInfoState extends State<BasicInfo> {
         FormItem(
           name: "Email",
           controller: widget.viewModel.emailController,
-          onChanged: (p0) => widget.viewModel.storeInfoChanged(),
+          onChanged: (p0) => widget.viewModel.storeInfoChanged(context),
           controllerEnabled: false,
           hasSecondItem: true,
           customWidget: Row(
