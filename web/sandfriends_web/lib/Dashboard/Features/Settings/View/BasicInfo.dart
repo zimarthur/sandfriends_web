@@ -41,7 +41,10 @@ class _BasicInfoState extends State<BasicInfo> {
             ),
           ],
         ),
-        SFDivider(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: defaultPadding),
+          child: SFDivider(),
+        ),
         Column(
           children: [
             FormItem(
@@ -70,7 +73,10 @@ class _BasicInfoState extends State<BasicInfo> {
             ),
           ],
         ),
-        SFDivider(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: defaultPadding),
+          child: SFDivider(),
+        ),
         FormItem(
           name: "Email",
           controller: widget.viewModel.emailController,
