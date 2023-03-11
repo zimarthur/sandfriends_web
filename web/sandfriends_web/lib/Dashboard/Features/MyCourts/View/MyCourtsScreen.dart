@@ -9,7 +9,7 @@ import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 import 'dart:io';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../ViewModel/DataProvider.dart';
 import 'CourtInfo.dart';
 
@@ -23,17 +23,11 @@ class MyCourtsScreen extends StatefulWidget {
 class _MyCourtsScreenState extends State<MyCourtsScreen> {
   final MyCourtsViewModel viewModel = MyCourtsViewModel();
 
-  late ScrollController scrollController;
-  bool isScrollOverflown = false;
-
   @override
   void initState() {
-    scrollController = ScrollController();
-    scrollController.addListener(() {
-      isScrollOverflown = scrollController.position.maxScrollExtent >
-          scrollController.position.pixels;
-    });
+    // TODO: implement initState
     super.initState();
+    viewModel.setFields(context);
   }
 
   @override
@@ -42,8 +36,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
         Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
     double height =
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
-    double courtInfo = 300;
-    double courtCalendar = width - courtInfo - 8 * defaultPadding;
+    double courtInfo = width * 0.3 < 350 ? 350 : width * 0.3;
+    double courtCalendar = width - courtInfo;
     return ChangeNotifierProvider<MyCourtsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<MyCourtsViewModel>(
@@ -69,8 +63,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                         viewModel.setWorkingHours(context);
                       },
                       textPadding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding,
-                        horizontal: defaultPadding * 2,
+                        vertical: defaultPadding / 2,
+                        horizontal: defaultPadding,
                       ),
                     ),
                   ],
@@ -86,30 +80,45 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       width: double.infinity,
                       color: divider,
                     ),
-                    Row(
-                      children: [
-                        MyCourtsTabSelector(
-                          title: "Adicionar Quadra",
-                          isSelected: true,
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 50,
+                    SizedBox(
+                      height: 40,
+                      child: Row(
+                        children: [
+                          MyCourtsTabSelector(
+                            title: "Adicionar Quadra",
+                            isSelected: viewModel.selectedCourtIndex == -1
+                                ? true
+                                : false,
+                            iconPath: r'assets/icon/plus.svg',
+                            onTap: () {
+                              viewModel.switchTabs(context, -1);
+                            },
+                          ),
+                          Expanded(
                             child: ListView.builder(
-                              controller: scrollController,
-                              itemCount: 10,
+                              itemCount: Provider.of<DataProvider>(context)
+                                  .courts
+                                  .length,
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return MyCourtsTabSelector(
-                                  title: "Quadra $index",
-                                  isSelected: false,
+                                  title: Provider.of<DataProvider>(context)
+                                      .courts[index]
+                                      .description,
+                                  isSelected:
+                                      viewModel.selectedCourtIndex == index
+                                          ? true
+                                          : false,
+                                  onTap: () {
+                                    viewModel.switchTabs(context, index);
+                                  },
                                 );
                               },
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -137,7 +146,10 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           SizedBox(
                             width: courtInfo,
                             height: height,
-                            child: CourtInfo(),
+                            child: CourtInfo(
+                              viewModel: viewModel,
+                              newCourt: viewModel.isNewCourt,
+                            ),
                           ),
                           SizedBox(
                             width: defaultPadding,

@@ -1,3 +1,4 @@
+import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 
 import 'Sport.dart';
@@ -7,7 +8,7 @@ class Court {
   String description;
   bool isIndoor;
 
-  List<Sport> sports = [];
+  List<AvailableSport> sports = [];
   List<HourPrice> prices = [];
 
   Court({
@@ -23,9 +24,9 @@ class Court {
       isIndoor: parsedJson["IsIndoor"],
     );
 
-    for (int i = 0; i < parsedJson["Sports"].length; i++) {
-      newCourt.sports.add(Sport.fromJson(parsedJson["Sports"][i]));
-    }
+    // for (int i = 0; i < parsedJson["Sports"].length; i++) {
+    //   newCourt.sports.add(Sport.fromJson(parsedJson["Sports"][i]));
+    // }
 
     for (int i = 0; i < parsedJson["Prices"].length; i++) {
       newCourt.prices.add(HourPrice.fromJson(parsedJson["Prices"][i]));

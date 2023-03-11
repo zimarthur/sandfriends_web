@@ -25,5 +25,27 @@
                 }
             }
         ]
+    },
+    {
+        "IdStoreCourt": 2,
+        "Description": "Quadra 2",
+        "IsIndoor": false,
+        "Sports": [
+            {
+                "IdSport": 3,
+                "Description": "Futevolei",
+                "SportPhoto": "url"
+            }
+        ],
+        "Prices": [
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            }
+        ]
     }
 ]

@@ -10,6 +10,7 @@ enum ButtonType {
   YellowSecondary,
   LightBluePrimary,
   LightBlueSecondary,
+  Delete,
 }
 
 class SFButton extends StatefulWidget {
@@ -51,11 +52,15 @@ class _SFButtonState extends State<SFButton> {
                   ? secondaryYellow
                   : widget.buttonType == ButtonType.LightBluePrimary
                       ? primaryLightBlue
-                      : widget.buttonType == ButtonType.Secondary ||
-                              widget.buttonType == ButtonType.YellowSecondary ||
-                              widget.buttonType == ButtonType.LightBlueSecondary
-                          ? secondaryPaper
-                          : textDisabled,
+                      : widget.buttonType == ButtonType.Delete
+                          ? red
+                          : widget.buttonType == ButtonType.Secondary ||
+                                  widget.buttonType ==
+                                      ButtonType.YellowSecondary ||
+                                  widget.buttonType ==
+                                      ButtonType.LightBlueSecondary
+                              ? secondaryPaper
+                              : textDisabled,
           borderRadius: BorderRadius.circular(16.0),
           border: widget.buttonType == ButtonType.Secondary
               ? Border.all(color: primaryBlue, width: 1)

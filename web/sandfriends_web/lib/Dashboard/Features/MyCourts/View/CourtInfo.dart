@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:provider/provider.dart';
 
 class CourtInfo extends StatefulWidget {
-  const CourtInfo({super.key});
+  MyCourtsViewModel viewModel;
+  bool newCourt;
+  CourtInfo({required this.viewModel, required this.newCourt});
 
   @override
   State<CourtInfo> createState() => _CourtInfoState();
 }
 
 class _CourtInfoState extends State<CourtInfo> {
-  List<String> courtTypeValues = ["Coberto", "Descoberto"];
-  String courtType = "Coberto";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,61 +28,215 @@ class _CourtInfoState extends State<CourtInfo> {
           ),
           borderRadius: BorderRadius.circular(defaultBorderRadius)),
       margin: EdgeInsets.all(defaultPadding),
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultPadding,
+      padding: EdgeInsets.all(
+        defaultPadding,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: defaultPadding),
-              child: Text(
-                "Informações",
-                style: TextStyle(
-                  color: primaryBlue,
-                ),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: defaultPadding,
+            ),
+            child: Text(
+              "Informações",
+              style: TextStyle(
+                color: primaryBlue,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: defaultPadding),
-              child: SFDivider(),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: defaultPadding,
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Nome",
-                    style: TextStyle(
-                      color: textDarkGrey,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Row(
+            child: SFDivider(),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
                     children: [
-                      // RadioListTile(
-                      //   value: "Coberto",
-                      //   groupValue: courtType,
-                      //   onChanged: (value) {
-                      //     courtType = value!;
-                      //   },
-                      // ),
-                      // RadioListTile(
-                      //   value: "Descoberto",
-                      //   groupValue: courtType,
-                      //   onChanged: (value) {
-                      //     courtType = value!;
-                      //   },
-                      // )
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Nome",
+                              style: TextStyle(
+                                color: textDarkGrey,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: SFTextField(
+                              labelText: "",
+                              pourpose: TextFieldPourpose.Standard,
+                              controller: widget.viewModel.nameController,
+                              validator: (value) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 2 * defaultPadding,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Tipo",
+                              style: TextStyle(
+                                color: textDarkGrey,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: true,
+                                      groupValue: widget.viewModel.isIndoor,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          widget.viewModel.isIndoor = value!;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: defaultPadding,
+                                    ),
+                                    Text(
+                                      "Coberta",
+                                      style: TextStyle(
+                                        color: textDarkGrey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: false,
+                                      groupValue: widget.viewModel.isIndoor,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          widget.viewModel.isIndoor = value!;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: defaultPadding,
+                                    ),
+                                    Text(
+                                      "Descoberta",
+                                      style: TextStyle(
+                                        color: textDarkGrey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 2 * defaultPadding,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Esportes:",
+                              style: TextStyle(
+                                color: textDarkGrey,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.all(defaultPadding),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  defaultBorderRadius,
+                                ),
+                                border: Border.all(
+                                  color: divider,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  for (int sportIndex = 0;
+                                      sportIndex <
+                                          widget.viewModel.sports.length;
+                                      sportIndex++)
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          value: widget.viewModel
+                                              .sports[sportIndex].isAvailable,
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              widget
+                                                  .viewModel
+                                                  .sports[sportIndex]
+                                                  .isAvailable = newValue!;
+                                            });
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: defaultPadding,
+                                        ),
+                                        Text(
+                                          widget.viewModel.sports[sportIndex]
+                                              .sport.description,
+                                          style: TextStyle(
+                                            color: textDarkGrey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          widget.newCourt
+              ? SFButton(
+                  buttonLabel: "Adicionar quadra",
+                  buttonType: ButtonType.Primary,
+                  onTap: () {},
+                )
+              : SFButton(
+                  buttonLabel: "Excluir quadra",
+                  buttonType: ButtonType.Delete,
+                  onTap: () {},
+                )
+        ],
       ),
     );
   }

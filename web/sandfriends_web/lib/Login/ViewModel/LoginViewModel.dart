@@ -10,6 +10,7 @@ import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountCourtWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountOwnerWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountWidget.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
@@ -40,6 +41,24 @@ class LoginViewModel extends ChangeNotifier {
   void onTapLogin(BuildContext context) async {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
+
+    String responseSport =
+        await rootBundle.loadString(r"assets/fakeJson/sport.json");
+    List<dynamic> dataSport = json.decode(responseSport);
+    for (var sport in dataSport) {
+      Provider.of<DataProvider>(context, listen: false)
+          .sports
+          .add(Sport.fromJson(sport));
+    }
+    String responseHour =
+        await rootBundle.loadString(r"assets/fakeJson/availableHours.json");
+    List<dynamic> dataHour = json.decode(responseHour);
+    for (var hour in dataHour) {
+      Provider.of<DataProvider>(context, listen: false)
+          .hours
+          .add(Hour.fromJson(hour));
+    }
+
     final String responseStore =
         await rootBundle.loadString(r"assets/fakeJson/store.json");
     final dataStore = await json.decode(responseStore);
@@ -50,27 +69,19 @@ class LoginViewModel extends ChangeNotifier {
         await rootBundle.loadString(r"assets/fakeJson/court.json");
     List<dynamic> dataCourt = json.decode(responseCourt);
     for (var court in dataCourt) {
-      Provider.of<DataProvider>(context, listen: false)
-          .courts
-          .add(Court.fromJson(court));
-
-      String responseSport =
-          await rootBundle.loadString(r"assets/fakeJson/sport.json");
-      List<dynamic> dataSport = json.decode(responseSport);
-      for (var sport in dataSport) {
-        Provider.of<DataProvider>(context, listen: false)
-            .sports
-            .add(Sport.fromJson(sport));
-
-        String responseHour =
-            await rootBundle.loadString(r"assets/fakeJson/availableHours.json");
-        List<dynamic> dataHour = json.decode(responseHour);
-        for (var hour in dataHour) {
-          Provider.of<DataProvider>(context, listen: false)
-              .hours
-              .add(Hour.fromJson(hour));
+      var newCourt = Court.fromJson(court);
+      for (var sport
+          in Provider.of<DataProvider>(context, listen: false).sports) {
+        bool foundSport = false;
+        for (var courtSport in court["Sports"]) {
+          if (courtSport["IdSport"] == sport.idSport) {
+            foundSport = true;
+          }
         }
+        newCourt.sports
+            .add(AvailableSport(sport: sport, isAvailable: foundSport));
       }
+      Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
     }
 
     // _loginRepo
