@@ -25,7 +25,6 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     viewModel.setFields(context);
   }
@@ -37,7 +36,10 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
     double height =
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
     double courtInfo = width * 0.3 < 350 ? 350 : width * 0.3;
-    double courtCalendar = width - courtInfo;
+    double courtCalendar = width -
+        courtInfo -
+        3 * defaultPadding -
+        4; // o 4 foi por causa da borda
     return ChangeNotifierProvider<MyCourtsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<MyCourtsViewModel>(
@@ -58,12 +60,14 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                     ),
                     SFButton(
                       buttonLabel: "Horário de funcionamento",
-                      buttonType: ButtonType.Primary,
+                      buttonType: ButtonType.Secondary,
+                      iconFirst: true,
+                      iconPath: r"assets/icon/clock.svg",
                       onTap: () {
                         viewModel.setWorkingHours(context);
                       },
                       textPadding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding / 2,
+                        vertical: defaultPadding,
                         horizontal: defaultPadding,
                       ),
                     ),
@@ -117,6 +121,18 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                               },
                             ),
                           ),
+                          if (viewModel.courtInfoChanged)
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: defaultPadding / 4),
+                              child: SFButton(
+                                buttonLabel: "Salvar",
+                                buttonType: ButtonType.Primary,
+                                textPadding: EdgeInsets.symmetric(
+                                    horizontal: defaultPadding),
+                                onTap: () {},
+                              ),
+                            ),
                         ],
                       ),
                     ),

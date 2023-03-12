@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/WorkingHoursWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 
 import '../../../../SharedComponents/Model/Court.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
@@ -21,6 +22,13 @@ class MyCourtsViewModel extends ChangeNotifier {
   bool get isIndoor => _isIndoor;
   set isIndoor(bool value) {
     _isIndoor = value;
+    notifyListeners();
+  }
+
+  bool _courtInfoChanged = false;
+  bool get courtInfoChanged => _courtInfoChanged;
+  set courtInfoChanged(bool value) {
+    _courtInfoChanged = value;
     notifyListeners();
   }
 
@@ -75,6 +83,80 @@ class MyCourtsViewModel extends ChangeNotifier {
           sports.add(availableSport);
         },
       );
+    }
+  }
+
+  void addCourt(BuildContext context) {
+    if (nameController.text.isEmpty) print("sem nome");
+
+    if (Provider.of<DataProvider>(context, listen: false)
+        .courts
+        .any((element) => element.description == nameController.text))
+      print("nome já existe");
+
+    if (sports.any((element) => element.isAvailable == true) == false)
+      print("selecione esporte");
+
+    //VAI TER Q ALTERAR PRA RECEBER O ID DO SERVIDOR
+    var newCourt = Court(
+        idStoreCourt:
+            Provider.of<DataProvider>(context, listen: false).courts.length,
+        description: nameController.text,
+        isIndoor: isIndoor);
+    sports.forEach((sport) {
+      newCourt.sports.add(sport);
+    });
+
+    Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
+    switchTabs(
+        context,
+        Provider.of<DataProvider>(context, listen: false)
+            .courts
+            .where((element) => element.idStoreCourt == newCourt.idStoreCourt)
+            .first
+            .idStoreCourt);
+  }
+
+  void deleteCourt(BuildContext context) {
+    Provider.of<DataProvider>(context, listen: false)
+        .courts
+        .removeAt(selectedCourtIndex);
+    selectedCourtIndex = -1;
+    setFields(context);
+  }
+
+  void checkCourtInfoChanges(BuildContext context) {
+    if (selectedCourtIndex == -1) {
+      courtInfoChanged = false;
+    } else {
+      bool changedSport = false;
+      sports.forEach((formSport) {
+        print("aa ${formSport.sport.description}");
+        print("aa ${formSport.isAvailable}");
+        Provider.of<DataProvider>(context, listen: false)
+            .courts[selectedCourtIndex]
+            .sports
+            .forEach((sport) {
+          if (sport.sport.idSport == formSport.sport.idSport) {
+            print("bb ${sport.sport.description}");
+            print("bb ${sport.isAvailable}");
+            if (sport.isAvailable == formSport.isAvailable) {
+              print("igual");
+            } else {
+              print("dif");
+            }
+          }
+        });
+      });
+      courtInfoChanged = nameController.text !=
+              Provider.of<DataProvider>(context, listen: false)
+                  .courts[selectedCourtIndex]
+                  .description ||
+          isIndoor !=
+              Provider.of<DataProvider>(context, listen: false)
+                  .courts[selectedCourtIndex]
+                  .isIndoor ||
+          changedSport;
     }
   }
 }

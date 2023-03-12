@@ -78,6 +78,9 @@ class _CourtInfoState extends State<CourtInfo> {
                               pourpose: TextFieldPourpose.Standard,
                               controller: widget.viewModel.nameController,
                               validator: (value) {},
+                              onChanged: (p0) {
+                                widget.viewModel.checkCourtInfoChanges(context);
+                              },
                             ),
                           ),
                         ],
@@ -107,9 +110,9 @@ class _CourtInfoState extends State<CourtInfo> {
                                       value: true,
                                       groupValue: widget.viewModel.isIndoor,
                                       onChanged: (value) {
-                                        setState(() {
-                                          widget.viewModel.isIndoor = value!;
-                                        });
+                                        widget.viewModel.isIndoor = value!;
+                                        widget.viewModel
+                                            .checkCourtInfoChanges(context);
                                       },
                                     ),
                                     SizedBox(
@@ -129,9 +132,9 @@ class _CourtInfoState extends State<CourtInfo> {
                                       value: false,
                                       groupValue: widget.viewModel.isIndoor,
                                       onChanged: (value) {
-                                        setState(() {
-                                          widget.viewModel.isIndoor = value!;
-                                        });
+                                        widget.viewModel.isIndoor = value!;
+                                        widget.viewModel
+                                            .checkCourtInfoChanges(context);
                                       },
                                     ),
                                     SizedBox(
@@ -190,12 +193,10 @@ class _CourtInfoState extends State<CourtInfo> {
                                           value: widget.viewModel
                                               .sports[sportIndex].isAvailable,
                                           onChanged: (newValue) {
-                                            setState(() {
-                                              widget
-                                                  .viewModel
-                                                  .sports[sportIndex]
-                                                  .isAvailable = newValue!;
-                                            });
+                                            widget.viewModel.sports[sportIndex]
+                                                .isAvailable = newValue!;
+                                            widget.viewModel
+                                                .checkCourtInfoChanges(context);
                                           },
                                         ),
                                         SizedBox(
@@ -229,12 +230,16 @@ class _CourtInfoState extends State<CourtInfo> {
               ? SFButton(
                   buttonLabel: "Adicionar quadra",
                   buttonType: ButtonType.Primary,
-                  onTap: () {},
+                  onTap: () {
+                    widget.viewModel.addCourt(context);
+                  },
                 )
               : SFButton(
                   buttonLabel: "Excluir quadra",
                   buttonType: ButtonType.Delete,
-                  onTap: () {},
+                  onTap: () {
+                    widget.viewModel.deleteCourt(context);
+                  },
                 )
         ],
       ),
