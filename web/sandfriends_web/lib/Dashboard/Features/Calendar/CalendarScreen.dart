@@ -58,7 +58,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   padding: const EdgeInsets.all(defaultPadding),
                   child: weekCalendar
-                      ? SFCalendarWeek(height, calendarWidth)
+                      ? SFCalendarWeek(
+                          height,
+                          calendarWidth,
+                        )
                       : SFCalendarDay(height, calendarWidth),
                 ),
                 Container(

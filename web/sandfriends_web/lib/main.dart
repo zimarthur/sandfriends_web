@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           '/login': (BuildContext context) => const LoginScreen(),
           '/dashboard': (BuildContext context) => const DashboardScreen(),
         },
-        initialRoute: '/login',
+        initialRoute: '/dashboard',
       ),
     );
   }

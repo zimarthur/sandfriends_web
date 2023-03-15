@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/SFCalendarWeek.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsTabSelector.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -35,11 +36,18 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
         Provider.of<DashboardViewModel>(context).getDashboardWidth(context);
     double height =
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
-    double courtInfo = width * 0.3 < 350 ? 350 : width * 0.3;
-    double courtCalendar = width -
-        courtInfo -
-        3 * defaultPadding -
+    double courtInfoWidth = width * 0.3 < 300 ? 300 : width * 0.3;
+    double courtWeekdayWidth = width -
+        courtInfoWidth -
+        5 * defaultPadding -
         4; // o 4 foi por causa da borda
+    double minCourtWeekdayWidth = 150;
+    double minCourtWeekdayHeight = 200;
+    int itemsPerRow =
+        (courtWeekdayWidth / (minCourtWeekdayWidth + defaultBorderRadius))
+            .floor();
+    int rows = (7 / itemsPerRow).ceil();
+
     return ChangeNotifierProvider<MyCourtsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<MyCourtsViewModel>(
@@ -149,7 +157,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                     ),
                     child: Container(
                       margin: EdgeInsets.only(bottom: 2, left: 2, right: 2),
-                      padding: EdgeInsets.all(defaultPadding),
+                      padding: EdgeInsets.all(2 * defaultPadding),
                       decoration: BoxDecoration(
                         color: secondaryPaper,
                         borderRadius: BorderRadius.only(
@@ -160,7 +168,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: courtInfo,
+                            width: courtInfoWidth,
                             height: height,
                             child: CourtInfo(
                               viewModel: viewModel,
@@ -170,7 +178,76 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           SizedBox(
                             width: defaultPadding,
                           ),
-                          SFCalendarWeek(height, courtCalendar)
+                          SizedBox(
+                            height: height,
+                            width: courtWeekdayWidth,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  for (int j = 0; j < rows; j++)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: defaultPadding),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          for (int i = 0; i < itemsPerRow; i++)
+                                            Row(
+                                              children: [
+                                                CourtDay(
+                                                  height: minCourtWeekdayHeight,
+                                                  width: minCourtWeekdayWidth,
+                                                ),
+                                                SizedBox(
+                                                  width: defaultPadding,
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // Column(
+                          //   children: [
+                          //     Row(
+                          //       children: [
+                          //         CourtDay(),
+                          //         SizedBox(
+                          //           width: defaultPadding,
+                          //         ),
+                          //         CourtDay(),
+                          //         SizedBox(
+                          //           width: defaultPadding,
+                          //         ),
+                          //         CourtDay(),
+                          //         SizedBox(
+                          //           width: defaultPadding,
+                          //         ),
+                          //         CourtDay(),
+                          //       ],
+                          //     ),
+                          //     Row(
+                          //       children: [
+                          //         CourtDay(),
+                          //         SizedBox(
+                          //           width: defaultPadding,
+                          //         ),
+                          //         CourtDay(),
+                          //         SizedBox(
+                          //           width: defaultPadding,
+                          //         ),
+                          //         CourtDay(),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),

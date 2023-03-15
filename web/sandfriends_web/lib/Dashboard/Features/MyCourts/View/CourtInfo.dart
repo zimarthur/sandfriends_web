@@ -27,7 +27,6 @@ class _CourtInfoState extends State<CourtInfo> {
             width: 1,
           ),
           borderRadius: BorderRadius.circular(defaultBorderRadius)),
-      margin: EdgeInsets.all(defaultPadding),
       padding: EdgeInsets.all(
         defaultPadding,
       ),
@@ -35,7 +34,7 @@ class _CourtInfoState extends State<CourtInfo> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: defaultPadding,
+              vertical: defaultPadding / 4,
             ),
             child: Text(
               "Informações",
