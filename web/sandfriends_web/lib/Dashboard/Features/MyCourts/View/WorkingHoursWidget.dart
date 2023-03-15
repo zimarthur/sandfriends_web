@@ -85,16 +85,22 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              for (int i = 0; i < weeKDays.length; i++)
+                              for (int i = 0;
+                                  i < viewModel.operationDays.length;
+                                  i++)
                                 Expanded(
                                   child: HourSelector(
+                                    isEnabled:
+                                        viewModel.operationDays[i].isEnabled,
                                     availableHours: Provider.of<DataProvider>(
                                             context,
                                             listen: false)
                                         .hours,
                                     title: weeKDays[i],
-                                    startHour: startHour,
-                                    endHour: endHour,
+                                    startHour:
+                                        viewModel.operationDays[i].startingHour,
+                                    endHour:
+                                        viewModel.operationDays[i].endingHour,
                                   ),
                                 )
                             ],

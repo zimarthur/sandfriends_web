@@ -6,12 +6,14 @@ class SFDropdown extends StatefulWidget {
   final List<String> items;
   final FormFieldValidator<String>? validator;
   final Function(String?) onChanged;
+  bool isEnabled;
 
   SFDropdown({
     required this.labelText,
     required this.items,
     required this.validator,
     required this.onChanged,
+    this.isEnabled = true,
   });
 
   @override
@@ -25,6 +27,7 @@ class _SFDropdownState extends State<SFDropdown> {
   Widget build(BuildContext context) {
     return DropdownButton(
       value: widget.labelText,
+      style: TextStyle(color: widget.isEnabled ? textBlack : textLightGrey),
       items: widget.items.map((item) {
         return DropdownMenuItem(
           child: Text(item),

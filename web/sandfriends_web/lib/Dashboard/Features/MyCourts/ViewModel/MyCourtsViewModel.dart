@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/WorkingHoursWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
+import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 
 import '../../../../SharedComponents/Model/Court.dart';
+import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 
 class MyCourtsViewModel extends ChangeNotifier {
@@ -40,6 +42,44 @@ class MyCourtsViewModel extends ChangeNotifier {
   }
 
   List<AvailableSport> sports = [];
+
+  List<OperationDay> operationDays = [
+    OperationDay(
+      weekDay: 0,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 1,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 2,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 3,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 4,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 5,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+    OperationDay(
+      weekDay: 6,
+      startingHour: Hour(hour: 8, hourString: "08:00"),
+      endingHour: Hour(hour: 22, hourString: "22:00"),
+    ),
+  ];
 
   void setWorkingHours(BuildContext context) {
     Provider.of<DashboardViewModel>(context, listen: false).setModalForm(
