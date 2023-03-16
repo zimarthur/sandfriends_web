@@ -41,12 +41,6 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
         courtInfoWidth -
         5 * defaultPadding -
         4; // o 4 foi por causa da borda
-    double minCourtWeekdayWidth = 150;
-    double minCourtWeekdayHeight = 200;
-    int itemsPerRow =
-        (courtWeekdayWidth / (minCourtWeekdayWidth + defaultBorderRadius))
-            .floor();
-    int rows = (7 / itemsPerRow).ceil();
 
     return ChangeNotifierProvider<MyCourtsViewModel>(
       create: (BuildContext context) => viewModel,
@@ -178,76 +172,9 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           SizedBox(
                             width: defaultPadding,
                           ),
-                          SizedBox(
-                            height: height,
+                          CourtDay(
                             width: courtWeekdayWidth,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  for (int j = 0; j < rows; j++)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: defaultPadding),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          for (int i = 0; i < itemsPerRow; i++)
-                                            Row(
-                                              children: [
-                                                CourtDay(
-                                                  height: minCourtWeekdayHeight,
-                                                  width: minCourtWeekdayWidth,
-                                                ),
-                                                SizedBox(
-                                                  width: defaultPadding,
-                                                ),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
                           ),
-
-                          // Column(
-                          //   children: [
-                          //     Row(
-                          //       children: [
-                          //         CourtDay(),
-                          //         SizedBox(
-                          //           width: defaultPadding,
-                          //         ),
-                          //         CourtDay(),
-                          //         SizedBox(
-                          //           width: defaultPadding,
-                          //         ),
-                          //         CourtDay(),
-                          //         SizedBox(
-                          //           width: defaultPadding,
-                          //         ),
-                          //         CourtDay(),
-                          //       ],
-                          //     ),
-                          //     Row(
-                          //       children: [
-                          //         CourtDay(),
-                          //         SizedBox(
-                          //           width: defaultPadding,
-                          //         ),
-                          //         CourtDay(),
-                          //         SizedBox(
-                          //           width: defaultPadding,
-                          //         ),
-                          //         CourtDay(),
-                          //       ],
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),

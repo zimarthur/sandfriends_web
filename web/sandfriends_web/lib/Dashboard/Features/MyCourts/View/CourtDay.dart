@@ -1,65 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class CourtDay extends StatelessWidget {
+class CourtDay extends StatefulWidget {
   double width;
-  double height;
-  CourtDay({required this.width, required this.height});
+  CourtDay({
+    required this.width,
+  });
+
+  @override
+  State<CourtDay> createState() => _CourtDayState();
+}
+
+class _CourtDayState extends State<CourtDay> {
+  // double height;
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: isExpanded ? 300 : 50,
+      width: widget.width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(defaultBorderRadius),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            primaryBlue,
-            secondaryBack,
-          ],
-        ),
-      ),
-      padding: EdgeInsets.all(defaultPadding),
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
+          color: primaryBlue),
+      padding: EdgeInsets.all(2),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "SEGUNDA",
-            style: TextStyle(color: textWhite, fontSize: 16),
-          ),
-          Container(
-            padding: EdgeInsets.all(defaultPadding),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
-                color: secondaryPaper),
-            child: Column(
+          Expanded(
+            child: Row(
               children: [
-                Text(
-                  "Horário",
-                  style: TextStyle(color: textLightGrey, fontSize: 10),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(defaultBorderRadius),
+                        color: secondaryPaper),
+                  ),
                 ),
-                Text(
-                  "08:00 - 22:00",
-                  style: TextStyle(color: textDarkGrey, fontSize: 12),
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Text(
-                  "Preço",
-                  style: TextStyle(color: textLightGrey, fontSize: 10),
-                ),
-                Text(
-                  r"R$80 - R$110",
-                  style: TextStyle(color: textDarkGrey, fontSize: 12),
-                ),
+                isExpanded
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          setState(() {
+                            isExpanded = !isExpanded;
+                          });
+                        },
+                        child: SizedBox(
+                          width: 30,
+                          child: SvgPicture.asset(
+                            r'assets/icon/edit.svg',
+                            color: Colors.white,
+                            height: 16,
+                          ),
+                        ),
+                      )
               ],
             ),
           ),
+          isExpanded
+              ? InkWell(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: SizedBox(
+                    width: 30,
+                    child: SvgPicture.asset(
+                      r'assets/icon/chevron_up.svg',
+                      color: Colors.white,
+                      height: 16,
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

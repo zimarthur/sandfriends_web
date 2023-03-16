@@ -102,6 +102,8 @@ flutter:
     - assets/icon/logout.svg
     - assets/icon/whatsapp.svg
     - assets/icon/clock.svg
+    - assets/icon/chevron_up.svg
+    - assets/icon/edit.svg
 
 
     - assets/fakeJson/store.json
