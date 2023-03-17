@@ -172,9 +172,87 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           SizedBox(
                             width: defaultPadding,
                           ),
-                          CourtDay(
-                            width: courtWeekdayWidth,
-                          ),
+                          Expanded(
+                            child: LayoutBuilder(
+                              builder: (ctx, cnst) {
+                                double myHeight = (cnst.maxHeight -
+                                                6 * defaultPadding) /
+                                            8 >
+                                        50
+                                    ? (cnst.maxHeight - 6 * defaultPadding) / 8
+                                    : 50;
+                                return Column(
+                                  children: [
+                                    Container(
+                                      height: myHeight,
+                                      padding: EdgeInsets.all(2),
+                                      margin: EdgeInsets.only(right: 50),
+                                      width: courtWeekdayWidth,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Dia",
+                                              style: TextStyle(
+                                                  color: textLightGrey),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Horário",
+                                              style: TextStyle(
+                                                  color: textLightGrey),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Aceita\nMensalista?",
+                                              style: TextStyle(
+                                                  color: textLightGrey),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Preço\n(Mensalista)",
+                                              style: TextStyle(
+                                                  color: textLightGrey),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: 7,
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              CourtDay(
+                                                width: courtWeekdayWidth,
+                                                height: myHeight,
+                                              ),
+                                              if (index != 6)
+                                                SizedBox(
+                                                  height: defaultPadding,
+                                                )
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ),

@@ -23,8 +23,8 @@ class _CourtInfoState extends State<CourtInfo> {
       decoration: BoxDecoration(
           color: secondaryBack,
           border: Border.all(
-            color: primaryBlue,
-            width: 1,
+            color: divider,
+            width: 2,
           ),
           borderRadius: BorderRadius.circular(defaultBorderRadius)),
       padding: EdgeInsets.all(
