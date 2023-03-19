@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/PriceRuleRadio.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/ResumedInfoRow.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/PriceSelector.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Utils/SFDateTime.dart';
+
+import '../../ViewModel/MyCourtsViewModel.dart';
 
 class CourtDay extends StatefulWidget {
   double width;
   double height;
+  int dayIndex;
+  int rules;
+  MyCourtsViewModel viewModel;
+
   CourtDay({
     required this.width,
     required this.height,
+    required this.dayIndex,
+    this.rules = 2,
+    required this.viewModel,
   });
 
   @override
@@ -35,7 +50,7 @@ class _CourtDayState extends State<CourtDay> {
       height: isExpanded
           ? isPriceStandard
               ? mainRowHeight * 2 +
-                  2 * secondaryRowHeight +
+                  widget.rules * secondaryRowHeight +
                   borderSize +
                   arrowHeight
               : 4 * widget.height
@@ -55,7 +70,8 @@ class _CourtDayState extends State<CourtDay> {
                     duration: Duration(milliseconds: 300),
                     height: isExpanded
                         ? isPriceStandard
-                            ? mainRowHeight * 2 + 2 * secondaryRowHeight
+                            ? mainRowHeight * 2 +
+                                widget.rules * secondaryRowHeight
                             : 4 * mainRowHeight
                         : mainRowHeight,
                     decoration: BoxDecoration(
@@ -69,11 +85,14 @@ class _CourtDayState extends State<CourtDay> {
                               right: isExpanded ? editIconWidth : 0),
                           height: mainRowHeight,
                           child: ResumedInfoRow(
-                              day: "Segunda",
-                              workingHours: "08:00 - 22:00",
-                              allowRecurrentMatch: true,
-                              priceRange: "R\$100 - R\$110\n(R\$90 - R\$100",
-                              isEditing: isExpanded),
+                            day: weekday[widget.dayIndex],
+                            workingHours:
+                                "${widget.viewModel.operationDays[widget.dayIndex].startingHour.hourString} - ${widget.viewModel.operationDays[widget.dayIndex].endingHour.hourString}",
+                            allowRecurrentMatch: true,
+                            priceRange: "R\$100 - R\$110\n(R\$90 - R\$100",
+                            isEditing: isExpanded,
+                            rowHeight: mainRowHeight,
+                          ),
                         ),
                         isExpanded
                             ? Expanded(
@@ -203,84 +222,74 @@ class _CourtDayState extends State<CourtDay> {
                                                       ? SizedBox(
                                                           height:
                                                               secondaryRowHeight,
-                                                          child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 3,
-                                                                child: Text(
-                                                                  "08:00 - 22:00",
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          textDarkGrey),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 2,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          defaultPadding),
-                                                                  child:
-                                                                      SFTextField(
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    plainTextField:
-                                                                        true,
-                                                                    prefixText:
-                                                                        "R\$",
-                                                                    sufixText:
-                                                                        "/hora",
-                                                                    labelText:
-                                                                        "",
-                                                                    pourpose:
-                                                                        TextFieldPourpose
-                                                                            .Numeric,
-                                                                    controller:
-                                                                        controller,
-                                                                    validator:
-                                                                        (value) {},
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Flexible(
-                                                                flex: 2,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          defaultPadding),
-                                                                  child:
-                                                                      SFTextField(
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    plainTextField:
-                                                                        true,
-                                                                    prefixText:
-                                                                        "R\$",
-                                                                    sufixText:
-                                                                        "/hora",
-                                                                    labelText:
-                                                                        "",
-                                                                    pourpose:
-                                                                        TextFieldPourpose
-                                                                            .Numeric,
-                                                                    controller:
-                                                                        controller,
-                                                                    validator:
-                                                                        (value) {},
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                          child: PriceSelector(
+                                                            startingHour: Hour(
+                                                                hour: 1,
+                                                                hourString:
+                                                                    "08:00"),
+                                                            endingHour: Hour(
+                                                                hour: 2,
+                                                                hourString:
+                                                                    "22:00"),
+                                                            height:
+                                                                secondaryRowHeight,
+                                                            availableHours: [
+                                                              Hour(
+                                                                  hour: 1,
+                                                                  hourString:
+                                                                      "08:00"),
+                                                              Hour(
+                                                                  hour: 2,
+                                                                  hourString:
+                                                                      "22:00"),
                                                             ],
+                                                            editHour: false,
+                                                            singlePrice:
+                                                                controller,
+                                                            recurrentPrice:
+                                                                controller,
                                                           ),
                                                         )
-                                                      : Container()
+                                                      : Expanded(
+                                                          child:
+                                                              ListView.builder(
+                                                            itemCount:
+                                                                widget.rules,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return SizedBox(
+                                                                height:
+                                                                    secondaryRowHeight,
+                                                                child:
+                                                                    PriceSelector(
+                                                                  singlePrice:
+                                                                      controller,
+                                                                  recurrentPrice:
+                                                                      controller,
+                                                                  height:
+                                                                      secondaryRowHeight,
+                                                                  startingHour: Hour(
+                                                                      hour: 1,
+                                                                      hourString:
+                                                                          "08:00"),
+                                                                  endingHour: Hour(
+                                                                      hour: 2,
+                                                                      hourString:
+                                                                          "22:00"),
+                                                                  availableHours: Provider.of<
+                                                                              DataProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .availableHours,
+                                                                  editHour:
+                                                                      true,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        )
                                                 ],
                                               ),
                                             ),

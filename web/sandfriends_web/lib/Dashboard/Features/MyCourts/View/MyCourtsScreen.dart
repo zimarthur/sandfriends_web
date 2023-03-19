@@ -27,7 +27,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel.setFields(context);
+    viewModel.init(context);
   }
 
   @override
@@ -66,7 +66,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       iconFirst: true,
                       iconPath: r"assets/icon/clock.svg",
                       onTap: () {
-                        viewModel.setWorkingHours(context);
+                        viewModel.setWorkingHours(context, viewModel);
                       },
                       textPadding: const EdgeInsets.symmetric(
                         vertical: defaultPadding,
@@ -238,6 +238,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                               CourtDay(
                                                 width: courtWeekdayWidth,
                                                 height: myHeight,
+                                                dayIndex: index,
+                                                viewModel: viewModel,
                                               ),
                                               if (index != 6)
                                                 SizedBox(

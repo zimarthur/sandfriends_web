@@ -27,6 +27,25 @@ List monthsPortuguese = [
   'Dez'
 ];
 
+List<String> weekdayFull = [
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
+  "Domingo",
+];
+List<String> weekday = [
+  "segunda",
+  "terça",
+  "quarta",
+  "quinta",
+  "sexta",
+  "sábado",
+  "domingo",
+];
+
 String getMonthYear(DateTime datetime) {
   return "${monthsPortuguese[datetime.month - 1]}/${datetime.year.toString().substring(datetime.year.toString().length - 2)}";
 }

@@ -23,6 +23,166 @@
                     "IdAvailableHour": 8,
                     "HourString": "08:00"
                 }
+            },
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
             }
         ]
     },
@@ -44,6 +204,166 @@
                 "Hour": {
                     "IdAvailableHour": 8,
                     "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 0,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 1,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 2,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 3,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 4,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 5,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 8,
+                    "HourString": "08:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 9,
+                    "HourString": "09:00"
+                }
+            },
+            {
+                "Weekday": 6,
+                "Price": 90,
+                "Hour": {
+                    "IdAvailableHour": 10,
+                    "HourString": "10:00"
                 }
             }
         ]

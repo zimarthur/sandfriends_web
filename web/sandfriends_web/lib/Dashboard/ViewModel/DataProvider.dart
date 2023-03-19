@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
+import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 
 import '../../SharedComponents/Model/Hour.dart';
 import '../../SharedComponents/Model/Sport.dart';
@@ -13,9 +14,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<OperationDay> operationDays = [];
+
   List<Court> courts = [];
 
-  List<Sport> sports = [];
+  List<Sport> availableSports = [];
 
-  List<Hour> hours = [];
+  List<Hour> availableHours = [];
 }

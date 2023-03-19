@@ -7,6 +7,8 @@ class SFDropdown extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final Function(String?) onChanged;
   bool isEnabled;
+  Color textColor;
+  bool enableBorder;
 
   SFDropdown({
     required this.labelText,
@@ -14,6 +16,8 @@ class SFDropdown extends StatefulWidget {
     required this.validator,
     required this.onChanged,
     this.isEnabled = true,
+    this.textColor = textBlack,
+    this.enableBorder = false,
   });
 
   @override
@@ -25,19 +29,36 @@ class _SFDropdownState extends State<SFDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      value: widget.labelText,
-      style: TextStyle(color: widget.isEnabled ? textBlack : textLightGrey),
-      items: widget.items.map((item) {
-        return DropdownMenuItem(
-          child: Text(item),
-          value: item,
-        );
-      }).toList(),
-      onChanged: widget.onChanged,
-      alignment: AlignmentDirectional.center,
-      borderRadius: BorderRadius.circular(defaultBorderRadius),
-      underline: Container(),
+    return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: widget.enableBorder ? defaultPadding / 2 : 0),
+      decoration: widget.enableBorder
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(defaultBorderRadius),
+              border: Border.all(
+                color: divider,
+                width: 2,
+              ),
+            )
+          : BoxDecoration(),
+      child: DropdownButton(
+        value: widget.labelText,
+        style: TextStyle(
+          color: widget.isEnabled ? widget.textColor : textLightGrey,
+          fontFamily: "Lexend",
+        ),
+        iconEnabledColor: widget.textColor,
+        items: widget.items.map((item) {
+          return DropdownMenuItem(
+            child: Text(item),
+            value: item,
+          );
+        }).toList(),
+        onChanged: widget.onChanged,
+        alignment: AlignmentDirectional.center,
+        borderRadius: BorderRadius.circular(defaultBorderRadius),
+        underline: Container(),
+      ),
     );
 
     // DropdownButtonFormField(

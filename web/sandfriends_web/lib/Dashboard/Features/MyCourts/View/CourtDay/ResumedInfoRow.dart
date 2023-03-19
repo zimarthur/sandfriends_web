@@ -8,6 +8,7 @@ class ResumedInfoRow extends StatefulWidget {
   bool allowRecurrentMatch;
   String priceRange;
   bool isEditing;
+  double rowHeight;
 
   ResumedInfoRow({
     required this.day,
@@ -15,6 +16,7 @@ class ResumedInfoRow extends StatefulWidget {
     required this.allowRecurrentMatch,
     required this.priceRange,
     required this.isEditing,
+    required this.rowHeight,
   });
   @override
   State<ResumedInfoRow> createState() => _ResumedInfoRowState();
@@ -43,23 +45,30 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
         ),
         Expanded(
           flex: 1,
-          child: widget.isEditing
-              ? SFDropdown(
-                  labelText: "",
-                  items: ["Sim", "Não"],
-                  validator: (value) {},
-                  onChanged: (value) {
-                    if (value == "Sim") {
-                    } else {
-                      widget.allowRecurrentMatch = false;
-                    }
-                  },
-                )
-              : Text(
-                  widget.allowRecurrentMatch ? "Sim" : "Não",
-                  style: TextStyle(color: textDarkGrey),
-                  textAlign: TextAlign.center,
-                ),
+          child: Align(
+            alignment: Alignment.center,
+            child: widget.isEditing
+                ? SizedBox(
+                    height: widget.rowHeight * 0.7,
+                    child: SFDropdown(
+                      labelText: "Sim",
+                      items: ["Sim", "Não"],
+                      validator: (value) {},
+                      onChanged: (value) {
+                        if (value == "Sim") {
+                        } else {
+                          widget.allowRecurrentMatch = false;
+                        }
+                      },
+                      textColor: textDarkGrey,
+                      enableBorder: true,
+                    ),
+                  )
+                : Text(
+                    widget.allowRecurrentMatch ? "Sim" : "Não",
+                    style: TextStyle(color: textDarkGrey),
+                  ),
+          ),
         ),
         Expanded(
           flex: 1,

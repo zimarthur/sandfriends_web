@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
 import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../SharedComponents/View/SFDropDown.dart';
 
 class HourSelector extends StatefulWidget {
-  bool isEnabled;
-  String title;
+  OperationDay operationDay;
   List<Hour> availableHours;
-  Hour startHour;
-  Hour endHour;
 
   HourSelector({
-    required this.isEnabled,
-    required this.title,
+    required this.operationDay,
     required this.availableHours,
-    required this.startHour,
-    required this.endHour,
   });
 
   @override
@@ -30,10 +26,10 @@ class _HourSelectorState extends State<HourSelector> {
       child: Row(
         children: [
           Checkbox(
-              value: widget.isEnabled,
+              value: widget.operationDay.isEnabled,
               onChanged: (value) {
                 setState(() {
-                  widget.isEnabled = value!;
+                  widget.operationDay.isEnabled = value!;
                 });
               }),
           SizedBox(
@@ -41,25 +37,29 @@ class _HourSelectorState extends State<HourSelector> {
           ),
           Expanded(
             child: Text(
-              widget.title,
+              weekdayFull[widget.operationDay.weekDay],
               style: TextStyle(
-                  color: widget.isEnabled ? textBlack : textLightGrey),
+                  color: widget.operationDay.isEnabled
+                      ? textBlack
+                      : textLightGrey),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          widget.isEnabled
+          widget.operationDay.isEnabled
               ? Row(
                   children: [
                     SFDropdown(
-                      labelText: widget.startHour.hourString,
+                      labelText: widget.operationDay.startingHour.hourString,
                       items: widget.availableHours
-                          .where((hour) => hour.hour < widget.endHour.hour)
+                          .where((hour) =>
+                              hour.hour < widget.operationDay.endingHour.hour)
                           .map((hour) => hour.hourString)
                           .toList(),
                       validator: (a) {},
                       onChanged: (a) {
                         setState(() {
-                          widget.startHour = widget.availableHours
+                          widget.operationDay.startingHour = widget
+                              .availableHours
                               .firstWhere((element) => element.hourString == a);
                         });
                       },
@@ -69,20 +69,22 @@ class _HourSelectorState extends State<HourSelector> {
                       child: Text(
                         "até",
                         style: TextStyle(
-                            color:
-                                widget.isEnabled ? textBlack : textLightGrey),
+                            color: widget.operationDay.isEnabled
+                                ? textBlack
+                                : textLightGrey),
                       ),
                     ),
                     SFDropdown(
-                      labelText: widget.endHour.hourString,
+                      labelText: widget.operationDay.endingHour.hourString,
                       items: widget.availableHours
-                          .where((hour) => hour.hour > widget.startHour.hour)
+                          .where((hour) =>
+                              hour.hour > widget.operationDay.startingHour.hour)
                           .map((hour) => hour.hourString)
                           .toList(),
                       validator: (a) {},
                       onChanged: (a) {
                         setState(() {
-                          widget.endHour = widget.availableHours
+                          widget.operationDay.endingHour = widget.availableHours
                               .firstWhere((element) => element.hourString == a);
                         });
                       },

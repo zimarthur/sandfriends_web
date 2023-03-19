@@ -107,9 +107,11 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: true,
-                                      groupValue: widget.viewModel.isIndoor,
+                                      groupValue:
+                                          widget.viewModel.currentCourtIsIndoor,
                                       onChanged: (value) {
-                                        widget.viewModel.isIndoor = value!;
+                                        widget.viewModel.currentCourtIsIndoor =
+                                            value!;
                                         widget.viewModel
                                             .checkCourtInfoChanges(context);
                                       },
@@ -129,9 +131,11 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: false,
-                                      groupValue: widget.viewModel.isIndoor,
+                                      groupValue:
+                                          widget.viewModel.currentCourtIsIndoor,
                                       onChanged: (value) {
-                                        widget.viewModel.isIndoor = value!;
+                                        widget.viewModel.currentCourtIsIndoor =
+                                            value!;
                                         widget.viewModel
                                             .checkCourtInfoChanges(context);
                                       },
@@ -184,15 +188,20 @@ class _CourtInfoState extends State<CourtInfo> {
                                 children: [
                                   for (int sportIndex = 0;
                                       sportIndex <
-                                          widget.viewModel.sports.length;
+                                          widget.viewModel.currentCourtSports
+                                              .length;
                                       sportIndex++)
                                     Row(
                                       children: [
                                         Checkbox(
-                                          value: widget.viewModel
-                                              .sports[sportIndex].isAvailable,
+                                          value: widget
+                                              .viewModel
+                                              .currentCourtSports[sportIndex]
+                                              .isAvailable,
                                           onChanged: (newValue) {
-                                            widget.viewModel.sports[sportIndex]
+                                            widget
+                                                .viewModel
+                                                .currentCourtSports[sportIndex]
                                                 .isAvailable = newValue!;
                                             widget.viewModel
                                                 .checkCourtInfoChanges(context);
@@ -202,8 +211,11 @@ class _CourtInfoState extends State<CourtInfo> {
                                           width: defaultPadding,
                                         ),
                                         Text(
-                                          widget.viewModel.sports[sportIndex]
-                                              .sport.description,
+                                          widget
+                                              .viewModel
+                                              .currentCourtSports[sportIndex]
+                                              .sport
+                                              .description,
                                           style: TextStyle(
                                             color: textDarkGrey,
                                           ),

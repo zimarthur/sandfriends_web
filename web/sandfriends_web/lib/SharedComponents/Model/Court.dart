@@ -24,10 +24,6 @@ class Court {
       isIndoor: parsedJson["IsIndoor"],
     );
 
-    // for (int i = 0; i < parsedJson["Sports"].length; i++) {
-    //   newCourt.sports.add(Sport.fromJson(parsedJson["Sports"][i]));
-    // }
-
     for (int i = 0; i < parsedJson["Prices"].length; i++) {
       newCourt.prices.add(HourPrice.fromJson(parsedJson["Prices"][i]));
     }

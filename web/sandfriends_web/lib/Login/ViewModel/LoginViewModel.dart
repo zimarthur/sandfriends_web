@@ -13,6 +13,8 @@ import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountWidget.dar
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
+import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
+import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Login/View/LoginSuccessWidget.dart';
@@ -47,7 +49,7 @@ class LoginViewModel extends ChangeNotifier {
     List<dynamic> dataSport = json.decode(responseSport);
     for (var sport in dataSport) {
       Provider.of<DataProvider>(context, listen: false)
-          .sports
+          .availableSports
           .add(Sport.fromJson(sport));
     }
     String responseHour =
@@ -55,7 +57,7 @@ class LoginViewModel extends ChangeNotifier {
     List<dynamic> dataHour = json.decode(responseHour);
     for (var hour in dataHour) {
       Provider.of<DataProvider>(context, listen: false)
-          .hours
+          .availableHours
           .add(Hour.fromJson(hour));
     }
 
@@ -70,8 +72,8 @@ class LoginViewModel extends ChangeNotifier {
     List<dynamic> dataCourt = json.decode(responseCourt);
     for (var court in dataCourt) {
       var newCourt = Court.fromJson(court);
-      for (var sport
-          in Provider.of<DataProvider>(context, listen: false).sports) {
+      for (var sport in Provider.of<DataProvider>(context, listen: false)
+          .availableSports) {
         bool foundSport = false;
         for (var courtSport in court["Sports"]) {
           if (courtSport["IdSport"] == sport.idSport) {
@@ -82,6 +84,28 @@ class LoginViewModel extends ChangeNotifier {
             .add(AvailableSport(sport: sport, isAvailable: foundSport));
       }
       Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
+    }
+    if (Provider.of<DataProvider>(context, listen: false).courts.isNotEmpty) {
+      List<HourPrice> courtPrices =
+          Provider.of<DataProvider>(context, listen: false).courts.first.prices;
+      if (courtPrices.isNotEmpty) {
+        for (int weekday = 0; weekday < 7; weekday++) {
+          List<HourPrice> filteredPrices = courtPrices
+              .where((hourPrice) => hourPrice.weekday == weekday)
+              .toList();
+          Provider.of<DataProvider>(context, listen: false).operationDays.add(
+                OperationDay(
+                  weekDay: weekday,
+                  startingHour: filteredPrices
+                      .map((hourPrice) => hourPrice.hour)
+                      .reduce((a, b) => a.hour < b.hour ? a : b),
+                  endingHour: filteredPrices
+                      .map((hourPrice) => hourPrice.hour)
+                      .reduce((a, b) => a.hour > b.hour ? a : b),
+                ),
+              );
+        }
+      }
     }
 
     // _loginRepo

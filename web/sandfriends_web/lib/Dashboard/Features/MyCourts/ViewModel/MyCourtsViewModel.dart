@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/WorkingHoursWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
+import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 
@@ -13,17 +14,19 @@ import '../../../ViewModel/DashboardViewModel.dart';
 class MyCourtsViewModel extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
 
+  String currentCourtName = "";
+  bool currentCourtIsIndoor = true;
+  List<AvailableSport> currentCourtSports = [];
+
+  List<Court> courts = [];
+  List<HourPrice> currentCourtHourPrices = [];
+
+  List<OperationDay> operationDays = [];
+
   bool _isNewCourt = true;
   bool get isNewCourt => _isNewCourt;
   set isNewCourt(bool value) {
     _isNewCourt = value;
-    notifyListeners();
-  }
-
-  bool _isIndoor = true;
-  bool get isIndoor => _isIndoor;
-  set isIndoor(bool value) {
-    _isIndoor = value;
     notifyListeners();
   }
 
@@ -41,54 +44,28 @@ class MyCourtsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<AvailableSport> sports = [];
+  void init(BuildContext context) {
+    operationDays = List<OperationDay>.from(
+        Provider.of<DataProvider>(context, listen: false).operationDays);
+    courts = List<Court>.from(
+        Provider.of<DataProvider>(context, listen: false).courts);
+    setFields(context);
+  }
 
-  List<OperationDay> operationDays = [
-    OperationDay(
-      weekDay: 0,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 1,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 2,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 3,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 4,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 5,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-    OperationDay(
-      weekDay: 6,
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 22, hourString: "22:00"),
-    ),
-  ];
-
-  void setWorkingHours(BuildContext context) {
+  void setWorkingHours(BuildContext context, MyCourtsViewModel viewModel) {
     Provider.of<DashboardViewModel>(context, listen: false).setModalForm(
-      WorkingHoursWidget(),
+      WorkingHoursWidget(viewModel: viewModel),
     );
   }
 
   void returnMainView(BuildContext context) {
     Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+  }
+
+  void saveNewOperationDays(
+      BuildContext context, List<OperationDay> newOperationDays) {
+    operationDays = newOperationDays;
+    returnMainView(context);
   }
 
   void switchTabs(BuildContext context, int index) {
@@ -102,27 +79,53 @@ class MyCourtsViewModel extends ChangeNotifier {
   void setFields(BuildContext context) {
     if (selectedCourtIndex == -1) {
       nameController.text = "";
-      isIndoor = true;
-      sports.clear();
-      Provider.of<DataProvider>(context, listen: false).sports.forEach((sport) {
-        sports.add(
-          AvailableSport(
-            sport: sport,
-            isAvailable: false,
-          ),
-        );
+      currentCourtIsIndoor = true;
+      currentCourtSports.clear();
+      Provider.of<DataProvider>(context, listen: false)
+          .availableSports
+          .forEach((sport) {
+        currentCourtSports
+            .add(AvailableSport(sport: sport, isAvailable: false));
+      });
+      currentCourtHourPrices.clear();
+      operationDays.forEach((operationDay) {
+        for (int i = operationDay.startingHour.hour;
+            i < operationDay.endingHour.hour;
+            i++) {
+          currentCourtHourPrices.add(
+            HourPrice(
+              hour: Provider.of<DataProvider>(context, listen: false)
+                  .availableHours
+                  .firstWhere((hour) => hour.hour == i),
+              weekday: operationDay.weekDay,
+              price: 0,
+            ),
+          );
+        }
       });
     } else {
-      Court referenceCourt = Provider.of<DataProvider>(context, listen: false)
-          .courts[selectedCourtIndex];
-      nameController.text = referenceCourt.description;
-      isIndoor = referenceCourt.isIndoor;
-      sports.clear();
-      referenceCourt.sports.forEach(
-        (availableSport) {
-          sports.add(availableSport);
-        },
-      );
+      nameController.text = courts[selectedCourtIndex].description;
+      currentCourtIsIndoor = courts[selectedCourtIndex].isIndoor;
+      currentCourtSports.clear();
+      courts[selectedCourtIndex].sports.forEach((sport) {
+        currentCourtSports.add(sport);
+      });
+      currentCourtHourPrices.clear();
+      operationDays.forEach((operationDay) {
+        for (int i = operationDay.startingHour.hour;
+            i < operationDay.endingHour.hour;
+            i++) {
+          currentCourtHourPrices.add(
+            HourPrice(
+              hour: Provider.of<DataProvider>(context, listen: false)
+                  .availableHours
+                  .firstWhere((hour) => hour.hour == i),
+              weekday: operationDay.weekDay,
+              price: 0,
+            ),
+          );
+        }
+      });
     }
   }
 
@@ -134,16 +137,18 @@ class MyCourtsViewModel extends ChangeNotifier {
         .any((element) => element.description == nameController.text))
       print("nome já existe");
 
-    if (sports.any((element) => element.isAvailable == true) == false)
-      print("selecione esporte");
+    if (courts[selectedCourtIndex]
+            .sports
+            .any((element) => element.isAvailable == true) ==
+        false) print("selecione esporte");
 
     //VAI TER Q ALTERAR PRA RECEBER O ID DO SERVIDOR
     var newCourt = Court(
         idStoreCourt:
             Provider.of<DataProvider>(context, listen: false).courts.length,
         description: nameController.text,
-        isIndoor: isIndoor);
-    sports.forEach((sport) {
+        isIndoor: courts[selectedCourtIndex].isIndoor);
+    courts[selectedCourtIndex].sports.forEach((sport) {
       newCourt.sports.add(sport);
     });
 
@@ -170,7 +175,7 @@ class MyCourtsViewModel extends ChangeNotifier {
       courtInfoChanged = false;
     } else {
       bool changedSport = false;
-      sports.forEach((formSport) {
+      courts[selectedCourtIndex].sports.forEach((formSport) {
         print("aa ${formSport.sport.description}");
         print("aa ${formSport.isAvailable}");
         Provider.of<DataProvider>(context, listen: false)
@@ -192,7 +197,7 @@ class MyCourtsViewModel extends ChangeNotifier {
               Provider.of<DataProvider>(context, listen: false)
                   .courts[selectedCourtIndex]
                   .description ||
-          isIndoor !=
+          courts[selectedCourtIndex].isIndoor !=
               Provider.of<DataProvider>(context, listen: false)
                   .courts[selectedCourtIndex]
                   .isIndoor ||
