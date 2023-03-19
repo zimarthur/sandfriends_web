@@ -17,20 +17,29 @@ class SFTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final bool enable;
   final String hintText;
+  final bool plainTextField;
+  final String? sufixText;
+  final String? prefixText;
+  final TextAlign textAlign;
 
-  SFTextField(
-      {required this.labelText,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.suffixIconPressed,
-      required this.pourpose,
-      required this.controller,
-      required this.validator,
-      this.maxLines,
-      this.onChanged,
-      this.minLines,
-      this.enable = true,
-      this.hintText = ""});
+  SFTextField({
+    required this.labelText,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.suffixIconPressed,
+    required this.pourpose,
+    required this.controller,
+    required this.validator,
+    this.maxLines,
+    this.onChanged,
+    this.minLines,
+    this.enable = true,
+    this.hintText = "",
+    this.plainTextField = false,
+    this.prefixText,
+    this.sufixText,
+    this.textAlign = TextAlign.start,
+  });
 
   @override
   State<SFTextField> createState() => _SFTextFieldState();
@@ -69,74 +78,82 @@ class _SFTextFieldState extends State<SFTextField> {
         fontWeight: FontWeight.w700,
         fontSize: 14,
       ),
-      decoration: InputDecoration(
-        filled: true,
-        hintText: widget.hintText,
-        fillColor: widget.enable ? secondaryPaper : disabled,
-        contentPadding: const EdgeInsets.all(16),
-        labelText: widget.labelText,
-        labelStyle: const TextStyle(
-          color: textDarkGrey,
-          fontWeight: FontWeight.w300,
-          fontSize: 14,
-        ),
-        prefixIcon: widget.prefixIcon == null
-            ? null
-            : Container(
-                padding: const EdgeInsets.all(16),
-                child: widget.prefixIcon,
+      textAlign: widget.textAlign,
+      decoration: widget.plainTextField
+          ? InputDecoration(
+              focusColor: primaryBlue,
+              prefix:
+                  widget.prefixText != null ? Text(widget.prefixText!) : null,
+              suffix: widget.sufixText != null ? Text(widget.sufixText!) : null,
+            )
+          : InputDecoration(
+              filled: true,
+              hintText: widget.hintText,
+              fillColor: widget.enable ? secondaryPaper : disabled,
+              contentPadding: const EdgeInsets.all(16),
+              labelText: widget.labelText,
+              labelStyle: const TextStyle(
+                color: textDarkGrey,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
               ),
-        suffixIcon: widget.suffixIcon == null
-            ? null
-            : InkWell(
-                onTap: () {
-                  setState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: _passwordVisible
-                      ? widget.suffixIconPressed
-                      : widget.suffixIcon,
+              prefixIcon: widget.prefixIcon == null
+                  ? null
+                  : Container(
+                      padding: const EdgeInsets.all(16),
+                      child: widget.prefixIcon,
+                    ),
+              suffixIcon: widget.suffixIcon == null
+                  ? null
+                  : InkWell(
+                      onTap: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        child: _passwordVisible
+                            ? widget.suffixIconPressed
+                            : widget.suffixIcon,
+                      ),
+                    ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  width: 2,
+                  color: divider,
                 ),
               ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            width: 2,
-            color: divider,
-          ),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            width: 2,
-            color: divider,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            width: 2,
-            color: primaryBlue,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-        ),
-      ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  width: 2,
+                  color: divider,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  width: 2,
+                  color: primaryBlue,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 2,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 2,
+                ),
+              ),
+            ),
     );
   }
 }
