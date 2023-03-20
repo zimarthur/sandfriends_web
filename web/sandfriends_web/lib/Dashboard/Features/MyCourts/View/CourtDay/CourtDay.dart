@@ -51,6 +51,7 @@ class _CourtDayState extends State<CourtDay> {
           ? isPriceStandard
               ? mainRowHeight * 2 +
                   widget.rules * secondaryRowHeight +
+                  defaultPadding / 2 +
                   borderSize +
                   arrowHeight
               : 4 * widget.height
@@ -71,7 +72,8 @@ class _CourtDayState extends State<CourtDay> {
                     height: isExpanded
                         ? isPriceStandard
                             ? mainRowHeight * 2 +
-                                widget.rules * secondaryRowHeight
+                                widget.rules * secondaryRowHeight +
+                                defaultPadding / 2
                             : 4 * mainRowHeight
                         : mainRowHeight,
                     decoration: BoxDecoration(
@@ -219,7 +221,13 @@ class _CourtDayState extends State<CourtDay> {
                                                     ),
                                                   ),
                                                   isPriceStandard
-                                                      ? SizedBox(
+                                                      ? Container(
+                                                          margin: EdgeInsets
+                                                              .symmetric(
+                                                            vertical:
+                                                                defaultPadding /
+                                                                    4,
+                                                          ),
                                                           height:
                                                               secondaryRowHeight,
                                                           child: PriceSelector(
@@ -258,7 +266,13 @@ class _CourtDayState extends State<CourtDay> {
                                                             itemBuilder:
                                                                 (context,
                                                                     index) {
-                                                              return SizedBox(
+                                                              return Container(
+                                                                margin: EdgeInsets
+                                                                    .symmetric(
+                                                                  vertical:
+                                                                      defaultPadding /
+                                                                          4,
+                                                                ),
                                                                 height:
                                                                     secondaryRowHeight,
                                                                 child:
@@ -274,7 +288,7 @@ class _CourtDayState extends State<CourtDay> {
                                                                       hourString:
                                                                           "08:00"),
                                                                   endingHour: Hour(
-                                                                      hour: 2,
+                                                                      hour: 22,
                                                                       hourString:
                                                                           "22:00"),
                                                                   availableHours: Provider.of<
