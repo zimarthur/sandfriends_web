@@ -166,7 +166,6 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                             height: height,
                             child: CourtInfo(
                               viewModel: viewModel,
-                              newCourt: viewModel.isNewCourt,
                             ),
                           ),
                           SizedBox(

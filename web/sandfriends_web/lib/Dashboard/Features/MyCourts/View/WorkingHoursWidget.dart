@@ -29,7 +29,12 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
 
   @override
   void initState() {
-    newOperationDays = List.from(widget.viewModel.operationDays);
+    newOperationDays = widget.viewModel.operationDays
+        .map((opDay) => OperationDay(
+            weekDay: opDay.weekDay,
+            startingHour: opDay.startingHour,
+            endingHour: opDay.endingHour))
+        .toList();
     super.initState();
   }
 

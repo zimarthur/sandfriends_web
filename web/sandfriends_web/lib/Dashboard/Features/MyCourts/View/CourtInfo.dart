@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 
 class CourtInfo extends StatefulWidget {
   MyCourtsViewModel viewModel;
-  bool newCourt;
-  CourtInfo({required this.viewModel, required this.newCourt});
+  CourtInfo({
+    required this.viewModel,
+  });
 
   @override
   State<CourtInfo> createState() => _CourtInfoState();
@@ -77,7 +78,16 @@ class _CourtInfoState extends State<CourtInfo> {
                               pourpose: TextFieldPourpose.Standard,
                               controller: widget.viewModel.nameController,
                               validator: (value) {},
-                              onChanged: (p0) {
+                              onChanged: (newText) {
+                                if (widget.viewModel.selectedCourtIndex == -1) {
+                                  widget.viewModel.newCourtName = newText;
+                                } else {
+                                  widget
+                                      .viewModel
+                                      .courts[
+                                          widget.viewModel.selectedCourtIndex]
+                                      .description = newText;
+                                }
                                 widget.viewModel.checkCourtInfoChanges(context);
                               },
                             ),
@@ -107,11 +117,29 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: true,
-                                      groupValue:
-                                          widget.viewModel.currentCourtIsIndoor,
+                                      groupValue: widget.viewModel
+                                                  .selectedCourtIndex ==
+                                              -1
+                                          ? widget.viewModel.newCourtIsIndoor
+                                          : widget
+                                              .viewModel
+                                              .courts[widget
+                                                  .viewModel.selectedCourtIndex]
+                                              .isIndoor,
                                       onChanged: (value) {
-                                        widget.viewModel.currentCourtIsIndoor =
-                                            value!;
+                                        if (widget
+                                                .viewModel.selectedCourtIndex ==
+                                            -1) {
+                                          widget.viewModel.newCourtIsIndoor =
+                                              value!;
+                                        } else {
+                                          widget
+                                              .viewModel
+                                              .courts[widget
+                                                  .viewModel.selectedCourtIndex]
+                                              .isIndoor = value!;
+                                        }
+
                                         widget.viewModel
                                             .checkCourtInfoChanges(context);
                                       },
@@ -131,11 +159,29 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: false,
-                                      groupValue:
-                                          widget.viewModel.currentCourtIsIndoor,
+                                      groupValue: widget.viewModel
+                                                  .selectedCourtIndex ==
+                                              -1
+                                          ? widget.viewModel.newCourtIsIndoor
+                                          : widget
+                                              .viewModel
+                                              .courts[widget
+                                                  .viewModel.selectedCourtIndex]
+                                              .isIndoor,
                                       onChanged: (value) {
-                                        widget.viewModel.currentCourtIsIndoor =
-                                            value!;
+                                        if (widget
+                                                .viewModel.selectedCourtIndex ==
+                                            -1) {
+                                          widget.viewModel.newCourtIsIndoor =
+                                              value!;
+                                        } else {
+                                          widget
+                                              .viewModel
+                                              .courts[widget
+                                                  .viewModel.selectedCourtIndex]
+                                              .isIndoor = value!;
+                                        }
+
                                         widget.viewModel
                                             .checkCourtInfoChanges(context);
                                       },
@@ -188,21 +234,44 @@ class _CourtInfoState extends State<CourtInfo> {
                                 children: [
                                   for (int sportIndex = 0;
                                       sportIndex <
-                                          widget.viewModel.currentCourtSports
+                                          Provider.of<DataProvider>(context,
+                                                  listen: false)
+                                              .availableSports
                                               .length;
                                       sportIndex++)
                                     Row(
                                       children: [
                                         Checkbox(
-                                          value: widget
-                                              .viewModel
-                                              .currentCourtSports[sportIndex]
-                                              .isAvailable,
+                                          value: widget.viewModel
+                                                      .selectedCourtIndex ==
+                                                  -1
+                                              ? widget
+                                                  .viewModel
+                                                  .newCourtSports[sportIndex]
+                                                  .isAvailable
+                                              : widget
+                                                  .viewModel
+                                                  .courts[widget.viewModel
+                                                      .selectedCourtIndex]
+                                                  .sports[sportIndex]
+                                                  .isAvailable,
                                           onChanged: (newValue) {
-                                            widget
-                                                .viewModel
-                                                .currentCourtSports[sportIndex]
-                                                .isAvailable = newValue!;
+                                            if (widget.viewModel
+                                                    .selectedCourtIndex ==
+                                                -1) {
+                                              widget
+                                                  .viewModel
+                                                  .newCourtSports[sportIndex]
+                                                  .isAvailable = newValue!;
+                                            } else {
+                                              widget
+                                                  .viewModel
+                                                  .courts[widget.viewModel
+                                                      .selectedCourtIndex]
+                                                  .sports[sportIndex]
+                                                  .isAvailable = newValue!;
+                                            }
+
                                             widget.viewModel
                                                 .checkCourtInfoChanges(context);
                                           },
@@ -211,11 +280,20 @@ class _CourtInfoState extends State<CourtInfo> {
                                           width: defaultPadding,
                                         ),
                                         Text(
-                                          widget
-                                              .viewModel
-                                              .currentCourtSports[sportIndex]
-                                              .sport
-                                              .description,
+                                          widget.viewModel.selectedCourtIndex ==
+                                                  -1
+                                              ? widget
+                                                  .viewModel
+                                                  .newCourtSports[sportIndex]
+                                                  .sport
+                                                  .description
+                                              : widget
+                                                  .viewModel
+                                                  .courts[widget.viewModel
+                                                      .selectedCourtIndex]
+                                                  .sports[sportIndex]
+                                                  .sport
+                                                  .description,
                                           style: TextStyle(
                                             color: textDarkGrey,
                                           ),
@@ -237,7 +315,7 @@ class _CourtInfoState extends State<CourtInfo> {
           SizedBox(
             height: defaultPadding,
           ),
-          widget.newCourt
+          widget.viewModel.selectedCourtIndex == -1
               ? SFButton(
                   buttonLabel: "Adicionar quadra",
                   buttonType: ButtonType.Primary,

@@ -87,11 +87,15 @@ class _CourtDayState extends State<CourtDay> {
                               right: isExpanded ? editIconWidth : 0),
                           height: mainRowHeight,
                           child: ResumedInfoRow(
-                            day: weekday[widget.dayIndex],
-                            workingHours:
-                                "${widget.viewModel.operationDays[widget.dayIndex].startingHour.hourString} - ${widget.viewModel.operationDays[widget.dayIndex].endingHour.hourString}",
-                            allowRecurrentMatch: true,
-                            priceRange: "R\$100 - R\$110\n(R\$90 - R\$100",
+                            day: widget.dayIndex,
+                            hourPriceList: widget
+                                        .viewModel.selectedCourtIndex ==
+                                    -1
+                                ? widget.viewModel.newCourtHourPrices
+                                : widget
+                                    .viewModel
+                                    .courts[widget.viewModel.selectedCourtIndex]
+                                    .prices,
                             isEditing: isExpanded,
                             rowHeight: mainRowHeight,
                           ),
@@ -231,26 +235,48 @@ class _CourtDayState extends State<CourtDay> {
                                                           height:
                                                               secondaryRowHeight,
                                                           child: PriceSelector(
-                                                            startingHour: Hour(
-                                                                hour: 1,
-                                                                hourString:
-                                                                    "08:00"),
-                                                            endingHour: Hour(
-                                                                hour: 2,
-                                                                hourString:
-                                                                    "22:00"),
+                                                            startingHour: widget
+                                                                        .viewModel
+                                                                        .selectedCourtIndex ==
+                                                                    -1
+                                                                ? widget
+                                                                    .viewModel
+                                                                    .newCourtHourPrices
+                                                                    .first
+                                                                    .hour
+                                                                : widget
+                                                                    .viewModel
+                                                                    .courts[widget
+                                                                        .viewModel
+                                                                        .selectedCourtIndex]
+                                                                    .prices
+                                                                    .first
+                                                                    .hour,
+                                                            endingHour: widget
+                                                                        .viewModel
+                                                                        .selectedCourtIndex ==
+                                                                    -1
+                                                                ? widget
+                                                                    .viewModel
+                                                                    .newCourtHourPrices
+                                                                    .last
+                                                                    .hour
+                                                                : widget
+                                                                    .viewModel
+                                                                    .courts[widget
+                                                                        .viewModel
+                                                                        .selectedCourtIndex]
+                                                                    .prices
+                                                                    .last
+                                                                    .hour,
                                                             height:
                                                                 secondaryRowHeight,
-                                                            availableHours: [
-                                                              Hour(
-                                                                  hour: 1,
-                                                                  hourString:
-                                                                      "08:00"),
-                                                              Hour(
-                                                                  hour: 2,
-                                                                  hourString:
-                                                                      "22:00"),
-                                                            ],
+                                                            availableHours: Provider.of<
+                                                                        DataProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .availableHours,
                                                             editHour: false,
                                                             singlePrice:
                                                                 controller,
@@ -277,20 +303,40 @@ class _CourtDayState extends State<CourtDay> {
                                                                     secondaryRowHeight,
                                                                 child:
                                                                     PriceSelector(
-                                                                  singlePrice:
-                                                                      controller,
-                                                                  recurrentPrice:
-                                                                      controller,
+                                                                  startingHour: widget
+                                                                              .viewModel.selectedCourtIndex ==
+                                                                          -1
+                                                                      ? widget
+                                                                          .viewModel
+                                                                          .newCourtHourPrices
+                                                                          .first
+                                                                          .hour
+                                                                      : widget
+                                                                          .viewModel
+                                                                          .courts[widget
+                                                                              .viewModel
+                                                                              .selectedCourtIndex]
+                                                                          .prices
+                                                                          .first
+                                                                          .hour,
+                                                                  endingHour: widget
+                                                                              .viewModel.selectedCourtIndex ==
+                                                                          -1
+                                                                      ? widget
+                                                                          .viewModel
+                                                                          .newCourtHourPrices
+                                                                          .last
+                                                                          .hour
+                                                                      : widget
+                                                                          .viewModel
+                                                                          .courts[widget
+                                                                              .viewModel
+                                                                              .selectedCourtIndex]
+                                                                          .prices
+                                                                          .last
+                                                                          .hour,
                                                                   height:
                                                                       secondaryRowHeight,
-                                                                  startingHour: Hour(
-                                                                      hour: 1,
-                                                                      hourString:
-                                                                          "08:00"),
-                                                                  endingHour: Hour(
-                                                                      hour: 22,
-                                                                      hourString:
-                                                                          "22:00"),
                                                                   availableHours: Provider.of<
                                                                               DataProvider>(
                                                                           context,
@@ -298,7 +344,11 @@ class _CourtDayState extends State<CourtDay> {
                                                                               false)
                                                                       .availableHours,
                                                                   editHour:
-                                                                      true,
+                                                                      false,
+                                                                  singlePrice:
+                                                                      controller,
+                                                                  recurrentPrice:
+                                                                      controller,
                                                                 ),
                                                               );
                                                             },

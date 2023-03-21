@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:sandfriends_web/Utils/SFDateTime.dart';
+
+import '../../../../../SharedComponents/Model/HourPrice.dart';
 
 class ResumedInfoRow extends StatefulWidget {
-  String day;
-  String workingHours;
-  bool allowRecurrentMatch;
-  String priceRange;
+  int day;
+  List<HourPrice> hourPriceList;
   bool isEditing;
   double rowHeight;
 
   ResumedInfoRow({
     required this.day,
-    required this.workingHours,
-    required this.allowRecurrentMatch,
-    required this.priceRange,
+    required this.hourPriceList,
     required this.isEditing,
     required this.rowHeight,
   });
@@ -30,7 +29,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
         Expanded(
           flex: 1,
           child: Text(
-            widget.day,
+            weekday[widget.day],
             style: TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),
@@ -38,7 +37,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
         Expanded(
           flex: 1,
           child: Text(
-            widget.workingHours,
+            "${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).first.hour.hourString} - ${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).last.hour.hourString}",
             style: TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),
@@ -51,21 +50,36 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                 ? SizedBox(
                     height: widget.rowHeight * 0.7,
                     child: SFDropdown(
-                      labelText: "Sim",
+                      labelText: widget.hourPriceList
+                              .where((hourPrice) =>
+                                  hourPrice.weekday == widget.day)
+                              .first
+                              .allowReccurrent
+                          ? "Sim"
+                          : "Não",
                       items: ["Sim", "Não"],
                       validator: (value) {},
                       onChanged: (value) {
-                        if (value == "Sim") {
-                        } else {
-                          widget.allowRecurrentMatch = false;
-                        }
+                        setState(() {
+                          widget.hourPriceList
+                              .where((hourPrice) =>
+                                  hourPrice.weekday == widget.day)
+                              .forEach((element) =>
+                                  element.allowReccurrent = value == "Sim");
+                        });
                       },
                       textColor: textDarkGrey,
                       enableBorder: true,
                     ),
                   )
                 : Text(
-                    widget.allowRecurrentMatch ? "Sim" : "Não",
+                    widget.hourPriceList
+                            .where(
+                                (hourPrice) => hourPrice.weekday == widget.day)
+                            .first
+                            .allowReccurrent
+                        ? "Sim"
+                        : "Não",
                     style: TextStyle(color: textDarkGrey),
                   ),
           ),
@@ -73,7 +87,12 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
         Expanded(
           flex: 1,
           child: Text(
-            widget.priceRange,
+            widget.hourPriceList
+                    .where((hourPrice) => hourPrice.weekday == widget.day)
+                    .first
+                    .allowReccurrent
+                ? "R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.price < next.price ? current : next).price} - R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.price > next.price ? current : next).price} \n (R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.recurrentPrice < next.recurrentPrice ? current : next).recurrentPrice} - R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.recurrentPrice > next.recurrentPrice ? current : next).recurrentPrice})"
+                : "R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.price < next.price ? current : next).price} - R\$${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).reduce((current, next) => current.price > next.price ? current : next).price}",
             style: TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),
