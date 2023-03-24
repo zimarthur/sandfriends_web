@@ -54,6 +54,7 @@ class _SFTextFieldState extends State<SFTextField> {
       enabled: widget.enable,
       validator: widget.validator,
       controller: widget.controller,
+      textAlignVertical: TextAlignVertical.top,
       textInputAction: TextInputAction.next,
       keyboardType: widget.pourpose == TextFieldPourpose.Email
           ? TextInputType.emailAddress
@@ -78,7 +79,7 @@ class _SFTextFieldState extends State<SFTextField> {
         fontWeight: FontWeight.w700,
         fontSize: 14,
       ),
-      textAlign: widget.textAlign,
+      //textAlign: widget.textAlign,
       decoration: widget.plainTextField
           ? InputDecoration(
               focusColor: primaryBlue,

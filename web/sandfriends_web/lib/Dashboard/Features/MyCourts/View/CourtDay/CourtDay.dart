@@ -4,6 +4,7 @@ import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/Resume
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/PriceSelector.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
+import 'package:sandfriends_web/SharedComponents/Model/PriceRule.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
@@ -12,20 +13,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
+import '../../../../../SharedComponents/Model/HourPrice.dart';
 import '../../ViewModel/MyCourtsViewModel.dart';
+import 'PriceSelectorHeader.dart';
 
 class CourtDay extends StatefulWidget {
   double width;
   double height;
   int dayIndex;
-  int rules;
   MyCourtsViewModel viewModel;
 
   CourtDay({
     required this.width,
     required this.height,
     required this.dayIndex,
-    this.rules = 2,
     required this.viewModel,
   });
 
@@ -41,20 +42,26 @@ class _CourtDayState extends State<CourtDay> {
   TextEditingController controller = TextEditingController();
   double arrowHeight = 16;
 
+  List<HourPrice> priceRules = [];
+
   @override
   Widget build(BuildContext context) {
     double mainRowHeight = widget.height - 2 * borderSize;
-    double secondaryRowHeight = mainRowHeight / 2;
+    double secondaryRowHeight = mainRowHeight;
+    int numberRules = widget
+        .viewModel.courts[widget.viewModel.selectedCourtIndex].priceRules
+        .where((element) => element.weekday == widget.dayIndex)
+        .toList()
+        .length;
+    double standardHeight = mainRowHeight * 2 + 2 * secondaryRowHeight;
+    double customHeight = mainRowHeight * 2 +
+        (numberRules < 2 ? 2 : numberRules + 1) * secondaryRowHeight;
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       height: isExpanded
           ? isPriceStandard
-              ? mainRowHeight * 2 +
-                  widget.rules * secondaryRowHeight +
-                  defaultPadding / 2 +
-                  borderSize +
-                  arrowHeight
-              : 4 * widget.height
+              ? standardHeight + borderSize + arrowHeight
+              : customHeight + borderSize + arrowHeight
           : widget.height,
       width: widget.width,
       decoration: BoxDecoration(
@@ -71,10 +78,8 @@ class _CourtDayState extends State<CourtDay> {
                     duration: Duration(milliseconds: 300),
                     height: isExpanded
                         ? isPriceStandard
-                            ? mainRowHeight * 2 +
-                                widget.rules * secondaryRowHeight +
-                                defaultPadding / 2
-                            : 4 * mainRowHeight
+                            ? standardHeight
+                            : customHeight
                         : mainRowHeight,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -122,60 +127,16 @@ class _CourtDayState extends State<CourtDay> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                SizedBox(
-                                                  height: secondaryRowHeight,
-                                                  child: Row(
-                                                    children: [
-                                                      Radio(
-                                                        value: true,
-                                                        groupValue:
-                                                            isPriceStandard,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            isPriceStandard =
-                                                                value!;
-                                                          });
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width: defaultPadding,
-                                                      ),
-                                                      Text(
-                                                        "Preço único",
-                                                        style: TextStyle(
-                                                          color: textDarkGrey,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: secondaryRowHeight,
-                                                  child: Row(
-                                                    children: [
-                                                      Radio(
-                                                        value: false,
-                                                        groupValue:
-                                                            isPriceStandard,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            isPriceStandard =
-                                                                value!;
-                                                          });
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width: defaultPadding,
-                                                      ),
-                                                      Text(
-                                                        "Personalizado",
-                                                        style: TextStyle(
-                                                          color: textDarkGrey,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                PriceSelectorRadio(
+                                                    height: secondaryRowHeight,
+                                                    isPriceStandard:
+                                                        isPriceStandard,
+                                                    onChange: (value) {
+                                                      setState(() {
+                                                        isPriceStandard =
+                                                            value!;
+                                                      });
+                                                    }),
                                               ],
                                             ),
                                             Expanded(
@@ -183,177 +144,51 @@ class _CourtDayState extends State<CourtDay> {
                                                 children: [
                                                   SizedBox(
                                                     height: secondaryRowHeight,
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 3,
-                                                          child: Text(
-                                                            "Intervalo",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    textLightGrey),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            "Avulso",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    textLightGrey),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            "Mensalista",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    textLightGrey),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    child:
+                                                        PriceSelectorHeader(),
                                                   ),
-                                                  isPriceStandard
-                                                      ? Container(
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                            vertical:
-                                                                defaultPadding /
-                                                                    4,
-                                                          ),
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                      itemCount: widget
+                                                          .viewModel
+                                                          .courts[widget
+                                                              .viewModel
+                                                              .selectedCourtIndex]
+                                                          .priceRules
+                                                          .where((element) =>
+                                                              element.weekday ==
+                                                              widget.dayIndex)
+                                                          .toList()
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return PriceSelector(
+                                                          priceRule: widget
+                                                              .viewModel
+                                                              .courts[widget
+                                                                  .viewModel
+                                                                  .selectedCourtIndex]
+                                                              .priceRules
+                                                              .where((element) =>
+                                                                  element
+                                                                      .weekday ==
+                                                                  widget
+                                                                      .dayIndex)
+                                                              .toList()[index],
                                                           height:
                                                               secondaryRowHeight,
-                                                          child: PriceSelector(
-                                                            startingHour: widget
-                                                                        .viewModel
-                                                                        .selectedCourtIndex ==
-                                                                    -1
-                                                                ? widget
-                                                                    .viewModel
-                                                                    .newCourtHourPrices
-                                                                    .first
-                                                                    .hour
-                                                                : widget
-                                                                    .viewModel
-                                                                    .courts[widget
-                                                                        .viewModel
-                                                                        .selectedCourtIndex]
-                                                                    .prices
-                                                                    .first
-                                                                    .hour,
-                                                            endingHour: widget
-                                                                        .viewModel
-                                                                        .selectedCourtIndex ==
-                                                                    -1
-                                                                ? widget
-                                                                    .viewModel
-                                                                    .newCourtHourPrices
-                                                                    .last
-                                                                    .hour
-                                                                : widget
-                                                                    .viewModel
-                                                                    .courts[widget
-                                                                        .viewModel
-                                                                        .selectedCourtIndex]
-                                                                    .prices
-                                                                    .last
-                                                                    .hour,
-                                                            height:
-                                                                secondaryRowHeight,
-                                                            availableHours: Provider.of<
-                                                                        DataProvider>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .availableHours,
-                                                            editHour: false,
-                                                            singlePrice:
-                                                                controller,
-                                                            recurrentPrice:
-                                                                controller,
-                                                          ),
-                                                        )
-                                                      : Expanded(
-                                                          child:
-                                                              ListView.builder(
-                                                            itemCount:
-                                                                widget.rules,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Container(
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                  vertical:
-                                                                      defaultPadding /
-                                                                          4,
-                                                                ),
-                                                                height:
-                                                                    secondaryRowHeight,
-                                                                child:
-                                                                    PriceSelector(
-                                                                  startingHour: widget
-                                                                              .viewModel.selectedCourtIndex ==
-                                                                          -1
-                                                                      ? widget
-                                                                          .viewModel
-                                                                          .newCourtHourPrices
-                                                                          .first
-                                                                          .hour
-                                                                      : widget
-                                                                          .viewModel
-                                                                          .courts[widget
-                                                                              .viewModel
-                                                                              .selectedCourtIndex]
-                                                                          .prices
-                                                                          .first
-                                                                          .hour,
-                                                                  endingHour: widget
-                                                                              .viewModel.selectedCourtIndex ==
-                                                                          -1
-                                                                      ? widget
-                                                                          .viewModel
-                                                                          .newCourtHourPrices
-                                                                          .last
-                                                                          .hour
-                                                                      : widget
-                                                                          .viewModel
-                                                                          .courts[widget
-                                                                              .viewModel
-                                                                              .selectedCourtIndex]
-                                                                          .prices
-                                                                          .last
-                                                                          .hour,
-                                                                  height:
-                                                                      secondaryRowHeight,
-                                                                  availableHours: Provider.of<
-                                                                              DataProvider>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .availableHours,
-                                                                  editHour:
-                                                                      false,
-                                                                  singlePrice:
-                                                                      controller,
-                                                                  recurrentPrice:
-                                                                      controller,
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        )
+                                                          availableHours:
+                                                              Provider.of<DataProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .availableHours,
+                                                          editHour:
+                                                              !isPriceStandard,
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
                                                 ],
                                               ),
                                             ),

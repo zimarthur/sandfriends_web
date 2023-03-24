@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 
-class PriceRuleRadio extends StatefulWidget {
+class PriceSelectorRadio extends StatefulWidget {
   bool isPriceStandard;
   double height;
+  Function(bool?) onChange;
 
-  PriceRuleRadio({
+  PriceSelectorRadio({
     required this.isPriceStandard,
     required this.height,
+    required this.onChange,
   });
 
   @override
-  State<PriceRuleRadio> createState() => _PriceRuleRadioState();
+  State<PriceSelectorRadio> createState() => _PriceSelectorRadioState();
 }
 
-class _PriceRuleRadioState extends State<PriceRuleRadio> {
+class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,11 +29,7 @@ class _PriceRuleRadioState extends State<PriceRuleRadio> {
               Radio(
                 value: true,
                 groupValue: widget.isPriceStandard,
-                onChanged: (value) {
-                  setState(() {
-                    widget.isPriceStandard = value!;
-                  });
-                },
+                onChanged: widget.onChange,
               ),
               SizedBox(
                 width: defaultPadding,
@@ -52,11 +50,7 @@ class _PriceRuleRadioState extends State<PriceRuleRadio> {
               Radio(
                 value: false,
                 groupValue: widget.isPriceStandard,
-                onChanged: (value) {
-                  setState(() {
-                    widget.isPriceStandard = value!;
-                  });
-                },
+                onChanged: widget.onChange,
               ),
               SizedBox(
                 width: defaultPadding,
