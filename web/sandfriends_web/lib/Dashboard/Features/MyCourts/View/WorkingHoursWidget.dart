@@ -33,7 +33,18 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
         .operationDays
         .isEmpty) {
       for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
-        newOperationDays.add(OperationDay(weekDay: dayIndex));
+        newOperationDays.add(
+          OperationDay(
+            weekDay: dayIndex,
+            startingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .first,
+            endingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .last,
+            isEnabled: true,
+          ),
+        );
       }
     } else {
       newOperationDays = Provider.of<DataProvider>(context, listen: false)
@@ -44,7 +55,6 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
               endingHour: opDay.endingHour))
           .toList();
     }
-    print(newOperationDays.length);
     super.initState();
   }
 

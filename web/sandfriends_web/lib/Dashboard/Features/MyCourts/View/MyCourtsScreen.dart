@@ -66,7 +66,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       iconFirst: true,
                       iconPath: r"assets/icon/clock.svg",
                       onTap: () {
-                        viewModel.setWorkingHours(context, viewModel);
+                        viewModel.setWorkingHoursWidget(context, viewModel);
                       },
                       textPadding: const EdgeInsets.symmetric(
                         vertical: defaultPadding,
@@ -283,7 +283,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                                       width: courtWeekdayWidth,
                                                       height: myHeight,
                                                       dayIndex: index,
-                                                      viewModel: viewModel,
+                                                      court: viewModel
+                                                          .currentCourt,
                                                     ),
                                                     if (index != 6)
                                                       SizedBox(

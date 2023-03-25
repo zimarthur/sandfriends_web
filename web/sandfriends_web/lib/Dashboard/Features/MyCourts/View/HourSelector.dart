@@ -49,9 +49,7 @@ class _HourSelectorState extends State<HourSelector> {
               ? Row(
                   children: [
                     SFDropdown(
-                      labelText: widget.operationDay.startingHour == null
-                          ? widget.availableHours.first.hourString
-                          : widget.operationDay.startingHour!.hourString,
+                      labelText: widget.operationDay.startingHour.hourString,
                       items: widget.operationDay.endingHour == null
                           ? widget.availableHours
                               .where((hour) =>
@@ -61,7 +59,7 @@ class _HourSelectorState extends State<HourSelector> {
                           : widget.availableHours
                               .where((hour) =>
                                   hour.hour <
-                                  widget.operationDay.endingHour!.hour)
+                                  widget.operationDay.endingHour.hour)
                               .map((hour) => hour.hourString)
                               .toList(),
                       validator: (a) {},
@@ -86,7 +84,7 @@ class _HourSelectorState extends State<HourSelector> {
                     SFDropdown(
                       labelText: widget.operationDay.endingHour == null
                           ? widget.availableHours.last.hourString
-                          : widget.operationDay.endingHour!.hourString,
+                          : widget.operationDay.endingHour.hourString,
                       items: widget.operationDay.startingHour == null
                           ? widget.availableHours
                               .where((hour) =>
@@ -96,7 +94,7 @@ class _HourSelectorState extends State<HourSelector> {
                           : widget.availableHours
                               .where((hour) =>
                                   hour.hour >
-                                  widget.operationDay.startingHour!.hour)
+                                  widget.operationDay.startingHour.hour)
                               .map((hour) => hour.hourString)
                               .toList(),
                       validator: (a) {},

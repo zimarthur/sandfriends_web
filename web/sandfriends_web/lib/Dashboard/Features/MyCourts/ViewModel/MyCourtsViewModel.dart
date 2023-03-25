@@ -19,6 +19,8 @@ class MyCourtsViewModel extends ChangeNotifier {
   List<AvailableSport> newCourtSports = [];
   List<HourPrice> newCourtHourPrices = [];
 
+  Court currentCourt = Court(description: "", isIndoor: true);
+
   List<Court> courts = [];
 
   bool _courtInfoChanged = false;
@@ -47,8 +49,8 @@ class MyCourtsViewModel extends ChangeNotifier {
     Provider.of<DataProvider>(context, listen: false)
         .operationDays
         .forEach((opDay) {
-      for (int hour = opDay.startingHour!.hour;
-          hour <= opDay.endingHour!.hour;
+      for (int hour = opDay.startingHour.hour;
+          hour <= opDay.endingHour.hour;
           hour++) {
         newCourtHourPrices.add(
           HourPrice(
@@ -65,7 +67,8 @@ class MyCourtsViewModel extends ChangeNotifier {
     });
   }
 
-  void setWorkingHours(BuildContext context, MyCourtsViewModel viewModel) {
+  void setWorkingHoursWidget(
+      BuildContext context, MyCourtsViewModel viewModel) {
     Provider.of<DashboardViewModel>(context, listen: false).setModalForm(
       WorkingHoursWidget(viewModel: viewModel),
     );
@@ -82,16 +85,50 @@ class MyCourtsViewModel extends ChangeNotifier {
       Provider.of<DataProvider>(context, listen: false)
           .operationDays
           .add(opDay);
+      updateCourtWorkingHours(opDay, context);
     });
     returnMainView(context);
+  }
+
+  void updateCourtWorkingHours(OperationDay opDay, BuildContext context) {
+    if (newCourtHourPrices
+        .where((hourPrice) => hourPrice.weekday == opDay.weekDay)
+        .isEmpty) {
+      for (int hour = opDay.startingHour.hour;
+          hour <= opDay.endingHour.hour;
+          hour++) {
+        newCourtHourPrices.add(HourPrice(
+            hour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .firstWhere((avHour) => avHour.hour == hour),
+            weekday: opDay.weekDay,
+            allowReccurrent: true,
+            price: 0,
+            recurrentPrice: 0));
+      }
+    } else {
+      newCourtHourPrices = newCourtHourPrices
+          .where((hourPrice) =>
+              hourPrice.weekday == opDay.weekDay &&
+              hourPrice.hour.hour >= opDay.startingHour.hour &&
+              hourPrice.hour.hour <= opDay.endingHour.hour)
+          .toList();
+    }
+    switchTabs(context, selectedCourtIndex);
   }
 
   void switchTabs(BuildContext context, int index) {
     selectedCourtIndex = index;
     if (selectedCourtIndex == -1) {
       nameController.text = newCourtName;
+      currentCourt.isIndoor = newCourtIsIndoor;
+      currentCourt.prices = newCourtHourPrices;
+      currentCourt.sports = newCourtSports;
     } else {
       nameController.text = courts[selectedCourtIndex].description;
+      currentCourt.isIndoor = courts[selectedCourtIndex].isIndoor;
+      currentCourt.prices = courts[selectedCourtIndex].prices;
+      currentCourt.sports = courts[selectedCourtIndex].sports;
     }
     notifyListeners();
   }
@@ -126,7 +163,7 @@ class MyCourtsViewModel extends ChangeNotifier {
             .courts
             .where((element) => element.idStoreCourt == newCourt.idStoreCourt)
             .first
-            .idStoreCourt);
+            .idStoreCourt!);
   }
 
   void deleteCourt(BuildContext context) {

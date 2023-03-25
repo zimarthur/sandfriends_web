@@ -29,9 +29,14 @@ class _PriceSelectorState extends State<PriceSelector> {
   TextEditingController recurrentPriceController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     priceController.text = widget.priceRule.price.toString();
     recurrentPriceController.text = widget.priceRule.priceRecurrent.toString();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: widget.height * 0.05,
@@ -141,7 +146,6 @@ class _PriceSelectorState extends State<PriceSelector> {
                   setState(() {
                     widget.priceRule.priceRecurrent = int.parse(newPrice);
                   });
-                  print(widget.priceRule.priceRecurrent);
                 },
               ),
             ),

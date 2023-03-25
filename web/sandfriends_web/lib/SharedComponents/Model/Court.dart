@@ -5,7 +5,7 @@ import 'package:sandfriends_web/SharedComponents/Model/PriceRule.dart';
 import 'Sport.dart';
 
 class Court {
-  int idStoreCourt;
+  int? idStoreCourt;
   String description;
   bool isIndoor;
 
@@ -58,7 +58,7 @@ class Court {
   }
 
   Court({
-    required this.idStoreCourt,
+    this.idStoreCourt,
     required this.description,
     required this.isIndoor,
   });

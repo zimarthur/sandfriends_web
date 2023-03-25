@@ -13,7 +13,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
+import '../../../../../SharedComponents/Model/Court.dart';
 import '../../../../../SharedComponents/Model/HourPrice.dart';
+import '../../../../../SharedComponents/Model/OperationDay.dart';
 import '../../ViewModel/MyCourtsViewModel.dart';
 import 'PriceSelectorHeader.dart';
 
@@ -21,13 +23,13 @@ class CourtDay extends StatefulWidget {
   double width;
   double height;
   int dayIndex;
-  MyCourtsViewModel viewModel;
+  Court court;
 
   CourtDay({
     required this.width,
     required this.height,
     required this.dayIndex,
-    required this.viewModel,
+    required this.court,
   });
 
   @override
@@ -45,11 +47,19 @@ class _CourtDayState extends State<CourtDay> {
   List<HourPrice> priceRules = [];
 
   @override
+  void initState() {
+    isPriceStandard = widget.court.priceRules
+            .where((priceRule) => priceRule.weekday == widget.dayIndex)
+            .length ==
+        1;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double mainRowHeight = widget.height - 2 * borderSize;
     double secondaryRowHeight = mainRowHeight * 0.7;
-    int numberRules = widget
-        .viewModel.courts[widget.viewModel.selectedCourtIndex].priceRules
+    int numberRules = widget.court.priceRules
         .where((element) => element.weekday == widget.dayIndex)
         .toList()
         .length;
@@ -94,14 +104,10 @@ class _CourtDayState extends State<CourtDay> {
                           height: mainRowHeight,
                           child: ResumedInfoRow(
                             day: widget.dayIndex,
-                            hourPriceList: widget
-                                        .viewModel.selectedCourtIndex ==
-                                    -1
-                                ? widget.viewModel.newCourtHourPrices
-                                : widget
-                                    .viewModel
-                                    .courts[widget.viewModel.selectedCourtIndex]
-                                    .prices,
+                            hourPriceList: widget.court.prices
+                                .where((hourPrice) =>
+                                    hourPrice.weekday == widget.dayIndex)
+                                .toList(),
                             isEditing: isExpanded,
                             rowHeight: mainRowHeight,
                           ),
@@ -151,11 +157,7 @@ class _CourtDayState extends State<CourtDay> {
                                                   Expanded(
                                                     child: ListView.builder(
                                                       itemCount: widget
-                                                          .viewModel
-                                                          .courts[widget
-                                                              .viewModel
-                                                              .selectedCourtIndex]
-                                                          .priceRules
+                                                          .court.priceRules
                                                           .where((element) =>
                                                               element.weekday ==
                                                               widget.dayIndex)
@@ -165,11 +167,7 @@ class _CourtDayState extends State<CourtDay> {
                                                           (context, index) {
                                                         return PriceSelector(
                                                           priceRule: widget
-                                                              .viewModel
-                                                              .courts[widget
-                                                                  .viewModel
-                                                                  .selectedCourtIndex]
-                                                              .priceRules
+                                                              .court.priceRules
                                                               .where((element) =>
                                                                   element
                                                                       .weekday ==
@@ -182,7 +180,29 @@ class _CourtDayState extends State<CourtDay> {
                                                                       context,
                                                                       listen:
                                                                           false)
-                                                                  .availableHours,
+                                                                  .availableHours
+                                                                  .where(
+                                                                      (hour) {
+                                                            OperationDay validDay = Provider.of<
+                                                                        DataProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .operationDays
+                                                                .firstWhere((opDay) =>
+                                                                    opDay
+                                                                        .weekDay ==
+                                                                    widget
+                                                                        .dayIndex);
+                                                            return hour.hour >=
+                                                                    validDay
+                                                                        .startingHour
+                                                                        .hour &&
+                                                                hour.hour <=
+                                                                    validDay
+                                                                        .endingHour
+                                                                        .hour;
+                                                          }).toList(),
                                                           editHour:
                                                               !isPriceStandard,
                                                         );
