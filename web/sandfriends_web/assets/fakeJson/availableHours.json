@@ -1,21 +1,5 @@
 [
     {
-        "IdAvailableHour": 1,
-        "HourString": "01:00"
-    },
-    {
-        "IdAvailableHour": 2,
-        "HourString": "02:00"
-    },
-    {
-        "IdAvailableHour": 3,
-        "HourString": "03:00"
-    },
-    {
-        "IdAvailableHour": 4,
-        "HourString": "04:00"
-    },
-    {
         "IdAvailableHour": 5,
         "HourString": "05:00"
     },
@@ -93,6 +77,6 @@
     },
     {
         "IdAvailableHour": 24,
-        "HourString": "24:00"
+        "HourString": "00:00"
     }
 ]

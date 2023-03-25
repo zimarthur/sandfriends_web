@@ -129,6 +129,7 @@ class _PriceSelectorState extends State<PriceSelector> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
               child: SFTextField(
+                textAlign: TextAlign.center,
                 plainTextField: true,
                 prefixText: "R\$",
                 sufixText: "/hora",

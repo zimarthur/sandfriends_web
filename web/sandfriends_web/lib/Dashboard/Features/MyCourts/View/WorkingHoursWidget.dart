@@ -29,12 +29,22 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
 
   @override
   void initState() {
-    newOperationDays = widget.viewModel.operationDays
-        .map((opDay) => OperationDay(
-            weekDay: opDay.weekDay,
-            startingHour: opDay.startingHour,
-            endingHour: opDay.endingHour))
-        .toList();
+    if (Provider.of<DataProvider>(context, listen: false)
+        .operationDays
+        .isEmpty) {
+      for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
+        newOperationDays.add(OperationDay(weekDay: dayIndex));
+      }
+    } else {
+      newOperationDays = Provider.of<DataProvider>(context, listen: false)
+          .operationDays
+          .map((opDay) => OperationDay(
+              weekDay: opDay.weekDay,
+              startingHour: opDay.startingHour,
+              endingHour: opDay.endingHour))
+          .toList();
+    }
+    print(newOperationDays.length);
     super.initState();
   }
 

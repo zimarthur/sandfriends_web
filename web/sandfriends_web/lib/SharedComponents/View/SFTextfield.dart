@@ -79,10 +79,12 @@ class _SFTextFieldState extends State<SFTextField> {
         fontWeight: FontWeight.w700,
         fontSize: 14,
       ),
-      //textAlign: widget.textAlign,
+      textAlign: widget.textAlign,
       decoration: widget.plainTextField
           ? InputDecoration(
-              focusColor: primaryBlue,
+              focusColor: Colors.transparent,
+              isCollapsed: true,
+              contentPadding: EdgeInsets.only(bottom: 5),
               prefix:
                   widget.prefixText != null ? Text(widget.prefixText!) : null,
               suffix: widget.sufixText != null ? Text(widget.sufixText!) : null,

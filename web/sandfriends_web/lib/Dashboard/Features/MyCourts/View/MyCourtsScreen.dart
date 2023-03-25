@@ -159,103 +159,148 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           bottomRight: Radius.circular(defaultBorderRadius),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: courtInfoWidth,
-                            height: height,
-                            child: CourtInfo(
-                              viewModel: viewModel,
-                            ),
-                          ),
-                          SizedBox(
-                            width: defaultPadding,
-                          ),
-                          Expanded(
-                            child: LayoutBuilder(
-                              builder: (ctx, cnst) {
-                                double myHeight = (cnst.maxHeight -
-                                                6 * defaultPadding) /
-                                            8 >
-                                        50
-                                    ? (cnst.maxHeight - 6 * defaultPadding) / 8
-                                    : 50;
-                                return Column(
-                                  children: [
-                                    Container(
-                                      height: myHeight,
-                                      padding: EdgeInsets.all(2),
-                                      margin: EdgeInsets.only(right: 50),
-                                      width: courtWeekdayWidth,
-                                      child: Row(
+                      child: Provider.of<DataProvider>(context)
+                              .operationDays
+                              .isEmpty
+                          ? SizedBox(
+                              width: width,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SvgPicture.asset(
+                                    r'assets/people/calendar.svg',
+                                    height: width * 0.25,
+                                    width: width * 0.4,
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.5,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Você ainda não registrou os horários de funcionamento de seu estabelecimento",
+                                          style: TextStyle(
+                                            color: textDarkGrey,
+                                            fontSize: 18,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height: defaultPadding,
+                                        ),
+                                        Text(
+                                          "Clique em \"Horário de funcionamento\" para informar os horários de funcionamento de seu estabelecimento e cadastrar suas quadras",
+                                          style: TextStyle(
+                                            color: textLightGrey,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                SizedBox(
+                                  width: courtInfoWidth,
+                                  height: height,
+                                  child: CourtInfo(
+                                    viewModel: viewModel,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: defaultPadding,
+                                ),
+                                Expanded(
+                                  child: LayoutBuilder(
+                                    builder: (ctx, cnst) {
+                                      double myHeight = (cnst.maxHeight -
+                                                      6 * defaultPadding) /
+                                                  8 >
+                                              50
+                                          ? (cnst.maxHeight -
+                                                  6 * defaultPadding) /
+                                              8
+                                          : 50;
+                                      return Column(
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              "Dia",
-                                              style: TextStyle(
-                                                  color: textLightGrey),
-                                              textAlign: TextAlign.center,
+                                          Container(
+                                            height: myHeight,
+                                            padding: EdgeInsets.all(2),
+                                            margin: EdgeInsets.only(right: 50),
+                                            width: courtWeekdayWidth,
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    "Dia",
+                                                    style: TextStyle(
+                                                        color: textLightGrey),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    "Horário",
+                                                    style: TextStyle(
+                                                        color: textLightGrey),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    "Aceita\nMensalista?",
+                                                    style: TextStyle(
+                                                        color: textLightGrey),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    "Preço\n(Mensalista)",
+                                                    style: TextStyle(
+                                                        color: textLightGrey),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              "Horário",
-                                              style: TextStyle(
-                                                  color: textLightGrey),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              "Aceita\nMensalista?",
-                                              style: TextStyle(
-                                                  color: textLightGrey),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              "Preço\n(Mensalista)",
-                                              style: TextStyle(
-                                                  color: textLightGrey),
-                                              textAlign: TextAlign.center,
+                                            child: ListView.builder(
+                                              itemCount: 7,
+                                              itemBuilder: (context, index) {
+                                                return Column(
+                                                  children: [
+                                                    CourtDay(
+                                                      width: courtWeekdayWidth,
+                                                      height: myHeight,
+                                                      dayIndex: index,
+                                                      viewModel: viewModel,
+                                                    ),
+                                                    if (index != 6)
+                                                      SizedBox(
+                                                        height: defaultPadding,
+                                                      )
+                                                  ],
+                                                );
+                                              },
                                             ),
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: ListView.builder(
-                                        itemCount: 7,
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              CourtDay(
-                                                width: courtWeekdayWidth,
-                                                height: myHeight,
-                                                dayIndex: index,
-                                                viewModel: viewModel,
-                                              ),
-                                              if (index != 6)
-                                                SizedBox(
-                                                  height: defaultPadding,
-                                                )
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
                     ),
                   ),
                 ),

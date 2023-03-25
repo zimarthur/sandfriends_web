@@ -105,6 +105,8 @@ flutter:
     - assets/icon/chevron_up.svg
     - assets/icon/edit.svg
 
+    - assets/people/calendar.svg
+
 
     - assets/fakeJson/store.json
     - assets/fakeJson/court.json

@@ -22,47 +22,41 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: widget.height,
-          child: Row(
-            children: [
-              Radio(
-                value: true,
-                groupValue: widget.isPriceStandard,
-                onChanged: widget.onChange,
+        Row(
+          children: [
+            Radio(
+              value: true,
+              groupValue: widget.isPriceStandard,
+              onChanged: widget.onChange,
+            ),
+            SizedBox(
+              width: defaultPadding,
+            ),
+            Text(
+              "Preço único",
+              style: TextStyle(
+                color: textDarkGrey,
               ),
-              SizedBox(
-                width: defaultPadding,
-              ),
-              Text(
-                "Preço único",
-                style: TextStyle(
-                  color: textDarkGrey,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-        SizedBox(
-          height: widget.height,
-          child: Row(
-            children: [
-              Radio(
-                value: false,
-                groupValue: widget.isPriceStandard,
-                onChanged: widget.onChange,
+        Row(
+          children: [
+            Radio(
+              value: false,
+              groupValue: widget.isPriceStandard,
+              onChanged: widget.onChange,
+            ),
+            SizedBox(
+              width: defaultPadding,
+            ),
+            Text(
+              "Personalizado",
+              style: TextStyle(
+                color: textDarkGrey,
               ),
-              SizedBox(
-                width: defaultPadding,
-              ),
-              Text(
-                "Personalizado",
-                style: TextStyle(
-                  color: textDarkGrey,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

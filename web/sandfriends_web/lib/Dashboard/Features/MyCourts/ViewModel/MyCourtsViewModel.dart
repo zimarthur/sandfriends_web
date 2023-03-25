@@ -21,13 +21,6 @@ class MyCourtsViewModel extends ChangeNotifier {
 
   List<Court> courts = [];
 
-  List<OperationDay> _operationDays = [];
-  List<OperationDay> get operationDays => [..._operationDays];
-  set operationDays(List<OperationDay> newList) {
-    _operationDays = [...newList];
-    notifyListeners();
-  }
-
   bool _courtInfoChanged = false;
   bool get courtInfoChanged => _courtInfoChanged;
   set courtInfoChanged(bool value) {
@@ -43,8 +36,6 @@ class MyCourtsViewModel extends ChangeNotifier {
   }
 
   void init(BuildContext context) {
-    operationDays =
-        Provider.of<DataProvider>(context, listen: false).operationDays;
     courts = List<Court>.from(
         Provider.of<DataProvider>(context, listen: false).courts);
 
@@ -53,9 +44,11 @@ class MyCourtsViewModel extends ChangeNotifier {
         .forEach((sport) {
       newCourtSports.add(AvailableSport(sport: sport, isAvailable: false));
     });
-    operationDays.forEach((opDay) {
-      for (int hour = opDay.startingHour.hour;
-          hour <= opDay.endingHour.hour;
+    Provider.of<DataProvider>(context, listen: false)
+        .operationDays
+        .forEach((opDay) {
+      for (int hour = opDay.startingHour!.hour;
+          hour <= opDay.endingHour!.hour;
           hour++) {
         newCourtHourPrices.add(
           HourPrice(
@@ -84,7 +77,12 @@ class MyCourtsViewModel extends ChangeNotifier {
 
   void saveNewOperationDays(
       BuildContext context, List<OperationDay> newOperationDays) {
-    operationDays = newOperationDays;
+    Provider.of<DataProvider>(context, listen: false).operationDays.clear();
+    newOperationDays.forEach((opDay) {
+      Provider.of<DataProvider>(context, listen: false)
+          .operationDays
+          .add(opDay);
+    });
     returnMainView(context);
   }
 

@@ -47,15 +47,16 @@ class _CourtDayState extends State<CourtDay> {
   @override
   Widget build(BuildContext context) {
     double mainRowHeight = widget.height - 2 * borderSize;
-    double secondaryRowHeight = mainRowHeight;
+    double secondaryRowHeight = mainRowHeight * 0.7;
     int numberRules = widget
         .viewModel.courts[widget.viewModel.selectedCourtIndex].priceRules
         .where((element) => element.weekday == widget.dayIndex)
         .toList()
         .length;
-    double standardHeight = mainRowHeight * 2 + 2 * secondaryRowHeight;
-    double customHeight = mainRowHeight * 2 +
-        (numberRules < 2 ? 2 : numberRules + 1) * secondaryRowHeight;
+    double standardHeight =
+        mainRowHeight * 2 + secondaryRowHeight + mainRowHeight;
+    double customHeight =
+        mainRowHeight * 2 + secondaryRowHeight + numberRules * mainRowHeight;
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       height: isExpanded
@@ -115,7 +116,7 @@ class _CourtDayState extends State<CourtDay> {
                                       SFDivider(),
                                       Container(
                                         alignment: Alignment.centerLeft,
-                                        height: mainRowHeight * 0.7,
+                                        height: mainRowHeight,
                                         child: Text(
                                           "Regra de preço",
                                         ),
@@ -175,8 +176,7 @@ class _CourtDayState extends State<CourtDay> {
                                                                   widget
                                                                       .dayIndex)
                                                               .toList()[index],
-                                                          height:
-                                                              secondaryRowHeight,
+                                                          height: mainRowHeight,
                                                           availableHours:
                                                               Provider.of<DataProvider>(
                                                                       context,
