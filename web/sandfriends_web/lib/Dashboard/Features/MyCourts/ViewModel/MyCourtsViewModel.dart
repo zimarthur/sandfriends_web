@@ -15,6 +15,8 @@ import '../../../ViewModel/DashboardViewModel.dart';
 class MyCourtsViewModel extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
 
+  bool isPriceStandard = true;
+
   String newCourtName = "";
   bool newCourtIsIndoor = true;
   List<AvailableSport> newCourtSports = [];
@@ -174,6 +176,28 @@ class MyCourtsViewModel extends ChangeNotifier {
         }
       }
     });
+  }
+
+  void setIsPriceStandart(bool newIsPriceStandard, int dayIndex) {
+    isPriceStandard = newIsPriceStandard;
+    if (newIsPriceStandard) {
+      int refPrice = currentCourt.priceRules
+          .where((element) => element.weekday == dayIndex)
+          .first
+          .price;
+      int refRecurrentPrice = currentCourt.priceRules
+          .where((element) => element.weekday == dayIndex)
+          .first
+          .priceRecurrent;
+      currentCourt.prices
+          .where((hourPrice) => hourPrice.weekday == dayIndex)
+          .forEach((hourPrice) {
+        hourPrice.newPriceRule = false;
+        hourPrice.price = refPrice;
+        hourPrice.recurrentPrice = refRecurrentPrice;
+      });
+    }
+    notifyListeners();
   }
 
   void switchTabs(BuildContext context, int index) {

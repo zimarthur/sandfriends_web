@@ -11,6 +11,7 @@ import '../../../../../SharedComponents/View/SFTextfield.dart';
 class PriceSelector extends StatefulWidget {
   PriceRule priceRule;
   bool editHour;
+  bool allowRecurrent;
   double height;
   List<Hour> availableHours;
   int dayIndex;
@@ -21,6 +22,7 @@ class PriceSelector extends StatefulWidget {
     required this.height,
     required this.availableHours,
     required this.dayIndex,
+    required this.allowRecurrent,
   });
 
   @override
@@ -140,21 +142,23 @@ class _PriceSelectorState extends State<PriceSelector> {
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: SFTextField(
-                textAlign: TextAlign.center,
-                plainTextField: true,
-                prefixText: "R\$",
-                sufixText: "/hora",
-                labelText: "",
-                pourpose: TextFieldPourpose.Numeric,
-                controller: recurrentPriceController,
-                validator: (value) {},
-                onChanged: (newPrice) {
-                  Provider.of<MyCourtsViewModel>(context, listen: false)
-                      .priceChange(
-                          newPrice, widget.priceRule, widget.dayIndex, true);
-                },
-              ),
+              child: widget.allowRecurrent
+                  ? SFTextField(
+                      textAlign: TextAlign.center,
+                      plainTextField: true,
+                      prefixText: "R\$",
+                      sufixText: "/hora",
+                      labelText: "",
+                      pourpose: TextFieldPourpose.Numeric,
+                      controller: recurrentPriceController,
+                      validator: (value) {},
+                      onChanged: (newPrice) {
+                        Provider.of<MyCourtsViewModel>(context, listen: false)
+                            .priceChange(newPrice, widget.priceRule,
+                                widget.dayIndex, true);
+                      },
+                    )
+                  : Container(),
             ),
           ),
         ],

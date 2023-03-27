@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
 class PriceSelectorHeader extends StatelessWidget {
-  const PriceSelectorHeader({super.key});
+  bool allowRecurrent;
+
+  PriceSelectorHeader({
+    required this.allowRecurrent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +31,13 @@ class PriceSelectorHeader extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: Text(
-            "Mensalista",
-            style: TextStyle(color: textLightGrey),
-            textAlign: TextAlign.center,
-          ),
+          child: allowRecurrent
+              ? Text(
+                  "Mensalista",
+                  style: TextStyle(color: textLightGrey),
+                  textAlign: TextAlign.center,
+                )
+              : Container(),
         ),
       ],
     );
