@@ -50,13 +50,16 @@ class MyCourtsViewModel extends ChangeNotifier {
         .operationDays
         .forEach((opDay) {
       for (int hour = opDay.startingHour.hour;
-          hour <= opDay.endingHour.hour;
+          hour < opDay.endingHour.hour;
           hour++) {
         newCourtHourPrices.add(
           HourPrice(
-            hour: Provider.of<DataProvider>(context, listen: false)
+            startingHour: Provider.of<DataProvider>(context, listen: false)
                 .availableHours
                 .firstWhere((avHour) => avHour.hour == hour),
+            endingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .firstWhere((avHour) => avHour.hour == hour + 1),
             weekday: opDay.weekDay,
             allowReccurrent: true,
             price: 0,
@@ -95,12 +98,15 @@ class MyCourtsViewModel extends ChangeNotifier {
         .where((hourPrice) => hourPrice.weekday == opDay.weekDay)
         .isEmpty) {
       for (int hour = opDay.startingHour.hour;
-          hour <= opDay.endingHour.hour;
+          hour < opDay.endingHour.hour;
           hour++) {
         newCourtHourPrices.add(HourPrice(
-            hour: Provider.of<DataProvider>(context, listen: false)
+            startingHour: Provider.of<DataProvider>(context, listen: false)
                 .availableHours
                 .firstWhere((avHour) => avHour.hour == hour),
+            endingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .firstWhere((avHour) => avHour.hour == hour + 1),
             weekday: opDay.weekDay,
             allowReccurrent: true,
             price: 0,
@@ -110,11 +116,29 @@ class MyCourtsViewModel extends ChangeNotifier {
       newCourtHourPrices = newCourtHourPrices
           .where((hourPrice) =>
               hourPrice.weekday == opDay.weekDay &&
-              hourPrice.hour.hour >= opDay.startingHour.hour &&
-              hourPrice.hour.hour <= opDay.endingHour.hour)
+              hourPrice.startingHour.hour >= opDay.startingHour.hour &&
+              hourPrice.startingHour.hour <= opDay.endingHour.hour)
           .toList();
     }
     switchTabs(context, selectedCourtIndex);
+  }
+
+  void setNewRule(int dayIndex, String newHourString, BuildContext context) {
+    Hour newHour = Provider.of<DataProvider>(context, listen: false)
+        .availableHours
+        .firstWhere((hour) => hour.hourString == newHourString);
+    Hour lastHour = Provider.of<DataProvider>(context, listen: false)
+        .availableHours
+        .lastWhere((hour) => hour.hour < newHour.hour);
+    currentCourt.prices
+        .where((hourPrice) => hourPrice.weekday == dayIndex)
+        .forEach((hourPrice) {
+      if (hourPrice.startingHour.hour == newHour.hour) {
+        hourPrice.newPriceRule = true;
+      }
+      // else if(hourPrice.endingHour.hour > newHour.hour && )
+    });
+    notifyListeners();
   }
 
   void switchTabs(BuildContext context, int index) {

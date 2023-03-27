@@ -83,6 +83,20 @@ class LoginViewModel extends ChangeNotifier {
         newCourt.sports
             .add(AvailableSport(sport: sport, isAvailable: foundSport));
       }
+      for (var courtPrices in court["Prices"]) {
+        newCourt.prices.add(HourPrice(
+          startingHour: Hour.fromJson(courtPrices["Hour"]),
+          weekday: courtPrices["Weekday"],
+          allowReccurrent: courtPrices["AllowRecurrent"],
+          price: courtPrices["Price"],
+          recurrentPrice: courtPrices["RecurrentPrice"],
+          endingHour: Provider.of<DataProvider>(context, listen: false)
+              .availableHours
+              .firstWhere((hour) =>
+                  hour.hour > Hour.fromJson(courtPrices["Hour"]).hour),
+        ));
+      }
+
       Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
     }
     if (Provider.of<DataProvider>(context, listen: false).courts.isNotEmpty) {
@@ -97,10 +111,10 @@ class LoginViewModel extends ChangeNotifier {
                 OperationDay(
                   weekDay: weekday,
                   startingHour: filteredPrices
-                      .map((hourPrice) => hourPrice.hour)
+                      .map((hourPrice) => hourPrice.startingHour)
                       .reduce((a, b) => a.hour < b.hour ? a : b),
                   endingHour: filteredPrices
-                      .map((hourPrice) => hourPrice.hour)
+                      .map((hourPrice) => hourPrice.startingHour)
                       .reduce((a, b) => a.hour > b.hour ? a : b),
                 ),
               );

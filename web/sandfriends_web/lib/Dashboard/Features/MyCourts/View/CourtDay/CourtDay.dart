@@ -166,6 +166,8 @@ class _CourtDayState extends State<CourtDay> {
                                                       itemBuilder:
                                                           (context, index) {
                                                         return PriceSelector(
+                                                          dayIndex:
+                                                              widget.dayIndex,
                                                           priceRule: widget
                                                               .court.priceRules
                                                               .where((element) =>

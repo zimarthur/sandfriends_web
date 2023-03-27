@@ -1,27 +1,20 @@
 import 'Hour.dart';
 
 class HourPrice {
-  Hour hour;
+  Hour startingHour;
+  Hour endingHour;
   int weekday;
   bool allowReccurrent;
   int price;
   int recurrentPrice;
+  bool newPriceRule = false;
 
   HourPrice({
-    required this.hour,
+    required this.startingHour,
     required this.weekday,
     required this.allowReccurrent,
     required this.price,
     required this.recurrentPrice,
+    required this.endingHour,
   });
-
-  factory HourPrice.fromJson(Map<String, dynamic> parsedJson) {
-    return HourPrice(
-      hour: Hour.fromJson(parsedJson["Hour"]),
-      weekday: parsedJson["Weekday"],
-      allowReccurrent: parsedJson["AllowRecurrent"],
-      price: parsedJson["Price"],
-      recurrentPrice: parsedJson["RecurrentPrice"],
-    );
-  }
 }

@@ -37,7 +37,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
         Expanded(
           flex: 1,
           child: Text(
-            "${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).first.hour.hourString} - ${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).last.hour.hourString}",
+            "${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).first.startingHour.hourString} - ${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).last.endingHour.hourString}",
             style: TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),

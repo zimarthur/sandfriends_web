@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-
+import 'package:provider/provider.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../SharedComponents/Model/HourPrice.dart';
 import '../../../../../SharedComponents/Model/PriceRule.dart';
@@ -12,12 +13,14 @@ class PriceSelector extends StatefulWidget {
   bool editHour;
   double height;
   List<Hour> availableHours;
+  int dayIndex;
 
   PriceSelector({
     required this.priceRule,
     this.editHour = false,
     required this.height,
     required this.availableHours,
+    required this.dayIndex,
   });
 
   @override
@@ -93,11 +96,12 @@ class _PriceSelectorState extends State<PriceSelector> {
                               .map((hour) => hour.hourString)
                               .toList(),
                           validator: (a) {},
-                          onChanged: (a) {
+                          onChanged: (newHour) {
                             setState(() {
-                              // widget.startingHour = widget.availableHours
-                              //     .firstWhere(
-                              //         (element) => element.hourString == a);
+                              Provider.of<MyCourtsViewModel>(context,
+                                      listen: false)
+                                  .setNewRule(
+                                      widget.dayIndex, newHour!, context);
                             });
                           },
                         ),
