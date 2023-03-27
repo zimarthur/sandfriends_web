@@ -44,7 +44,7 @@ class _PriceSelectorState extends State<PriceSelector> {
       padding: EdgeInsets.symmetric(
         vertical: widget.height * 0.05,
       ),
-      height: widget.height * 0.8,
+      height: widget.height * 0.9,
       child: Row(
         children: [
           Expanded(
@@ -68,11 +68,12 @@ class _PriceSelectorState extends State<PriceSelector> {
                               .map((hour) => hour.hourString)
                               .toList(),
                           validator: (a) {},
-                          onChanged: (a) {
+                          onChanged: (newHour) {
                             setState(() {
-                              // widget.startingHour = widget.availableHours
-                              //     .firstWhere(
-                              //         (element) => element.hourString == a);
+                              Provider.of<MyCourtsViewModel>(context,
+                                      listen: false)
+                                  .setNewRuleStartHour(widget.dayIndex,
+                                      newHour!, context, widget.priceRule);
                             });
                           },
                         ),
@@ -100,8 +101,8 @@ class _PriceSelectorState extends State<PriceSelector> {
                             setState(() {
                               Provider.of<MyCourtsViewModel>(context,
                                       listen: false)
-                                  .setNewRule(
-                                      widget.dayIndex, newHour!, context);
+                                  .setNewRuleEndHour(widget.dayIndex, newHour!,
+                                      context, widget.priceRule);
                             });
                           },
                         ),
@@ -128,7 +129,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                 controller: priceController,
                 validator: (value) {},
                 onChanged: (newPrice) {
-                  widget.priceRule.price = int.parse(newPrice);
+                  Provider.of<MyCourtsViewModel>(context, listen: false)
+                      .priceChange(
+                          newPrice, widget.priceRule, widget.dayIndex, false);
                 },
               ),
             ),
@@ -147,9 +150,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                 controller: recurrentPriceController,
                 validator: (value) {},
                 onChanged: (newPrice) {
-                  setState(() {
-                    widget.priceRule.priceRecurrent = int.parse(newPrice);
-                  });
+                  Provider.of<MyCourtsViewModel>(context, listen: false)
+                      .priceChange(
+                          newPrice, widget.priceRule, widget.dayIndex, true);
                 },
               ),
             ),

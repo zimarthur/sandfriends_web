@@ -67,6 +67,7 @@ class _CourtDayState extends State<CourtDay> {
         mainRowHeight * 2 + secondaryRowHeight + mainRowHeight;
     double customHeight =
         mainRowHeight * 2 + secondaryRowHeight + numberRules * mainRowHeight;
+
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       height: isExpanded

@@ -13,7 +13,6 @@ class Court {
   List<HourPrice> prices = [];
 
   List<PriceRule> get priceRules {
-    print("STAAAAART");
     List<PriceRule> calculatedRules = [];
     for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
       List<HourPrice> filteredPrices =
@@ -22,13 +21,6 @@ class Court {
       for (int priceIndex = 0;
           priceIndex < filteredPrices.length;
           priceIndex++) {
-        if (dayIndex == 0) {
-          print("priceIndex: $priceIndex");
-          print("filteredPrices.length ${filteredPrices.length}");
-          print(
-              "StartingHour ${filteredPrices[priceIndex].startingHour.hourString}");
-          print("newPriceRule ${filteredPrices[priceIndex].newPriceRule}");
-        }
         if (priceIndex == 0) {
           newPriceRule = PriceRule(
             weekday: dayIndex,
@@ -40,8 +32,7 @@ class Court {
         } else if (filteredPrices[priceIndex].price != newPriceRule!.price ||
             filteredPrices[priceIndex].recurrentPrice !=
                 newPriceRule.priceRecurrent ||
-            filteredPrices[priceIndex].newPriceRule &&
-                (priceIndex != filteredPrices.length - 1)) {
+            filteredPrices[priceIndex].newPriceRule) {
           newPriceRule.endingHour = filteredPrices[priceIndex].startingHour;
           calculatedRules.add(newPriceRule);
           newPriceRule = PriceRule(
@@ -51,7 +42,8 @@ class Court {
             price: filteredPrices[priceIndex].price,
             priceRecurrent: filteredPrices[priceIndex].recurrentPrice,
           );
-        } else if (priceIndex == filteredPrices.length - 1) {
+        }
+        if (priceIndex == filteredPrices.length - 1) {
           newPriceRule.endingHour = filteredPrices[priceIndex].endingHour;
           calculatedRules.add(newPriceRule);
           newPriceRule = PriceRule(

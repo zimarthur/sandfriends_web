@@ -9,6 +9,7 @@ import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 
 import '../../../../SharedComponents/Model/Court.dart';
 import '../../../../SharedComponents/Model/Hour.dart';
+import '../../../../SharedComponents/Model/PriceRule.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 
 class MyCourtsViewModel extends ChangeNotifier {
@@ -123,22 +124,56 @@ class MyCourtsViewModel extends ChangeNotifier {
     switchTabs(context, selectedCourtIndex);
   }
 
-  void setNewRule(int dayIndex, String newHourString, BuildContext context) {
+  void setNewRuleStartHour(int dayIndex, String newHourString,
+      BuildContext context, PriceRule priceRule) {
     Hour newHour = Provider.of<DataProvider>(context, listen: false)
         .availableHours
         .firstWhere((hour) => hour.hourString == newHourString);
-    Hour lastHour = Provider.of<DataProvider>(context, listen: false)
-        .availableHours
-        .lastWhere((hour) => hour.hour < newHour.hour);
     currentCourt.prices
         .where((hourPrice) => hourPrice.weekday == dayIndex)
         .forEach((hourPrice) {
       if (hourPrice.startingHour.hour == newHour.hour) {
         hourPrice.newPriceRule = true;
+      } else if (hourPrice.startingHour.hour == priceRule.startingHour.hour) {
+        hourPrice.newPriceRule = false;
       }
-      // else if(hourPrice.endingHour.hour > newHour.hour && )
     });
     notifyListeners();
+  }
+
+  void setNewRuleEndHour(int dayIndex, String newHourString,
+      BuildContext context, PriceRule priceRule) {
+    Hour newHour = Provider.of<DataProvider>(context, listen: false)
+        .availableHours
+        .firstWhere((hour) => hour.hourString == newHourString);
+    currentCourt.prices
+        .where((hourPrice) => hourPrice.weekday == dayIndex)
+        .forEach((hourPrice) {
+      if (hourPrice.startingHour.hour == newHour.hour) {
+        hourPrice.newPriceRule = true;
+      } else if (hourPrice.startingHour.hour == priceRule.endingHour.hour) {
+        hourPrice.newPriceRule = false;
+      }
+      print(hourPrice.startingHour.hourString);
+      print(hourPrice.newPriceRule);
+    });
+    notifyListeners();
+  }
+
+  void priceChange(
+      String newPrice, PriceRule priceRule, int dayIndex, bool isRecurrent) {
+    currentCourt.prices
+        .where((hourPrice) => hourPrice.weekday == dayIndex)
+        .forEach((hourPrice) {
+      if (hourPrice.startingHour.hour >= priceRule.startingHour.hour ||
+          hourPrice.startingHour.hour < priceRule.endingHour.hour) {
+        if (isRecurrent) {
+          hourPrice.recurrentPrice = int.parse(newPrice);
+        } else {
+          hourPrice.price = int.parse(newPrice);
+        }
+      }
+    });
   }
 
   void switchTabs(BuildContext context, int index) {
