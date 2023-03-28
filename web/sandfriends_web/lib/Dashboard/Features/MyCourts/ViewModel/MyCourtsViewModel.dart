@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/PriceListWidget.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/WorkingHoursWidget.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
@@ -80,6 +81,16 @@ class MyCourtsViewModel extends ChangeNotifier {
     );
   }
 
+  void setPriceListWidget(MyCourtsViewModel viewModel, BuildContext context,
+      List<HourPrice> hourPriceList, int dayIndex) {
+    Provider.of<DashboardViewModel>(context, listen: false)
+        .setModalForm(PriceListWidget(
+      viewModel: viewModel,
+      hourPriceList: hourPriceList,
+      dayIndex: dayIndex,
+    ));
+  }
+
   void returnMainView(BuildContext context) {
     Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
   }
@@ -88,12 +99,17 @@ class MyCourtsViewModel extends ChangeNotifier {
       BuildContext context, List<OperationDay> newOperationDays) {
     Provider.of<DataProvider>(context, listen: false).operationDays.clear();
     newOperationDays.forEach((opDay) {
+      print(opDay.startingHour.hourString);
+      print(opDay.endingHour.hourString);
+      print(opDay.isEnabled);
+      print(opDay.weekDay);
       Provider.of<DataProvider>(context, listen: false)
           .operationDays
           .add(opDay);
       updateCourtWorkingHours(opDay, context);
     });
     returnMainView(context);
+    notifyListeners();
   }
 
   void updateCourtWorkingHours(OperationDay opDay, BuildContext context) {
@@ -156,8 +172,6 @@ class MyCourtsViewModel extends ChangeNotifier {
       } else if (hourPrice.startingHour.hour == priceRule.endingHour.hour) {
         hourPrice.newPriceRule = false;
       }
-      print(hourPrice.startingHour.hourString);
-      print(hourPrice.newPriceRule);
     });
     notifyListeners();
   }
@@ -167,7 +181,7 @@ class MyCourtsViewModel extends ChangeNotifier {
     currentCourt.prices
         .where((hourPrice) => hourPrice.weekday == dayIndex)
         .forEach((hourPrice) {
-      if (hourPrice.startingHour.hour >= priceRule.startingHour.hour ||
+      if (hourPrice.startingHour.hour >= priceRule.startingHour.hour &&
           hourPrice.startingHour.hour < priceRule.endingHour.hour) {
         if (isRecurrent) {
           hourPrice.recurrentPrice = int.parse(newPrice);
@@ -176,6 +190,7 @@ class MyCourtsViewModel extends ChangeNotifier {
         }
       }
     });
+    notifyListeners();
   }
 
   void setIsPriceStandart(bool newIsPriceStandard, int dayIndex) {
@@ -197,6 +212,15 @@ class MyCourtsViewModel extends ChangeNotifier {
         hourPrice.recurrentPrice = refRecurrentPrice;
       });
     }
+    notifyListeners();
+  }
+
+  void setAllowRecurrent(int dayIndex, bool allowReccurrent) {
+    currentCourt.prices
+        .where((hourPrice) => hourPrice.weekday == dayIndex)
+        .forEach((hourPrice) {
+      hourPrice.allowReccurrent = allowReccurrent;
+    });
     notifyListeners();
   }
 

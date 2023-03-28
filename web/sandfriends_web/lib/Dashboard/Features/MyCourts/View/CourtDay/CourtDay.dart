@@ -47,16 +47,6 @@ class _CourtDayState extends State<CourtDay> {
   List<HourPrice> priceRules = [];
 
   @override
-  void initState() {
-    Provider.of<MyCourtsViewModel>(context, listen: false).isPriceStandard =
-        widget.court.priceRules
-                .where((priceRule) => priceRule.weekday == widget.dayIndex)
-                .length ==
-            1;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double mainRowHeight = widget.height - 2 * borderSize;
     double secondaryRowHeight = mainRowHeight * 0.7;
@@ -106,14 +96,24 @@ class _CourtDayState extends State<CourtDay> {
                               right: isExpanded ? editIconWidth : 0),
                           height: mainRowHeight,
                           child: ResumedInfoRow(
-                            day: widget.dayIndex,
-                            hourPriceList: widget.court.prices
-                                .where((hourPrice) =>
-                                    hourPrice.weekday == widget.dayIndex)
-                                .toList(),
-                            isEditing: isExpanded,
-                            rowHeight: mainRowHeight,
-                          ),
+                              isEnabled: Provider.of<DataProvider>(context)
+                                  .operationDays
+                                  .firstWhere((opDay) =>
+                                      opDay.weekDay == widget.dayIndex)
+                                  .isEnabled,
+                              day: widget.dayIndex,
+                              hourPriceList: widget.court.prices
+                                  .where((hourPrice) =>
+                                      hourPrice.weekday == widget.dayIndex)
+                                  .toList(),
+                              isEditing: isExpanded,
+                              rowHeight: mainRowHeight,
+                              setAllowRecurrent: (newValue) {
+                                Provider.of<MyCourtsViewModel>(context,
+                                        listen: false)
+                                    .setAllowRecurrent(
+                                        widget.dayIndex, newValue);
+                              }),
                         ),
                         isExpanded
                             ? Expanded(
@@ -257,7 +257,21 @@ class _CourtDayState extends State<CourtDay> {
                     : InkWell(
                         onTap: () {
                           setState(() {
-                            isExpanded = !isExpanded;
+                            if (Provider.of<DataProvider>(context,
+                                    listen: false)
+                                .operationDays
+                                .firstWhere(
+                                    (opDay) => opDay.weekDay == widget.dayIndex)
+                                .isEnabled) {
+                              Provider.of<MyCourtsViewModel>(context,
+                                      listen: false)
+                                  .isPriceStandard = widget.court.priceRules
+                                      .where((priceRule) =>
+                                          priceRule.weekday == widget.dayIndex)
+                                      .length ==
+                                  1;
+                              isExpanded = !isExpanded;
+                            }
                           });
                         },
                         child: SizedBox(

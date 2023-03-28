@@ -49,10 +49,14 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
     } else {
       newOperationDays = Provider.of<DataProvider>(context, listen: false)
           .operationDays
-          .map((opDay) => OperationDay(
+          .map(
+            (opDay) => OperationDay(
               weekDay: opDay.weekDay,
               startingHour: opDay.startingHour,
-              endingHour: opDay.endingHour))
+              endingHour: opDay.endingHour,
+              isEnabled: opDay.isEnabled,
+            ),
+          )
           .toList();
     }
     super.initState();

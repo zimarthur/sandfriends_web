@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/SFCalendarWeek.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/CourtDay.dart';
+import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/ResumedInfoRowHeader.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsTabSelector.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -232,46 +233,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                             padding: EdgeInsets.all(2),
                                             margin: EdgeInsets.only(right: 50),
                                             width: courtWeekdayWidth,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "Dia",
-                                                    style: TextStyle(
-                                                        color: textLightGrey),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "Horário",
-                                                    style: TextStyle(
-                                                        color: textLightGrey),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "Aceita\nMensalista?",
-                                                    style: TextStyle(
-                                                        color: textLightGrey),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "Preço\n(Mensalista)",
-                                                    style: TextStyle(
-                                                        color: textLightGrey),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                            child: ResumedInfoRowHeader(),
                                           ),
                                           Expanded(
                                             child: ListView.builder(

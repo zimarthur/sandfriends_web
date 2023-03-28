@@ -104,6 +104,7 @@ flutter:
     - assets/icon/clock.svg
     - assets/icon/chevron_up.svg
     - assets/icon/edit.svg
+    - assets/icon/file.svg
 
     - assets/people/calendar.svg
 
