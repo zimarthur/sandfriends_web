@@ -118,7 +118,9 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                           ? true
                                           : false,
                                   onTap: () {
-                                    viewModel.switchTabs(context, index);
+                                    setState(() {
+                                      viewModel.switchTabs(context, index);
+                                    });
                                   },
                                 );
                               },

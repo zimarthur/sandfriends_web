@@ -54,13 +54,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
     String priceRecurrentText = smallestPriceRecurrent == highestPriceRecurrent
         ? "R\$$smallestPriceRecurrent"
         : "R\$$smallestPriceRecurrent - R\$$highestPriceRecurrent";
-    if (widget.day == 0) {
-      print(widget.hourPriceList
-          .where((hourPrice) => hourPrice.weekday == widget.day)
-          .first
-          .startingHour
-          .hourString);
-    }
+
     return Row(
       children: [
         Expanded(

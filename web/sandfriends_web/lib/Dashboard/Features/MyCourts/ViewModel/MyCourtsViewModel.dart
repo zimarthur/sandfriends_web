@@ -98,17 +98,15 @@ class MyCourtsViewModel extends ChangeNotifier {
   void saveNewOperationDays(
       BuildContext context, List<OperationDay> newOperationDays) {
     Provider.of<DataProvider>(context, listen: false).operationDays.clear();
-    newOperationDays.forEach((opDay) {
-      print(opDay.startingHour.hourString);
-      print(opDay.endingHour.hourString);
-      print(opDay.isEnabled);
-      print(opDay.weekDay);
+    for (var opDay in newOperationDays) {
       Provider.of<DataProvider>(context, listen: false)
           .operationDays
           .add(opDay);
       updateCourtWorkingHours(opDay, context);
-    });
+    }
     returnMainView(context);
+    newCourtHourPrices
+        .sort((a, b) => a.startingHour.hour.compareTo(b.startingHour.hour));
     notifyListeners();
   }
 
@@ -132,12 +130,83 @@ class MyCourtsViewModel extends ChangeNotifier {
             recurrentPrice: 0));
       }
     } else {
-      newCourtHourPrices = newCourtHourPrices
-          .where((hourPrice) =>
-              hourPrice.weekday == opDay.weekDay &&
-              hourPrice.startingHour.hour >= opDay.startingHour.hour &&
-              hourPrice.startingHour.hour <= opDay.endingHour.hour)
-          .toList();
+      if (opDay.weekDay == 0) {
+        print("before");
+        for (var element in newCourtHourPrices) {
+          if (element.weekday == 0) {
+            print(element.startingHour.hourString);
+          }
+        }
+      }
+
+      newCourtHourPrices.removeWhere((hourPrice) =>
+          hourPrice.weekday == opDay.weekDay &&
+          (hourPrice.startingHour.hour < opDay.startingHour.hour ||
+              hourPrice.startingHour.hour >= opDay.endingHour.hour));
+
+      HourPrice firstHourInList = newCourtHourPrices
+          .where((hourPrice) => hourPrice.weekday == opDay.weekDay)
+          .reduce((current, next) =>
+              current.startingHour.hour < next.startingHour.hour
+                  ? current
+                  : next);
+
+      for (int hoursBefore = opDay.startingHour.hour;
+          hoursBefore < firstHourInList.startingHour.hour;
+          hoursBefore++) {
+        HourPrice newHour = HourPrice(
+          startingHour: firstHourInList.startingHour,
+          weekday: firstHourInList.weekday,
+          allowReccurrent: firstHourInList.allowReccurrent,
+          price: firstHourInList.price,
+          recurrentPrice: firstHourInList.recurrentPrice,
+          endingHour: firstHourInList.endingHour,
+        );
+        newHour.startingHour = Provider.of<DataProvider>(context, listen: false)
+            .availableHours
+            .firstWhere((hour) => hour.hour == hoursBefore);
+        newHour.endingHour = Provider.of<DataProvider>(context, listen: false)
+            .availableHours
+            .firstWhere((hour) => hour.hour == hoursBefore + 1);
+        print(
+            "adding newHourPrice / startingHour: ${newHour.startingHour.hourString} / endingHour: ${newHour.endingHour.hourString}");
+        newCourtHourPrices.add(newHour);
+      }
+      if (opDay.weekDay == 0) {
+        print("-----------------------");
+        print("After");
+        for (var element in newCourtHourPrices) {
+          if (element.weekday == 0) {
+            print(element.startingHour.hourString);
+          }
+        }
+      }
+
+      HourPrice lastHourInList = newCourtHourPrices
+          .where((hourPrice) => hourPrice.weekday == opDay.weekDay)
+          .reduce((current, next) =>
+              current.startingHour.hour > next.startingHour.hour
+                  ? current
+                  : next);
+      for (int hoursAfter = lastHourInList.endingHour.hour;
+          hoursAfter < opDay.endingHour.hour;
+          hoursAfter++) {
+        HourPrice newHour = HourPrice(
+          startingHour: lastHourInList.startingHour,
+          weekday: lastHourInList.weekday,
+          allowReccurrent: lastHourInList.allowReccurrent,
+          price: lastHourInList.price,
+          recurrentPrice: lastHourInList.recurrentPrice,
+          endingHour: lastHourInList.endingHour,
+        );
+        newHour.startingHour = Provider.of<DataProvider>(context, listen: false)
+            .availableHours
+            .firstWhere((hour) => hour.hour == hoursAfter);
+        newHour.endingHour = Provider.of<DataProvider>(context, listen: false)
+            .availableHours
+            .firstWhere((hour) => hour.hour == hoursAfter + 1);
+        newCourtHourPrices.add(newHour);
+      }
     }
     switchTabs(context, selectedCourtIndex);
   }
@@ -240,6 +309,30 @@ class MyCourtsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetNewCourtStats() {
+    newCourtName = "";
+    newCourtIsIndoor = true;
+    List<AvailableSport> newListSports = [];
+
+    for (var avSport in newCourtSports) {
+      newListSports
+          .add(AvailableSport(sport: avSport.sport, isAvailable: false));
+    }
+    newCourtSports = newListSports;
+
+    List<HourPrice> newListHourPrices = [];
+    for (var hourPrice in newCourtHourPrices) {
+      newListHourPrices.add(HourPrice(
+          startingHour: hourPrice.startingHour,
+          weekday: hourPrice.weekday,
+          allowReccurrent: hourPrice.allowReccurrent,
+          price: 0,
+          recurrentPrice: 0,
+          endingHour: hourPrice.endingHour));
+    }
+    newCourtHourPrices = newListHourPrices;
+  }
+
   void addCourt(BuildContext context) {
     if (nameController.text.isEmpty) print("sem nome");
 
@@ -248,9 +341,7 @@ class MyCourtsViewModel extends ChangeNotifier {
         .any((element) => element.description == nameController.text))
       print("nome já existe");
 
-    if (courts[selectedCourtIndex]
-            .sports
-            .any((element) => element.isAvailable == true) ==
+    if (currentCourt.sports.any((element) => element.isAvailable == true) ==
         false) print("selecione esporte");
 
     //VAI TER Q ALTERAR PRA RECEBER O ID DO SERVIDOR
@@ -258,19 +349,26 @@ class MyCourtsViewModel extends ChangeNotifier {
         idStoreCourt:
             Provider.of<DataProvider>(context, listen: false).courts.length,
         description: nameController.text,
-        isIndoor: courts[selectedCourtIndex].isIndoor);
-    courts[selectedCourtIndex].sports.forEach((sport) {
+        isIndoor: currentCourt.isIndoor);
+
+    for (var sport in currentCourt.sports) {
       newCourt.sports.add(sport);
-    });
+    }
+    for (var hourPrice in currentCourt.prices) {
+      newCourt.prices.add(hourPrice);
+    }
 
     Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
+    courts.add(newCourt);
+    resetNewCourtStats();
     switchTabs(
         context,
         Provider.of<DataProvider>(context, listen: false)
             .courts
-            .where((element) => element.idStoreCourt == newCourt.idStoreCourt)
-            .first
+            .firstWhere(
+                (element) => element.idStoreCourt == newCourt.idStoreCourt)
             .idStoreCourt!);
+    notifyListeners();
   }
 
   void deleteCourt(BuildContext context) {
@@ -285,13 +383,12 @@ class MyCourtsViewModel extends ChangeNotifier {
       courtInfoChanged = false;
     } else {
       bool changedSport = false;
-      courts[selectedCourtIndex].sports.forEach((formSport) {
+      for (var formSport in courts[selectedCourtIndex].sports) {
         print("aa ${formSport.sport.description}");
         print("aa ${formSport.isAvailable}");
-        Provider.of<DataProvider>(context, listen: false)
+        for (var sport in Provider.of<DataProvider>(context, listen: false)
             .courts[selectedCourtIndex]
-            .sports
-            .forEach((sport) {
+            .sports) {
           if (sport.sport.idSport == formSport.sport.idSport) {
             print("bb ${sport.sport.description}");
             print("bb ${sport.isAvailable}");
@@ -301,8 +398,8 @@ class MyCourtsViewModel extends ChangeNotifier {
               print("dif");
             }
           }
-        });
-      });
+        }
+      }
       courtInfoChanged = nameController.text !=
               Provider.of<DataProvider>(context, listen: false)
                   .courts[selectedCourtIndex]
