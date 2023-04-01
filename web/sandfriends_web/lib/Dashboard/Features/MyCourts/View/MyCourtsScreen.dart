@@ -100,6 +100,11 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                             onTap: () {
                               viewModel.switchTabs(context, -1);
                             },
+                            mouseCursor: Provider.of<DataProvider>(context)
+                                    .operationDays
+                                    .isEmpty
+                                ? SystemMouseCursors.basic
+                                : SystemMouseCursors.click,
                           ),
                           Expanded(
                             child: ListView.builder(
@@ -154,7 +159,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                     ),
                     child: Container(
                       margin: EdgeInsets.only(bottom: 2, left: 2, right: 2),
-                      padding: EdgeInsets.all(2 * defaultPadding),
+                      padding: EdgeInsets.all(defaultPadding),
                       decoration: BoxDecoration(
                         color: secondaryPaper,
                         borderRadius: BorderRadius.only(

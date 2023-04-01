@@ -7,12 +7,15 @@ class MyCourtsTabSelector extends StatefulWidget {
   bool isSelected;
   String? iconPath;
   VoidCallback onTap;
+  MouseCursor mouseCursor;
 
-  MyCourtsTabSelector(
-      {required this.title,
-      required this.isSelected,
-      this.iconPath,
-      required this.onTap});
+  MyCourtsTabSelector({
+    required this.title,
+    required this.isSelected,
+    this.iconPath,
+    required this.onTap,
+    this.mouseCursor = SystemMouseCursors.click,
+  });
 
   @override
   State<MyCourtsTabSelector> createState() => _MyCourtsTabSelectorState();
@@ -22,6 +25,7 @@ class _MyCourtsTabSelectorState extends State<MyCourtsTabSelector> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      mouseCursor: widget.mouseCursor,
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(

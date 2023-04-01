@@ -65,7 +65,7 @@ class _CourtInfoState extends State<CourtInfo> {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "Nome",
+                              "Nome da quadra",
                               style: TextStyle(
                                 color: textDarkGrey,
                               ),
