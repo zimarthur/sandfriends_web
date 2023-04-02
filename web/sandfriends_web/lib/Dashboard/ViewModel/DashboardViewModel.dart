@@ -4,7 +4,7 @@ import 'package:sandfriends_web/Dashboard/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
-import 'package:sandfriends_web/Dashboard/Features/Finances/FinanceScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Finances/View/FinancesScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/HomeScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/RewardsScreen.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -70,7 +70,7 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const MyCourtsScreen();
+  Widget _currentDashboardWidget = const FinanceScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {

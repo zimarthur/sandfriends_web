@@ -57,23 +57,6 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
 
     return Row(
       children: [
-        InkWell(
-          onTap: () => Provider.of<MyCourtsViewModel>(context, listen: false)
-              .setPriceListWidget(
-                  Provider.of<MyCourtsViewModel>(context, listen: false),
-                  context,
-                  widget.hourPriceList,
-                  widget.day),
-          child: Padding(
-            padding: const EdgeInsets.only(left: defaultPadding * 2),
-            child: SvgPicture.asset(
-              r'assets/icon/file.svg',
-              width: 20,
-              height: 20,
-              color: textBlue,
-            ),
-          ),
-        ),
         Expanded(
           flex: 1,
           child: Text(
@@ -133,16 +116,54 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text(
-                        widget.hourPriceList
-                                .where((hourPrice) =>
-                                    hourPrice.weekday == widget.day)
-                                .first
-                                .allowReccurrent
-                            ? "$priceText\n($priceRecurrentText)"
-                            : priceText,
-                        style: TextStyle(color: textDarkGrey),
-                        textAlign: TextAlign.center,
+                      child: widget.hourPriceList
+                              .where((hourPrice) =>
+                                  hourPrice.weekday == widget.day)
+                              .first
+                              .allowReccurrent
+                          ? RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: '$priceText\n',
+                                style: const TextStyle(
+                                  color: textLightGrey,
+                                  fontFamily: 'Lexend',
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '$priceRecurrentText',
+                                    style: const TextStyle(
+                                      color: textBlue,
+                                      fontFamily: 'Lexend',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(
+                              priceText,
+                              style: TextStyle(color: textDarkGrey),
+                              textAlign: TextAlign.center,
+                            ),
+                    ),
+                    InkWell(
+                      onTap: () =>
+                          Provider.of<MyCourtsViewModel>(context, listen: false)
+                              .setPriceListWidget(
+                                  Provider.of<MyCourtsViewModel>(context,
+                                      listen: false),
+                                  context,
+                                  widget.hourPriceList,
+                                  widget.day),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(right: defaultPadding * 2),
+                        child: SvgPicture.asset(
+                          r'assets/icon/file.svg',
+                          width: 20,
+                          height: 20,
+                          color: textDarkGrey,
+                        ),
                       ),
                     ),
                   ],

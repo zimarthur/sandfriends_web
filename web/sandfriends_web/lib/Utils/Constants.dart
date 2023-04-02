@@ -22,6 +22,10 @@ const textBlack = Color.fromRGBO(0, 0, 0, 1);
 const divider = Color.fromRGBO(218, 219, 223, 1);
 const disabled = Color.fromRGBO(230, 235, 239, 1);
 const error = Color.fromRGBO(248, 113, 113, 1);
+const success = Color.fromRGBO(3, 152, 85, 1);
+const success50 = Color.fromRGBO(236, 253, 243, 1);
+const forecast = Color.fromRGBO(68, 76, 231, 1);
+const forecast50 = Color.fromRGBO(238, 244, 255, 1);
 
 const red = Colors.red;
 const whatsapp = Color.fromRGBO(37, 211, 102, 1);

@@ -105,6 +105,8 @@ flutter:
     - assets/icon/chevron_up.svg
     - assets/icon/edit.svg
     - assets/icon/file.svg
+    - assets/icon/forecast.svg
+    - assets/icon/money.svg
 
     - assets/people/calendar.svg
 

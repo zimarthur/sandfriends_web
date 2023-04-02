@@ -28,6 +28,7 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
               value: true,
               groupValue: widget.isPriceStandard,
               onChanged: widget.onChange,
+              activeColor: primaryBlue,
             ),
             SizedBox(
               width: defaultPadding,
@@ -46,6 +47,7 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
               value: false,
               groupValue: widget.isPriceStandard,
               onChanged: widget.onChange,
+              activeColor: primaryBlue,
             ),
             SizedBox(
               width: defaultPadding,

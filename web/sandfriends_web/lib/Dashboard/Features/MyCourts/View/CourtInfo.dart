@@ -117,6 +117,7 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: true,
+                                      activeColor: primaryBlue,
                                       groupValue: widget.viewModel
                                                   .selectedCourtIndex ==
                                               -1
@@ -159,6 +160,7 @@ class _CourtInfoState extends State<CourtInfo> {
                                   children: [
                                     Radio(
                                       value: false,
+                                      activeColor: primaryBlue,
                                       groupValue: widget.viewModel
                                                   .selectedCourtIndex ==
                                               -1
@@ -220,7 +222,10 @@ class _CourtInfoState extends State<CourtInfo> {
                           Expanded(
                             flex: 2,
                             child: Container(
-                              padding: EdgeInsets.all(defaultPadding),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: defaultPadding / 2,
+                                vertical: defaultBorderRadius / 4,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
                                   defaultBorderRadius,
@@ -255,6 +260,7 @@ class _CourtInfoState extends State<CourtInfo> {
                                                       .selectedCourtIndex]
                                                   .sports[sportIndex]
                                                   .isAvailable,
+                                          activeColor: primaryBlue,
                                           onChanged: (newValue) {
                                             if (widget.viewModel
                                                     .selectedCourtIndex ==

@@ -11,9 +11,6 @@ class ResumedInfoRowHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
       child: Row(
         children: [
-          SizedBox(
-            width: (2 * defaultPadding) + 20,
-          ),
           Expanded(
             flex: 1,
             child: Text(
@@ -40,11 +37,29 @@ class ResumedInfoRowHeader extends StatelessWidget {
           ),
           Expanded(
             flex: 1,
-            child: Text(
-              "Preço\n(Mensalista)",
-              style: TextStyle(color: textLightGrey),
+            child: RichText(
               textAlign: TextAlign.center,
+              text: TextSpan(
+                text: 'Preço avulso\n',
+                style: const TextStyle(
+                  color: textLightGrey,
+                  fontFamily: 'Lexend',
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Preço Mensalista',
+                    style: const TextStyle(
+                      color: textBlue,
+                      fontFamily: 'Lexend',
+                      //fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                ],
+              ),
             ),
+          ),
+          SizedBox(
+            width: (2 * defaultPadding) + 20,
           ),
         ],
       ),

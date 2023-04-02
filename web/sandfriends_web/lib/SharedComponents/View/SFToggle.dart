@@ -15,7 +15,6 @@ class _SFToggleState extends State<SFToggle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55,
       width: 350,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
@@ -40,7 +39,7 @@ class _SFToggleState extends State<SFToggle> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(defaultPadding),
+                  padding: const EdgeInsets.all(defaultPadding / 2),
                   decoration: BoxDecoration(
                     borderRadius: labelIndex == 0
                         ? BorderRadius.only(
