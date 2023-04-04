@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'dart:math' as math;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class SFPieChart extends StatefulWidget {
   List<PieChartItem> pieChartItems;
@@ -21,6 +22,8 @@ class _SFPieChartState extends State<SFPieChart> {
 
   @override
   Widget build(BuildContext context) {
+    double chartValuesSum =
+        widget.pieChartItems.fold(0, (sum, item) => sum + item.value);
     for (int i = 0; i < widget.pieChartItems.length; i++) {
       if (i < sfColors.length) {
         widget.pieChartItems[i].color = sfColors[i];
@@ -61,7 +64,8 @@ class _SFPieChartState extends State<SFPieChart> {
                   sections: <PieChartSectionData>[
                     for (int i = 0; i < widget.pieChartItems.length; i++)
                       PieChartSectionData(
-                        title: widget.pieChartItems[i].value.toString(),
+                        title:
+                            "${(widget.pieChartItems[i].value * 100 / chartValuesSum).toStringAsFixed(0)}%",
                         value: widget.pieChartItems[i].value,
                         color: widget.pieChartItems[i].color,
                         radius: i == touchedIndex
@@ -75,9 +79,9 @@ class _SFPieChartState extends State<SFPieChart> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(defaultPadding),
+              padding: const EdgeInsets.all(defaultPadding / 2),
               child: SizedBox(
-                width: 120,
+                width: 150,
                 child: ScrollablePositionedList.builder(
                   itemScrollController: _scrollController,
                   itemCount: widget.pieChartItems.length,
@@ -109,9 +113,11 @@ class _SFPieChartState extends State<SFPieChart> {
                               SizedBox(
                                 width: defaultPadding,
                               ),
-                              Text(
-                                widget.pieChartItems[index].name,
-                                overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Text(
+                                  widget.pieChartItems[index].name,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -121,10 +127,16 @@ class _SFPieChartState extends State<SFPieChart> {
                                 SizedBox(
                                   width: defaultPadding + 10,
                                 ),
-                                Text(
-                                  "${widget.pieChartItems[index].value.toString()} (25%)",
-                                  style: TextStyle(color: textDarkGrey),
-                                  overflow: TextOverflow.ellipsis,
+                                Expanded(
+                                  child: AutoSizeText(
+                                    "${widget.pieChartItems[index].prefix == null ? "" : "${widget.pieChartItems[index].prefix} "}${widget.pieChartItems[index].value.toString()} (${(widget.pieChartItems[index].value * 100 / chartValuesSum).toStringAsFixed(0)}%)",
+                                    minFontSize: 8,
+                                    maxFontSize: 18,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: textDarkGrey,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -146,6 +158,7 @@ class PieChartItem {
   String name;
   double value;
   Color? color;
+  String? prefix;
 
-  PieChartItem({required this.name, required this.value});
+  PieChartItem({required this.name, required this.value, this.prefix});
 }
