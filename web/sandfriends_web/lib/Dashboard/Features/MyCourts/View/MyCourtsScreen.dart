@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Calendar/SFCalendarWeek.dart';
+import 'package:sandfriends_web/Dashboard/Features/Calendar/View/Calendar/SFCalendarWeek.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/CourtDay.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/ResumedInfoRowHeader.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsTabSelector.dart';

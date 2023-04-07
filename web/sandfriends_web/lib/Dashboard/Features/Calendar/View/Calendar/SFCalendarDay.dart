@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../Utils/Constants.dart';
+import '../../../../../Utils/Constants.dart';
 
-import 'HourWidget.dart';
+import '../HourWidget.dart';
 
 class SFCalendarDay extends StatefulWidget {
   double height;

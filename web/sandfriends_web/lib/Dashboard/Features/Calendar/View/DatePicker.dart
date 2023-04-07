@@ -20,7 +20,7 @@ class _DatePickerState extends State<DatePicker> {
       config: CalendarDatePicker2Config(
         weekdayLabels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
         firstDate: DateTime(today.year, today.month, today.day),
-        calendarType: CalendarDatePicker2Type.range,
+        calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: primaryBlue,
         weekdayLabelTextStyle: const TextStyle(
           color: Colors.black87,

@@ -44,7 +44,7 @@ class _SFTableState extends State<SFTable> {
             headerColor: secondaryBack,
           ),
           child: SfDataGrid(
-            columnWidthMode: ColumnWidthMode.fitByCellValue,
+            columnWidthMode: ColumnWidthMode.fill,
             headerGridLinesVisibility: GridLinesVisibility.none,
             gridLinesVisibility: GridLinesVisibility.none,
             source: widget.source,

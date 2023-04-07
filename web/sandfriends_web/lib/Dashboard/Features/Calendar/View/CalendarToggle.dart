@@ -1,12 +1,13 @@
+import 'package:sandfriends_web/Dashboard/Features/Calendar/Model/CalendarType.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter/material.dart';
 
 class CalendarToggle extends StatefulWidget {
-  List<String> labels;
-  int selectedIndex = 0;
-  Function(int) onChanged;
+  List<CalendarType> labels = [CalendarType.Weekly, CalendarType.Daily];
+  CalendarType selectedIndex;
+  Function(CalendarType) onChanged;
 
-  CalendarToggle(this.labels, this.selectedIndex, this.onChanged);
+  CalendarToggle(this.selectedIndex, this.onChanged);
   @override
   State<CalendarToggle> createState() => _CalendarToggleState();
 }
@@ -28,24 +29,23 @@ class _CalendarToggleState extends State<CalendarToggle> {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  setState(() {
-                    widget.selectedIndex = labelIndex;
-                    widget.onChanged(labelIndex);
-                  });
+                  widget.onChanged(widget.labels[labelIndex]);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.0),
-                    color: labelIndex == widget.selectedIndex
+                    color: widget.labels[labelIndex] == widget.selectedIndex
                         ? primaryBlue
                         : textDisabled,
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    widget.labels[labelIndex],
+                    widget.labels[labelIndex] == CalendarType.Weekly
+                        ? "Semanal"
+                        : "Diário",
                     style: TextStyle(
-                        color: labelIndex == widget.selectedIndex
+                        color: widget.labels[labelIndex] == widget.selectedIndex
                             ? textWhite
                             : textDarkGrey),
                   ),

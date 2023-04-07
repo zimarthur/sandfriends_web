@@ -9,6 +9,7 @@ import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,15 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('pt', 'BR'),
+          const Locale('en'),
+        ],
+        locale: const Locale('pt', 'BR'),
         debugShowCheckedModeBanner: false,
         scrollBehavior: const MaterialScrollBehavior().copyWith(
           dragDevices: {

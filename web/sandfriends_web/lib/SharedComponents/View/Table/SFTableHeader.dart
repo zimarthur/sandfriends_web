@@ -6,6 +6,7 @@ import '../../../Utils/Constants.dart';
 GridColumn SFTableHeader(String columnName, String columnTitle) {
   return GridColumn(
     columnName: columnName,
+    autoFitPadding: EdgeInsets.symmetric(horizontal: 10.0),
     label: Column(
       children: [
         Expanded(

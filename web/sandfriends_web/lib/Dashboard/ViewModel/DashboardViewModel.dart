@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Calendar/CalendarScreen.dart';
+import 'package:sandfriends_web/Dashboard/Features/Calendar/View/CalendarScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/SettingsScreen.dart';
@@ -70,7 +70,7 @@ class DashboardViewModel extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
-  Widget _currentDashboardWidget = const FinanceScreen();
+  Widget _currentDashboardWidget = const CalendarScreen();
   Widget get currentDashboardWidget => _currentDashboardWidget;
 
   double getDashboardWidth(BuildContext context) {
@@ -147,18 +147,4 @@ class DashboardViewModel extends ChangeNotifier {
   String modalDescription = "";
   VoidCallback modalCallback = () {};
   Widget? modalFormWidget;
-
-  int _selectedCalendarStyle = 0;
-  int get selectedCalendarStyle => _selectedCalendarStyle;
-  set selectedCalendarStyle(int value) {
-    _selectedCalendarStyle = value;
-  }
-
-  bool isCalendarWeekly() {
-    if (selectedCalendarStyle == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

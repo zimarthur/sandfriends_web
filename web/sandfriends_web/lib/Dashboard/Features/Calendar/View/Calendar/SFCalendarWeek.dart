@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../Utils/Constants.dart';
+import '../../../../../Utils/Constants.dart';
 
-import 'HourWidget.dart';
+import '../HourWidget.dart';
 
 class SFCalendarWeek extends StatefulWidget {
   double height;
@@ -58,6 +58,10 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
     double tableColumnSpacing = tableWidth * 0.01;
     double tableColumnWidth = tableWidth * 0.105 < 70 ? 70 : tableWidth * 0.105;
     double tableHeaderHeight = tableLineHeight * 1.5;
+    print("tableWidth $tableWidth");
+    print("tableColumnSpacing $tableColumnSpacing");
+    print("tableColumnWidth $tableColumnWidth");
+
     return SizedBox(
       width: tableWidth,
       height: tableHeight,

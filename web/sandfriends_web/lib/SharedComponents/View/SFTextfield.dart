@@ -74,8 +74,8 @@ class _SFTextFieldState extends State<SFTextField> {
           widget.pourpose == TextFieldPourpose.Multiline ? widget.maxLines : 1,
       enableSuggestions: false,
       autocorrect: false,
-      style: const TextStyle(
-        color: primaryBlue,
+      style: TextStyle(
+        color: widget.enable ? textBlue : textDarkGrey,
         fontWeight: FontWeight.w700,
         fontSize: 14,
       ),

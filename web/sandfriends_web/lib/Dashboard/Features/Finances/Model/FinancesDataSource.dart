@@ -46,7 +46,8 @@ class FinancesDataSource extends DataGridSource {
           children: [
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(defaultPadding),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 10.0, vertical: defaultPadding),
               child: Flexible(
                 child: Text(
                   dataGridCell.value.toString(),
