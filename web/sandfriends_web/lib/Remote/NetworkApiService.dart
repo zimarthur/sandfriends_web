@@ -26,7 +26,14 @@ class NetworkApiService extends BaseApiService {
       print(aditionalUrl);
       final response = await http.post(
         Uri.parse(baseUrl + aditionalUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          //"Access-Control-Allow-Origin": "*",
+          // "Access-Control-Allow-Methods": "GET,PUT,PATCH,POST,DELETE",
+          // "Access-Control-Allow-Headers":
+          //     "Origin, X-Requested-With, Content-Type, Accept",
+          'Content-Type': 'application/json'
+        },
+        //{'Content-Type': 'application/json'},
         body: body,
       );
       return returnResponse(response, expectResponse);

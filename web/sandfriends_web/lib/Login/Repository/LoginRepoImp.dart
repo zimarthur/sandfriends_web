@@ -47,6 +47,23 @@ class LoginRepoImp implements LoginRepo {
               "Password": password,
             },
           ),
+          true,
+        )
+        .onError((error, stackTrace) => throw error!);
+    return response;
+  }
+
+  @override
+  Future forgotPassword(String email) async {
+    dynamic response = await _apiService
+        .postResponse(
+          _apiService.sandfriendsUrl,
+          ApiEndPoints().forgotPassword,
+          jsonEncode(
+            <String, Object>{
+              "Email": email,
+            },
+          ),
           false,
         )
         .onError((error, stackTrace) => throw error!);

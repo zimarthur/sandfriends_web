@@ -78,7 +78,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
               buttonType: ButtonType.Primary,
               onTap: () {
                 Provider.of<LoginViewModel>(context, listen: false)
-                    .sendForgotPassword();
+                    .sendForgotPassword(context);
               },
             ),
           )

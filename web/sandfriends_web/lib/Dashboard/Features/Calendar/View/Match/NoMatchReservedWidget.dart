@@ -43,7 +43,7 @@ class NoMatchReservedWidget extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   r"assets/icon/sad_face.svg",
-                  height: height * 0.2 < 50 ? 50 : height * 0.2,
+                  height: 100,
                 ),
                 SizedBox(
                   height: defaultPadding,

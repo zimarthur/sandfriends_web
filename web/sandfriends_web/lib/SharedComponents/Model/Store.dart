@@ -48,23 +48,27 @@ class Store {
   });
 
   factory Store.fromJson(Map<String, dynamic> parsedJson) {
-    return Store(
-        idStore: parsedJson["IdStore"],
-        name: parsedJson["Name"],
-        address: parsedJson["Address"],
-        addressNumber: parsedJson["AddressNumber"],
-        email: parsedJson["Email"],
-        phoneNumber: parsedJson["PhoneNumber1"],
-        ownerPhoneNumber: parsedJson["PhoneNumber2"],
-        logo: parsedJson["Logo"],
-        description: parsedJson["Description"],
-        instagram: parsedJson["Instagram"],
-        cnpj: parsedJson["Cnpj"],
-        cep: parsedJson["Cep"],
-        neighbourhood: parsedJson["Neighbourhood"],
-        cpf: parsedJson["Cpf"],
-        ownerName: parsedJson["OwnerName"],
-        hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
-        city: City.fromJson(parsedJson["City"]));
+    var store = Store(
+      idStore: parsedJson["IdStore"],
+      name: parsedJson["Name"],
+      address: parsedJson["Address"],
+      addressNumber: parsedJson["AddressNumber"],
+      email: parsedJson["Email"],
+      phoneNumber: parsedJson["PhoneNumber1"],
+      ownerPhoneNumber: parsedJson["PhoneNumber2"],
+      logo: parsedJson["Logo"],
+      description: parsedJson["Description"],
+      instagram: parsedJson["Instagram"],
+      cnpj: parsedJson["Cnpj"],
+      cep: parsedJson["Cep"],
+      neighbourhood: parsedJson["Neighbourhood"],
+      cpf: parsedJson["Cpf"],
+      ownerName: parsedJson["OwnerName"],
+      hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
+      city: City.fromJson(
+        parsedJson["City"],
+      ),
+    );
+    return store;
   }
 }

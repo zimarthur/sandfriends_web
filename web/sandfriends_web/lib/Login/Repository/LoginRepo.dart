@@ -5,8 +5,10 @@ class LoginRepo {
   Future<CnpjStore?> getStoreFromCnpj(String cnpj) async {
     return null;
   }
+
   Future createAccount(CreateAccountStore store) async {}
   Future login(String email, String password) async {}
+  Future forgotPassword(String email) async {}
 
   Future debug() async {}
 }

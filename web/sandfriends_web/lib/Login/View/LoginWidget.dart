@@ -127,14 +127,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                     InkWell(
                       onTap: () {
-                        // setState(() {
-                        //   loginViewModel.onTapForgotPassword();
-                        // });
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DashboardScreen()),
-                        );
+                        setState(() {
+                          loginViewModel.onTapForgotPassword();
+                        });
                       },
                       child: const Text(
                         "Esqueci minha senha",

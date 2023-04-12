@@ -5,6 +5,7 @@ import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Login/View/LoginScreen.dart';
+import 'package:sandfriends_web/Login/View/NewPasswordScreen.dart';
 import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
 import 'Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'Utils/Constants.dart';
@@ -57,10 +58,11 @@ class MyApp extends StatelessWidget {
           fontFamily: "Lexend",
         ),
         routes: {
+          '/new_password': (BuildContext context) => const NewPasswordScreen(),
           '/login': (BuildContext context) => const LoginScreen(),
           '/dashboard': (BuildContext context) => const DashboardScreen(),
         },
-        initialRoute: '/login',
+        initialRoute: '/new_password',
       ),
     );
   }

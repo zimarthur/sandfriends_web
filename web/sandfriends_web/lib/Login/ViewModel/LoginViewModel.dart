@@ -44,33 +44,55 @@ class LoginViewModel extends ChangeNotifier {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
 
-    String responseSport =
-        await rootBundle.loadString(r"assets/fakeJson/sport.json");
-    List<dynamic> dataSport = json.decode(responseSport);
-    for (var sport in dataSport) {
+    _loginRepo
+        .login(userController.text, passwordController.text)
+        .then((response) {
+      setSports(context, response);
+      setAvailableHours(context, response);
+      setStore(context, response);
+      setCourts(context, response);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+      );
+    }).onError((error, stackTrace) {
+      modalTitle = error.toString();
+      modalDescription = "";
+      modalCallback = () {
+        pageStatus = PageStatus.SUCCESS;
+        notifyListeners();
+      };
+      pageStatus = PageStatus.ERROR;
+      notifyListeners();
+    });
+  }
+
+  void setSports(BuildContext context, Map<String, dynamic> responseBody) {
+    for (var sport in responseBody['Sports']) {
       Provider.of<DataProvider>(context, listen: false)
           .availableSports
           .add(Sport.fromJson(sport));
     }
-    String responseHour =
-        await rootBundle.loadString(r"assets/fakeJson/availableHours.json");
-    List<dynamic> dataHour = json.decode(responseHour);
-    for (var hour in dataHour) {
+  }
+
+  void setAvailableHours(
+      BuildContext context, Map<String, dynamic> responseBody) {
+    for (var hour in responseBody['AvailableHours']) {
       Provider.of<DataProvider>(context, listen: false)
           .availableHours
           .add(Hour.fromJson(hour));
     }
+  }
 
-    final String responseStore =
-        await rootBundle.loadString(r"assets/fakeJson/store.json");
-    final dataStore = await json.decode(responseStore);
-    Provider.of<DataProvider>(context, listen: false).store =
-        Store.fromJson(dataStore);
+  void setStore(BuildContext context, Map<String, dynamic> responseBody) {
+    var store = Store.fromJson(responseBody['Store']);
+    //Provider.of<DataProvider>(context, listen: false).store =
+    //    Store.fromJson(responseBody['Store']);
+  }
 
-    String responseCourt =
-        await rootBundle.loadString(r"assets/fakeJson/court.json");
-    List<dynamic> dataCourt = json.decode(responseCourt);
-    for (var court in dataCourt) {
+  void setCourts(BuildContext context, Map<String, dynamic> responseBody) {
+    for (var court in responseBody['Courts']) {
       var newCourt = Court.fromJson(court);
       for (var sport in Provider.of<DataProvider>(context, listen: false)
           .availableSports) {
@@ -85,15 +107,17 @@ class LoginViewModel extends ChangeNotifier {
       }
       for (var courtPrices in court["Prices"]) {
         newCourt.prices.add(HourPrice(
-          startingHour: Hour.fromJson(courtPrices["Hour"]),
-          weekday: courtPrices["Weekday"],
+          startingHour: Provider.of<DataProvider>(context, listen: false)
+              .availableHours
+              .firstWhere(
+                  (hour) => hour.hour == courtPrices["IdAvailableHour"]),
+          weekday: courtPrices["Day"],
           allowReccurrent: courtPrices["AllowRecurrent"],
           price: courtPrices["Price"],
-          recurrentPrice: courtPrices["RecurrentPrice"],
+          recurrentPrice: courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
           endingHour: Provider.of<DataProvider>(context, listen: false)
               .availableHours
-              .firstWhere((hour) =>
-                  hour.hour > Hour.fromJson(courtPrices["Hour"]).hour),
+              .firstWhere((hour) => hour.hour > courtPrices["IdAvailableHour"]),
         ));
       }
 
@@ -121,29 +145,6 @@ class LoginViewModel extends ChangeNotifier {
         }
       }
     }
-
-    // _loginRepo
-    //     .login(userController.text, passwordController.text)
-    //     .then(
-    //       (value) => Navigator.push(
-    //         context,
-    //         MaterialPageRoute(builder: (context) => const DashboardScreen()),
-    //       ),
-    //     )
-    //     .onError((error, stackTrace) {
-    //   modalTitle = error.toString();
-    //   modalDescription = "";
-    //   modalCallback = () {
-    //     pageStatus = PageStatus.SUCCESS;
-    //     notifyListeners();
-    //   };
-    //   pageStatus = PageStatus.ERROR;
-    //   notifyListeners();
-    // });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const DashboardScreen()),
-    );
   }
 
   void onTapForgotPassword() {
@@ -164,11 +165,20 @@ class LoginViewModel extends ChangeNotifier {
   //FORGOT PASSWORD
   TextEditingController forgotPasswordEmailController = TextEditingController();
 
-  void sendForgotPassword() {
-    //TODO
-
-    _loginWidget = const LoginSuccessWidget();
-    notifyListeners();
+  void sendForgotPassword(BuildContext context) {
+    _loginRepo.forgotPassword(forgotPasswordEmailController.text).then((value) {
+      _loginWidget = const LoginSuccessWidget();
+      notifyListeners();
+    }).onError((error, stackTrace) {
+      modalTitle = error.toString();
+      modalDescription = "";
+      modalCallback = () {
+        pageStatus = PageStatus.SUCCESS;
+        notifyListeners();
+      };
+      pageStatus = PageStatus.ERROR;
+      notifyListeners();
+    });
   }
 
   //CREATE ACCOUNT
