@@ -5,6 +5,7 @@ import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import '../../SharedComponents/Model/Hour.dart';
 import '../../SharedComponents/Model/Sport.dart';
 import '../../SharedComponents/Model/Store.dart';
+import '../../SharedComponents/Model/Match.dart';
 
 class DataProvider extends ChangeNotifier {
   Store? _store;
@@ -21,4 +22,6 @@ class DataProvider extends ChangeNotifier {
   List<Sport> availableSports = [];
 
   List<Hour> availableHours = [];
+
+  List<Match> matches = [];
 }

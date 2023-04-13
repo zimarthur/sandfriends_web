@@ -44,21 +44,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: height,
                           width: width,
                           child: Center(
-                              child: viewModel.pageStatus == PageStatus.LOADING
-                                  ? Container(
-                                      height: 300,
-                                      width: 300,
-                                      child: SFLoading(size: 80),
-                                    )
-                                  : SFMessageModal(
-                                      title: viewModel.modalTitle,
-                                      description: viewModel.modalDescription,
-                                      onTap: viewModel.modalCallback,
-                                      isHappy: viewModel.pageStatus ==
-                                              PageStatus.ERROR
-                                          ? false
-                                          : true,
-                                    )),
+                            child: viewModel.pageStatus == PageStatus.LOADING
+                                ? Container(
+                                    height: 300,
+                                    width: 300,
+                                    child: SFLoading(size: 80),
+                                  )
+                                : SFMessageModal(
+                                    title: viewModel.modalTitle,
+                                    description: viewModel.modalDescription,
+                                    onTap: viewModel.modalCallback,
+                                    isHappy:
+                                        viewModel.pageStatus == PageStatus.ERROR
+                                            ? false
+                                            : true,
+                                  ),
+                          ),
                         )
                       : Container(),
                 ],

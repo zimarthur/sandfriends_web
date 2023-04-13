@@ -28,7 +28,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   @override
   void initState() {
-    viewModel.setFinancesDataSource();
+    viewModel.setupFinance(context);
     super.initState();
   }
 

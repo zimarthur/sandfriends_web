@@ -23,169 +23,7 @@ class FinancesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Match> _matches = [
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 9, hourString: "09:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 90,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(idSport: 1, description: "Volei", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 10, hourString: "10:00"),
-      endingHour: Hour(hour: 11, hourString: "11:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 80,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 12, hourString: "12:00"),
-      endingHour: Hour(hour: 13, hourString: "13:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 70,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport:
-          Sport(idSport: 1, description: "Futevolei", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 7, hourString: "07:00"),
-      endingHour: Hour(hour: 8, hourString: "08:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-05 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-06 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-13 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-14 23:00"),
-      cost: 90,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-06-03 15:00"),
-      cost: 70,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-  ];
+  List<Match> _matches = [];
   List<Match> get matches {
     if (selectedFilterIndex == 0) {
       return _matches
@@ -198,6 +36,12 @@ class FinancesViewModel extends ChangeNotifier {
     } else {
       return _matches;
     }
+  }
+
+  void setupFinance(BuildContext context) {
+    _matches = Provider.of<DataProvider>(context, listen: false).matches;
+    setFinancesDataSource();
+    notifyListeners();
   }
 
   int getRevenue() {
