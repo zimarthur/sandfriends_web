@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Calendar/Model/PaymentType.dart';
+import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/View/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';

@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: width,
                 height: 120,
                 child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: 4,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return ResumedMatch();
