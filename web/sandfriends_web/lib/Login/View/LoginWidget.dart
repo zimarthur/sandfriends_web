@@ -146,7 +146,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 Flexible(
                   child: RichText(
                     text: TextSpan(
-                      text: 'Ainda não cadastrou sua quadra? ',
+                      text: 'Ainda não se cadastrou? ',
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Cadastre já!',

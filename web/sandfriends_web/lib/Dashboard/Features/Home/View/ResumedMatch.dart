@@ -41,7 +41,7 @@ class ResumedMatch extends StatelessWidget {
                     ),
                   ),
                 ),
-                SFPaymentStatus(paymentType: PaymentType.NeedsPayment)
+                SFPaymentStatus(paymentType: PaymentType.Paid)
               ],
             ),
           ),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/View/FeedItem.dart';
+import 'package:sandfriends_web/Dashboard/Features/Home/View/OccupationWidget.dart';
+import 'package:sandfriends_web/Dashboard/Features/Home/View/OnboardingWidget.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/View/ResumedMatch.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/ViewModel/HomeViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFCard.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPaymentStatus.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
@@ -33,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
+              OnboardingWidget(),
               Text(
                 viewModel.welcomeTitle,
                 overflow: TextOverflow.ellipsis,
@@ -49,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Partidas acontecendo agora",
+                    "Partidas acontecendo hoje",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: textDarkGrey,
@@ -60,17 +65,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     width: defaultPadding,
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      "Ver todas",
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: textBlue,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        r'assets/icon/chevron_left.svg',
                       ),
-                    ),
+                      Text(
+                        "09:00 - 10:00",
+                        style: TextStyle(
+                          color: textDarkGrey,
+                        ),
+                      ),
+                      SvgPicture.asset(
+                        r'assets/icon/chevron_right.svg',
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -89,14 +99,110 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               SizedBox(
-                height: defaultPadding,
+                height: 2 * defaultPadding,
               ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (layoutContext, layoutConstraints) => Row(
                     children: [
                       Expanded(
-                        child: Container(),
+                        child: LayoutBuilder(
+                            builder: (layoutContext, layoutConstraints) {
+                          return Column(
+                            children: [
+                              SFCard(
+                                height: layoutConstraints.maxHeight * 0.3,
+                                width: layoutConstraints.maxWidth,
+                                title: "Faturamento hoje",
+                                child: Center(
+                                  child: Text(
+                                    "R\$ 560,00",
+                                    style: TextStyle(
+                                        color: textBlue, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: layoutConstraints.maxHeight * 0.05,
+                              ),
+                              SFCard(
+                                height: layoutConstraints.maxHeight * 0.3,
+                                width: layoutConstraints.maxWidth,
+                                title: "Partidas agendadas hoje",
+                                child: Center(
+                                  child: Text(
+                                    "15",
+                                    style: TextStyle(
+                                        color: textBlue, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: layoutConstraints.maxHeight * 0.05,
+                              ),
+                              SFCard(
+                                height: layoutConstraints.maxHeight * 0.3,
+                                width: layoutConstraints.maxWidth,
+                                title: "Recompensas hoje",
+                                child: Center(
+                                  child: Text(
+                                    "2",
+                                    style: TextStyle(
+                                        color: textBlue, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+                      Container(
+                        height: layoutConstraints.maxHeight,
+                        width: layoutConstraints.maxWidth * 0.3 < 300
+                            ? 300
+                            : layoutConstraints.maxWidth * 0.3,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: defaultPadding / 2,
+                          horizontal: defaultPadding,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Ocupação das suas quadras hoje",
+                              style: TextStyle(
+                                color: textDarkGrey,
+                              ),
+                            ),
+                            SizedBox(
+                              height: defaultPadding,
+                            ),
+                            OccupationWidget(
+                              title: "Geral",
+                              result: 0.85,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: defaultPadding,
+                              ),
+                              child: SFDivider(),
+                            ),
+                            OccupationWidget(
+                              title: "Quadra 1",
+                              result: 0.9,
+                            ),
+                            SizedBox(
+                              height: defaultPadding,
+                            ),
+                            OccupationWidget(
+                              title: "Quadra 2",
+                              result: 0.8,
+                            ),
+                          ],
+                        ),
                       ),
                       Container(
                         height: layoutConstraints.maxHeight,

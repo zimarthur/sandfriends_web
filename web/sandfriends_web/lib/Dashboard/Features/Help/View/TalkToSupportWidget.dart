@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -78,10 +77,10 @@ class TalkToSupportWidget extends StatelessWidget {
                       width: 40,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: whatsapp.withOpacity(0.3)),
+                          color: green.withOpacity(0.3)),
                       child: SvgPicture.asset(
                         r'assets/icon/whatsapp.svg',
-                        color: whatsapp,
+                        color: green,
                         fit: BoxFit.scaleDown,
                       ),
                     ),
@@ -90,7 +89,7 @@ class TalkToSupportWidget extends StatelessWidget {
                     ),
                     Text(
                       "(51) 99999-9999",
-                      style: TextStyle(color: whatsapp),
+                      style: TextStyle(color: green),
                     )
                   ],
                 ),

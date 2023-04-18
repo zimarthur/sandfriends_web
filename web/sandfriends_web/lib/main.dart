@@ -60,9 +60,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/new_password': (BuildContext context) => const NewPasswordScreen(),
           '/login': (BuildContext context) => const LoginScreen(),
-          '/dashboard': (BuildContext context) => const DashboardScreen(),
+          '/home': (BuildContext context) => const DashboardScreen(),
         },
-        initialRoute: '/dashboard',
+        initialRoute: '/login',
       ),
     );
   }

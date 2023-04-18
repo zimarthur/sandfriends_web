@@ -33,7 +33,7 @@ const needsPaymentBackground = Color.fromRGBO(255, 250, 235, 1);
 const needsPaymentText = Color.fromRGBO(181, 71, 8, 1);
 
 const red = Colors.red;
-const whatsapp = Color.fromRGBO(37, 211, 102, 1);
+const green = Color.fromRGBO(37, 211, 102, 1);
 
 const defaultPadding = 16.0;
 const defaultBorderRadius = 16.0;

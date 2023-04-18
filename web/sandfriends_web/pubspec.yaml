@@ -106,12 +106,16 @@ flutter:
     - assets/icon/whatsapp.svg
     - assets/icon/clock.svg
     - assets/icon/chevron_up.svg
+    - assets/icon/chevron_left.svg
+    - assets/icon/chevron_right.svg
     - assets/icon/edit.svg
     - assets/icon/file.svg
     - assets/icon/forecast.svg
     - assets/icon/money.svg
+    - assets/icon/check.svg
 
     - assets/people/calendar.svg
+    - assets/people/onboarding.svg
 
 
     - assets/fakeJson/store.json
