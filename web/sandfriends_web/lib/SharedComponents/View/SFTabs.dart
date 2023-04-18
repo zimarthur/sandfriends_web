@@ -4,15 +4,19 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 class SFTabs extends StatefulWidget {
   List<String> tabs;
   Function(int) onTap;
+  int selectedPosition;
 
-  SFTabs({required this.tabs, required this.onTap});
+  SFTabs({
+    required this.tabs,
+    required this.onTap,
+    required this.selectedPosition,
+  });
 
   @override
   State<SFTabs> createState() => _SFTabsState();
 }
 
 class _SFTabsState extends State<SFTabs> {
-  int selectedTab = 0;
   double tabWidth = 150;
 
   @override
@@ -31,7 +35,7 @@ class _SFTabsState extends State<SFTabs> {
                 return InkWell(
                   onTap: (() {
                     widget.onTap(index);
-                    selectedTab = index;
+                    widget.selectedPosition = index;
                   }),
                   child: Container(
                     alignment: Alignment.center,
@@ -39,7 +43,9 @@ class _SFTabsState extends State<SFTabs> {
                     child: Text(
                       widget.tabs[index],
                       style: TextStyle(
-                          color: index == selectedTab ? textBlue : textDarkGrey,
+                          color: index == widget.selectedPosition
+                              ? textBlue
+                              : textDarkGrey,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -56,7 +62,7 @@ class _SFTabsState extends State<SFTabs> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 100),
-                left: tabWidth * selectedTab,
+                left: tabWidth * widget.selectedPosition,
                 child: Container(
                   height: 4,
                   width: tabWidth,

@@ -130,15 +130,39 @@ class DashboardViewModel extends ChangeNotifier {
         _currentDashboardWidget = const FinanceScreen();
         break;
       case 4:
-        _currentDashboardWidget = const MyCourtsScreen();
+        _currentDashboardWidget = MyCourtsScreen();
         break;
       case -1:
-        _currentDashboardWidget = const SettingsScreen();
+        _currentDashboardWidget = SettingsScreen();
         break;
       case -2:
         _currentDashboardWidget = const HelpScreen();
         break;
     }
+    notifyListeners();
+  }
+
+  void quickLinkBrand() {
+    _indexSelectedDrawerTile = -1;
+    _currentDashboardWidget = SettingsScreen(
+      initForm: 1,
+    );
+    notifyListeners();
+  }
+
+  void quickLinkFinanceSettings() {
+    _indexSelectedDrawerTile = -1;
+    _currentDashboardWidget = SettingsScreen(
+      initForm: 2,
+    );
+    notifyListeners();
+  }
+
+  void quickLinkWorkingHours() {
+    _indexSelectedDrawerTile = 4;
+    _currentDashboardWidget = MyCourtsScreen(
+      showWorkingHours: true,
+    );
     notifyListeners();
   }
 

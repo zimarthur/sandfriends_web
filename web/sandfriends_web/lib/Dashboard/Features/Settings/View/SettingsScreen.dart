@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/BrandInfo.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/View/EmployeeInfo.dart';
 import 'package:sandfriends_web/Dashboard/Features/Settings/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  int? initForm;
+  SettingsScreen({
+    this.initForm,
+  });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -27,6 +31,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     viewModel.setFields(context);
+    if (widget.initForm != null) {
+      setState(() {
+        viewModel.currentForm = widget.initForm!;
+      });
+    }
   }
 
   @override
@@ -68,10 +77,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
                 SFTabs(
-                  tabs: ["Dados básicos", "Sua marca", "Dados financeiros"],
+                  tabs: viewModel.formsTitle,
                   onTap: (index) {
                     viewModel.currentForm = index;
                   },
+                  selectedPosition: viewModel.currentForm,
                 ),
                 const SizedBox(
                   height: defaultPadding,
@@ -93,7 +103,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ? BrandInfo(
                                     viewModel: viewModel,
                                   )
-                                : FinanceInfo(),
+                                : Provider.of<SettingsViewModel>(context)
+                                            .currentForm ==
+                                        2
+                                    ? FinanceInfo()
+                                    : EmployeeInfo(
+                                        viewModel: viewModel,
+                                      ),
                       ),
                     ],
                   ),

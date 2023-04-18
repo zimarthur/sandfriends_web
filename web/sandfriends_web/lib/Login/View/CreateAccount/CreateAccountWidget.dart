@@ -19,7 +19,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     double height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.85,
+      height: height * 0.9,
       width: width * 0.5 < 350 ? 350 : width * 0.5,
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -58,6 +58,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               ),
             ],
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: defaultPadding / 2),
+            child: Text(
+              "ou",
+              style: TextStyle(
+                color: textDarkGrey,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Provider.of<LoginViewModel>(context, listen: false)
+                  .setCreateAccountEmployeeWidget();
+            },
+            child: Text(
+              "Crie uma conta funcionário",
+              style: TextStyle(
+                  color: textBlue, decoration: TextDecoration.underline),
+            ),
+          )
         ],
       ),
     );

@@ -17,6 +17,9 @@ class SettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> get formsTitle =>
+      ["Dados básicos", "Marca", "Dados financeiros", "Equipe"];
+
   TextEditingController nameController = TextEditingController();
   TextEditingController telephoneController =
       MaskedTextController(mask: '(00) 00000-0000');

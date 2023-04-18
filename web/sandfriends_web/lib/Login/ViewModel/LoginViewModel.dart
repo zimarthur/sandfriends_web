@@ -8,6 +8,7 @@ import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
 import 'package:sandfriends_web/Login/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountCourtWidget.dart';
+import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountEmployeeWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountOwnerWidget.dart';
 import 'package:sandfriends_web/Login/View/CreateAccount/CreateAccountWidget.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
@@ -86,9 +87,8 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void setStore(BuildContext context, Map<String, dynamic> responseBody) {
-    var store = Store.fromJson(responseBody['Store']);
-    //Provider.of<DataProvider>(context, listen: false).store =
-    //    Store.fromJson(responseBody['Store']);
+    Provider.of<DataProvider>(context, listen: false).store =
+        Store.fromJson(responseBody['Store']);
   }
 
   void setCourts(BuildContext context, Map<String, dynamic> responseBody) {
@@ -162,8 +162,19 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //Create Account Employee
+  TextEditingController createAccountEmployeeController =
+      TextEditingController();
+
+  void setCreateAccountEmployeeWidget() {
+    _loginWidget = CreateAccountEmployeeWidget();
+    notifyListeners();
+  }
+
   //FORGOT PASSWORD
   TextEditingController forgotPasswordEmailController = TextEditingController();
+
+  void createAccountEmployee() {}
 
   void sendForgotPassword(BuildContext context) {
     _loginRepo.forgotPassword(forgotPasswordEmailController.text).then((value) {

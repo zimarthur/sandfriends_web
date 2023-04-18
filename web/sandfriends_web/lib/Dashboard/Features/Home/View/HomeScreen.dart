@@ -37,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              OnboardingWidget(),
+              if (viewModel.needsOnboarding(context))
+                OnboardingWidget(viewModel: viewModel),
               Text(
                 viewModel.welcomeTitle,
                 overflow: TextOverflow.ellipsis,

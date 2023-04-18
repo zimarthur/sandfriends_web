@@ -52,6 +52,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   onTap: (newValue) {
                     viewModel.matchRecurrentView = newValue;
                   },
+                  selectedPosition: viewModel.matchRecurrentView,
                 ),
                 const SizedBox(
                   height: defaultPadding,

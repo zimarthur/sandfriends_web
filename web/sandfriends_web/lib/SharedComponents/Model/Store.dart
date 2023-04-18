@@ -7,7 +7,7 @@ import 'StorePhoto.dart';
 class Store {
   int idStore;
   String name;
-  String logo;
+  String? logo;
   String address;
   String addressNumber;
   String phoneNumber;
@@ -48,7 +48,7 @@ class Store {
   });
 
   factory Store.fromJson(Map<String, dynamic> parsedJson) {
-    var store = Store(
+    return Store(
       idStore: parsedJson["IdStore"],
       name: parsedJson["Name"],
       address: parsedJson["Address"],
@@ -69,6 +69,5 @@ class Store {
         parsedJson["City"],
       ),
     );
-    return store;
   }
 }

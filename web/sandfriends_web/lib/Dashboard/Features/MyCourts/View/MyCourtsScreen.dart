@@ -16,7 +16,8 @@ import '../../../ViewModel/DataProvider.dart';
 import 'CourtInfo.dart';
 
 class MyCourtsScreen extends StatefulWidget {
-  const MyCourtsScreen({super.key});
+  bool? showWorkingHours;
+  MyCourtsScreen({this.showWorkingHours = false});
 
   @override
   State<MyCourtsScreen> createState() => _MyCourtsScreenState();
@@ -29,6 +30,13 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
   void initState() {
     super.initState();
     viewModel.init(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.showWorkingHours == true) {
+        setState(() {
+          viewModel.setWorkingHoursWidget(context, viewModel);
+        });
+      }
+    });
   }
 
   @override

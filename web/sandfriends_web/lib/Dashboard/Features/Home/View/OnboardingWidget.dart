@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/View/OnboardingCheckItem.dart';
+import 'package:sandfriends_web/Dashboard/Features/Home/ViewModel/HomeViewModel.dart';
+import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingWidget extends StatelessWidget {
-  const OnboardingWidget({super.key});
+  HomeViewModel viewModel;
+  OnboardingWidget({
+    required this.viewModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +76,22 @@ class OnboardingWidget extends StatelessWidget {
                             OnboardingCheckItem(
                               title:
                                   "Adicionar o logo e fotos do seu estabelecimento",
-                              isChecked: false,
-                              onTap: () {},
+                              isChecked: viewModel.brandingSet(context),
+                              onTap: () {
+                                Provider.of<DashboardViewModel>(context,
+                                        listen: false)
+                                    .quickLinkBrand();
+                              },
                             ),
                             OnboardingCheckItem(
                               title:
                                   "Inserir uma descrição para o seu estabelecimento",
-                              isChecked: false,
-                              onTap: () {},
+                              isChecked: viewModel.storeDescriptionSet(context),
+                              onTap: () {
+                                Provider.of<DashboardViewModel>(context,
+                                        listen: false)
+                                    .quickLinkBrand();
+                              },
                             ),
                           ],
                         ),
@@ -89,17 +103,29 @@ class OnboardingWidget extends StatelessWidget {
                             OnboardingCheckItem(
                               title: "Cadastrar dados bancários",
                               isChecked: false,
-                              onTap: () {},
+                              onTap: () {
+                                Provider.of<DashboardViewModel>(context,
+                                        listen: false)
+                                    .quickLinkFinanceSettings();
+                              },
                             ),
                             OnboardingCheckItem(
                               title: "Configurar o horário de funcionamento",
-                              isChecked: false,
-                              onTap: () {},
+                              isChecked: viewModel.opDaysSet(context),
+                              onTap: () {
+                                Provider.of<DashboardViewModel>(context,
+                                        listen: false)
+                                    .quickLinkWorkingHours();
+                              },
                             ),
                             OnboardingCheckItem(
                               title: "Cadastrar suas quadras",
-                              isChecked: false,
-                              onTap: () {},
+                              isChecked: viewModel.courtsSet(context),
+                              onTap: () {
+                                Provider.of<DashboardViewModel>(context,
+                                        listen: false)
+                                    .onTabClick(4);
+                              },
                             ),
                           ],
                         ),
