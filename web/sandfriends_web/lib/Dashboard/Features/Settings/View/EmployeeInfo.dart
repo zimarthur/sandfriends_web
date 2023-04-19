@@ -2,12 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
+import '../../../../SharedComponents/View/Table/SFTable.dart';
+import '../../../../SharedComponents/View/Table/SFTableHeader.dart';
 import '../ViewModel/SettingsViewModel.dart';
 
-class EmployeeInfo extends StatelessWidget {
+class EmployeeInfo extends StatefulWidget {
   SettingsViewModel viewModel;
 
   EmployeeInfo({required this.viewModel});
+
+  @override
+  State<EmployeeInfo> createState() => _EmployeeInfoState();
+}
+
+class _EmployeeInfoState extends State<EmployeeInfo> {
+  @override
+  void initState() {
+    widget.viewModel.setFinancesDataSource(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +60,17 @@ class EmployeeInfo extends StatelessWidget {
               ),
             )
           ],
+        ),
+        SFTable(
+          height: 500,
+          width: 700,
+          headers: [
+            SFTableHeader("name", "Nome"),
+            SFTableHeader("email", "Email"),
+            SFTableHeader("date", "Membro desde"),
+            SFTableHeader("admin", "Administrador?"),
+          ],
+          source: widget.viewModel.employeesDataSource!,
         ),
       ],
     );

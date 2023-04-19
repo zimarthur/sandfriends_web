@@ -43,7 +43,7 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   void setModalAccomplished() {
-    pageStatus = PageStatus.ACCOMPLISHED;
+    pageStatus = PageStatus.SUCCESS;
     notifyListeners();
   }
 

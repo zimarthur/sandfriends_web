@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image/image.dart' as IMG;
 import 'package:image_picker/image_picker.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/Model/EmployeeDataSource.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Employee.dart';
 import '../../../../Utils/SFImage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -241,5 +243,12 @@ class SettingsViewModel extends ChangeNotifier {
     _storePhotos.removeAt(index);
     storeInfoChanged(context);
     notifyListeners();
+  }
+
+  EmployeeDataSource? employeesDataSource;
+
+  void setFinancesDataSource(BuildContext context) {
+    employeesDataSource = EmployeeDataSource(
+        employees: Provider.of<DataProvider>(context, listen: false).employees);
   }
 }

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 import '../../../SharedComponents/View/SFTextfield.dart';
-import '../../ViewModel/LoginViewModel.dart';
+import '../../Login/ViewModel/LoginViewModel.dart';
 
 class CreateAccountCourtWidget extends StatefulWidget {
-  const CreateAccountCourtWidget({super.key});
+  CreateAccountViewModel viewModel;
+  CreateAccountCourtWidget({
+    required this.viewModel,
+  });
 
   @override
   State<CreateAccountCourtWidget> createState() =>
@@ -41,24 +45,20 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
               ),
               Column(
                 children: [
-                  Provider.of<LoginViewModel>(context).noCnpj
+                  widget.viewModel.noCnpj
                       ? SFTextField(
                           labelText: "CPF",
                           pourpose: TextFieldPourpose.Numeric,
-                          controller: Provider.of<LoginViewModel>(context)
-                              .cpfController,
+                          controller: widget.viewModel.cpfController,
                           validator: (_) {})
                       : Row(
                           children: [
                             Expanded(
                               child: SFTextField(
-                                enable: !Provider.of<LoginViewModel>(context)
-                                    .noCnpj,
+                                enable: !widget.viewModel.noCnpj,
                                 labelText: "CNPJ",
                                 pourpose: TextFieldPourpose.Numeric,
-                                controller: Provider.of<LoginViewModel>(context,
-                                        listen: false)
-                                    .cnpjController,
+                                controller: widget.viewModel.cnpjController,
                                 validator: (_) {},
                               ),
                             ),
@@ -72,9 +72,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                                     horizontal: 2 * defaultPadding,
                                     vertical: defaultPadding),
                                 onTap: () {
-                                  Provider.of<LoginViewModel>(context,
-                                          listen: false)
-                                      .onTapSearchCnpj();
+                                  widget.viewModel.onTapSearchCnpj();
                                 })
                           ],
                         ),
@@ -82,12 +80,10 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     children: [
                       Checkbox(
                           activeColor: primaryBlue,
-                          value: Provider.of<LoginViewModel>(context).noCnpj,
+                          value: widget.viewModel.noCnpj,
                           onChanged: (value) {
                             setState(() {
-                              Provider.of<LoginViewModel>(context,
-                                      listen: false)
-                                  .noCnpj = value!;
+                              widget.viewModel.noCnpj = value!;
                             });
                           }),
                       const Text(
@@ -112,9 +108,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "Nome do Estabelecimento",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .storeNameController,
+                      controller: widget.viewModel.storeNameController,
                       validator: (_) {},
                     ),
                   ),
@@ -126,9 +120,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "CEP",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .cepController,
+                      controller: widget.viewModel.cepController,
                       validator: (_) {},
                     ),
                   ),
@@ -141,11 +133,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                 children: [
                   Expanded(
                     child: SFTextField(
-                      labelText: "Estado",
+                      labelText: "Estado(UF)",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .stateController,
+                      controller: widget.viewModel.stateController,
                       validator: (_) {},
                     ),
                   ),
@@ -157,9 +147,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "Cidade",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .cityController,
+                      controller: widget.viewModel.cityController,
                       validator: (_) {},
                     ),
                   ),
@@ -171,9 +159,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "Bairro",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .neighbourhoodController,
+                      controller: widget.viewModel.neighbourhoodController,
                       validator: (_) {},
                     ),
                   ),
@@ -189,9 +175,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "Rua",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .addressController,
+                      controller: widget.viewModel.addressController,
                       validator: (_) {},
                     ),
                   ),
@@ -203,9 +187,7 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                     child: SFTextField(
                       labelText: "Nº",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .addressNumberController,
+                      controller: widget.viewModel.addressNumberController,
                       validator: (_) {},
                     ),
                   ),

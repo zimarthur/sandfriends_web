@@ -122,6 +122,8 @@ flutter:
     - assets/fakeJson/court.json
     - assets/fakeJson/sport.json
     - assets/fakeJson/availableHours.json
+    - assets/fakeJson/employee.json
+    - assets/fakeJson/loggedEmail.json
 
 
     

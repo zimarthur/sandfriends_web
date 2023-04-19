@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 
+import '../../SharedComponents/Model/Employee.dart';
 import '../../SharedComponents/Model/Hour.dart';
 import '../../SharedComponents/Model/Sport.dart';
 import '../../SharedComponents/Model/Store.dart';
@@ -24,4 +25,8 @@ class DataProvider extends ChangeNotifier {
   List<Hour> availableHours = [];
 
   List<Match> matches = [];
+
+  List<Employee> employees = [];
+
+  String loggedEmail = "";
 }

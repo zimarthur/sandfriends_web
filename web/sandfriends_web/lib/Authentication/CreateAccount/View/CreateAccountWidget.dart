@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountCourtWidget.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountOwnerWidget.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
+import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 
 class CreateAccountWidget extends StatefulWidget {
-  const CreateAccountWidget({super.key});
+  CreateAccountViewModel viewModel;
+  CreateAccountWidget({
+    required this.viewModel,
+  });
 
   @override
   State<CreateAccountWidget> createState() => _CreateAccountWidgetState();
@@ -32,7 +38,14 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
       child: Column(
         children: [
           Expanded(
-              child: Provider.of<LoginViewModel>(context).createAccountForm),
+            child: widget.viewModel.currentCreateAccountFormIndex == 0
+                ? CreateAccountCourtWidget(
+                    viewModel: widget.viewModel,
+                  )
+                : CreateAccountOwnerWidget(
+                    viewModel: widget.viewModel,
+                  ),
+          ),
           Row(
             children: [
               Expanded(
@@ -40,8 +53,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                     buttonLabel: "Voltar",
                     buttonType: ButtonType.Secondary,
                     onTap: () {
-                      Provider.of<LoginViewModel>(context, listen: false)
-                          .returnForm();
+                      widget.viewModel.returnForm(context);
                     }),
               ),
               const SizedBox(
@@ -52,8 +64,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                     buttonLabel: "Próximo",
                     buttonType: ButtonType.Primary,
                     onTap: () {
-                      Provider.of<LoginViewModel>(context, listen: false)
-                          .nextForm();
+                      widget.viewModel.nextForm();
                     }),
               ),
             ],
@@ -69,8 +80,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
           ),
           InkWell(
             onTap: () {
-              Provider.of<LoginViewModel>(context, listen: false)
-                  .setCreateAccountEmployeeWidget();
+              widget.viewModel.goToCreateAccountEmployee(context);
             },
             child: Text(
               "Crie uma conta funcionário",
@@ -82,6 +92,4 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
       ),
     );
   }
-
-  Widget CreateAccountOwnerForm = Column();
 }

@@ -1,16 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
+import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../Dashboard/View/DashboardScreen.dart';
-import '../../SharedComponents/View/SFButton.dart';
-import '../../SharedComponents/View/SFTextfield.dart';
+import '../../../Dashboard/View/DashboardScreen.dart';
+import '../../../SharedComponents/View/SFButton.dart';
+import '../../../SharedComponents/View/SFTextfield.dart';
 
 class LoginWidget extends StatefulWidget {
-  const LoginWidget({super.key});
+  LoginViewModel viewModel;
+  LoginWidget({
+    required this.viewModel,
+  });
 
   @override
   State<LoginWidget> createState() => _LoginWidgetState();
@@ -21,7 +24,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var loginViewModel = Provider.of<LoginViewModel>(context);
 
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
@@ -56,14 +58,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                       labelText: "Email",
                       pourpose: TextFieldPourpose.Email,
                       prefixIcon: SvgPicture.asset(r"assets/icon/email.svg"),
-                      controller: loginViewModel.userController,
+                      controller: widget.viewModel.userController,
                       validator: (value) {},
                     ),
                     const SizedBox(
                       height: defaultPadding,
                     ),
                     SFTextField(
-                      controller: loginViewModel.passwordController,
+                      controller: widget.viewModel.passwordController,
                       labelText: "Senha",
                       prefixIcon: SvgPicture.asset(r"assets/icon/lock.svg"),
                       suffixIcon:
@@ -128,7 +130,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     InkWell(
                       onTap: () {
                         setState(() {
-                          loginViewModel.onTapForgotPassword();
+                          widget.viewModel.onTapForgotPassword(context);
                         });
                       },
                       child: const Text(
@@ -154,9 +156,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               color: textBlue, fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Provider.of<LoginViewModel>(context,
-                                      listen: false)
-                                  .onTapCreateAccount();
+                              widget.viewModel.onTapCreateAccount(context);
                             },
                         )
                       ],

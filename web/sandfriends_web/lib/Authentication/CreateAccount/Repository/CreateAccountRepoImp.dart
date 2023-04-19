@@ -1,13 +1,13 @@
 import 'dart:convert';
-
-import 'package:sandfriends_web/Login/Model/CnpjStore.dart';
-import '../../Remote/ApiEndPoints.dart';
-import '../../Remote/BaseApiService.dart';
-import '../../Remote/NetworkApiService.dart';
+import '../../../Remote/ApiEndPoints.dart';
+import '../../../Remote/BaseApiService.dart';
+import '../../../Remote/NetworkApiService.dart';
+import 'package:sandfriends_web/Authentication/Login/Repository/LoginRepo.dart';
+import '../Model/CnpjStore.dart';
 import '../Model/CreateAccountStore.dart';
-import 'package:sandfriends_web/Login/Repository/LoginRepo.dart';
+import 'CreateAccountRepo.dart';
 
-class LoginRepoImp implements LoginRepo {
+class CreateAccountRepoImp implements CreateAccountRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
@@ -36,7 +36,7 @@ class LoginRepoImp implements LoginRepo {
   }
 
   @override
-  Future login(String email, String password) async {
+  Future createAccountEmployee(String email, String password) async {
     dynamic response = await _apiService
         .postResponse(
           _apiService.sandfriendsUrl,
@@ -51,27 +51,5 @@ class LoginRepoImp implements LoginRepo {
         )
         .onError((error, stackTrace) => throw error!);
     return response;
-  }
-
-  @override
-  Future forgotPassword(String email) async {
-    dynamic response = await _apiService
-        .postResponse(
-          _apiService.sandfriendsUrl,
-          ApiEndPoints().forgotPassword,
-          jsonEncode(
-            <String, Object>{
-              "Email": email,
-            },
-          ),
-          false,
-        )
-        .onError((error, stackTrace) => throw error!);
-  }
-
-  @override
-  Future debug() async {
-    dynamic response =
-        await _apiService.getResponse(_apiService.sandfriendsUrl, "debug");
   }
 }

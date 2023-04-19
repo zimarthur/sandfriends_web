@@ -4,10 +4,14 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFTextfield.dart';
-import '../../ViewModel/LoginViewModel.dart';
+import '../../Login/ViewModel/LoginViewModel.dart';
+import '../ViewModel/CreateAccountViewModel.dart';
 
 class CreateAccountOwnerWidget extends StatefulWidget {
-  const CreateAccountOwnerWidget({super.key});
+  CreateAccountViewModel viewModel;
+  CreateAccountOwnerWidget({
+    required this.viewModel,
+  });
 
   @override
   State<CreateAccountOwnerWidget> createState() =>
@@ -38,8 +42,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                   SFTextField(
                       labelText: "Nome",
                       pourpose: TextFieldPourpose.Standard,
-                      controller: Provider.of<LoginViewModel>(context)
-                          .ownerNameController,
+                      controller: widget.viewModel.ownerNameController,
                       validator: (_) {}),
                   const SizedBox(
                     height: defaultPadding,
@@ -47,20 +50,18 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                   SFTextField(
                       labelText: "Email",
                       pourpose: TextFieldPourpose.Standard,
-                      controller:
-                          Provider.of<LoginViewModel>(context).emailController,
+                      controller: widget.viewModel.emailController,
                       validator: (_) {}),
                   const SizedBox(
                     height: defaultPadding,
                   ),
-                  !Provider.of<LoginViewModel>(context).noCnpj
+                  !widget.viewModel.noCnpj
                       ? Column(
                           children: [
                             SFTextField(
                                 labelText: "CPF",
                                 pourpose: TextFieldPourpose.Standard,
-                                controller: Provider.of<LoginViewModel>(context)
-                                    .cpfController,
+                                controller: widget.viewModel.cpfController,
                                 validator: (_) {}),
                             const SizedBox(
                               height: defaultPadding,
@@ -74,8 +75,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                         child: SFTextField(
                           labelText: "Telefone da Quadra",
                           pourpose: TextFieldPourpose.Numeric,
-                          controller: Provider.of<LoginViewModel>(context)
-                              .telephoneController,
+                          controller: widget.viewModel.telephoneController,
                           validator: (_) {},
                         ),
                       ),
@@ -86,8 +86,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                         child: SFTextField(
                           labelText: "Telefone Pessoal",
                           pourpose: TextFieldPourpose.Numeric,
-                          controller: Provider.of<LoginViewModel>(context)
-                              .telephoneOwnerController,
+                          controller: widget.viewModel.telephoneOwnerController,
                           validator: (_) {},
                         ),
                       ),
@@ -106,13 +105,10 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       children: [
                         Checkbox(
                             activeColor: primaryBlue,
-                            value:
-                                Provider.of<LoginViewModel>(context).isAbove18,
+                            value: widget.viewModel.isAbove18,
                             onChanged: (value) {
                               setState(() {
-                                Provider.of<LoginViewModel>(context,
-                                        listen: false)
-                                    .isAbove18 = value!;
+                                widget.viewModel.isAbove18 = value!;
                               });
                             }),
                         RichText(
@@ -130,13 +126,10 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       children: [
                         Checkbox(
                             activeColor: primaryBlue,
-                            value:
-                                Provider.of<LoginViewModel>(context).termsAgree,
+                            value: widget.viewModel.termsAgree,
                             onChanged: (value) {
                               setState(() {
-                                Provider.of<LoginViewModel>(context,
-                                        listen: false)
-                                    .termsAgree = value!;
+                                widget.viewModel.termsAgree = value!;
                               });
                             }),
                         Flexible(
@@ -155,9 +148,8 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                       fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Provider.of<LoginViewModel>(context,
-                                              listen: false)
-                                          .onTapCreateAccount();
+                                      widget.viewModel
+                                          .onTapTermosDeUso(context);
                                     },
                                 ),
                                 const TextSpan(
@@ -170,9 +162,8 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                       fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Provider.of<LoginViewModel>(context,
-                                              listen: false)
-                                          .onTapCreateAccount();
+                                      widget.viewModel
+                                          .onTapPoliticaDePrivacidade(context);
                                     },
                                 )
                               ],

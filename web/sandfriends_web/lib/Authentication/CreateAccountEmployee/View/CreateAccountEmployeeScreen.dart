@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Utils/PageStatus.dart';
-import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidget.dart';
+import 'package:sandfriends_web/Authentication/CreateAccountEmployee/ViewModel/CreateAccountEmployeeViewModel.dart';
 import 'package:provider/provider.dart';
-import '../../SharedComponents/View/SFLoading.dart';
-import '../../SharedComponents/View/SFMessageModal.dart';
-import '../ViewModel/LoginViewModel.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import '../../../SharedComponents/View/SFLoading.dart';
+import '../../../SharedComponents/View/SFMessageModal.dart';
+import '../../../Utils/PageStatus.dart';
+
+class CreateAccountEmployeeScreen extends StatefulWidget {
+  const CreateAccountEmployeeScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<CreateAccountEmployeeScreen> createState() =>
+      _CreateAccountEmployeeScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final LoginViewModel viewModel = LoginViewModel();
+class _CreateAccountEmployeeScreenState
+    extends State<CreateAccountEmployeeScreen> {
+  final viewModel = CreateAccountEmployeeViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: ChangeNotifierProvider<LoginViewModel>(
+      body: ChangeNotifierProvider<CreateAccountEmployeeViewModel>(
         create: (BuildContext context) => viewModel,
-        child: Consumer<LoginViewModel>(
+        child: Consumer<CreateAccountEmployeeViewModel>(
           builder: (context, viewModel, _) {
             return SafeArea(
               child: Stack(
@@ -35,10 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: height,
                     width: width,
                     child: Center(
-                      child: viewModel.loginWidget,
+                      child: CreateAccountEmployeeWidget(viewModel: viewModel),
                     ),
                   ),
-                  viewModel.pageStatus != PageStatus.SUCCESS
+                  viewModel.pageStatus != PageStatus.OK
                       ? Container(
                           color: primaryBlue.withOpacity(0.4),
                           height: height,

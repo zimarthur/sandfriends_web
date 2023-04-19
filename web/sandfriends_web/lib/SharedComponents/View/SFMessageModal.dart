@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Login/ViewModel/LoginViewModel.dart';
+import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'SFButton.dart';
@@ -28,8 +28,6 @@ class _SFMessageModalState extends State<SFMessageModal> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    LoginViewModel loginViewModel = LoginViewModel();
-
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
       width: width * 0.3 < 350 ? 350 : width * 0.3,
