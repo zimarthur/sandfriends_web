@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Settings/View/BrandInfo.dart';
-import 'package:sandfriends_web/Dashboard/Features/Settings/View/EmployeeInfo.dart';
-import 'package:sandfriends_web/Dashboard/Features/Settings/View/FinanceInfo.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/BrandInfo/View/BrandInfo.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/EmployeeInfo/View/EmployeeInfo.dart';
+import 'package:sandfriends_web/Dashboard/Features/Settings/FinanceInfo/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
-import 'BasicInfo.dart';
+import '../BasicInfo/View/BasicInfo.dart';
 import '../ViewModel/SettingsViewModel.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 
 class SettingsScreen extends StatefulWidget {
   int? initForm;
-  SettingsScreen({
+  SettingsScreen({super.key, 
     this.initForm,
   });
 
@@ -25,7 +22,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final SettingsViewModel viewModel = SettingsViewModel();
+  final viewModel = SettingsViewModel();
 
   @override
   void initState() {
@@ -87,32 +84,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   height: defaultPadding,
                 ),
                 Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Provider.of<SettingsViewModel>(context)
-                                    .currentForm ==
-                                0
-                            ? BasicInfo(
-                                viewModel: viewModel,
-                              )
-                            : Provider.of<SettingsViewModel>(context)
-                                        .currentForm ==
-                                    1
-                                ? BrandInfo(
-                                    viewModel: viewModel,
-                                  )
-                                : Provider.of<SettingsViewModel>(context)
-                                            .currentForm ==
-                                        2
-                                    ? FinanceInfo()
-                                    : EmployeeInfo(
-                                        viewModel: viewModel,
-                                      ),
-                      ),
-                    ],
-                  ),
+                  child: Provider.of<SettingsViewModel>(context).currentForm ==
+                          0
+                      ? BasicInfo(
+                          viewModel: viewModel,
+                        )
+                      : Provider.of<SettingsViewModel>(context).currentForm == 1
+                          ? BrandInfo(
+                              viewModel: viewModel,
+                            )
+                          : Provider.of<SettingsViewModel>(context)
+                                      .currentForm ==
+                                  2
+                              ? FinanceInfo()
+                              : EmployeeInfo(
+                                  viewModel: viewModel,
+                                ),
                 ),
               ],
             ),

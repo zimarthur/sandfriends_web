@@ -7,6 +7,7 @@ import 'package:sandfriends_web/Dashboard/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/View/FinancesScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/View/HomeScreen.dart';
 import 'package:sandfriends_web/Dashboard/Features/Rewards/View/RewardsScreen.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFModalConfirmation.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 
@@ -22,13 +23,19 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
+  PageStatus pageStatus = PageStatus.OK;
+  String modalTitle = "";
+  String modalDescription = "";
+  VoidCallback modalCallback = () {};
+  Widget? modalFormWidget;
+
   void setModalLoading() {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
   }
 
-  void setModalSuccess() {
-    pageStatus = PageStatus.SUCCESS;
+  void closeModal() {
+    pageStatus = PageStatus.OK;
     notifyListeners();
   }
 
@@ -36,7 +43,7 @@ class DashboardViewModel extends ChangeNotifier {
     modalTitle = title;
     modalDescription = description;
     modalCallback = () {
-      setModalSuccess();
+      closeModal();
     };
     pageStatus = PageStatus.ERROR;
     notifyListeners();
@@ -49,6 +56,18 @@ class DashboardViewModel extends ChangeNotifier {
 
   void setModalForm(Widget widget) {
     modalFormWidget = widget;
+    pageStatus = PageStatus.FORM;
+    notifyListeners();
+  }
+
+  void setModalConfirmation(String title, String description,
+      VoidCallback onContinue, VoidCallback onReturn) {
+    modalFormWidget = SFModalConfirmation(
+      title: title,
+      description: description,
+      onContinue: onContinue,
+      onReturn: onReturn,
+    );
     pageStatus = PageStatus.FORM;
     notifyListeners();
   }
@@ -165,10 +184,4 @@ class DashboardViewModel extends ChangeNotifier {
     );
     notifyListeners();
   }
-
-  PageStatus pageStatus = PageStatus.SUCCESS;
-  String modalTitle = "";
-  String modalDescription = "";
-  VoidCallback modalCallback = () {};
-  Widget? modalFormWidget;
 }

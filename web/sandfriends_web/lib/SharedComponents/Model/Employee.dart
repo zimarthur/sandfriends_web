@@ -6,6 +6,8 @@ class Employee {
   String email;
   bool admin;
   DateTime registrationDate;
+  bool isLoggedUser;
+  bool isCourtOwner;
 
   Employee({
     required this.firstName,
@@ -13,6 +15,8 @@ class Employee {
     required this.email,
     required this.admin,
     required this.registrationDate,
+    this.isLoggedUser = false,
+    this.isCourtOwner = false,
   });
 
   factory Employee.fromJson(Map<String, dynamic> parsedJson) {
@@ -23,6 +27,7 @@ class Employee {
       admin: parsedJson["Admin"],
       registrationDate:
           DateFormat("dd/MM/yyyy").parse(parsedJson["RegistrationDate"]),
+      isLoggedUser: false,
     );
   }
 }

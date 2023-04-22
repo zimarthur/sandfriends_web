@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFTabs.dart';
-import '../../../../Utils/Responsive.dart';
 import 'Calendar/SFCalendarDay.dart';
 import 'CalendarToggle.dart';
 import 'Calendar/SFCalendarWeek.dart';
@@ -42,13 +41,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   onTap: () {
                     viewModel.setNoMatchReservedWidget(context, viewModel);
                   },
-                  child: SFHeader(
+                  child: const SFHeader(
                       header: "Calendário",
                       description:
                           "Acompanhe as partidas agendadas e veja seus mensalistas"),
                 ),
                 SFTabs(
-                  tabs: ["Partidas", "Mensalistas"],
+                  tabs: const ["Partidas", "Mensalistas"],
                   onTap: (newValue) {
                     viewModel.matchRecurrentView = newValue;
                   },
@@ -84,10 +83,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           );
                         }),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: defaultPadding,
                       ),
-                      Container(
+                      SizedBox(
                         width: calendarFilterWidth,
                         height: height,
                         child: SingleChildScrollView(
@@ -96,7 +95,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               CalendarToggle(viewModel.calendarView, (calType) {
                                 viewModel.calendarView = calType;
                               }),
-                              SizedBox(
+                              const SizedBox(
                                 height: defaultPadding,
                               ),
                               const DatePicker(),

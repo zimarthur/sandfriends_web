@@ -10,7 +10,7 @@ class SFDropdown extends StatefulWidget {
   Color textColor;
   bool enableBorder;
 
-  SFDropdown({
+  SFDropdown({super.key, 
     required this.labelText,
     required this.items,
     required this.validator,
@@ -40,7 +40,7 @@ class _SFDropdownState extends State<SFDropdown> {
                 width: 2,
               ),
             )
-          : BoxDecoration(),
+          : const BoxDecoration(),
       child: DropdownButton(
         value: widget.labelText,
         style: TextStyle(
@@ -50,8 +50,8 @@ class _SFDropdownState extends State<SFDropdown> {
         iconEnabledColor: widget.textColor,
         items: widget.items.map((item) {
           return DropdownMenuItem(
-            child: Text(item),
             value: item,
+            child: Text(item),
           );
         }).toList(),
         onChanged: widget.onChanged,

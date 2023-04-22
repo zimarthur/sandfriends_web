@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 
 DateTime lastDayOfMonth(DateTime date) {
   return DateTime(date.year, date.month + 1, 0);

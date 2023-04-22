@@ -6,9 +6,7 @@ import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
-import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
@@ -24,28 +22,28 @@ class RewardsViewModel extends ChangeNotifier {
   }
 
   void returnMainView(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+    Provider.of<DashboardViewModel>(context, listen: false).closeModal();
   }
 
   int get rewardsCounter => rewards.length;
 
-  List<Reward> _rewards = [
+  final List<Reward> _rewards = [
     Reward(reward: "Agua", date: DateTime.now(), player: arthur),
     Reward(
         reward: "Agua",
-        date: DateTime.now().subtract(Duration(days: 5)),
+        date: DateTime.now().subtract(const Duration(days: 5)),
         player: pietro),
     Reward(
         reward: "Gatorade",
-        date: DateTime.now().subtract(Duration(days: 15)),
+        date: DateTime.now().subtract(const Duration(days: 15)),
         player: arthur),
     Reward(
         reward: "Bolinha",
-        date: DateTime.now().subtract(Duration(days: 20)),
+        date: DateTime.now().subtract(const Duration(days: 20)),
         player: pietro),
     Reward(
         reward: "Agua",
-        date: DateTime.now().subtract(Duration(days: 50)),
+        date: DateTime.now().subtract(const Duration(days: 50)),
         player: arthur),
   ];
   List<Reward> get rewards {
@@ -72,7 +70,7 @@ class RewardsViewModel extends ChangeNotifier {
   TextEditingController addRewardController = TextEditingController();
 
   void validateAddReward(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+    Provider.of<DashboardViewModel>(context, listen: false).closeModal();
   }
 
   ///////////////////////////////////////////////////////
@@ -88,14 +86,14 @@ class RewardsViewModel extends ChangeNotifier {
   //////// PIE CHART ////////////////////////////////////
   List<PieChartItem> get pieChartItems {
     List<PieChartItem> items = [];
-    Map<String, int> nameCount = LinkedHashMap<String, int>();
-    rewards.forEach((object) {
+    Map<String, int> nameCount = <String, int>{};
+    for (var object in rewards) {
       if (nameCount.containsKey(object.reward)) {
         nameCount[object.reward] = nameCount[object.reward]! + 1;
       } else {
         nameCount[object.reward] = 1;
       }
-    });
+    }
     nameCount.forEach((key, value) {
       items.add(PieChartItem(name: key, value: value.toDouble()));
     });
@@ -124,12 +122,11 @@ class RewardsViewModel extends ChangeNotifier {
       angle: -math.pi / 3,
       child: Text(
         selectedFilterIndex == 0
-            ? '${value}\n'
+            ? '$value\n'
             : selectedFilterIndex == 1
-                ? '${value}\n'
-                : getMonthYear(
-                        DateTime.parse(monthsOnChartData[value.toInt()])) +
-                    '\n',
+                ? '$value\n'
+                : '${getMonthYear(
+                        DateTime.parse(monthsOnChartData[value.toInt()]))}\n',
         style: const TextStyle(
           color: textDarkGrey,
         ),
@@ -153,8 +150,7 @@ class RewardsViewModel extends ChangeNotifier {
               ? '${group.x}:00\n'
               : selectedFilterIndex == 1
                   ? 'Dia ${group.x}\n'
-                  : getMonthYear(DateTime.parse(monthsOnChartData[group.x])) +
-                      '\n',
+                  : '${getMonthYear(DateTime.parse(monthsOnChartData[group.x]))}\n',
           const TextStyle(
             color: textWhite,
             fontWeight: FontWeight.bold,
@@ -163,7 +159,7 @@ class RewardsViewModel extends ChangeNotifier {
           children: <TextSpan>[
             TextSpan(
               text: (rod.toY).toString(),
-              style: TextStyle(
+              style: const TextStyle(
                 color: primaryLightBlue,
                 fontSize: 16,
               ),
@@ -177,12 +173,12 @@ class RewardsViewModel extends ChangeNotifier {
       case 0:
         for (int hourIndex = 1; hourIndex < 25; hourIndex++) {
           int rewardsCounter = 0;
-          rewards.forEach((element) {
+          for (var element in rewards) {
             if (isSameDate(element.date, DateTime.now()) &&
                 element.date.hour == hourIndex) {
               rewardsCounter++;
             }
-          });
+          }
           chartData.add(
             BarChartGroupData(
               x: hourIndex,
@@ -202,14 +198,14 @@ class RewardsViewModel extends ChangeNotifier {
             dayIndex < lastDayOfMonth(DateTime.now()).day;
             dayIndex++) {
           int rewardsCounter = 0;
-          rewards.forEach((element) {
+          for (var element in rewards) {
             if (isSameDate(
                 element.date,
-                new DateTime(
+                DateTime(
                     DateTime.now().year, DateTime.now().month, dayIndex))) {
               rewardsCounter++;
             }
-          });
+          }
           chartData.add(
             BarChartGroupData(
               x: dayIndex,

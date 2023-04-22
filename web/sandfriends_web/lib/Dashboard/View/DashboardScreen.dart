@@ -59,27 +59,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     )
                                   : Container(),
                               Expanded(
-                                  child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 2 * defaultPadding,
-                                    vertical: defaultPadding),
-                                child: Provider.of<DashboardViewModel>(context)
-                                    .currentDashboardWidget,
-                              ))
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2 * defaultPadding,
+                                      vertical: defaultPadding),
+                                  child:
+                                      Provider.of<DashboardViewModel>(context)
+                                          .currentDashboardWidget,
+                                ),
+                              )
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                  viewModel.pageStatus != PageStatus.SUCCESS
+                  viewModel.pageStatus != PageStatus.OK
                       ? Container(
                           color: primaryBlue.withOpacity(0.4),
                           height: height,
                           width: width,
                           child: Center(
                               child: viewModel.pageStatus == PageStatus.LOADING
-                                  ? Container(
+                                  ? SizedBox(
                                       height: 300,
                                       width: 300,
                                       child: SFLoading(size: 80),

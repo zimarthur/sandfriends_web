@@ -50,6 +50,6 @@ class CalendarViewModel extends ChangeNotifier {
   }
 
   void returnMainView(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+    Provider.of<DashboardViewModel>(context, listen: false).closeModal();
   }
 }

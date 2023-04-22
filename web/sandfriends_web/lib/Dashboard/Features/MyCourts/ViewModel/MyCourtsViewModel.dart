@@ -6,7 +6,6 @@ import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
-import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 
 import '../../../../SharedComponents/Model/Court.dart';
 import '../../../../SharedComponents/Model/Hour.dart';
@@ -92,7 +91,7 @@ class MyCourtsViewModel extends ChangeNotifier {
   }
 
   void returnMainView(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+    Provider.of<DashboardViewModel>(context, listen: false).closeModal();
   }
 
   void saveNewOperationDays(
@@ -338,8 +337,9 @@ class MyCourtsViewModel extends ChangeNotifier {
 
     if (Provider.of<DataProvider>(context, listen: false)
         .courts
-        .any((element) => element.description == nameController.text))
+        .any((element) => element.description == nameController.text)) {
       print("nome já existe");
+    }
 
     if (currentCourt.sports.any((element) => element.isAvailable == true) ==
         false) print("selecione esporte");

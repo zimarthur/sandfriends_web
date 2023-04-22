@@ -22,7 +22,7 @@ class SFTextField extends StatefulWidget {
   final String? prefixText;
   final TextAlign textAlign;
 
-  SFTextField({
+  const SFTextField({super.key, 
     required this.labelText,
     this.prefixIcon,
     this.suffixIcon,
@@ -84,7 +84,7 @@ class _SFTextFieldState extends State<SFTextField> {
           ? InputDecoration(
               focusColor: Colors.transparent,
               isCollapsed: true,
-              contentPadding: EdgeInsets.only(bottom: 5),
+              contentPadding: const EdgeInsets.only(bottom: 5),
               prefix:
                   widget.prefixText != null ? Text(widget.prefixText!) : null,
               suffix: widget.sufixText != null ? Text(widget.sufixText!) : null,

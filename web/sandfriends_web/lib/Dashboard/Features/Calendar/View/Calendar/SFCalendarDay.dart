@@ -8,7 +8,7 @@ class SFCalendarDay extends StatefulWidget {
   double height;
   double width;
 
-  SFCalendarDay(this.height, this.width);
+  SFCalendarDay(this.height, this.width, {super.key});
 
   @override
   State<SFCalendarDay> createState() => _SFCalendarDayState();

@@ -1,18 +1,9 @@
 import 'dart:convert';
 
-import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountScreen.dart';
-import 'package:sandfriends_web/Authentication/ForgotPassword/View/ForgotPasswordScreen.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/Model/CnpjStore.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Authentication/Login/Repository/LoginRepoImp.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountCourtWidget.dart';
-import 'package:sandfriends_web/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidget.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountOwnerWidget.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountWidget.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Employee.dart';
@@ -21,17 +12,14 @@ import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
-import 'package:sandfriends_web/Authentication/Login/View/LoginSuccessWidget.dart';
-import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
 import '../../../SharedComponents/Model/Store.dart';
-import '../../ForgotPassword/View/ForgotPasswordWidget.dart';
-import '../View/LoginWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final _loginRepo = LoginRepoImp();
 
-  PageStatus pageStatus = PageStatus.OK;
+  PageStatus pageStatus = PageStatus.LOADING;
   String modalTitle = "";
   String modalDescription = "";
   VoidCallback modalCallback = () {};
@@ -40,6 +28,21 @@ class LoginViewModel extends ChangeNotifier {
   TextEditingController passwordController = TextEditingController();
   bool keepConnected = true;
 
+  Future<void> validateToken(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString("AccessToken");
+    if (accessToken != null) {
+      _loginRepo.validateLogin(accessToken).then((response) {
+        setLoginResponse(context, response);
+        Navigator.pushNamed(context, '/home');
+      }).onError((error, stackTrace) {
+        print("eero");
+      });
+    }
+    pageStatus = PageStatus.OK;
+    notifyListeners();
+  }
+
   void onTapLogin(BuildContext context) async {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
@@ -47,20 +50,7 @@ class LoginViewModel extends ChangeNotifier {
     _loginRepo
         .login(userController.text, passwordController.text)
         .then((response) {
-      //setLoggedEmail(context, response);
-      //setEmployees(context, response);
-      setSports(context, response);
-      setAvailableHours(context, response);
-      setStore(context, response);
-      setCourts(context, response);
-
-      rootBundle.loadString(r'assets/fakeJson/loggedEmail.json').then((value) {
-        setLoggedEmail(context, json.decode(value));
-      });
-      rootBundle.loadString(r'assets/fakeJson/employee.json').then((value) {
-        setEmployees(context, json.decode(value));
-      });
-
+      setLoginResponse(context, response);
       Navigator.pushNamed(context, '/home');
     }).onError((error, stackTrace) {
       modalTitle = error.toString();
@@ -74,17 +64,56 @@ class LoginViewModel extends ChangeNotifier {
     });
   }
 
+  void setLoginResponse(BuildContext context, Map<String, dynamic> response) {
+    //setLoggedEmail(context, response);
+    //setEmployees(context, response);
+    setSports(context, response);
+    setAvailableHours(context, response);
+    setStore(context, response);
+    setCourts(context, response);
+
+    rootBundle.loadString(r'assets/fakeJson/loggedEmail.json').then((value) {
+      setLoggedEmail(context, json.decode(value));
+    });
+    rootBundle.loadString(r'assets/fakeJson/employee.json').then((value) {
+      setEmployees(context, json.decode(value));
+    });
+
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString("AccessToken", response['AccessToken']);
+    });
+  }
+
   void setLoggedEmail(BuildContext context, Map<String, dynamic> responseBody) {
     Provider.of<DataProvider>(context, listen: false).loggedEmail =
         responseBody["LoggedEmail"];
   }
 
   void setEmployees(BuildContext context, Map<String, dynamic> responseBody) {
+    final store = Provider.of<DataProvider>(context, listen: false).store!;
+    final loggedEmail =
+        Provider.of<DataProvider>(context, listen: false).loggedEmail;
+    Provider.of<DataProvider>(context, listen: false).employees.add(
+          Employee(
+            firstName: store.ownerName,
+            lastName: "",
+            email: store.email,
+            admin: true,
+            registrationDate: store.approvalDate,
+            isCourtOwner: true,
+          ),
+        );
     for (var employee in responseBody['Employees']) {
       Provider.of<DataProvider>(context, listen: false)
           .employees
           .add(Employee.fromJson(employee));
     }
+    Provider.of<DataProvider>(context, listen: false)
+        .employees
+        .firstWhere(
+          (employee) => employee.email == loggedEmail,
+        )
+        .isLoggedUser = true;
   }
 
   void setSports(BuildContext context, Map<String, dynamic> responseBody) {

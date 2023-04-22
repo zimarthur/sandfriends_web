@@ -8,7 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 class SFPieChart extends StatefulWidget {
   List<PieChartItem> pieChartItems;
 
-  SFPieChart({
+  SFPieChart({super.key, 
     required this.pieChartItems,
   });
 
@@ -18,7 +18,7 @@ class SFPieChart extends StatefulWidget {
 
 class _SFPieChartState extends State<SFPieChart> {
   int touchedIndex = -1;
-  ItemScrollController _scrollController = ItemScrollController();
+  final ItemScrollController _scrollController = ItemScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _SFPieChartState extends State<SFPieChart> {
                           if (touchedIndex >= 0) {
                             _scrollController.scrollTo(
                                 index: touchedIndex,
-                                duration: Duration(milliseconds: 150));
+                                duration: const Duration(milliseconds: 150));
                           }
                         }
                       });
@@ -74,7 +74,7 @@ class _SFPieChartState extends State<SFPieChart> {
                       ),
                   ],
                 ),
-                swapAnimationDuration: Duration(milliseconds: 150), // Optional
+                swapAnimationDuration: const Duration(milliseconds: 150), // Optional
                 swapAnimationCurve: Curves.linear, // Optional
               ),
             ),
@@ -87,17 +87,17 @@ class _SFPieChartState extends State<SFPieChart> {
                   itemCount: widget.pieChartItems.length,
                   itemBuilder: (context, index) {
                     return AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       padding: index == touchedIndex
-                          ? EdgeInsets.all(defaultPadding / 2)
-                          : EdgeInsets.all(0),
+                          ? const EdgeInsets.all(defaultPadding / 2)
+                          : const EdgeInsets.all(0),
                       decoration: BoxDecoration(
                           color: index == touchedIndex
                               ? secondaryBack
                               : secondaryPaper,
                           border: index == touchedIndex
                               ? Border.all(color: primaryBlue, width: 2)
-                              : Border(),
+                              : const Border(),
                           borderRadius:
                               BorderRadius.circular(defaultBorderRadius)),
                       child: Column(
@@ -110,7 +110,7 @@ class _SFPieChartState extends State<SFPieChart> {
                                 width: 10,
                                 color: widget.pieChartItems[index].color,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: defaultPadding,
                               ),
                               Expanded(
@@ -124,7 +124,7 @@ class _SFPieChartState extends State<SFPieChart> {
                           if (index == touchedIndex)
                             Row(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   width: defaultPadding + 10,
                                 ),
                                 Expanded(
@@ -133,7 +133,7 @@ class _SFPieChartState extends State<SFPieChart> {
                                     minFontSize: 8,
                                     maxFontSize: 18,
                                     maxLines: 1,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: textDarkGrey,
                                     ),
                                   ),

@@ -15,7 +15,7 @@ class ResumedInfoRow extends StatefulWidget {
   double rowHeight;
   Function(bool) setAllowRecurrent;
 
-  ResumedInfoRow({
+  ResumedInfoRow({super.key, 
     required this.day,
     required this.hourPriceList,
     required this.isEditing,
@@ -61,7 +61,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
           flex: 1,
           child: Text(
             weekday[widget.day],
-            style: TextStyle(color: textDarkGrey),
+            style: const TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),
         ),
@@ -74,7 +74,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                       flex: 1,
                       child: Text(
                         "${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).first.startingHour.hourString} - ${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).last.endingHour.hourString}",
-                        style: TextStyle(color: textDarkGrey),
+                        style: const TextStyle(color: textDarkGrey),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -93,8 +93,10 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                                           .allowReccurrent
                                       ? "Sim"
                                       : "Não",
-                                  items: ["Sim", "Não"],
-                                  validator: (value) {},
+                                  items: const ["Sim", "Não"],
+                                  validator: (value) {
+                                    return null;
+                                  },
                                   onChanged: (newValue) {
                                     widget.setAllowRecurrent(newValue == "Sim");
                                   },
@@ -110,7 +112,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                                         .allowReccurrent
                                     ? "Sim"
                                     : "Não",
-                                style: TextStyle(color: textDarkGrey),
+                                style: const TextStyle(color: textDarkGrey),
                               ),
                       ),
                     ),
@@ -131,7 +133,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                                 ),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text: '$priceRecurrentText',
+                                    text: priceRecurrentText,
                                     style: const TextStyle(
                                       color: textBlue,
                                       fontFamily: 'Lexend',
@@ -142,7 +144,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                             )
                           : Text(
                               priceText,
-                              style: TextStyle(color: textDarkGrey),
+                              style: const TextStyle(color: textDarkGrey),
                               textAlign: TextAlign.center,
                             ),
                     ),
@@ -169,7 +171,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                   ],
                 ),
               )
-            : Expanded(
+            : const Expanded(
                 flex: 3,
                 child: Text(
                   "Fechado",

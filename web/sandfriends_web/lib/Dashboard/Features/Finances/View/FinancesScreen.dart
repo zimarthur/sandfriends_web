@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/View/FinanceKpi.dart';
 import 'package:sandfriends_web/Dashboard/Features/Finances/ViewModel/FinancesViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
-import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFCard.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFPieChart.dart';
@@ -46,7 +44,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SFHeader(
+              const SFHeader(
                   header: "Finanças",
                   description:
                       "Confira o faturamento de suas quadras atual e para os próximos dias"),
@@ -54,7 +52,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                 height: height * 0.01,
               ),
               SFToggle(
-                ["Hoje", "Esse mês", "Histórico"],
+                const ["Hoje", "Esse mês", "Histórico"],
                 viewModel.selectedFilterIndex,
                 (value) {
                   viewModel.selectedFilterIndex = value;
@@ -87,7 +85,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                     iconColor: success,
                                     iconColorBackground: success50,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: defaultPadding,
                                   ),
                                   FinanceKpi(
@@ -99,7 +97,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                     iconColor: forecast,
                                     iconColorBackground: forecast50,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: defaultPadding,
                                   ),
                                   Expanded(
@@ -119,7 +117,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: defaultPadding,
                             ),
                             SFTable(
@@ -137,7 +135,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: defaultPadding,
                         ),
                         SFCard(

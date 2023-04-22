@@ -13,7 +13,7 @@ class PriceListWidget extends StatelessWidget {
   List<HourPrice> hourPriceList;
   MyCourtsViewModel viewModel;
 
-  PriceListWidget({
+  PriceListWidget({super.key, 
     required this.dayIndex,
     required this.hourPriceList,
     required this.viewModel,
@@ -28,7 +28,7 @@ class PriceListWidget extends StatelessWidget {
     return Container(
       height: height * 0.8,
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -41,15 +41,15 @@ class PriceListWidget extends StatelessWidget {
         children: [
           Text(
             weekdayFull[dayIndex],
-            style: TextStyle(color: textBlue, fontSize: 22),
+            style: const TextStyle(color: textBlue, fontSize: 22),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
             child: Row(
-              children: [
+              children: const [
                 Expanded(
                     flex: 1,
                     child: Text(
@@ -84,7 +84,7 @@ class PriceListWidget extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           "${hourPriceList[index].startingHour.hourString} - ${hourPriceList[index].endingHour.hourString}",
-                          style: TextStyle(color: textDarkGrey),
+                          style: const TextStyle(color: textDarkGrey),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -92,7 +92,7 @@ class PriceListWidget extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           "R\$${hourPriceList[index].price}",
-                          style: TextStyle(color: textDarkGrey),
+                          style: const TextStyle(color: textDarkGrey),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -100,7 +100,7 @@ class PriceListWidget extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           "R\$${hourPriceList[index].recurrentPrice}",
-                          style: TextStyle(color: textDarkGrey),
+                          style: const TextStyle(color: textDarkGrey),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -110,7 +110,7 @@ class PriceListWidget extends StatelessWidget {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding,
           ),
           SFButton(

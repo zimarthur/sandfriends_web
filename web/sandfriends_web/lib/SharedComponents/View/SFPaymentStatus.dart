@@ -4,12 +4,12 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFPaymentStatus extends StatelessWidget {
   PaymentType paymentType;
-  SFPaymentStatus({required this.paymentType});
+  SFPaymentStatus({super.key, required this.paymentType});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding / 2,
         vertical: defaultPadding / 4,
       ),

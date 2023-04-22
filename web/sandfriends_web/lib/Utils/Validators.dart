@@ -10,6 +10,14 @@ String? emailValidator(String? value) {
   }
 }
 
+String? emptyCheck(String? value, String onNull) {
+  if (value == null || value.isEmpty) {
+    return onNull;
+  } else {
+    return null;
+  }
+}
+
 String? passwordValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "digite sua senha";

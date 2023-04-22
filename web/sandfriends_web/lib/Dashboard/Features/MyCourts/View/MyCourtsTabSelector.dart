@@ -9,7 +9,7 @@ class MyCourtsTabSelector extends StatefulWidget {
   VoidCallback onTap;
   MouseCursor mouseCursor;
 
-  MyCourtsTabSelector({
+  MyCourtsTabSelector({super.key, 
     required this.title,
     required this.isSelected,
     this.iconPath,
@@ -28,7 +28,7 @@ class _MyCourtsTabSelectorState extends State<MyCourtsTabSelector> {
       mouseCursor: widget.mouseCursor,
       onTap: widget.onTap,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: divider,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(defaultBorderRadius),
@@ -37,12 +37,12 @@ class _MyCourtsTabSelectorState extends State<MyCourtsTabSelector> {
         ),
         child: Container(
           alignment: Alignment.bottomCenter,
-          margin: EdgeInsets.only(top: 2, left: 2, right: 2),
-          padding: EdgeInsets.symmetric(
+          margin: const EdgeInsets.only(top: 2, left: 2, right: 2),
+          padding: const EdgeInsets.symmetric(
               vertical: defaultPadding / 2, horizontal: defaultPadding),
           decoration: BoxDecoration(
             color: widget.isSelected ? secondaryPaper : secondaryBack,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(defaultBorderRadius),
               topRight: Radius.circular(defaultBorderRadius),
             ),
@@ -58,14 +58,14 @@ class _MyCourtsTabSelectorState extends State<MyCourtsTabSelector> {
                       width: 20,
                       color: textDarkGrey,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                   ],
                 ),
               Text(
                 widget.title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: textDarkGrey,
                 ),
               ),

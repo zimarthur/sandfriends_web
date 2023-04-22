@@ -5,13 +5,12 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../Dashboard/View/DashboardScreen.dart';
 import '../../../SharedComponents/View/SFButton.dart';
 import '../../../SharedComponents/View/SFTextfield.dart';
 
 class LoginWidget extends StatefulWidget {
   LoginViewModel viewModel;
-  LoginWidget({
+  LoginWidget({super.key, 
     required this.viewModel,
   });
 
@@ -59,7 +58,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                       pourpose: TextFieldPourpose.Email,
                       prefixIcon: SvgPicture.asset(r"assets/icon/email.svg"),
                       controller: widget.viewModel.userController,
-                      validator: (value) {},
+                      validator: (value) {
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: defaultPadding,
@@ -73,7 +74,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                       suffixIconPressed:
                           SvgPicture.asset(r"assets/icon/eye_open.svg"),
                       pourpose: TextFieldPourpose.Password,
-                      validator: (value) {},
+                      validator: (value) {
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: defaultPadding,

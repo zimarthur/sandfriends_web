@@ -7,7 +7,7 @@ class SFStorePhoto extends StatelessWidget {
   Uint8List image;
   VoidCallback delete;
 
-  SFStorePhoto({
+  SFStorePhoto({super.key, 
     required this.image,
     required this.delete,
   });
@@ -16,7 +16,7 @@ class SFStorePhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
+        SizedBox(
           height: 190,
           width: 320,
           child: Stack(
@@ -37,11 +37,11 @@ class SFStorePhoto extends StatelessWidget {
                   child: Container(
                     height: 40,
                     width: 40,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: primaryBlue,
                     ),
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: SvgPicture.asset(
                       r'assets/icon/x.svg',
                       color: secondaryPaper,
@@ -52,7 +52,7 @@ class SFStorePhoto extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 2 * defaultPadding,
         )
       ],

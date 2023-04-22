@@ -1,4 +1,3 @@
-import 'City.dart';
 
 class State {
   int idState;

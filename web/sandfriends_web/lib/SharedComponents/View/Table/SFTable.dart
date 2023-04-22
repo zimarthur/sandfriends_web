@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Rewards/Model/RewardDataSource.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
 import '../../../Utils/Constants.dart';
-import 'SFTableHeader.dart';
 
 class SFTable extends StatefulWidget {
   double height;
@@ -12,7 +10,7 @@ class SFTable extends StatefulWidget {
   List<GridColumn> headers;
   DataGridSource source;
 
-  SFTable({
+  SFTable({super.key, 
     required this.height,
     required this.width,
     required this.headers,

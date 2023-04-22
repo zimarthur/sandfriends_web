@@ -49,7 +49,7 @@ class _SFDrawerState extends State<SFDrawer> {
                         onTap: () => menuController.isDrawerExpanded =
                             !menuController.isDrawerExpanded,
                         child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           width: double.infinity,
                           alignment: fullSize
                               ? Alignment.centerRight

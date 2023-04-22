@@ -5,7 +5,7 @@ class OccupationWidget extends StatelessWidget {
   String title;
   double result;
 
-  OccupationWidget({
+  OccupationWidget({super.key, 
     required this.title,
     required this.result,
   });
@@ -20,17 +20,17 @@ class OccupationWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(color: textDarkGrey, fontSize: 12),
+                  style: const TextStyle(color: textDarkGrey, fontSize: 12),
                 ),
               ),
               Text(
                 "${(result * 100).toStringAsFixed(0)}%",
-                style: TextStyle(
+                style: const TextStyle(
                     color: textBlue, fontSize: 12, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding / 2,
           ),
           Stack(

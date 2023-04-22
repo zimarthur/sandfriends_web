@@ -41,7 +41,7 @@ Future<Uint8List?> cropImage(
           height: viewPortHeight,
           width: viewPortWidth,
         ),
-        boundary: CroppieBoundary(
+        boundary: const CroppieBoundary(
           height: 400,
           width: 400,
         ),

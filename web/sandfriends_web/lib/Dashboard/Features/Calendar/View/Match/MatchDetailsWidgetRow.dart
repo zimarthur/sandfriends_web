@@ -7,7 +7,7 @@ class MatchDetailsWidgetRow extends StatelessWidget {
   Widget? customValue;
   bool fixedHeight;
 
-  MatchDetailsWidgetRow({
+  MatchDetailsWidgetRow({super.key, 
     required this.title,
     this.value,
     this.customValue,
@@ -26,7 +26,7 @@ class MatchDetailsWidgetRow extends StatelessWidget {
             flex: 1,
             child: Text(
               title,
-              style: TextStyle(color: textDarkGrey, fontSize: 14),
+              style: const TextStyle(color: textDarkGrey, fontSize: 14),
             ),
           ),
           Expanded(
@@ -34,7 +34,7 @@ class MatchDetailsWidgetRow extends StatelessWidget {
             child: customValue ??
                 Text(
                   value!,
-                  style: TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                 ),
           ),
         ],

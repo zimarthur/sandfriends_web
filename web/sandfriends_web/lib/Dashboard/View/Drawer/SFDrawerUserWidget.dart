@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/View/Drawer/SFDrawerPopup.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {
   bool fullSize;
   Function(int) onTap;
 
-  SFDrawerUserWidget({required this.fullSize, required this.onTap});
+  SFDrawerUserWidget({super.key, required this.fullSize, required this.onTap});
 
   @override
   State<SFDrawerUserWidget> createState() => _SFDrawerUserWidgetState();

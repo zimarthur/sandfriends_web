@@ -26,7 +26,22 @@ class DataProvider extends ChangeNotifier {
 
   List<Match> matches = [];
 
-  List<Employee> employees = [];
+  final List<Employee> _employees = [];
+  List<Employee> get employees {
+    _employees.sort((a, b) {
+      if (a.admin == b.admin) {
+        return a.registrationDate.compareTo(b.registrationDate);
+      } else {
+        return 1;
+      }
+    });
+    return _employees;
+  }
+
+  void addEmployee(Employee employee) {
+    _employees.add(employee);
+    notifyListeners();
+  }
 
   String loggedEmail = "";
 }

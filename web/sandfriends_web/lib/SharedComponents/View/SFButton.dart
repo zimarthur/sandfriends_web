@@ -22,12 +22,12 @@ class SFButton extends StatefulWidget {
   final EdgeInsets? textPadding;
   final bool? iconFirst;
 
-  const SFButton({
+  const SFButton({super.key, 
     required this.buttonLabel,
     required this.buttonType,
     required this.onTap,
     this.iconPath = "",
-    this.iconSize = 14,
+    this.iconSize = 18,
     this.textPadding = const EdgeInsets.symmetric(vertical: 10),
     this.iconFirst = false,
   });
@@ -77,6 +77,7 @@ class _SFButtonState extends State<SFButton> {
                     padding: const EdgeInsets.only(right: 10),
                     child: SvgPicture.asset(
                       widget.iconPath,
+                      height: widget.iconSize,
                       color: widget.buttonType == ButtonType.Secondary
                           ? primaryBlue
                           : widget.buttonType == ButtonType.YellowSecondary

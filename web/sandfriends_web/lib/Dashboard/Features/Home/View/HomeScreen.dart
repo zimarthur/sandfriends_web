@@ -6,10 +6,8 @@ import 'package:sandfriends_web/Dashboard/Features/Home/View/ResumedMatch.dart';
 import 'package:sandfriends_web/Dashboard/Features/Home/ViewModel/HomeViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFCard.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
-import 'package:sandfriends_web/SharedComponents/View/SFPaymentStatus.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
 import '../../../ViewModel/DashboardViewModel.dart';
@@ -48,22 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 2 * defaultPadding,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Partidas acontecendo hoje",
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: textDarkGrey,
                       fontWeight: FontWeight.w300,
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: defaultPadding,
                   ),
                   Row(
@@ -72,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SvgPicture.asset(
                         r'assets/icon/chevron_left.svg',
                       ),
-                      Text(
+                      const Text(
                         "09:00 - 10:00",
                         style: TextStyle(
                           color: textDarkGrey,
@@ -85,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: defaultPadding / 2,
               ),
               SizedBox(
@@ -95,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: 4,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return ResumedMatch();
+                    return const ResumedMatch();
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 2 * defaultPadding,
               ),
               Expanded(
@@ -115,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: layoutConstraints.maxHeight * 0.3,
                                 width: layoutConstraints.maxWidth,
                                 title: "Faturamento hoje",
-                                child: Center(
+                                child: const Center(
                                   child: Text(
                                     "R\$ 560,00",
                                     style: TextStyle(
@@ -130,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: layoutConstraints.maxHeight * 0.3,
                                 width: layoutConstraints.maxWidth,
                                 title: "Partidas agendadas hoje",
-                                child: Center(
+                                child: const Center(
                                   child: Text(
                                     "15",
                                     style: TextStyle(
@@ -145,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: layoutConstraints.maxHeight * 0.3,
                                 width: layoutConstraints.maxWidth,
                                 title: "Recompensas hoje",
-                                child: Center(
+                                child: const Center(
                                   child: Text(
                                     "2",
                                     style: TextStyle(
@@ -162,31 +160,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: layoutConstraints.maxWidth * 0.3 < 300
                             ? 300
                             : layoutConstraints.maxWidth * 0.3,
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                           horizontal: defaultPadding,
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: defaultPadding / 2,
                           horizontal: defaultPadding,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Ocupação das suas quadras hoje",
                               style: TextStyle(
                                 color: textDarkGrey,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: defaultPadding,
                             ),
                             OccupationWidget(
                               title: "Geral",
                               result: 0.85,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
                                 vertical: defaultPadding,
                               ),
                               child: SFDivider(),
@@ -195,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "Quadra 1",
                               result: 0.9,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: defaultPadding,
                             ),
                             OccupationWidget(
@@ -210,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: layoutConstraints.maxWidth * 0.4 < 450
                             ? 450
                             : layoutConstraints.maxWidth * 0.4,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: defaultPadding / 2,
                           horizontal: defaultPadding,
                         ),
@@ -226,22 +224,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Últimas atualizações",
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: textDarkGrey,
                                 fontWeight: FontWeight.w300,
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: defaultPadding / 2,
                             ),
                             Expanded(
                               child: ListView.builder(
                                 itemBuilder: (context, index) {
-                                  return FeedItem();
+                                  return const FeedItem();
                                 },
                               ),
                             ),

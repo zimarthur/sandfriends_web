@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class CourtInfo extends StatefulWidget {
   MyCourtsViewModel viewModel;
-  CourtInfo({
+  CourtInfo({super.key, 
     required this.viewModel,
   });
 
@@ -28,12 +28,12 @@ class _CourtInfoState extends State<CourtInfo> {
             width: 2,
           ),
           borderRadius: BorderRadius.circular(defaultBorderRadius)),
-      padding: EdgeInsets.all(
+      padding: const EdgeInsets.all(
         defaultPadding,
       ),
       child: Column(
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(
               vertical: defaultPadding / 4,
             ),
@@ -44,13 +44,13 @@ class _CourtInfoState extends State<CourtInfo> {
               ),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(
               vertical: defaultPadding,
             ),
             child: SFDivider(),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding,
           ),
           Expanded(
@@ -62,7 +62,7 @@ class _CourtInfoState extends State<CourtInfo> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
+                          const Expanded(
                             flex: 1,
                             child: Text(
                               "Nome da quadra",
@@ -77,7 +77,9 @@ class _CourtInfoState extends State<CourtInfo> {
                               labelText: "",
                               pourpose: TextFieldPourpose.Standard,
                               controller: widget.viewModel.nameController,
-                              validator: (value) {},
+                              validator: (value) {
+                                return null;
+                              },
                               onChanged: (newText) {
                                 if (widget.viewModel.selectedCourtIndex == -1) {
                                   widget.viewModel.newCourtName = newText;
@@ -94,13 +96,13 @@ class _CourtInfoState extends State<CourtInfo> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 2 * defaultPadding,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          const Expanded(
                             flex: 1,
                             child: Text(
                               "Tipo",
@@ -145,10 +147,10 @@ class _CourtInfoState extends State<CourtInfo> {
                                             .checkCourtInfoChanges(context);
                                       },
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: defaultPadding,
                                     ),
-                                    Text(
+                                    const Text(
                                       "Coberta",
                                       style: TextStyle(
                                         color: textDarkGrey,
@@ -188,10 +190,10 @@ class _CourtInfoState extends State<CourtInfo> {
                                             .checkCourtInfoChanges(context);
                                       },
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: defaultPadding,
                                     ),
-                                    Text(
+                                    const Text(
                                       "Descoberta",
                                       style: TextStyle(
                                         color: textDarkGrey,
@@ -204,13 +206,13 @@ class _CourtInfoState extends State<CourtInfo> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 2 * defaultPadding,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          const Expanded(
                             flex: 1,
                             child: Text(
                               "Esportes:",
@@ -222,7 +224,7 @@ class _CourtInfoState extends State<CourtInfo> {
                           Expanded(
                             flex: 2,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: defaultPadding / 2,
                                 vertical: defaultBorderRadius / 4,
                               ),
@@ -282,7 +284,7 @@ class _CourtInfoState extends State<CourtInfo> {
                                                 .checkCourtInfoChanges(context);
                                           },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: defaultPadding,
                                         ),
                                         Text(
@@ -300,7 +302,7 @@ class _CourtInfoState extends State<CourtInfo> {
                                                   .sports[sportIndex]
                                                   .sport
                                                   .description,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: textDarkGrey,
                                           ),
                                         ),
@@ -318,7 +320,7 @@ class _CourtInfoState extends State<CourtInfo> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding,
           ),
           widget.viewModel.selectedCourtIndex == -1

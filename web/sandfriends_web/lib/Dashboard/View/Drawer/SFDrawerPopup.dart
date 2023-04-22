@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SFDrawerPopup extends StatefulWidget {
   Function(int) onTap;
   bool showIcon;
-  SFDrawerPopup({
+  SFDrawerPopup({super.key, 
     required this.onTap,
     required this.showIcon,
   });
@@ -31,16 +31,17 @@ class _SFDrawerPopupState extends State<SFDrawerPopup> {
       tooltip: "",
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         PopupMenuItem(
+          value: -1,
           child: Row(
             children: [
               SvgPicture.asset(
                 r'assets/icon/profile.svg',
                 color: textDarkGrey,
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
-              Text(
+              const Text(
                 'Meu perfil',
                 style: TextStyle(
                   color: textDarkGrey,
@@ -48,19 +49,19 @@ class _SFDrawerPopupState extends State<SFDrawerPopup> {
               ),
             ],
           ),
-          value: -1,
         ),
         PopupMenuItem(
+          value: -2,
           child: Row(
             children: [
               SvgPicture.asset(
                 r'assets/icon/help.svg',
                 color: textDarkGrey,
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
-              Text(
+              const Text(
                 'Ajuda',
                 style: TextStyle(
                   color: textDarkGrey,
@@ -68,19 +69,19 @@ class _SFDrawerPopupState extends State<SFDrawerPopup> {
               ),
             ],
           ),
-          value: -2,
         ),
         PopupMenuItem(
+          value: -3,
           child: Row(
             children: [
               SvgPicture.asset(
                 r'assets/icon/logout.svg',
                 color: Colors.red,
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
-              Text(
+              const Text(
                 'Sair',
                 style: TextStyle(
                   color: Colors.red,
@@ -88,7 +89,6 @@ class _SFDrawerPopupState extends State<SFDrawerPopup> {
               ),
             ],
           ),
-          value: -3,
         ),
       ],
       onSelected: (value) {

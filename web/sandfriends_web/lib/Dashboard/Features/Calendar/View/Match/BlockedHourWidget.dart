@@ -13,7 +13,7 @@ import 'MatchDetailsWidgetRow.dart';
 class BlockedHourWidget extends StatelessWidget {
   CalendarViewModel viewModel;
 
-  BlockedHourWidget({required this.viewModel});
+  BlockedHourWidget({super.key, required this.viewModel});
 
   TextEditingController controller = TextEditingController();
 
@@ -26,7 +26,7 @@ class BlockedHourWidget extends StatelessWidget {
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
     return Container(
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -43,7 +43,7 @@ class BlockedHourWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Horário bloqueado",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -51,16 +51,16 @@ class BlockedHourWidget extends StatelessWidget {
                     color: red,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2 * defaultPadding,
                 ),
                 MatchDetailsWidgetRow(title: "Dia", value: "07/04/2023"),
                 MatchDetailsWidgetRow(title: "Horário", value: "16:00 - 17:00"),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: defaultPadding),
                   child: SFDivider(),
                 ),
-                Text(
+                const Text(
                   "Motivo do Bloqueio",
                   style: TextStyle(
                     color: textDarkGrey,
@@ -76,7 +76,9 @@ class BlockedHourWidget extends StatelessWidget {
                     maxLines: 4,
                     enable: false,
                     controller: controller,
-                    validator: (a) {},
+                    validator: (a) {
+                      return null;
+                    },
                   ),
                 ),
               ],
@@ -93,7 +95,7 @@ class BlockedHourWidget extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

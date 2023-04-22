@@ -3,9 +3,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
-import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
-import 'dart:io';
 
 import '../ViewModel/HelpViewModel.dart';
 
@@ -19,7 +17,7 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> {
   final HelpViewModel viewModel = HelpViewModel();
 
-  int _selectedTile = -1;
+  final int _selectedTile = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +59,9 @@ class _HelpScreenState extends State<HelpScreen> {
                 const SizedBox(
                   height: 2 * defaultPadding,
                 ),
-                Text(
+                const Text(
                   "Perguntas frequentes",
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: textBlack,
                     fontSize: 22,
                     fontWeight: FontWeight.w300,
@@ -81,7 +79,7 @@ class _HelpScreenState extends State<HelpScreen> {
                         ExpansionTile(
                           title: Text(
                             viewModel.faqItems[index].question,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: textBlack,
                             ),
@@ -90,14 +88,14 @@ class _HelpScreenState extends State<HelpScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(defaultBorderRadius)),
-                          childrenPadding: EdgeInsets.all(defaultPadding),
+                          childrenPadding: const EdgeInsets.all(defaultPadding),
                           children: [
                             ListTile(
                               title: Text(viewModel.faqItems[index].answer),
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: defaultPadding,
                         )
                       ],

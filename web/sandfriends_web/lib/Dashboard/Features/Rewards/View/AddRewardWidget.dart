@@ -16,7 +16,7 @@ Widget AddRewardWidget(BuildContext context) {
         return Container(
           height: 300,
           width: 500,
-          padding: EdgeInsets.all(defaultPadding),
+          padding: const EdgeInsets.all(defaultPadding),
           decoration: BoxDecoration(
             color: secondaryPaper,
             borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -34,17 +34,17 @@ Widget AddRewardWidget(BuildContext context) {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "Adicione uma nova recompensa",
-                          style: const TextStyle(color: textBlue, fontSize: 24),
+                          style: TextStyle(color: textBlue, fontSize: 24),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: defaultPadding / 2,
                         ),
                         Text(
                           "Digite o código do jogador para validar a recompensa",
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: textDarkGrey, fontSize: 16),
                         ),
                       ],
@@ -53,7 +53,9 @@ Widget AddRewardWidget(BuildContext context) {
                         labelText: "",
                         pourpose: TextFieldPourpose.Standard,
                         controller: viewModel.addRewardController,
-                        validator: ((value) {})),
+                        validator: ((value) {
+                          return null;
+                        })),
                     Row(
                       children: [
                         Expanded(

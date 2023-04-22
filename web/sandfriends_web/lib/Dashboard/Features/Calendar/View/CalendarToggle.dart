@@ -7,7 +7,7 @@ class CalendarToggle extends StatefulWidget {
   CalendarType selectedIndex;
   Function(CalendarType) onChanged;
 
-  CalendarToggle(this.selectedIndex, this.onChanged);
+  CalendarToggle(this.selectedIndex, this.onChanged, {super.key});
   @override
   State<CalendarToggle> createState() => _CalendarToggleState();
 }

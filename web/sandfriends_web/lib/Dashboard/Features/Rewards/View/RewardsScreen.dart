@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTable.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTableHeader.dart';
-import 'package:sandfriends_web/Utils/PageStatus.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFCard.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
 import '../../../../SharedComponents/View/SFToggle.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
-import '../Model/Reward.dart';
-import '../Model/RewardDataSource.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -76,7 +70,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 height: height * 0.02,
               ),
               SFToggle(
-                ["Hoje", "Esse mês", "Histórico"],
+                const ["Hoje", "Esse mês", "Histórico"],
                 viewModel.selectedFilterIndex,
                 (value) {
                   viewModel.selectedFilterIndex = value;
@@ -87,10 +81,10 @@ class _RewardsScreenState extends State<RewardsScreen> {
               ),
               Container(
                 height: 60,
-                constraints: BoxConstraints(minHeight: 60),
+                constraints: const BoxConstraints(minHeight: 60),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       "Recompensas recolhidas:",
                       style: TextStyle(color: textDarkGrey),
                     ),
@@ -100,7 +94,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     Text(
                       "${viewModel.rewardsCounter}",
                       textScaleFactor: 1.5,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: textBlue, fontWeight: FontWeight.bold),
                     )
                   ],
@@ -117,7 +111,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                         constraints.maxHeight < remainingHeight
                             ? constraints.maxHeight
                             : remainingHeight;
-                    return Container(
+                    return SizedBox(
                       height: widgetHeight,
                       child: Row(
                         children: [
@@ -132,7 +126,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             ],
                             source: viewModel.rewardsDataSource!,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: defaultPadding,
                           ),
                           Column(
@@ -145,7 +139,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   pieChartItems: viewModel.pieChartItems,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: defaultPadding,
                               ),
                               SFCard(

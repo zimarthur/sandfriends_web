@@ -6,7 +6,7 @@ class SFTabs extends StatefulWidget {
   Function(int) onTap;
   int selectedPosition;
 
-  SFTabs({
+  SFTabs({super.key, 
     required this.tabs,
     required this.onTap,
     required this.selectedPosition,

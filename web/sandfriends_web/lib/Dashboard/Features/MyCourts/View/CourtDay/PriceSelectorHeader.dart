@@ -4,7 +4,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 class PriceSelectorHeader extends StatelessWidget {
   bool allowRecurrent;
 
-  PriceSelectorHeader({
+  PriceSelectorHeader({super.key, 
     required this.allowRecurrent,
   });
 
@@ -13,7 +13,7 @@ class PriceSelectorHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        const Expanded(
           flex: 3,
           child: Text(
             "Intervalo",
@@ -21,7 +21,7 @@ class PriceSelectorHeader extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        Expanded(
+        const Expanded(
           flex: 2,
           child: Text(
             "Avulso",
@@ -32,7 +32,7 @@ class PriceSelectorHeader extends StatelessWidget {
         Expanded(
           flex: 2,
           child: allowRecurrent
-              ? Text(
+              ? const Text(
                   "Mensalista",
                   style: TextStyle(color: textLightGrey),
                   textAlign: TextAlign.center,

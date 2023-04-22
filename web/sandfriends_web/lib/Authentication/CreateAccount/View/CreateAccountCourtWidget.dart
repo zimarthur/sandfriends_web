@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 import '../../../SharedComponents/View/SFTextfield.dart';
-import '../../Login/ViewModel/LoginViewModel.dart';
 
 class CreateAccountCourtWidget extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountCourtWidget({
+  CreateAccountCourtWidget({super.key, 
     required this.viewModel,
   });
 
@@ -50,7 +48,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                           labelText: "CPF",
                           pourpose: TextFieldPourpose.Numeric,
                           controller: widget.viewModel.cpfController,
-                          validator: (_) {})
+                          validator: (_) {
+                            return null;
+                          })
                       : Row(
                           children: [
                             Expanded(
@@ -59,7 +59,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                                 labelText: "CNPJ",
                                 pourpose: TextFieldPourpose.Numeric,
                                 controller: widget.viewModel.cnpjController,
-                                validator: (_) {},
+                                validator: (_) {
+                                  return null;
+                                },
                               ),
                             ),
                             const SizedBox(
@@ -109,7 +111,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Nome do Estabelecimento",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.storeNameController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -121,7 +125,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "CEP",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.cepController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -136,7 +142,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Estado(UF)",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.stateController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -148,7 +156,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Cidade",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.cityController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -160,7 +170,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Bairro",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.neighbourhoodController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -176,7 +188,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Rua",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.addressController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -188,7 +202,9 @@ class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
                       labelText: "Nº",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.addressNumberController,
-                      validator: (_) {},
+                      validator: (_) {
+                        return null;
+                      },
                     ),
                   ),
                 ],

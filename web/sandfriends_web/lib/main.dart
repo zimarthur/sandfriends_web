@@ -7,12 +7,9 @@ import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Authentication/Login/View/LoginScreen.dart';
-import 'package:sandfriends_web/Authentication/Login/View/NewPasswordScreen.dart';
-import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Terms/PrivacyScreen.dart';
 import 'package:sandfriends_web/Terms/TermsScreen.dart';
 import 'Authentication/CreateAccountEmployee/View/CreateAccountEmployeeScreen.dart';
-import 'Dashboard/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -39,13 +36,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('pt', 'BR'),
-          const Locale('en'),
+        supportedLocales: const [
+          Locale('pt', 'BR'),
+          Locale('en'),
         ],
         locale: const Locale('pt', 'BR'),
         debugShowCheckedModeBanner: false,

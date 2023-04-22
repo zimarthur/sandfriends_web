@@ -1,11 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:extended_masked_text/extended_masked_text.dart';
-import 'package:flutter/services.dart';
-import 'dart:io';
-import 'package:image/image.dart' as IMG;
-import 'package:image_picker/image_picker.dart';
-import '../../../../Utils/SFImage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
 import '../Model/Faq.dart';
@@ -34,6 +27,6 @@ class HelpViewModel extends ChangeNotifier {
   }
 
   void returnMainView(BuildContext context) {
-    Provider.of<DashboardViewModel>(context, listen: false).setModalSuccess();
+    Provider.of<DashboardViewModel>(context, listen: false).closeModal();
   }
 }

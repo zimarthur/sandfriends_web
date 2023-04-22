@@ -1,9 +1,6 @@
-import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Match.dart';
-import 'package:provider/provider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -23,7 +20,7 @@ class FinancesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Match> _matches = [
+  final List<Match> _matches = [
     Match(
       idMatch: 1,
       date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
@@ -221,7 +218,7 @@ class FinancesViewModel extends ChangeNotifier {
   /////////// PIE CHART ////////////////////////////////////
   List<PieChartItem> get pieChartItems {
     List<PieChartItem> items = [];
-    Map<String, int> nameCount = LinkedHashMap<String, int>();
+    Map<String, int> nameCount = <String, int>{};
     nameCount["Mensalista"] = 0;
     nameCount["Avulso"] = 0;
     for (var match in matches) {
@@ -262,12 +259,11 @@ class FinancesViewModel extends ChangeNotifier {
       angle: -math.pi / 3,
       child: Text(
         selectedFilterIndex == 0
-            ? '${value}\n'
+            ? '$value\n'
             : selectedFilterIndex == 1
-                ? '${value}\n'
-                : getMonthYear(
-                        DateTime.parse(monthsOnChartData[value.toInt()])) +
-                    '\n',
+                ? '$value\n'
+                : '${getMonthYear(
+                        DateTime.parse(monthsOnChartData[value.toInt()]))}\n',
         style: const TextStyle(
           color: textDarkGrey,
         ),
@@ -291,8 +287,7 @@ class FinancesViewModel extends ChangeNotifier {
               ? '${group.x}:00\n'
               : selectedFilterIndex == 1
                   ? 'Dia ${group.x}\n'
-                  : getMonthYear(DateTime.parse(monthsOnChartData[group.x])) +
-                      '\n',
+                  : '${getMonthYear(DateTime.parse(monthsOnChartData[group.x]))}\n',
           const TextStyle(
             color: textWhite,
             fontWeight: FontWeight.bold,
@@ -301,7 +296,7 @@ class FinancesViewModel extends ChangeNotifier {
           children: <TextSpan>[
             TextSpan(
               text: "R\$ ${(rod.toY).toString()}",
-              style: TextStyle(
+              style: const TextStyle(
                 color: primaryLightBlue,
                 fontSize: 16,
               ),
@@ -343,7 +338,7 @@ class FinancesViewModel extends ChangeNotifier {
           for (var match in matches) {
             if (isSameDate(
                 match.date,
-                new DateTime(
+                DateTime(
                     DateTime.now().year, DateTime.now().month, dayIndex))) {
               revenue = revenue + match.cost;
             }

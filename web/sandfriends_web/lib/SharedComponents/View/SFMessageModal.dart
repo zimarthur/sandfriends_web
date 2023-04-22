@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'SFButton.dart';
@@ -11,7 +10,7 @@ class SFMessageModal extends StatefulWidget {
   String buttonText;
   bool isHappy;
 
-  SFMessageModal({
+  SFMessageModal({super.key, 
     required this.title,
     required this.description,
     required this.onTap,

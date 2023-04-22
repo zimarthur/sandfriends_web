@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/Login/View/LoginWidget.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
@@ -17,6 +16,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final viewModel = LoginViewModel();
+
+  @override
+  void initState() {
+    viewModel.validateToken(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: width,
                           child: Center(
                             child: viewModel.pageStatus == PageStatus.LOADING
-                                ? Container(
+                                ? SizedBox(
                                     height: 300,
                                     width: 300,
                                     child: SFLoading(size: 80),

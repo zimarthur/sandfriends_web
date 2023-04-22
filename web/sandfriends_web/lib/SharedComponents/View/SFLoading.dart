@@ -4,7 +4,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFLoading extends StatelessWidget {
   double size;
-  SFLoading({required this.size});
+  SFLoading({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {

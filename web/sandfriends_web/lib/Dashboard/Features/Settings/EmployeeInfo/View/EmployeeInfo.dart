@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
-import '../../../../SharedComponents/View/Table/SFTable.dart';
-import '../../../../SharedComponents/View/Table/SFTableHeader.dart';
-import '../ViewModel/SettingsViewModel.dart';
+import '../../../../../SharedComponents/View/Table/SFTable.dart';
+import '../../../../../SharedComponents/View/Table/SFTableHeader.dart';
+import '../../ViewModel/SettingsViewModel.dart';
 
 class EmployeeInfo extends StatefulWidget {
   SettingsViewModel viewModel;
 
-  EmployeeInfo({required this.viewModel});
+  EmployeeInfo({super.key, required this.viewModel});
 
   @override
   State<EmployeeInfo> createState() => _EmployeeInfoState();
@@ -18,7 +18,7 @@ class EmployeeInfo extends StatefulWidget {
 class _EmployeeInfoState extends State<EmployeeInfo> {
   @override
   void initState() {
-    widget.viewModel.setFinancesDataSource(context);
+    widget.viewModel.employeeInfoViewModel.setFinancesDataSource(context);
     super.initState();
   }
 
@@ -31,7 +31,7 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text(
                     "Adicione membros à sua equipe e edite seus níveis de permissão.",
                   ),
@@ -45,33 +45,50 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
             SFButton(
               buttonLabel: "Adic. funcionário",
               buttonType: ButtonType.Primary,
-              onTap: () {},
+              onTap: () {
+                widget.viewModel.employeeInfoViewModel.goToAddEmployee(
+                  context,
+                  widget.viewModel.employeeInfoViewModel,
+                );
+              },
               iconFirst: true,
               iconPath: r"assets/icon/plus.svg",
-              textPadding: EdgeInsets.symmetric(
+              iconSize: 14,
+              textPadding: const EdgeInsets.symmetric(
                 vertical: defaultPadding / 4,
                 horizontal: defaultPadding / 2,
               ),
             )
           ],
         ),
-        SFTable(
-          height: 500,
-          width: 700,
-          headers: [
-            SFTableHeader("name", "Nome"),
-            SFTableHeader("email", "Email"),
-            SFTableHeader("date", "Membro desde"),
-            SFTableHeader("admin", "Administrador?"),
-          ],
-          source: widget.viewModel.employeesDataSource!,
+        const SizedBox(
+          height: 2 * defaultPadding,
         ),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (layoutContext, layoutConstraints) {
+              return SFTable(
+                height: layoutConstraints.maxHeight,
+                width: layoutConstraints.maxWidth,
+                headers: [
+                  SFTableHeader("name", "Nome"),
+                  SFTableHeader("email", "Email"),
+                  SFTableHeader("date", "Membro desde"),
+                  SFTableHeader("admin", "Acesso"),
+                  SFTableHeader("action", ""),
+                ],
+                source:
+                    widget.viewModel.employeeInfoViewModel.employeesDataSource!,
+              );
+            },
+          ),
+        )
       ],
     );
   }

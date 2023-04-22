@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountCourtWidget.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountOwnerWidget.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
-import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 
 class CreateAccountWidget extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountWidget({
+  CreateAccountWidget({super.key, 
     required this.viewModel,
   });
 
@@ -69,7 +67,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               ),
             ],
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: defaultPadding / 2),
             child: Text(
               "ou",
@@ -82,7 +80,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
             onTap: () {
               widget.viewModel.goToCreateAccountEmployee(context);
             },
-            child: Text(
+            child: const Text(
               "Crie uma conta funcionário",
               style: TextStyle(
                   color: textBlue, decoration: TextDecoration.underline),

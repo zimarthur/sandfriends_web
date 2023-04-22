@@ -2,7 +2,6 @@ import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/PriceRule.dart';
 
-import 'Sport.dart';
 
 class Court {
   int? idStoreCourt;

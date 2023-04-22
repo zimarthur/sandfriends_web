@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ResumedInfoRowHeader extends StatelessWidget {
   const ResumedInfoRowHeader({super.key});
@@ -11,7 +10,7 @@ class ResumedInfoRowHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
       child: Row(
         children: [
-          Expanded(
+          const Expanded(
             flex: 1,
             child: Text(
               "Dia",
@@ -19,7 +18,7 @@ class ResumedInfoRowHeader extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Expanded(
+          const Expanded(
             flex: 1,
             child: Text(
               "Horário",
@@ -27,7 +26,7 @@ class ResumedInfoRowHeader extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Expanded(
+          const Expanded(
             flex: 1,
             child: Text(
               "Aceita\nMensalista?",
@@ -39,16 +38,16 @@ class ResumedInfoRowHeader extends StatelessWidget {
             flex: 1,
             child: RichText(
               textAlign: TextAlign.center,
-              text: TextSpan(
+              text: const TextSpan(
                 text: 'Preço avulso\n',
-                style: const TextStyle(
+                style: TextStyle(
                   color: textLightGrey,
                   fontFamily: 'Lexend',
                 ),
                 children: <TextSpan>[
                   TextSpan(
                     text: 'Preço Mensalista',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: textBlue,
                       fontFamily: 'Lexend',
                       //fontWeight: FontWeight.w200,
@@ -58,7 +57,7 @@ class ResumedInfoRowHeader extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: (2 * defaultPadding) + 20,
           ),
         ],

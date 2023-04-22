@@ -6,7 +6,7 @@ class SFToggle extends StatefulWidget {
   int selectedIndex = 0;
   Function(int) onChanged;
 
-  SFToggle(this.labels, this.selectedIndex, this.onChanged);
+  SFToggle(this.labels, this.selectedIndex, this.onChanged, {super.key});
   @override
   State<SFToggle> createState() => _SFToggleState();
 }
@@ -42,12 +42,12 @@ class _SFToggleState extends State<SFToggle> {
                   padding: const EdgeInsets.all(defaultPadding / 2),
                   decoration: BoxDecoration(
                     borderRadius: labelIndex == 0
-                        ? BorderRadius.only(
+                        ? const BorderRadius.only(
                             bottomLeft: Radius.circular(defaultBorderRadius),
                             topLeft: Radius.circular(defaultBorderRadius),
                           )
                         : labelIndex == widget.labels.length - 1
-                            ? BorderRadius.only(
+                            ? const BorderRadius.only(
                                 bottomRight:
                                     Radius.circular(defaultBorderRadius),
                                 topRight: Radius.circular(defaultBorderRadius),
@@ -64,7 +64,7 @@ class _SFToggleState extends State<SFToggle> {
                   alignment: Alignment.center,
                   child: Text(
                     widget.labels[labelIndex],
-                    style: TextStyle(color: textDarkGrey),
+                    style: const TextStyle(color: textDarkGrey),
                   ),
                 ),
               ),

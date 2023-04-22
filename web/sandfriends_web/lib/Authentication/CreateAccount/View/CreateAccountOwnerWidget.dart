@@ -1,15 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
 
 import '../../../SharedComponents/View/SFTextfield.dart';
-import '../../Login/ViewModel/LoginViewModel.dart';
 import '../ViewModel/CreateAccountViewModel.dart';
 
 class CreateAccountOwnerWidget extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountOwnerWidget({
+  CreateAccountOwnerWidget({super.key, 
     required this.viewModel,
   });
 
@@ -43,7 +41,9 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       labelText: "Nome",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.ownerNameController,
-                      validator: (_) {}),
+                      validator: (_) {
+                        return null;
+                      }),
                   const SizedBox(
                     height: defaultPadding,
                   ),
@@ -51,7 +51,9 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                       labelText: "Email",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.emailController,
-                      validator: (_) {}),
+                      validator: (_) {
+                        return null;
+                      }),
                   const SizedBox(
                     height: defaultPadding,
                   ),
@@ -62,7 +64,9 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                 labelText: "CPF",
                                 pourpose: TextFieldPourpose.Standard,
                                 controller: widget.viewModel.cpfController,
-                                validator: (_) {}),
+                                validator: (_) {
+                                  return null;
+                                }),
                             const SizedBox(
                               height: defaultPadding,
                             ),
@@ -76,7 +80,9 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           labelText: "Telefone da Quadra",
                           pourpose: TextFieldPourpose.Numeric,
                           controller: widget.viewModel.telephoneController,
-                          validator: (_) {},
+                          validator: (_) {
+                            return null;
+                          },
                         ),
                       ),
                       const SizedBox(
@@ -87,7 +93,9 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           labelText: "Telefone Pessoal",
                           pourpose: TextFieldPourpose.Numeric,
                           controller: widget.viewModel.telephoneOwnerController,
-                          validator: (_) {},
+                          validator: (_) {
+                            return null;
+                          },
                         ),
                       ),
                     ],

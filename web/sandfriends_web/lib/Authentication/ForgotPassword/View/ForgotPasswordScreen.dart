@@ -46,7 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           width: width,
                           child: Center(
                             child: viewModel.pageStatus == PageStatus.LOADING
-                                ? Container(
+                                ? SizedBox(
                                     height: 300,
                                     width: 300,
                                     child: SFLoading(size: 80),

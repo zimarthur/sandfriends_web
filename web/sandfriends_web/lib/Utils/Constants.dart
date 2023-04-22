@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../SharedComponents/Model/Hour.dart';
 
 const primaryBlue = Color.fromRGBO(48, 95, 230, 1);
 const primaryLightBlue = Color.fromRGBO(24, 190, 203, 1);

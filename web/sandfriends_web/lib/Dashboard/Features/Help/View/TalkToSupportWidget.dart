@@ -20,7 +20,7 @@ class TalkToSupportWidget extends StatelessWidget {
           return Container(
             height: 300,
             width: 500,
-            padding: EdgeInsets.all(defaultPadding),
+            padding: const EdgeInsets.all(defaultPadding),
             decoration: BoxDecoration(
               color: secondaryPaper,
               borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -35,7 +35,7 @@ class TalkToSupportWidget extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Text(
                       "Fale com a nossa equipe.",
                       style:
@@ -61,10 +61,10 @@ class TalkToSupportWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: defaultPadding,
                     ),
-                    Text(
+                    const Text(
                       "contato@sandfriends.com.br",
                       style: TextStyle(color: textBlue),
                     )
@@ -84,10 +84,10 @@ class TalkToSupportWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: defaultPadding,
                     ),
-                    Text(
+                    const Text(
                       "(51) 99999-9999",
                       style: TextStyle(color: green),
                     )

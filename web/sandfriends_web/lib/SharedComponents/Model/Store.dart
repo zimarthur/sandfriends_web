@@ -1,8 +1,8 @@
 import 'City.dart';
 import 'Court.dart';
-import 'Hour.dart';
 import 'HourPrice.dart';
 import 'StorePhoto.dart';
+import 'package:intl/intl.dart';
 
 class Store {
   int idStore;
@@ -22,6 +22,7 @@ class Store {
   String neighbourhood;
   int? hoursBeforeCancellation;
   City city;
+  DateTime approvalDate;
 
   List<Court> courts = [];
   List<StorePhoto> photos = [];
@@ -45,29 +46,31 @@ class Store {
     required this.ownerName,
     required this.neighbourhood,
     required this.city,
+    required this.approvalDate,
   });
 
   factory Store.fromJson(Map<String, dynamic> parsedJson) {
     return Store(
-      idStore: parsedJson["IdStore"],
-      name: parsedJson["Name"],
-      address: parsedJson["Address"],
-      addressNumber: parsedJson["AddressNumber"],
-      email: parsedJson["Email"],
-      phoneNumber: parsedJson["PhoneNumber1"],
-      ownerPhoneNumber: parsedJson["PhoneNumber2"],
-      logo: parsedJson["Logo"],
-      description: parsedJson["Description"],
-      instagram: parsedJson["Instagram"],
-      cnpj: parsedJson["Cnpj"],
-      cep: parsedJson["Cep"],
-      neighbourhood: parsedJson["Neighbourhood"],
-      cpf: parsedJson["Cpf"],
-      ownerName: parsedJson["OwnerName"],
-      hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
-      city: City.fromJson(
-        parsedJson["City"],
-      ),
-    );
+        idStore: parsedJson["IdStore"],
+        name: parsedJson["Name"],
+        address: parsedJson["Address"],
+        addressNumber: parsedJson["AddressNumber"],
+        email: parsedJson["Email"],
+        phoneNumber: parsedJson["PhoneNumber1"],
+        ownerPhoneNumber: parsedJson["PhoneNumber2"],
+        logo: parsedJson["Logo"],
+        description: parsedJson["Description"],
+        instagram: parsedJson["Instagram"],
+        cnpj: parsedJson["Cnpj"],
+        cep: parsedJson["Cep"],
+        neighbourhood: parsedJson["Neighbourhood"],
+        cpf: parsedJson["Cpf"],
+        ownerName: parsedJson["OwnerName"],
+        hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
+        city: City.fromJson(
+          parsedJson["City"],
+        ),
+        approvalDate:
+            DateFormat("dd/MM/yyyy").parse(parsedJson["ApprovalDate"]));
   }
 }

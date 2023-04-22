@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/ForgotPassword/ViewModel/ForgotPasswordViewModel.dart';
 import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
@@ -28,7 +27,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
     LoginViewModel loginViewModel = LoginViewModel();
 
     return Container(
-      padding: EdgeInsets.all(2 * defaultPadding),
+      padding: const EdgeInsets.all(2 * defaultPadding),
       width: width * 0.3 < 350 ? 350 : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -51,21 +50,21 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                 height: 25,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2 * defaultPadding,
             ),
-            Text(
+            const Text(
               "Informe seu e-mail",
               style: TextStyle(color: textBlack, fontSize: 24),
             ),
-            SizedBox(
+            const SizedBox(
               height: defaultPadding / 2,
             ),
-            Text(
+            const Text(
               "Enviaremos um e-mail com um link para criar uma nova senha!",
               style: TextStyle(color: textDarkGrey, fontSize: 16),
             ),
-            SizedBox(
+            const SizedBox(
               height: defaultPadding * 2,
             ),
             SFTextField(
@@ -76,7 +75,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                 return emailValidator(value);
               }),
             ),
-            SizedBox(
+            const SizedBox(
               height: defaultPadding * 2,
             ),
             Padding(

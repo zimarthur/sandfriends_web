@@ -11,7 +11,7 @@ class HourWidget extends StatefulWidget {
   Function(bool) onChanged;
 
   HourWidget(this.hourIndex, this.columnIndex, this.hoveredHour,
-      this.hoveredColumn, this.height, this.width, this.onChanged);
+      this.hoveredColumn, this.height, this.width, this.onChanged, {super.key});
   @override
   State<HourWidget> createState() => _HourWidgetState();
 }

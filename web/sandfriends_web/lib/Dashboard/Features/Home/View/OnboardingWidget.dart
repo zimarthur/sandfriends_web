@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class OnboardingWidget extends StatelessWidget {
   HomeViewModel viewModel;
-  OnboardingWidget({
+  OnboardingWidget({super.key, 
     required this.viewModel,
   });
 
@@ -18,13 +18,13 @@ class OnboardingWidget extends StatelessWidget {
       return Container(
         height: 300,
         width: layoutConstraits.maxWidth,
-        padding: EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding),
         decoration: BoxDecoration(
           color: secondaryPaper,
           borderRadius: BorderRadius.circular(
             defaultBorderRadius,
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: divider,
               spreadRadius: 1,
@@ -44,10 +44,11 @@ class OnboardingWidget extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Seja bem-vindo ao sandfriends!",
                     style: TextStyle(
                       color: textBlue,
@@ -55,7 +56,7 @@ class OnboardingWidget extends StatelessWidget {
                       fontSize: 22,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Preencha as informações essenciais do seu estabelecimento para começar para começar a receber agendamentos.",
                     style: TextStyle(
                       color: textDarkGrey,
@@ -134,7 +135,6 @@ class OnboardingWidget extends StatelessWidget {
                   )),
                 ],
               ),
-              flex: 2,
             ),
           ],
         ),

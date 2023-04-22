@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
-import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
-import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
-import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
@@ -16,7 +12,7 @@ import 'HourSelector.dart';
 class WorkingHoursWidget extends StatefulWidget {
   MyCourtsViewModel viewModel;
 
-  WorkingHoursWidget({
+  WorkingHoursWidget({super.key, 
     required this.viewModel,
   });
 
@@ -71,7 +67,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
     return Container(
       height: height * 0.8,
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -86,7 +82,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Text(
                 "Horário de funcionamento.",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
@@ -99,7 +95,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(defaultPadding),
+              padding: const EdgeInsets.all(defaultPadding),
               child: CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
@@ -134,7 +130,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

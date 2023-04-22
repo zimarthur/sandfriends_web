@@ -9,7 +9,7 @@ class FinanceKpi extends StatelessWidget {
   Color iconColor;
   Color iconColorBackground;
 
-  FinanceKpi({
+  FinanceKpi({super.key, 
     required this.title,
     required this.value,
     required this.iconPath,
@@ -20,7 +20,7 @@ class FinanceKpi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(defaultBorderRadius),
         border: Border.all(
@@ -32,7 +32,7 @@ class FinanceKpi extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(
+            padding: const EdgeInsets.all(
               defaultPadding,
             ),
             decoration: BoxDecoration(
@@ -52,14 +52,14 @@ class FinanceKpi extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(color: textDarkGrey, fontSize: 12),
+                style: const TextStyle(color: textDarkGrey, fontSize: 12),
               ),
-              SizedBox(
+              const SizedBox(
                 height: defaultPadding / 2,
               ),
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),

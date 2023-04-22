@@ -10,7 +10,7 @@ class HourSelector extends StatefulWidget {
   OperationDay operationDay;
   List<Hour> availableHours;
 
-  HourSelector({
+  HourSelector({super.key, 
     required this.operationDay,
     required this.availableHours,
   });
@@ -32,7 +32,7 @@ class _HourSelectorState extends State<HourSelector> {
                   widget.operationDay.isEnabled = value!;
                 });
               }),
-          SizedBox(
+          const SizedBox(
             width: defaultPadding,
           ),
           Expanded(
@@ -62,7 +62,9 @@ class _HourSelectorState extends State<HourSelector> {
                                   widget.operationDay.endingHour.hour)
                               .map((hour) => hour.hourString)
                               .toList(),
-                      validator: (a) {},
+                      validator: (a) {
+                        return null;
+                      },
                       onChanged: (a) {
                         setState(() {
                           widget.operationDay.startingHour = widget
@@ -72,7 +74,7 @@ class _HourSelectorState extends State<HourSelector> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                       child: Text(
                         "até",
                         style: TextStyle(
@@ -97,7 +99,9 @@ class _HourSelectorState extends State<HourSelector> {
                                   widget.operationDay.startingHour.hour)
                               .map((hour) => hour.hourString)
                               .toList(),
-                      validator: (a) {},
+                      validator: (a) {
+                        return null;
+                      },
                       onChanged: (a) {
                         setState(() {
                           widget.operationDay.endingHour = widget.availableHours

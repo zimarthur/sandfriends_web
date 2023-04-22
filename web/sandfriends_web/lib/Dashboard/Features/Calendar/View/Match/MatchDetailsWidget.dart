@@ -8,12 +8,11 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../ViewModel/DashboardViewModel.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class MatchDetailsWidget extends StatelessWidget {
   CalendarViewModel viewModel;
 
-  MatchDetailsWidget({required this.viewModel});
+  MatchDetailsWidget({super.key, required this.viewModel});
   TextEditingController controller = TextEditingController();
   PaymentType paymentStatus = PaymentType.NeedsPayment;
 
@@ -27,7 +26,7 @@ class MatchDetailsWidget extends StatelessWidget {
     return Container(
       height: height * 0.9,
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -46,14 +45,14 @@ class MatchDetailsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Partida agendada",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                         color: textBlue),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2 * defaultPadding,
                   ),
                   MatchDetailsWidgetRow(
@@ -73,10 +72,10 @@ class MatchDetailsWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: defaultPadding,
                         ),
-                        Text(
+                        const Text(
                           "Arthur Zim",
                           style: TextStyle(fontSize: 14),
                         ),
@@ -87,9 +86,9 @@ class MatchDetailsWidget extends StatelessWidget {
                   MatchDetailsWidgetRow(
                       title: "Horário", value: "16:00 - 17:00"),
                   MatchDetailsWidgetRow(title: "Esporte", value: "Beach tenis"),
-                  Padding(
+                  const Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                        EdgeInsets.symmetric(vertical: defaultPadding),
                     child: SFDivider(),
                   ),
                   MatchDetailsWidgetRow(
@@ -100,14 +99,16 @@ class MatchDetailsWidget extends StatelessWidget {
                       minLines: 4,
                       maxLines: 4,
                       controller: controller,
-                      validator: (a) {},
+                      validator: (a) {
+                        return null;
+                      },
                       enable: false,
                     ),
                     fixedHeight: false,
                   ),
-                  Padding(
+                  const Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                        EdgeInsets.symmetric(vertical: defaultPadding),
                     child: SFDivider(),
                   ),
                   MatchDetailsWidgetRow(
@@ -115,7 +116,7 @@ class MatchDetailsWidget extends StatelessWidget {
                       customValue: Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: defaultPadding / 4,
                                 horizontal: defaultPadding / 2),
                             decoration: BoxDecoration(
@@ -158,7 +159,7 @@ class MatchDetailsWidget extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

@@ -5,7 +5,7 @@ class SFAvatar extends StatefulWidget {
   final double height;
   final String img;
 
-  const SFAvatar({required this.height, required this.img});
+  const SFAvatar({super.key, required this.height, required this.img});
 
   @override
   State<SFAvatar> createState() => _SFAvatarState();

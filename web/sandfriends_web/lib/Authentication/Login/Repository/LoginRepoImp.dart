@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:sandfriends_web/Authentication/CreateAccount/Model/CnpjStore.dart';
 import '../../../Remote/ApiEndPoints.dart';
 import '../../../Remote/BaseApiService.dart';
 import '../../../Remote/NetworkApiService.dart';
-import '../../CreateAccount/Model/CreateAccountStore.dart';
 import 'package:sandfriends_web/Authentication/Login/Repository/LoginRepo.dart';
 
 class LoginRepoImp implements LoginRepo {
@@ -19,6 +17,23 @@ class LoginRepoImp implements LoginRepo {
             <String, Object>{
               "Email": email,
               "Password": password,
+            },
+          ),
+          true,
+        )
+        .onError((error, stackTrace) => throw error!);
+    return response;
+  }
+
+  @override
+  Future validateLogin(String accessToken) async {
+    dynamic response = await _apiService
+        .postResponse(
+          _apiService.sandfriendsUrl,
+          ApiEndPoints().login,
+          jsonEncode(
+            <String, Object>{
+              "AccessToken": accessToken,
             },
           ),
           true,

@@ -7,7 +7,7 @@ class OnboardingCheckItem extends StatefulWidget {
   bool isChecked;
   VoidCallback onTap;
 
-  OnboardingCheckItem({
+  OnboardingCheckItem({super.key, 
     required this.title,
     required this.isChecked,
     required this.onTap,

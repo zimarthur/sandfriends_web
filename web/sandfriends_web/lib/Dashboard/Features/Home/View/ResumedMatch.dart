@@ -11,11 +11,11 @@ class ResumedMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 250,
-      margin: EdgeInsets.only(right: defaultPadding, bottom: 3),
+      margin: const EdgeInsets.only(right: defaultPadding, bottom: 3),
       decoration: BoxDecoration(
         color: primaryBlue,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: divider,
             spreadRadius: 1,
@@ -27,13 +27,13 @@ class ResumedMatch extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: defaultPadding / 2,
               vertical: defaultPadding / 4,
             ),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Text(
                     "Quadra 1",
                     style: TextStyle(
@@ -47,7 +47,7 @@ class ResumedMatch extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: defaultPadding / 2,
                 vertical: defaultPadding / 2,
               ),
@@ -58,7 +58,7 @@ class ResumedMatch extends StatelessWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text(
                     "Partida de Arthur",
                     style: TextStyle(

@@ -27,7 +27,7 @@ class FeedItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: defaultPadding,
                 ),
                 Expanded(
@@ -37,16 +37,16 @@ class FeedItem extends StatelessWidget {
                     children: [
                       RichText(
                         textAlign: TextAlign.center,
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Arthur agendou uma ',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: textDarkGrey,
                             fontFamily: 'Lexend',
                           ),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'nova partida',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: textBlue,
                                 fontFamily: 'Lexend',
                               ),
@@ -54,7 +54,7 @@ class FeedItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: defaultPadding / 2,
                       ),
                       Row(
@@ -63,26 +63,26 @@ class FeedItem extends StatelessWidget {
                             r"assets/icon/calendar.svg",
                             color: textDarkGrey,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: defaultPadding / 2,
                           ),
-                          Text(
+                          const Text(
                             "07/04/2023",
                             style: TextStyle(
                               color: textDarkGrey,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: defaultPadding * 2,
                           ),
                           SvgPicture.asset(
                             r"assets/icon/clock.svg",
                             color: textDarkGrey,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: defaultPadding / 2,
                           ),
-                          Text(
+                          const Text(
                             "11:00 - 12:00",
                             style: TextStyle(
                               color: textDarkGrey,
@@ -93,10 +93,10 @@ class FeedItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: defaultPadding,
                 ),
-                Text(
+                const Text(
                   "12/04/23\n14:28",
                   style: TextStyle(
                     color: textLightGrey,

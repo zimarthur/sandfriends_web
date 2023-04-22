@@ -38,6 +38,7 @@ class NetworkApiService extends BaseApiService {
       );
       return returnResponse(response, expectResponse);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

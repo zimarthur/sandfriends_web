@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../SharedComponents/View/SFButton.dart';
-import '../../../../../SharedComponents/View/SFDivider.dart';
-import '../../../../../SharedComponents/View/SFTextfield.dart';
 import '../../../../ViewModel/DashboardViewModel.dart';
 import '../../ViewModel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
 
-import 'MatchDetailsWidgetRow.dart';
 
 class NoMatchReservedWidget extends StatelessWidget {
   CalendarViewModel viewModel;
 
-  NoMatchReservedWidget({required this.viewModel});
+  NoMatchReservedWidget({super.key, required this.viewModel});
 
   TextEditingController controller = TextEditingController();
 
@@ -26,7 +23,7 @@ class NoMatchReservedWidget extends StatelessWidget {
     return Container(
       width: 500,
       height: height * 0.8,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -45,20 +42,20 @@ class NoMatchReservedWidget extends StatelessWidget {
                   r"assets/icon/sad_face.svg",
                   height: 100,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: defaultPadding,
                 ),
-                Text(
+                const Text(
                   "Nenhuma partida agendada",
                   style: TextStyle(
                     color: textBlue,
                     fontSize: 18,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: defaultPadding / 2,
                 ),
-                Text(
+                const Text(
                   "Aguarde um agendamento ou bloqueie o horário",
                   style: TextStyle(
                     color: textDarkGrey,
@@ -72,16 +69,16 @@ class NoMatchReservedWidget extends StatelessWidget {
                       height: 20,
                       color: textDarkGrey,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: defaultPadding / 2,
                     ),
-                    Text(
+                    const Text(
                       "07/04/2023",
                       style: TextStyle(
                         color: textDarkGrey,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: defaultPadding * 2,
                     ),
                     SvgPicture.asset(
@@ -89,10 +86,10 @@ class NoMatchReservedWidget extends StatelessWidget {
                       height: 20,
                       color: textDarkGrey,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: defaultPadding / 2,
                     ),
-                    Text(
+                    const Text(
                       "11:00 - 12:00",
                       style: TextStyle(
                         color: textDarkGrey,
@@ -103,7 +100,7 @@ class NoMatchReservedWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding / 2,
           ),
           Row(
@@ -117,7 +114,7 @@ class NoMatchReservedWidget extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

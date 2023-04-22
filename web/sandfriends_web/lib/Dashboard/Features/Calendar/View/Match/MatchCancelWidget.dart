@@ -9,7 +9,7 @@ import '../../ViewModel/CalendarViewModel.dart';
 class MatchCancelWidget extends StatelessWidget {
   CalendarViewModel viewModel;
 
-  MatchCancelWidget({required this.viewModel});
+  MatchCancelWidget({super.key, required this.viewModel});
 
   TextEditingController controller = TextEditingController();
 
@@ -21,7 +21,7 @@ class MatchCancelWidget extends StatelessWidget {
         Provider.of<DashboardViewModel>(context).getDashboardHeigth(context);
     return Container(
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -33,7 +33,7 @@ class MatchCancelWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             "Deseja mesmo cancelar a partida de Arthur?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class MatchCancelWidget extends StatelessWidget {
               color: textBlue,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding * 2,
           ),
           SFTextField(
@@ -51,9 +51,11 @@ class MatchCancelWidget extends StatelessWidget {
             maxLines: 4,
             hintText: "Escreva o motivo do cancelamento",
             controller: controller,
-            validator: (a) {},
+            validator: (a) {
+              return null;
+            },
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding,
           ),
           Row(
@@ -67,7 +69,7 @@ class MatchCancelWidget extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

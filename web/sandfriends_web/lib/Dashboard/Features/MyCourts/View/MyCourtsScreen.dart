@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Dashboard/Features/Calendar/View/Calendar/SFCalendarWeek.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/CourtDay.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/ResumedInfoRowHeader.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/MyCourtsTabSelector.dart';
@@ -8,16 +7,14 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFHeader.dart';
-import '../../../../SharedComponents/View/SFTabs.dart';
 import '../../../ViewModel/DashboardViewModel.dart';
-import 'dart:io';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../ViewModel/DataProvider.dart';
 import 'CourtInfo.dart';
 
 class MyCourtsScreen extends StatefulWidget {
   bool? showWorkingHours;
-  MyCourtsScreen({this.showWorkingHours = false});
+  MyCourtsScreen({super.key, this.showWorkingHours = false});
 
   @override
   State<MyCourtsScreen> createState() => _MyCourtsScreenState();
@@ -141,12 +138,12 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           ),
                           if (viewModel.courtInfoChanged)
                             Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: defaultPadding / 4),
                               child: SFButton(
                                 buttonLabel: "Salvar",
                                 buttonType: ButtonType.Primary,
-                                textPadding: EdgeInsets.symmetric(
+                                textPadding: const EdgeInsets.symmetric(
                                     horizontal: defaultPadding),
                                 onTap: () {},
                               ),
@@ -158,7 +155,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: divider,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(defaultBorderRadius),
@@ -166,9 +163,9 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       ),
                     ),
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 2, left: 2, right: 2),
-                      padding: EdgeInsets.all(defaultPadding),
-                      decoration: BoxDecoration(
+                      margin: const EdgeInsets.only(bottom: 2, left: 2, right: 2),
+                      padding: const EdgeInsets.all(defaultPadding),
+                      decoration: const BoxDecoration(
                         color: secondaryPaper,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(defaultBorderRadius),
@@ -192,7 +189,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                   SizedBox(
                                     width: width * 0.5,
                                     child: Column(
-                                      children: [
+                                      children: const [
                                         Text(
                                           "Você ainda não registrou os horários de funcionamento de seu estabelecimento",
                                           style: TextStyle(
@@ -227,7 +224,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                     viewModel: viewModel,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: defaultPadding,
                                 ),
                                 Expanded(
@@ -245,10 +242,10 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                         children: [
                                           Container(
                                             height: myHeight,
-                                            padding: EdgeInsets.all(2),
-                                            margin: EdgeInsets.only(right: 50),
+                                            padding: const EdgeInsets.all(2),
+                                            margin: const EdgeInsets.only(right: 50),
                                             width: courtWeekdayWidth,
-                                            child: ResumedInfoRowHeader(),
+                                            child: const ResumedInfoRowHeader(),
                                           ),
                                           Expanded(
                                             child: ListView.builder(
@@ -264,7 +261,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                                           .currentCourt,
                                                     ),
                                                     if (index != 6)
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: defaultPadding,
                                                       )
                                                   ],

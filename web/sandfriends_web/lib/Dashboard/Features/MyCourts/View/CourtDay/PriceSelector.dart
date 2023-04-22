@@ -3,7 +3,6 @@ import 'package:sandfriends_web/Dashboard/Features/MyCourts/ViewModel/MyCourtsVi
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
-import '../../../../../SharedComponents/Model/HourPrice.dart';
 import '../../../../../SharedComponents/Model/PriceRule.dart';
 import '../../../../../SharedComponents/View/SFDropDown.dart';
 import '../../../../../SharedComponents/View/SFTextfield.dart';
@@ -16,7 +15,7 @@ class PriceSelector extends StatefulWidget {
   List<Hour> availableHours;
   int dayIndex;
 
-  PriceSelector({
+  PriceSelector({super.key, 
     required this.priceRule,
     this.editHour = false,
     required this.height,
@@ -69,7 +68,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                               )
                               .map((hour) => hour.hourString)
                               .toList(),
-                          validator: (a) {},
+                          validator: (a) {
+                            return null;
+                          },
                           onChanged: (newHour) {
                             setState(() {
                               Provider.of<MyCourtsViewModel>(context,
@@ -80,7 +81,7 @@ class _PriceSelectorState extends State<PriceSelector> {
                           },
                         ),
                       ),
-                      Text(
+                      const Text(
                         " - ",
                         style: TextStyle(color: textDarkGrey),
                       ),
@@ -98,7 +99,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                               )
                               .map((hour) => hour.hourString)
                               .toList(),
-                          validator: (a) {},
+                          validator: (a) {
+                            return null;
+                          },
                           onChanged: (newHour) {
                             setState(() {
                               Provider.of<MyCourtsViewModel>(context,
@@ -113,7 +116,7 @@ class _PriceSelectorState extends State<PriceSelector> {
                   )
                 : Text(
                     "${widget.priceRule.startingHour.hourString} - ${widget.priceRule.endingHour.hourString}",
-                    style: TextStyle(color: textDarkGrey),
+                    style: const TextStyle(color: textDarkGrey),
                     textAlign: TextAlign.center,
                   ),
           ),
@@ -129,7 +132,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                 labelText: "",
                 pourpose: TextFieldPourpose.Numeric,
                 controller: priceController,
-                validator: (value) {},
+                validator: (value) {
+                  return null;
+                },
                 onChanged: (newPrice) {
                   Provider.of<MyCourtsViewModel>(context, listen: false)
                       .priceChange(
@@ -151,7 +156,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                       labelText: "",
                       pourpose: TextFieldPourpose.Numeric,
                       controller: recurrentPriceController,
-                      validator: (value) {},
+                      validator: (value) {
+                        return null;
+                      },
                       onChanged: (newPrice) {
                         Provider.of<MyCourtsViewModel>(context, listen: false)
                             .priceChange(newPrice, widget.priceRule,

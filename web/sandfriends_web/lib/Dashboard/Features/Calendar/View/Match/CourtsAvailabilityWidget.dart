@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/View/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Dashboard/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
-import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
-import 'package:sandfriends_web/SharedComponents/View/Table/SFTable.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../ViewModel/DashboardViewModel.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CourtsAvailabilityWidget extends StatelessWidget {
   CalendarViewModel viewModel;
 
-  CourtsAvailabilityWidget({required this.viewModel});
+  CourtsAvailabilityWidget({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
     return Container(
       height: height * 0.9,
       width: 500,
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -43,14 +40,14 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Suas quadras para",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                         color: textBlue),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: defaultPadding,
                   ),
                   MatchDetailsWidgetRow(
@@ -63,9 +60,9 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                     value: "21:00 - 22:00",
                   ),
 
-                  Padding(
+                  const Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                        EdgeInsets.symmetric(vertical: defaultPadding),
                     child: SFDivider(),
                   ),
                   // Expanded(child: LayoutBuilder(
@@ -88,7 +85,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: defaultPadding,
               ),
               Expanded(

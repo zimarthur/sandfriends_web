@@ -6,7 +6,7 @@ class PriceSelectorRadio extends StatefulWidget {
   double height;
   Function(bool?) onChange;
 
-  PriceSelectorRadio({
+  PriceSelectorRadio({super.key, 
     required this.isPriceStandard,
     required this.height,
     required this.onChange,
@@ -30,10 +30,10 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
               onChanged: widget.onChange,
               activeColor: primaryBlue,
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
-            Text(
+            const Text(
               "Preço único",
               style: TextStyle(
                 color: textDarkGrey,
@@ -49,10 +49,10 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
               onChanged: widget.onChange,
               activeColor: primaryBlue,
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding,
             ),
-            Text(
+            const Text(
               "Personalizado",
               style: TextStyle(
                 color: textDarkGrey,

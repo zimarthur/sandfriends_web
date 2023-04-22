@@ -22,7 +22,7 @@ class FinancesDataSource extends DataGridSource {
                   value: "Quadra ${match.idStoreCOurt.toString()}"),
               DataGridCell<String>(
                   columnName: 'price', value: "R\$${match.cost}"),
-              DataGridCell<String>(columnName: 'player', value: "Arthur"),
+              const DataGridCell<String>(columnName: 'player', value: "Arthur"),
               DataGridCell<String>(
                 columnName: 'sport',
                 value: match.sport.description,
@@ -46,7 +46,7 @@ class FinancesDataSource extends DataGridSource {
           children: [
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                   horizontal: 10.0, vertical: defaultPadding),
               child: Flexible(
                 child: Text(

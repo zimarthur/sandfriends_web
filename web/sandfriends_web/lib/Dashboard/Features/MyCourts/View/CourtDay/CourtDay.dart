@@ -3,15 +3,10 @@ import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/PriceR
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/ResumedInfoRow.dart';
 import 'package:sandfriends_web/Dashboard/Features/MyCourts/View/CourtDay/PriceSelector.dart';
 import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
-import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
-import 'package:sandfriends_web/SharedComponents/Model/PriceRule.dart';
-import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
-import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
 import '../../../../../SharedComponents/Model/Court.dart';
 import '../../../../../SharedComponents/Model/HourPrice.dart';
@@ -25,7 +20,7 @@ class CourtDay extends StatefulWidget {
   int dayIndex;
   Court court;
 
-  CourtDay({
+  CourtDay({super.key, 
     required this.width,
     required this.height,
     required this.dayIndex,
@@ -64,7 +59,7 @@ class _CourtDayState extends State<CourtDay> {
             : customHeight - mainRowHeight - 2;
 
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       height: isExpanded
           ? Provider.of<MyCourtsViewModel>(context).isPriceStandard
               ? standardHeight + borderSize + arrowHeight
@@ -82,7 +77,7 @@ class _CourtDayState extends State<CourtDay> {
               children: [
                 Expanded(
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     height: isExpanded
                         ? Provider.of<MyCourtsViewModel>(context)
                                 .isPriceStandard
@@ -121,7 +116,7 @@ class _CourtDayState extends State<CourtDay> {
                                 }),
                           ),
                           AnimatedSize(
-                              duration: Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 200),
                               child: isExpanded
                                   ? Container(
                                       height: expandedHeight,
@@ -129,11 +124,11 @@ class _CourtDayState extends State<CourtDay> {
                                           horizontal: defaultPadding),
                                       child: Column(
                                         children: [
-                                          SFDivider(),
+                                          const SFDivider(),
                                           Container(
                                             alignment: Alignment.centerLeft,
                                             height: mainRowHeight,
-                                            child: Text(
+                                            child: const Text(
                                               "Regra de preço",
                                             ),
                                           ),
@@ -260,7 +255,7 @@ class _CourtDayState extends State<CourtDay> {
                                         ],
                                       ),
                                     )
-                                  : SizedBox()),
+                                  : const SizedBox()),
                         ],
                       ),
                     ),

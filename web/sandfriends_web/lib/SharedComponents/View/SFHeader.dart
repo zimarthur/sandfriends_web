@@ -5,7 +5,7 @@ class SFHeader extends StatelessWidget {
   final String header;
   final String description;
 
-  const SFHeader({required this.header, required this.description});
+  const SFHeader({super.key, required this.header, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SFHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: defaultPadding / 2,
           ),
           Text(

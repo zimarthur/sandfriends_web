@@ -13,7 +13,7 @@ class FormItem extends StatefulWidget {
   Widget? customWidget;
   final Function(String)? onChanged;
 
-  FormItem({
+  FormItem({super.key, 
     required this.name,
     required this.controller,
     required this.onChanged,
@@ -48,7 +48,9 @@ class _FormItemState extends State<FormItem> {
               controller: widget.controller,
               labelText: '',
               pourpose: TextFieldPourpose.Standard,
-              validator: (String? value) {},
+              validator: (String? value) {
+                return null;
+              },
               enable: widget.controllerEnabled,
               onChanged: widget.onChanged,
             ),
@@ -75,7 +77,9 @@ class _FormItemState extends State<FormItem> {
                                 controller: widget.secondController!,
                                 labelText: '',
                                 pourpose: TextFieldPourpose.Standard,
-                                validator: (a) {},
+                                validator: (a) {
+                                  return null;
+                                },
                                 onChanged: widget.onChanged,
                               ),
                             ),
