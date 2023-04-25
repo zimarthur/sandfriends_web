@@ -2,14 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountScreen.dart';
 import 'package:sandfriends_web/Authentication/ForgotPassword/View/ForgotPasswordScreen.dart';
-import 'package:sandfriends_web/Dashboard/Features/Rewards/ViewModel/RewardsViewModel.dart';
-import 'package:sandfriends_web/Dashboard/View/DashboardScreen.dart';
-import 'package:sandfriends_web/Dashboard/ViewModel/DashboardViewModel.dart';
-import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Rewards/ViewModel/RewardsViewModel.dart';
+import 'package:sandfriends_web/Menu/ViewModel/MenuProvider.dart';
+import 'package:sandfriends_web/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Authentication/Login/View/LoginScreen.dart';
 import 'package:sandfriends_web/Terms/PrivacyScreen.dart';
 import 'package:sandfriends_web/Terms/TermsScreen.dart';
 import 'Authentication/CreateAccountEmployee/View/CreateAccountEmployeeScreen.dart';
+import 'Menu/View/MenuScreen.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,10 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => DashboardViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => RewardsViewModel(),
+          create: (_) => MenuProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => DataProvider(),
@@ -68,7 +65,7 @@ class MyApp extends StatelessWidget {
               const CreateAccountEmployeeScreen(),
           '/forgot_password': (BuildContext context) =>
               const ForgotPasswordScreen(),
-          '/home': (BuildContext context) => const DashboardScreen(),
+          '/home': (BuildContext context) => const MenuScreen(),
           '/terms': (BuildContext context) => const TermsScreen(),
           '/privacy': (BuildContext context) => const PrivacyScreen(),
         },

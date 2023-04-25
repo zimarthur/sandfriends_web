@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sandfriends_web/Dashboard/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Authentication/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
