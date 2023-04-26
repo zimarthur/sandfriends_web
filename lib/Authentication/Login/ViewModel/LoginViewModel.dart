@@ -47,62 +47,56 @@ class LoginViewModel extends ChangeNotifier {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
 
-    _loginRepo
-        .login(userController.text, passwordController.text)
-        .then((response) {
-      setLoginResponse(context, response);
+    rootBundle.loadString(r'assets/fakeJson/login.json').then((value) {
+      setLoginResponse(context, json.decode(value));
       Navigator.pushNamed(context, '/home');
-    }).onError((error, stackTrace) {
-      modalTitle = error.toString();
-      modalDescription = "";
-      modalCallback = () {
-        pageStatus = PageStatus.SUCCESS;
-        notifyListeners();
-      };
-      pageStatus = PageStatus.ERROR;
-      notifyListeners();
     });
+
+    // _loginRepo
+    //     .login(userController.text, passwordController.text)
+    //     .then((response) {
+    //   rootBundle.loadString(r'assets/fakeJson/login.json').then((value) {
+    //     setLoginResponse(context, json.decode(value));
+    //   });
+
+    //   Navigator.pushNamed(context, '/home');
+    // }).onError((error, stackTrace) {
+    //   modalTitle = error.toString();
+    //   modalDescription = "";
+    //   modalCallback = () {
+    //     pageStatus = PageStatus.SUCCESS;
+    //     notifyListeners();
+    //   };
+    //   pageStatus = PageStatus.ERROR;
+    //   notifyListeners();
+    // });
   }
 
   void setLoginResponse(BuildContext context, Map<String, dynamic> response) {
-    //setLoggedEmail(context, response);
-    //setEmployees(context, response);
+    setLoggedUser(context, response);
+    setAccessToken(context, response);
+    setEmployees(context, response);
     setSports(context, response);
     setAvailableHours(context, response);
     setStore(context, response);
     setCourts(context, response);
+  }
 
-    rootBundle.loadString(r'assets/fakeJson/loggedEmail.json').then((value) {
-      setLoggedEmail(context, json.decode(value));
-    });
-    rootBundle.loadString(r'assets/fakeJson/employee.json').then((value) {
-      setEmployees(context, json.decode(value));
-    });
-
+  void setAccessToken(BuildContext context, Map<String, dynamic> responseBody) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setString("AccessToken", response['AccessToken']);
+      prefs.setString("AccessToken", responseBody['AccessToken']);
     });
   }
 
-  void setLoggedEmail(BuildContext context, Map<String, dynamic> responseBody) {
+  void setLoggedUser(BuildContext context, Map<String, dynamic> responseBody) {
     Provider.of<DataProvider>(context, listen: false).loggedEmail =
-        responseBody["LoggedEmail"];
+        responseBody["LoggedIdEmployee"];
   }
 
   void setEmployees(BuildContext context, Map<String, dynamic> responseBody) {
-    final store = Provider.of<DataProvider>(context, listen: false).store!;
     final loggedEmail =
         Provider.of<DataProvider>(context, listen: false).loggedEmail;
-    Provider.of<DataProvider>(context, listen: false).employees.add(
-          Employee(
-            firstName: store.ownerName,
-            lastName: "",
-            email: store.email,
-            admin: true,
-            registrationDate: store.approvalDate,
-            isCourtOwner: true,
-          ),
-        );
+
     for (var employee in responseBody['Employees']) {
       Provider.of<DataProvider>(context, listen: false)
           .employees
@@ -111,7 +105,7 @@ class LoginViewModel extends ChangeNotifier {
     Provider.of<DataProvider>(context, listen: false)
         .employees
         .firstWhere(
-          (employee) => employee.email == loggedEmail,
+          (employee) => employee.idEmployee == loggedEmail,
         )
         .isLoggedUser = true;
   }
@@ -156,15 +150,16 @@ class LoginViewModel extends ChangeNotifier {
         newCourt.prices.add(HourPrice(
           startingHour: Provider.of<DataProvider>(context, listen: false)
               .availableHours
-              .firstWhere(
-                  (hour) => hour.hour == courtPrices["IdAvailableHour"]),
-          weekday: courtPrices["Day"],
+              .firstWhere((hour) =>
+                  hour.hour == courtPrices["Hour"]["IdAvailableHour"]),
+          weekday: courtPrices["Weekday"],
           allowReccurrent: courtPrices["AllowRecurrent"],
           price: courtPrices["Price"],
           recurrentPrice: courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
           endingHour: Provider.of<DataProvider>(context, listen: false)
               .availableHours
-              .firstWhere((hour) => hour.hour > courtPrices["IdAvailableHour"]),
+              .firstWhere(
+                  (hour) => hour.hour > courtPrices["Hour"]["IdAvailableHour"]),
         ));
       }
 

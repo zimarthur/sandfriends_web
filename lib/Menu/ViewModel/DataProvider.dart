@@ -47,5 +47,5 @@ class DataProvider extends ChangeNotifier {
     return employees.firstWhere((employee) => employee.isLoggedUser);
   }
 
-  String loggedEmail = "";
+  int loggedEmail = -1;
 }

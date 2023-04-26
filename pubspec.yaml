@@ -119,13 +119,7 @@ flutter:
     - assets/people/onboarding.svg
 
 
-    - assets/fakeJson/store.json
-    - assets/fakeJson/court.json
-    - assets/fakeJson/sport.json
-    - assets/fakeJson/availableHours.json
-    - assets/fakeJson/employee.json
-    - assets/fakeJson/loggedEmail.json
-
+    - assets/fakeJson/login.json
 
     
     - assets/Arthur.jpg
