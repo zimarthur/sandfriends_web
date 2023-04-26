@@ -16,6 +16,8 @@ class CalendarViewModel extends ChangeNotifier {
     setWorkingHours(
         Provider.of<DataProvider>(context, listen: false).operationDays,
         Provider.of<DataProvider>(context, listen: false).availableHours);
+    operationDays =
+        Provider.of<DataProvider>(context, listen: false).operationDays;
   }
 
   CalendarType _calendarView = CalendarType.Weekly;
@@ -54,6 +56,8 @@ class CalendarViewModel extends ChangeNotifier {
     }
     return days;
   }
+
+  List<OperationDay> operationDays = [];
 
   List<Hour> _workingHours = [];
   List<Hour> get workingHours => _workingHours;

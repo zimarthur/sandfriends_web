@@ -174,7 +174,9 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                           child: Container(
                                             alignment: Alignment.center,
                                             height: tableLineHeight,
-                                            child: HourWidget(
+                                            child:
+                                                //hour.hour < widget.viewModel.operationDays.firstWhere((opDay) => opDay.weekDay == dayIndex,)
+                                                HourWidget(
                                               hour.hour,
                                               dayIndex,
                                               hoveredHour,
