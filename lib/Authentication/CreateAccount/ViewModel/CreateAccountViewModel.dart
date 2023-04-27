@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/Repository/CreateAccountRepo.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFMessageModal.dart';
 import '../../../Utils/PageStatus.dart';
 import '../Model/CnpjStore.dart';
 import '../Model/CreateAccountStore.dart';
@@ -9,9 +10,12 @@ class CreateAccountViewModel extends ChangeNotifier {
   final _createAccountRepo = CreateAccountRepo();
 
   PageStatus pageStatus = PageStatus.OK;
-  String modalTitle = "";
-  String modalDescription = "";
-  VoidCallback modalCallback = () {};
+  SFMessageModal messageModal = SFMessageModal(
+    title: "",
+    description: "",
+    onTap: () {},
+    isHappy: true,
+  );
 
   void goToCreateAccountEmployee(BuildContext context) {
     Navigator.pushNamed(context, '/create_account_employee');
@@ -38,12 +42,15 @@ class CreateAccountViewModel extends ChangeNotifier {
     }
 
     if (missingfields.isNotEmpty) {
-      modalTitle = "Para posseguir, preencha:";
-      modalDescription = missingfields;
-      modalCallback = () {
-        pageStatus = PageStatus.OK;
-        notifyListeners();
-      };
+      messageModal = SFMessageModal(
+        title: "Para posseguir, preencha:",
+        description: missingfields,
+        onTap: () {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        },
+        isHappy: false,
+      );
       pageStatus = PageStatus.ERROR;
       notifyListeners();
       return;
@@ -71,7 +78,8 @@ class CreateAccountViewModel extends ChangeNotifier {
   TextEditingController addressNumberController = TextEditingController();
   bool noCnpj = false;
 
-  TextEditingController ownerNameController = TextEditingController();
+  TextEditingController ownerFirstNameController = TextEditingController();
+  TextEditingController ownerLastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController telephoneController =
       MaskedTextController(mask: '(00) 00000-0000');
@@ -95,12 +103,15 @@ class CreateAccountViewModel extends ChangeNotifier {
       notifyListeners();
     }).onError(
       (error, stackTrace) {
-        modalTitle = "CNPJ não encontrado";
-        modalDescription = "Verifique se digitou corretamente";
-        modalCallback = () {
-          pageStatus = PageStatus.OK;
-          notifyListeners();
-        };
+        messageModal = SFMessageModal(
+          title: "CNPJ não encontrado",
+          description: "Verifique se digitou corretamente",
+          onTap: () {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          },
+          isHappy: false,
+        );
         pageStatus = PageStatus.ERROR;
         notifyListeners();
       },
@@ -136,7 +147,8 @@ class CreateAccountViewModel extends ChangeNotifier {
   String missingOwnerFormFields() {
     String missingFields = "";
     if (!noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
-    if (ownerNameController.text.isEmpty) missingFields += "Nome\n";
+    if (ownerFirstNameController.text.isEmpty) missingFields += "Nome\n";
+    if (ownerLastNameController.text.isEmpty) missingFields += "Sobrenome\n";
     if (emailController.text.isEmpty) missingFields += "Email\n";
     if (telephoneController.text.isEmpty) {
       missingFields += "Telefone da Quadra\n";
@@ -162,7 +174,8 @@ class CreateAccountViewModel extends ChangeNotifier {
         neighborhood: neighbourhoodController.text,
         street: addressController.text,
         number: addressNumberController.text,
-        ownerName: ownerNameController.text,
+        ownerFirstName: ownerFirstNameController.text,
+        ownerLastName: ownerLastNameController.text,
         email: emailController.text,
         cpf: cpfController.text.replaceAll(RegExp('[^0-9]'), ''),
         telephone: telephoneController.text.replaceAll(RegExp('[^0-9]'), ''),
@@ -172,21 +185,29 @@ class CreateAccountViewModel extends ChangeNotifier {
       ),
     )
         .then((value) {
-      modalTitle = "feito";
-      modalDescription = "feito";
-      modalCallback = () {
-        pageStatus = PageStatus.OK;
-        notifyListeners();
-      };
+      messageModal = SFMessageModal(
+        title: "feito",
+        description: "feito",
+        onTap: () {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        },
+        isHappy: true,
+      );
+
       pageStatus = PageStatus.SUCCESS;
       notifyListeners();
     }).onError((error, stackTrace) {
-      modalTitle = error.toString();
-      modalDescription = "";
-      modalCallback = () {
-        pageStatus = PageStatus.OK;
-        notifyListeners();
-      };
+      messageModal = SFMessageModal(
+        title: "",
+        description: "",
+        onTap: () {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        },
+        isHappy: true,
+      );
+
       pageStatus = PageStatus.ERROR;
       notifyListeners();
     });

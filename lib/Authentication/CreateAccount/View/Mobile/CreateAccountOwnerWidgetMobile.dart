@@ -2,21 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
-import '../../../SharedComponents/View/SFTextfield.dart';
-import '../ViewModel/CreateAccountViewModel.dart';
+import '../../../../SharedComponents/View/SFTextfield.dart';
+import '../../ViewModel/CreateAccountViewModel.dart';
 
-class CreateAccountOwnerWidget extends StatefulWidget {
+class CreateAccountOwnerWidgetMobile extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountOwnerWidget({super.key, 
+  CreateAccountOwnerWidgetMobile({
+    super.key,
     required this.viewModel,
   });
 
   @override
-  State<CreateAccountOwnerWidget> createState() =>
-      _CreateAccountOwnerWidgetState();
+  State<CreateAccountOwnerWidgetMobile> createState() =>
+      _CreateAccountOwnerWidgetMobileState();
 }
 
-class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
+class _CreateAccountOwnerWidgetMobileState
+    extends State<CreateAccountOwnerWidgetMobile> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -40,7 +42,17 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                   SFTextField(
                       labelText: "Nome",
                       pourpose: TextFieldPourpose.Standard,
-                      controller: widget.viewModel.ownerNameController,
+                      controller: widget.viewModel.ownerFirstNameController,
+                      validator: (_) {
+                        return null;
+                      }),
+                  const SizedBox(
+                    height: defaultPadding,
+                  ),
+                  SFTextField(
+                      labelText: "Sobrenome",
+                      pourpose: TextFieldPourpose.Standard,
+                      controller: widget.viewModel.ownerLastNameController,
                       validator: (_) {
                         return null;
                       }),
@@ -73,32 +85,24 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                           ],
                         )
                       : Container(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SFTextField(
-                          labelText: "Telefone da Quadra",
-                          pourpose: TextFieldPourpose.Numeric,
-                          controller: widget.viewModel.telephoneController,
-                          validator: (_) {
-                            return null;
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: defaultPadding,
-                      ),
-                      Expanded(
-                        child: SFTextField(
-                          labelText: "Telefone Pessoal",
-                          pourpose: TextFieldPourpose.Numeric,
-                          controller: widget.viewModel.telephoneOwnerController,
-                          validator: (_) {
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
+                  SFTextField(
+                    labelText: "Telefone da Quadra",
+                    pourpose: TextFieldPourpose.Numeric,
+                    controller: widget.viewModel.telephoneController,
+                    validator: (_) {
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: defaultPadding,
+                  ),
+                  SFTextField(
+                    labelText: "Telefone Pessoal",
+                    pourpose: TextFieldPourpose.Numeric,
+                    controller: widget.viewModel.telephoneOwnerController,
+                    validator: (_) {
+                      return null;
+                    },
                   ),
                   const SizedBox(
                     height: defaultPadding,
@@ -110,6 +114,7 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                 child: Column(
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Checkbox(
                             activeColor: primaryBlue,
@@ -119,18 +124,24 @@ class _CreateAccountOwnerWidgetState extends State<CreateAccountOwnerWidget> {
                                 widget.viewModel.isAbove18 = value!;
                               });
                             }),
-                        RichText(
-                          text: const TextSpan(
-                            text: 'Declaro que tenho acima de 18 anos',
-                            style: TextStyle(
-                              color: textDarkGrey,
-                              fontWeight: FontWeight.bold,
+                        Flexible(
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Declaro que tenho acima de 18 anos',
+                              style: TextStyle(
+                                color: textDarkGrey,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: defaultPadding / 2,
+                    ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Checkbox(
                             activeColor: primaryBlue,

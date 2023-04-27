@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'SFButton.dart';
 
 class SFMessageModal extends StatefulWidget {
@@ -10,7 +11,8 @@ class SFMessageModal extends StatefulWidget {
   String buttonText;
   bool isHappy;
 
-  SFMessageModal({super.key, 
+  SFMessageModal({
+    super.key,
     required this.title,
     required this.description,
     required this.onTap,
@@ -29,7 +31,11 @@ class _SFMessageModalState extends State<SFMessageModal> {
     double height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      width: width * 0.3 < 350 ? 350 : width * 0.3,
+      width: Responsive.isMobile(context)
+          ? width * 0.8
+          : width * 0.3 < 350
+              ? 350
+              : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -45,21 +51,25 @@ class _SFMessageModalState extends State<SFMessageModal> {
             widget.isHappy
                 ? r"assets/icon/happy_face.svg"
                 : r"assets/icon/sad_face.svg",
-            height: 100,
+            height: Responsive.isMobile(context) ? 80 : 100,
           ),
           const SizedBox(
             height: 2 * defaultPadding,
           ),
           Text(
             widget.title,
-            style: const TextStyle(color: textBlack, fontSize: 24),
+            style: TextStyle(
+                color: textBlack,
+                fontSize: Responsive.isMobile(context) ? 18 : 24),
           ),
           const SizedBox(
             height: defaultPadding / 2,
           ),
           Text(
             widget.description,
-            style: const TextStyle(color: textDarkGrey, fontSize: 16),
+            style: TextStyle(
+                color: textDarkGrey,
+                fontSize: Responsive.isMobile(context) ? 14 : 16),
           ),
           const SizedBox(
             height: defaultPadding * 2,

@@ -8,14 +8,38 @@ class CreateAccountEmployeeRepoImp implements CreateAccountEmployeeRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future createAccountEmployee(String email, String password) async {
+  Future validateNewEmployeeToken(String token) async {
+    dynamic response = await _apiService
+        .postResponse(
+          _apiService.sandfriendsUrl,
+          ApiEndPoints().validateNewEmployeeToken,
+          jsonEncode(
+            <String, Object>{
+              "Token": token,
+            },
+          ),
+          true,
+        )
+        .onError((error, stackTrace) => throw error!);
+    return response;
+  }
+
+  @override
+  Future createAccountEmployee(
+    String token,
+    String firstName,
+    String lastName,
+    String password,
+  ) async {
     dynamic response = await _apiService
         .postResponse(
           _apiService.sandfriendsUrl,
           ApiEndPoints().createAccountEmployee,
           jsonEncode(
             <String, Object>{
-              "Email": email,
+              "Token": token,
+              "FirstName": firstName,
+              "LastName": lastName,
               "Password": password,
             },
           ),

@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
-import '../../../SharedComponents/View/SFButton.dart';
-import '../../../SharedComponents/View/SFTextfield.dart';
+import '../../../../SharedComponents/View/SFButton.dart';
+import '../../../../SharedComponents/View/SFTextfield.dart';
 
-class CreateAccountCourtWidget extends StatefulWidget {
+class CreateAccountCourtWidgetWeb extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountCourtWidget({super.key, 
+  CreateAccountCourtWidgetWeb({
+    super.key,
     required this.viewModel,
   });
 
   @override
-  State<CreateAccountCourtWidget> createState() =>
-      _CreateAccountCourtWidgetState();
+  State<CreateAccountCourtWidgetWeb> createState() =>
+      _CreateAccountCourtWidgetWebState();
 }
 
-class _CreateAccountCourtWidgetState extends State<CreateAccountCourtWidget> {
+class _CreateAccountCourtWidgetWebState
+    extends State<CreateAccountCourtWidgetWeb> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

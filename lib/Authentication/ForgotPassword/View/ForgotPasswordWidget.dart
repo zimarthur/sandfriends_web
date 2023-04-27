@@ -3,6 +3,7 @@ import 'package:sandfriends_web/Authentication/ForgotPassword/ViewModel/ForgotPa
 import 'package:sandfriends_web/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 import '../../../SharedComponents/View/SFTextfield.dart';
@@ -28,7 +29,11 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
 
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      width: width * 0.3 < 350 ? 350 : width * 0.3,
+      width: Responsive.isMobile(context)
+          ? width * 0.9
+          : width * 0.3 < 350
+              ? 350
+              : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),

@@ -9,7 +9,8 @@ class CreateAccountStore {
   String neighborhood;
   String street;
   String number;
-  String ownerName;
+  String ownerFirstName;
+  String ownerLastName;
   String email;
   String cpf;
   String telephone;
@@ -24,7 +25,8 @@ class CreateAccountStore {
     required this.neighborhood,
     required this.street,
     required this.number,
-    required this.ownerName,
+    required this.ownerFirstName,
+    required this.ownerLastName,
     required this.email,
     required this.cpf,
     required this.telephone,
@@ -42,7 +44,8 @@ String CreateAccountStoreToJson(CreateAccountStore store) {
       "City": store.city,
       "Neighbourhood": store.neighborhood,
       "Address": "${store.street} ${store.number}",
-      "OwnerName": store.ownerName,
+      "OwnerFirstName": store.ownerFirstName,
+      "OwnerLastName": store.ownerLastName,
       "Email": store.email,
       "CPF": store.cpf,
       "Telephone": store.telephone,

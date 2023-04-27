@@ -13,9 +13,15 @@ import 'Menu/View/MenuScreen.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
+  configureApp();
   runApp(const MyApp());
+}
+
+void configureApp() {
+  setUrlStrategy(PathUrlStrategy());
 }
 
 class MyApp extends StatelessWidget {
@@ -56,13 +62,28 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: secondaryBack,
           fontFamily: "Lexend",
         ),
+        onGenerateRoute: (settings) {
+          String newAccountEmployee = '/create_account_employee';
+          if (settings.name!.startsWith(newAccountEmployee)) {
+            return MaterialPageRoute(
+              builder: (context) {
+                return CreateAccountEmployeeScreen(
+                  token: settings.name!.split(newAccountEmployee)[1],
+                );
+              },
+            );
+          }
+        },
         routes: {
           //'/new_password': (BuildContext context) => const NewPasswordScreen(),
           '/login': (BuildContext context) => const LoginScreen(),
           '/create_account': (BuildContext context) =>
               const CreateAccountScreen(),
-          '/create_account_employee': (BuildContext context) =>
-              const CreateAccountEmployeeScreen(),
+          // '/create_account_employee': (BuildContext context) {
+          //   final uri = Uri.base;
+          //   final token = uri.queryParameters['token'] ?? '';
+          //   return CreateAccountEmployeeScreen(token: token);
+          // },
           '/forgot_password': (BuildContext context) =>
               const ForgotPasswordScreen(),
           '/home': (BuildContext context) => const MenuScreen(),

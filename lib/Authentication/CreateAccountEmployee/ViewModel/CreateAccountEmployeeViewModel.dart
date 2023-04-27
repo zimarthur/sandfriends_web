@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../Utils/PageStatus.dart';
 import '../Repository/CreateAccountEmployeeRepo.dart';
 
@@ -7,46 +8,100 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
   final _createAccountEmployeeRepo = CreateAccountEmployeeRepo();
 
   PageStatus pageStatus = PageStatus.OK;
-  String modalTitle = "";
-  String modalDescription = "";
-  VoidCallback modalCallback = () {};
+  SFMessageModal messageModal = SFMessageModal(
+    title: "",
+    description: "",
+    onTap: () {},
+    isHappy: true,
+  );
 
-  TextEditingController createAccountEmployeeEmailController =
+  String addEmployeeToken = "";
+  String email = "zim.arthur97@gmail.com";
+  String storeName = "Beach Brasil";
+
+  TextEditingController createAccountEmployeeFirstNameController =
+      TextEditingController();
+  TextEditingController createAccountEmployeeLastNameController =
       TextEditingController();
   TextEditingController createAccountEmployeePasswordController =
       TextEditingController();
   TextEditingController createAccountEmployeePasswordConfirmController =
       TextEditingController();
+  bool isAbove18 = true;
+  bool termsAgree = true;
 
   final createAccountEmployeeFormKey = GlobalKey<FormState>();
 
-  void createAccountEmployee(BuildContext context) {
+  void initCreateAccountEmployeeViewModel(BuildContext context) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     _createAccountEmployeeRepo
-        .createAccountEmployee(createAccountEmployeeEmailController.text,
-            createAccountEmployeePasswordController.text)
-        .then((value) {
-      modalTitle = "feito";
-      modalDescription = "feito";
-      modalCallback = () {
-        Navigator.pushNamed(context, '/login');
-      };
-      pageStatus = PageStatus.SUCCESS;
+        .validateNewEmployeeToken(addEmployeeToken)
+        .then((response) {
+      email = response["Email"];
+      storeName = response["Store"];
+      pageStatus = PageStatus.OK;
       notifyListeners();
     }).onError((error, stackTrace) {
-      modalTitle = error.toString();
-      modalDescription = "";
-      modalCallback = () {
-        pageStatus = PageStatus.OK;
-        notifyListeners();
-      };
+      messageModal = SFMessageModal(
+        title: error.toString(),
+        description: "",
+        onTap: () {
+          Navigator.pushNamed(context, '/login');
+        },
+        isHappy: false,
+      );
       pageStatus = PageStatus.ERROR;
       notifyListeners();
     });
   }
 
-  void goToCreateAccount(BuildContext context) {
-    Navigator.pushNamed(context, '/create_account');
+  void createAccountEmployee(BuildContext context) {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+    _createAccountEmployeeRepo
+        .createAccountEmployee(
+      addEmployeeToken,
+      createAccountEmployeeFirstNameController.text,
+      createAccountEmployeeLastNameController.text,
+      createAccountEmployeePasswordController.text,
+    )
+        .then((value) {
+      messageModal = SFMessageModal(
+        title: "feito",
+        description: "feito",
+        onTap: () {
+          Navigator.pushNamed(context, '/login');
+        },
+        isHappy: true,
+      );
+      pageStatus = PageStatus.SUCCESS;
+      notifyListeners();
+    }).onError((error, stackTrace) {
+      messageModal = SFMessageModal(
+        title: error.toString(),
+        description: "",
+        onTap: () {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        },
+        isHappy: false,
+      );
+
+      pageStatus = PageStatus.ERROR;
+      notifyListeners();
+    });
+  }
+
+  bool missingTerms() {
+    return !isAbove18 || !termsAgree;
+  }
+
+  void onTapTermosDeUso(BuildContext context) {
+    Navigator.pushNamed(context, '/terms');
+  }
+
+  void onTapPoliticaDePrivacidade(BuildContext context) {
+    Navigator.pushNamed(context, '/privacy');
   }
 }

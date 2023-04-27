@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidget.dart';
+import 'package:sandfriends_web/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidgetMobile.dart';
+import 'package:sandfriends_web/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidgetWeb.dart';
 import 'package:sandfriends_web/Authentication/CreateAccountEmployee/ViewModel/CreateAccountEmployeeViewModel.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFStandardScreen.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-
+import 'package:sandfriends_web/Utils/Responsive.dart';
+import 'dart:html';
 import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../Utils/PageStatus.dart';
 
 class CreateAccountEmployeeScreen extends StatefulWidget {
-  const CreateAccountEmployeeScreen({super.key});
+  String token;
+  CreateAccountEmployeeScreen({
+    required this.token,
+  });
 
   @override
   State<CreateAccountEmployeeScreen> createState() =>
@@ -21,6 +27,13 @@ class _CreateAccountEmployeeScreenState
   final viewModel = CreateAccountEmployeeViewModel();
 
   @override
+  void initState() {
+    viewModel.addEmployeeToken = widget.token;
+    viewModel.initCreateAccountEmployeeViewModel(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -30,43 +43,16 @@ class _CreateAccountEmployeeScreenState
         create: (BuildContext context) => viewModel,
         child: Consumer<CreateAccountEmployeeViewModel>(
           builder: (context, viewModel, _) {
-            return SafeArea(
-              child: Stack(
-                children: [
-                  Container(
-                    color: primaryBlue.withOpacity(0.4),
-                    height: height,
-                    width: width,
-                    child: Center(
-                      child: CreateAccountEmployeeWidget(viewModel: viewModel),
+            return SFStandardScreen(
+              pageStatus: viewModel.pageStatus,
+              child: Responsive.isMobile(context)
+                  ? CreateAccountEmployeeWidgetMobile(
+                      viewModel: viewModel,
+                    )
+                  : CreateAccountEmployeeWidgetWeb(
+                      viewModel: viewModel,
                     ),
-                  ),
-                  viewModel.pageStatus != PageStatus.OK
-                      ? Container(
-                          color: primaryBlue.withOpacity(0.4),
-                          height: height,
-                          width: width,
-                          child: Center(
-                            child: viewModel.pageStatus == PageStatus.LOADING
-                                ? SizedBox(
-                                    height: 300,
-                                    width: 300,
-                                    child: SFLoading(size: 80),
-                                  )
-                                : SFMessageModal(
-                                    title: viewModel.modalTitle,
-                                    description: viewModel.modalDescription,
-                                    onTap: viewModel.modalCallback,
-                                    isHappy:
-                                        viewModel.pageStatus == PageStatus.ERROR
-                                            ? false
-                                            : true,
-                                  ),
-                          ),
-                        )
-                      : Container(),
-                ],
-              ),
+              messageModalWidget: viewModel.messageModal,
             );
           },
         ),

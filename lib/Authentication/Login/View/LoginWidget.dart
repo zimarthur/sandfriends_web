@@ -10,7 +10,8 @@ import '../../../SharedComponents/View/SFTextfield.dart';
 
 class LoginWidget extends StatefulWidget {
   LoginViewModel viewModel;
-  LoginWidget({super.key, 
+  LoginWidget({
+    super.key,
     required this.viewModel,
   });
 
@@ -45,7 +46,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               children: [
                 SvgPicture.asset(
                   r'assets/icon/full_logo_positive.svg',
-                  height: height * 0.2,
+                  //height: height * 0.2,
                 ),
                 const SizedBox(
                   height: defaultPadding * 2,
@@ -152,6 +153,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                   child: RichText(
                     text: TextSpan(
                       text: 'Ainda não se cadastrou? ',
+                      style: TextStyle(
+                        color: textDarkGrey,
+                        fontFamily: 'Lexend',
+                      ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Cadastre já!',

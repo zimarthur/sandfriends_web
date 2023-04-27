@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountCourtWidget.dart';
-import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountOwnerWidget.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/Mobile/CreateAccountCourtWidgetMobile.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/Mobile/CreateAccountOwnerWidgetMobile.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/Web/CreateAccountCourtWidgetWeb.dart';
+import 'package:sandfriends_web/Authentication/CreateAccount/View/Web/CreateAccountOwnerWidgetWeb.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/ViewModel/CreateAccountViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
-import '../../../SharedComponents/View/SFButton.dart';
+import '../../../../SharedComponents/View/SFButton.dart';
 
-class CreateAccountWidget extends StatefulWidget {
+class CreateAccountWidgetMobile extends StatefulWidget {
   CreateAccountViewModel viewModel;
-  CreateAccountWidget({super.key, 
+  CreateAccountWidgetMobile({
+    super.key,
     required this.viewModel,
   });
 
   @override
-  State<CreateAccountWidget> createState() => _CreateAccountWidgetState();
+  State<CreateAccountWidgetMobile> createState() =>
+      _CreateAccountWidgetMobileState();
 }
 
-class _CreateAccountWidgetState extends State<CreateAccountWidget> {
+class _CreateAccountWidgetMobileState extends State<CreateAccountWidgetMobile> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -24,7 +28,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
       height: height * 0.9,
-      width: width * 0.5 < 350 ? 350 : width * 0.5,
+      width: width * 0.9,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -37,10 +41,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
         children: [
           Expanded(
             child: widget.viewModel.currentCreateAccountFormIndex == 0
-                ? CreateAccountCourtWidget(
+                ? CreateAccountCourtWidgetMobile(
                     viewModel: widget.viewModel,
                   )
-                : CreateAccountOwnerWidget(
+                : CreateAccountOwnerWidgetMobile(
                     viewModel: widget.viewModel,
                   ),
           ),
@@ -67,25 +71,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: defaultPadding / 2),
-            child: Text(
-              "ou",
-              style: TextStyle(
-                color: textDarkGrey,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              widget.viewModel.goToCreateAccountEmployee(context);
-            },
-            child: const Text(
-              "Crie uma conta funcionário",
-              style: TextStyle(
-                  color: textBlue, decoration: TextDecoration.underline),
-            ),
-          )
         ],
       ),
     );
