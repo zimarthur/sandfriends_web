@@ -38,24 +38,22 @@ class _CreateAccountEmployeeScreenState
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: ChangeNotifierProvider<CreateAccountEmployeeViewModel>(
-        create: (BuildContext context) => viewModel,
-        child: Consumer<CreateAccountEmployeeViewModel>(
-          builder: (context, viewModel, _) {
-            return SFStandardScreen(
-              pageStatus: viewModel.pageStatus,
-              child: Responsive.isMobile(context)
-                  ? CreateAccountEmployeeWidgetMobile(
-                      viewModel: viewModel,
-                    )
-                  : CreateAccountEmployeeWidgetWeb(
-                      viewModel: viewModel,
-                    ),
-              messageModalWidget: viewModel.messageModal,
-            );
-          },
-        ),
+    return ChangeNotifierProvider<CreateAccountEmployeeViewModel>(
+      create: (BuildContext context) => viewModel,
+      child: Consumer<CreateAccountEmployeeViewModel>(
+        builder: (context, viewModel, _) {
+          return SFStandardScreen(
+            pageStatus: viewModel.pageStatus,
+            child: Responsive.isMobile(context)
+                ? CreateAccountEmployeeWidgetMobile(
+                    viewModel: viewModel,
+                  )
+                : CreateAccountEmployeeWidgetWeb(
+                    viewModel: viewModel,
+                  ),
+            messageModalWidget: viewModel.messageModal,
+          );
+        },
       ),
     );
   }

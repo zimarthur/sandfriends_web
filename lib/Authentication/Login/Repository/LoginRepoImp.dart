@@ -19,7 +19,6 @@ class LoginRepoImp implements LoginRepo {
               "Password": password,
             },
           ),
-          true,
         )
         .onError((error, stackTrace) => throw error!);
     return response;
@@ -36,7 +35,6 @@ class LoginRepoImp implements LoginRepo {
               "AccessToken": accessToken,
             },
           ),
-          true,
         )
         .onError((error, stackTrace) => throw error!);
     return response;

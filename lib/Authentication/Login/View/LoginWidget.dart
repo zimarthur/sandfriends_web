@@ -44,9 +44,15 @@ class _LoginWidgetState extends State<LoginWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SvgPicture.asset(
-                  r'assets/icon/full_logo_positive.svg',
-                  //height: height * 0.2,
+                InkWell(
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    "/cgpw?str=0&tk=1682885967.333945eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZFVzZXIiOjQsInRpbWUiOiIyMDIzLTA0LTMwIDE2OjQ4OjAzLjI1MTY5NyJ9.bqXAWqVEjBDsofB0fbCrO_d3UGjOSxSm54hXnvhQWL4",
+                  ),
+                  child: SvgPicture.asset(
+                    r'assets/icon/full_logo_positive.svg',
+                    //height: height * 0.2,
+                  ),
                 ),
                 const SizedBox(
                   height: defaultPadding * 2,

@@ -18,7 +18,6 @@ class CreateAccountEmployeeRepoImp implements CreateAccountEmployeeRepo {
               "Token": token,
             },
           ),
-          true,
         )
         .onError((error, stackTrace) => throw error!);
     return response;
@@ -43,7 +42,6 @@ class CreateAccountEmployeeRepoImp implements CreateAccountEmployeeRepo {
               "Password": password,
             },
           ),
-          false,
         )
         .onError((error, stackTrace) => throw error!);
     return response;

@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Authentication/ChangePassword/View/ChangePasswordScreen.dart';
 import 'package:sandfriends_web/Authentication/CreateAccount/View/CreateAccountScreen.dart';
+import 'package:sandfriends_web/Authentication/EmailConfirmation/View/EmailConfirmationScreen.dart';
 import 'package:sandfriends_web/Authentication/ForgotPassword/View/ForgotPasswordScreen.dart';
 import 'package:sandfriends_web/Rewards/ViewModel/RewardsViewModel.dart';
 import 'package:sandfriends_web/Menu/ViewModel/MenuProvider.dart';
@@ -64,6 +66,9 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: (settings) {
           String newAccountEmployee = '/create_account_employee';
+          String emailConfirmation = '/emcf';
+          String changePassword = '/cgpw';
+
           if (settings.name!.startsWith(newAccountEmployee)) {
             return MaterialPageRoute(
               builder: (context) {
@@ -72,18 +77,52 @@ class MyApp extends StatelessWidget {
                 );
               },
             );
+          } else if (settings.name!.startsWith(emailConfirmation)) {
+            bool isStoreRequest = true;
+            String token = "";
+            final arguments = settings.name!.split("?")[1].split("&");
+            for (var argument in arguments) {
+              if (argument.startsWith("str")) {
+                isStoreRequest = argument.split("=")[1] == "1";
+              } else {
+                token = argument.split("=")[1];
+              }
+            }
+            return MaterialPageRoute(
+              builder: (context) {
+                return EmailConfirmationScreen(
+                  token: token,
+                  isStoreRequest: isStoreRequest,
+                );
+              },
+            );
+          } else if (settings.name!.startsWith(changePassword)) {
+            bool isStoreRequest = true;
+            String token = "";
+            final arguments = settings.name!.split("?")[1].split("&");
+            for (var argument in arguments) {
+              if (argument.startsWith("str")) {
+                isStoreRequest = argument.split("=")[1] == "1";
+              } else {
+                token = argument.split("=")[1];
+              }
+            }
+            return MaterialPageRoute(
+              builder: (context) {
+                return ChangePasswordScreen(
+                  token: token,
+                  isStoreRequest: isStoreRequest,
+                );
+              },
+            );
           }
+          return null;
         },
         routes: {
           //'/new_password': (BuildContext context) => const NewPasswordScreen(),
           '/login': (BuildContext context) => const LoginScreen(),
           '/create_account': (BuildContext context) =>
               const CreateAccountScreen(),
-          // '/create_account_employee': (BuildContext context) {
-          //   final uri = Uri.base;
-          //   final token = uri.queryParameters['token'] ?? '';
-          //   return CreateAccountEmployeeScreen(token: token);
-          // },
           '/forgot_password': (BuildContext context) =>
               const ForgotPasswordScreen(),
           '/home': (BuildContext context) => const MenuScreen(),

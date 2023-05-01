@@ -19,7 +19,6 @@ class ForgotPasswordRepoImp implements ForgotPasswordRepo {
               "Email": email,
             },
           ),
-          false,
         )
         .onError((error, stackTrace) => throw error!);
   }

@@ -27,36 +27,38 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: Stack(
-        children: [
-          Container(
-            color: primaryBlue.withOpacity(0.4),
-            height: height,
-            width: width,
-            child: Center(
-              child: widget.child,
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              color: primaryBlue.withOpacity(0.4),
+              height: height,
+              width: width,
+              child: Center(
+                child: widget.child,
+              ),
             ),
-          ),
-          widget.pageStatus != PageStatus.OK
-              ? Container(
-                  color: primaryBlue.withOpacity(0.4),
-                  height: height,
-                  width: width,
-                  child: Center(
-                    child: widget.pageStatus == PageStatus.LOADING
-                        ? SizedBox(
-                            height: 300,
-                            width: 300,
-                            child: SFLoading(size: 80),
-                          )
-                        : widget.pageStatus == PageStatus.FORM
-                            ? widget.modalFormWidget
-                            : widget.messageModalWidget,
-                  ),
-                )
-              : Container(),
-        ],
+            widget.pageStatus != PageStatus.OK
+                ? Container(
+                    color: primaryBlue.withOpacity(0.4),
+                    height: height,
+                    width: width,
+                    child: Center(
+                      child: widget.pageStatus == PageStatus.LOADING
+                          ? SizedBox(
+                              height: 300,
+                              width: 300,
+                              child: SFLoading(size: 80),
+                            )
+                          : widget.pageStatus == PageStatus.FORM
+                              ? widget.modalFormWidget
+                              : widget.messageModalWidget,
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

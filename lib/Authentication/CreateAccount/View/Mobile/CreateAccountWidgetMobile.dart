@@ -27,7 +27,6 @@ class _CreateAccountWidgetMobileState extends State<CreateAccountWidgetMobile> {
     double height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.9,
       width: width * 0.9,
       decoration: BoxDecoration(
         color: secondaryPaper,

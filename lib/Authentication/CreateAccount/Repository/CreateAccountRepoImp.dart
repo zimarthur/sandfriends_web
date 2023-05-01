@@ -29,7 +29,6 @@ class CreateAccountRepoImp implements CreateAccountRepo {
           _apiService.sandfriendsUrl,
           ApiEndPoints().createAccount,
           CreateAccountStoreToJson(store),
-          false,
         )
         .onError((error, stackTrace) => throw error!);
   }
@@ -46,7 +45,6 @@ class CreateAccountRepoImp implements CreateAccountRepo {
               "Password": password,
             },
           ),
-          true,
         )
         .onError((error, stackTrace) => throw error!);
     return response;

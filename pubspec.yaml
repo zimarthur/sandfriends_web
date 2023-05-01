@@ -117,6 +117,8 @@ flutter:
 
     - assets/people/calendar.svg
     - assets/people/onboarding.svg
+    - assets/people/email_confirmation_store.svg
+    - assets/people/email_confirmation_user.svg
 
 
     - assets/fakeJson/login.json

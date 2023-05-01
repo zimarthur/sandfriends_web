@@ -10,33 +10,43 @@ import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../SharedComponents/View/SFStandardScreen.dart';
 import '../../../Utils/PageStatus.dart';
+import '../ViewModel/ChangePasswordViewModel.dart';
+import 'ChangePasswordWidget.dart';
 
-class CreateAccountScreen extends StatefulWidget {
-  const CreateAccountScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  String token;
+  bool isStoreRequest;
+
+  ChangePasswordScreen({
+    required this.token,
+    required this.isStoreRequest,
+  });
 
   @override
-  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  final viewModel = CreateAccountViewModel();
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  final viewModel = ChangePasswordViewModel();
+
+  @override
+  void initState() {
+    viewModel.init(widget.token, widget.isStoreRequest);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CreateAccountViewModel>(
+    return ChangeNotifierProvider<ChangePasswordViewModel>(
       create: (BuildContext context) => viewModel,
-      child: Consumer<CreateAccountViewModel>(
+      child: Consumer<ChangePasswordViewModel>(
         builder: (context, viewModel, _) {
           return SFStandardScreen(
             pageStatus: viewModel.pageStatus,
             messageModalWidget: viewModel.messageModal,
-            child: Responsive.isMobile(context)
-                ? CreateAccountWidgetMobile(
-                    viewModel: viewModel,
-                  )
-                : CreateAccountWidgetWeb(
-                    viewModel: viewModel,
-                  ),
+            child: ChangePasswordWidget(
+              viewModel: viewModel,
+            ),
           );
         },
       ),

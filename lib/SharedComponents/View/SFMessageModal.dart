@@ -10,6 +10,7 @@ class SFMessageModal extends StatefulWidget {
   VoidCallback onTap;
   String buttonText;
   bool isHappy;
+  bool hideButton;
 
   SFMessageModal({
     super.key,
@@ -18,6 +19,7 @@ class SFMessageModal extends StatefulWidget {
     required this.onTap,
     this.buttonText = "Voltar",
     required this.isHappy,
+    this.hideButton = false,
   });
 
   @override
@@ -74,14 +76,15 @@ class _SFMessageModalState extends State<SFMessageModal> {
           const SizedBox(
             height: defaultPadding * 2,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.3 < 350 ? 35 : width * 0.03),
-            child: SFButton(
-                buttonLabel: widget.buttonText,
-                buttonType: ButtonType.Primary,
-                onTap: widget.onTap),
-          )
+          if (!widget.hideButton)
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.3 < 350 ? 35 : width * 0.03),
+              child: SFButton(
+                  buttonLabel: widget.buttonText,
+                  buttonType: ButtonType.Primary,
+                  onTap: widget.onTap),
+            )
         ],
       ),
     );

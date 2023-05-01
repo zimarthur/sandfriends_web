@@ -6,4 +6,10 @@ class ApiEndPoints {
   //add employee
   final String validateNewEmployeeToken = "ValidateNewEmployeeToken";
   final String createAccountEmployee = "AddStoreEmployee";
+  final String emailConfirmationStore = "EmailConfirmationStore";
+
+  final String emailConfirmationUser = "EmailConfirmationUser";
+  final String changePasswordValidateTokenUser =
+      "ValidateChangePasswordTokenUser";
+  final String changePasswordUser = "ChangePasswordUser";
 }
