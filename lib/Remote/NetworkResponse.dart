@@ -1,11 +1,13 @@
 class NetworkResponse {
-  bool requestSuccess;
-  String? errorMessage;
-  dynamic responseBody;
+  NetworkResponseStatus responseStatus;
+  String? userMessage;
+  String? responseBody;
 
   NetworkResponse({
-    required this.requestSuccess,
-    this.errorMessage,
+    required this.responseStatus,
+    this.userMessage,
     this.responseBody,
   });
 }
+
+enum NetworkResponseStatus { success, alert, error }
