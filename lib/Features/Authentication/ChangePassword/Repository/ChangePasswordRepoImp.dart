@@ -24,7 +24,38 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
   }
 
   @override
+  Future<NetworkResponse> validateChangePasswordTokenEmployee(
+      String token) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().changePasswordValidateTokenEmployee,
+      jsonEncode(
+        <String, Object>{
+          "ChangePasswordToken": token,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
   Future<NetworkResponse> changePasswordUser(
+      String token, String newPassword) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().changePasswordUser,
+      jsonEncode(
+        <String, Object>{
+          "ResetPasswordToken": token,
+          "NewPassword": newPassword,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> changePasswordEmployee(
       String token, String newPassword) async {
     NetworkResponse response = await _apiService.postResponse(
       _apiService.sandfriendsUrl,

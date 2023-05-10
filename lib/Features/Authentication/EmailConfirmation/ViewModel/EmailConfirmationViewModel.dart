@@ -6,11 +6,12 @@ import 'package:sandfriends_web/SharedComponents/View/SFMessageModal.dart';
 import '../../../../Utils/PageStatus.dart';
 
 class EmailConfirmationViewModel extends ChangeNotifier {
-  void initEmailConfirmationViewModel(String tokenUrl, bool isStoreRequestUrl) {
+  void initEmailConfirmationViewModel(
+      BuildContext context, String tokenUrl, bool isStoreRequestUrl) {
     token = tokenUrl;
     isStoreRequest = isStoreRequestUrl;
     if (isStoreRequest) {
-      validateTokenStore();
+      validateTokenStore(context);
     } else {
       validateTokenUser();
     }
@@ -20,7 +21,7 @@ class EmailConfirmationViewModel extends ChangeNotifier {
 
   PageStatus pageStatus = PageStatus.LOADING;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
@@ -34,7 +35,8 @@ class EmailConfirmationViewModel extends ChangeNotifier {
         pageStatus = PageStatus.OK;
       } else {
         messageModal = SFMessageModal(
-          message: response.userMessage!,
+          title: response.responseTitle!,
+          description: response.responseDescription,
           onTap: () {},
           isHappy: false,
           hideButton: true,
@@ -45,16 +47,19 @@ class EmailConfirmationViewModel extends ChangeNotifier {
     });
   }
 
-  void validateTokenStore() {
+  void validateTokenStore(BuildContext context) {
     emailConfirmationRepo.emailConfirmationStore(token).then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         pageStatus = PageStatus.OK;
       } else {
         messageModal = SFMessageModal(
-          message: response.userMessage!,
-          onTap: () {},
-          isHappy: false,
-          hideButton: true,
+          title: response.responseTitle!,
+          description: response.responseDescription!,
+          onTap: () {
+            Navigator.pushNamed(context, '/login');
+          },
+          isHappy: response.responseStatus == NetworkResponseStatus.alert,
+          buttonText: "login",
         );
         pageStatus = PageStatus.WARNING;
       }

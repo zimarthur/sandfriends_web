@@ -11,13 +11,15 @@ class NetworkApiService extends BaseApiService {
       String baseUrl, String aditionalUrl) async {
     try {
       final response = await http.get(Uri.parse(baseUrl + aditionalUrl));
+      print(response);
       return returnResponse(
         response,
       );
     } on SocketException {
       return NetworkResponse(
         responseStatus: NetworkResponseStatus.error,
-        userMessage: "Ops, você está sem acesso à internet",
+        responseTitle: "Ops, você está sem acesso à internet",
+        responseDescription: "Tente Novamente",
       );
     }
   }
@@ -28,27 +30,34 @@ class NetworkApiService extends BaseApiService {
     String aditionalUrl,
     String body,
   ) async {
+    print(baseUrl + aditionalUrl);
     print(body);
-    print(baseUrl);
-    print(aditionalUrl);
     try {
-      final response = await http.post(
-        Uri.parse(baseUrl + aditionalUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
-      );
+      final response = await http
+          .post(
+            Uri.parse(baseUrl + aditionalUrl),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: body,
+          )
+          .timeout(
+            Duration(
+              seconds: 10,
+            ),
+          );
       return returnResponse(response);
     } on SocketException {
       return NetworkResponse(
         responseStatus: NetworkResponseStatus.error,
-        userMessage: "Ops, você está sem acesso à internet",
+        responseTitle: "Ops!",
+        responseDescription: "você está sem acesso à internet",
       );
     } on TimeoutException catch (_) {
       return NetworkResponse(
         responseStatus: NetworkResponseStatus.error,
-        userMessage: "Ops, ocorreu um problema de conexão.",
+        responseTitle: "Ops!",
+        responseDescription: "ocorreu um problema de conexão.",
       );
     }
   }
@@ -62,26 +71,34 @@ class NetworkApiService extends BaseApiService {
           responseBody: response.body,
         );
       }
+      Map<String, dynamic> responseBody = json.decode(
+        response.body,
+      );
       if (statusCode == "231") {
         return NetworkResponse(
           responseStatus: NetworkResponseStatus.alert,
-          userMessage: response.body,
+          responseTitle: responseBody['Title'],
+          responseDescription: responseBody['Description'],
         );
       } else {
         return NetworkResponse(
           responseStatus: NetworkResponseStatus.error,
-          userMessage: response.body,
+          responseTitle: responseBody['Title'],
+          responseDescription: responseBody['Description'],
         );
       }
     } else if (statusCode.startsWith("5")) {
       return NetworkResponse(
-          responseStatus: NetworkResponseStatus.error,
-          userMessage:
-              "Ops, ocorreu um problema de conexão.\n Tente Novamente");
+        responseStatus: NetworkResponseStatus.error,
+        responseTitle: "Ops!",
+        responseDescription: "Ocorreu um problema de conexão.",
+      );
     } else {
       return NetworkResponse(
-          responseStatus: NetworkResponseStatus.error,
-          userMessage: "Ops, ocorreu erro.\n Tente Novamente");
+        responseStatus: NetworkResponseStatus.error,
+        responseTitle: "Ops, ocorreu erro.",
+        responseDescription: "Tente Novamente",
+      );
     }
   }
 }

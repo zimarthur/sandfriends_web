@@ -16,7 +16,7 @@ import '../../../../Remote/NetworkResponse.dart';
 import '../../../../SharedComponents/Model/Store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:localstorage/localstorage.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -24,7 +24,7 @@ class LoginViewModel extends ChangeNotifier {
 
   PageStatus pageStatus = PageStatus.LOADING;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
@@ -42,51 +42,39 @@ class LoginViewModel extends ChangeNotifier {
           setLoginResponse(context, response.responseBody!);
           Navigator.pushNamed(context, '/home');
         } else {
-          messageModal = SFMessageModal(
-            message: response.userMessage.toString(),
-            onTap: () {
-              pageStatus = PageStatus.OK;
-              notifyListeners();
-            },
-            isHappy: false,
-          );
-          pageStatus = PageStatus.WARNING;
+          pageStatus = PageStatus.OK;
           notifyListeners();
         }
       });
     }
+    pageStatus = PageStatus.OK;
+    notifyListeners();
   }
 
   void onTapLogin(BuildContext context) async {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
 
-    rootBundle.loadString(r'assets/fakeJson/login.json').then((value) {
-      setLoginResponse(context, json.decode(value));
-      Navigator.pushNamed(context, '/home');
+    loginRepo
+        .login(userController.text, passwordController.text)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        setLoginResponse(context, response.responseBody!);
+        Navigator.pushNamed(context, '/home');
+      } else {
+        messageModal = SFMessageModal(
+          title: response.responseTitle!,
+          description: response.responseDescription,
+          onTap: () {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          },
+          isHappy: false,
+        );
+        pageStatus = PageStatus.WARNING;
+        notifyListeners();
+      }
     });
-
-    // loginRepo
-    //     .login(userController.text, passwordController.text)
-    //     .then((response) {
-    //   if (response.responseStatus == NetworkResponseStatus.success) {
-    //     setLoginResponse(context, response.responseBody!);
-    //   } else {
-    //     messageModal = SFMessageModal(
-    //       title: response.userMessage.toString(),
-    //       description: "",
-    //       onTap: () {
-    //         pageStatus = PageStatus.OK;
-    //         notifyListeners();
-    //       },
-    //       isHappy: false,
-    //     );
-    //     pageStatus = PageStatus.ERROR;
-    //     notifyListeners();
-    //   }
-
-    //   Navigator.pushNamed(context, '/home');
-    // });
   }
 
   void setLoginResponse(BuildContext context, String response) {

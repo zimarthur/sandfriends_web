@@ -96,7 +96,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                     if (widget.viewModel.changePasswordFormKey.currentState
                             ?.validate() ==
                         true) {
-                      widget.viewModel.changePassword();
+                      widget.viewModel.changePassword(context);
                     }
                   },
                 ),

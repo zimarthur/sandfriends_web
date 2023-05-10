@@ -50,5 +50,3 @@ List<Color> sfColors = [
   secondaryGreen,
   textDarkGrey,
 ];
-
-String titleDescriptionSeparator = "/description";

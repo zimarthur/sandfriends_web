@@ -88,7 +88,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                   : viewModel.pageStatus == PageStatus.FORM
                                       ? viewModel.modalFormWidget
                                       : SFMessageModal(
-                                          message: viewModel.modalTitle,
+                                          title: viewModel.modalTitle,
                                           onTap: viewModel.modalCallback,
                                           isHappy: viewModel.pageStatus ==
                                                   PageStatus.WARNING

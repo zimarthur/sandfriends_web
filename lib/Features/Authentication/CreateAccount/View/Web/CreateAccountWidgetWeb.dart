@@ -24,8 +24,12 @@ class _CreateAccountWidgetWebState extends State<CreateAccountWidgetWeb> {
     double height = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.9,
-      width: width * 0.65 < 400 ? 400 : width * 0.65,
+      height: height * 0.85 > 600 ? 600 : height * 0.85,
+      width: width * 0.65 < 450
+          ? 450
+          : width * 0.65 > 800
+              ? 800
+              : width * 0.65,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -61,9 +65,11 @@ class _CreateAccountWidgetWebState extends State<CreateAccountWidgetWeb> {
               Expanded(
                 child: SFButton(
                     buttonLabel: "Próximo",
-                    buttonType: ButtonType.Primary,
+                    buttonType: widget.viewModel.buttonNextEnabled
+                        ? ButtonType.Primary
+                        : ButtonType.Disabled,
                     onTap: () {
-                      widget.viewModel.nextForm();
+                      widget.viewModel.nextForm(context);
                     }),
               ),
             ],

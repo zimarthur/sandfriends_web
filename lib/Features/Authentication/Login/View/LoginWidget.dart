@@ -27,8 +27,12 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.85,
-      width: width * 0.3 < 350 ? 350 : width * 0.3,
+      height: height * 0.85 > 700 ? 700 : height * 0.85,
+      width: width * 0.3 < 350
+          ? 350
+          : width * 0.3 > 500
+              ? 500
+              : width * 0.3,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -47,11 +51,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                 InkWell(
                   onTap: () => Navigator.pushNamed(
                     context,
-                    "/cgpw?str=0&tk=1682885967.333945eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZFVzZXIiOjQsInRpbWUiOiIyMDIzLTA0LTMwIDE2OjQ4OjAzLjI1MTY5NyJ9.bqXAWqVEjBDsofB0fbCrO_d3UGjOSxSm54hXnvhQWL4",
+                    "/cgpw?str=1&tk=1683684049.1963621683680830.2978246",
                   ),
                   child: SvgPicture.asset(
                     r'assets/icon/full_logo_positive.svg',
-                    //height: height * 0.2,
                   ),
                 ),
                 const SizedBox(

@@ -29,7 +29,7 @@ class EmailConfirmationRepoImp implements EmailConfirmationRepo {
       ApiEndPoints().emailConfirmationStore,
       jsonEncode(
         <String, Object>{
-          "Token": token,
+          "EmailConfirmationToken": token,
         },
       ),
     );

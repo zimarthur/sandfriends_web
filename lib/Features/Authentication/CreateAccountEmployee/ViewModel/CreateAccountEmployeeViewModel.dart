@@ -9,7 +9,7 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
 
   PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
@@ -43,7 +43,7 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
       notifyListeners();
     }).onError((error, stackTrace) {
       messageModal = SFMessageModal(
-        message: error.toString(),
+        title: error.toString(),
         onTap: () {
           Navigator.pushNamed(context, '/login');
         },
@@ -65,24 +65,24 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
       createAccountEmployeePasswordController.text,
     )
         .then((response) {
-      messageModal = SFMessageModal(
-        message: "feito",
-        onTap: () {
-          Navigator.pushNamed(context, '/login');
-        },
-        isHappy: true,
-      );
-      pageStatus = PageStatus.WARNING;
-      notifyListeners();
-    }).onError((error, stackTrace) {
-      messageModal = SFMessageModal(
-        message: error.toString(),
-        onTap: () {
-          pageStatus = PageStatus.OK;
-          notifyListeners();
-        },
-        isHappy: false,
-      );
+      //   messageModal = SFMessageModal(
+      //     message: "feito",
+      //     onTap: () {
+      //       Navigator.pushNamed(context, '/login');
+      //     },
+      //     isHappy: true,
+      //   );
+      //   pageStatus = PageStatus.WARNING;
+      //   notifyListeners();
+      // }).onError((error, stackTrace) {
+      //   messageModal = SFMessageModal(
+      //     message: error.toString(),
+      //     onTap: () {
+      //       pageStatus = PageStatus.OK;
+      //       notifyListeners();
+      //     },
+      //     isHappy: false,
+      //   );
 
       pageStatus = PageStatus.WARNING;
       notifyListeners();

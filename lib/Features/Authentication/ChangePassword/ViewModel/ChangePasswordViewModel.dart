@@ -9,17 +9,14 @@ class ChangePasswordViewModel extends ChangeNotifier {
   void init(String tokenArg, bool isStoreRequestArg) {
     token = tokenArg;
     isStoreRequest = isStoreRequestArg;
-    if (isStoreRequest) {
-    } else {
-      validateChangePasswordTokenUser();
-    }
+    validateChangePassword();
   }
 
   final changePasswordRepo = ChangePasswordRepoImp();
 
   PageStatus pageStatus = PageStatus.LOADING;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
@@ -31,6 +28,22 @@ class ChangePasswordViewModel extends ChangeNotifier {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
+  void validateChangePassword() {
+    if (isStoreRequest) {
+      validateChangePasswordTokenEmployee();
+    } else {
+      validateChangePasswordTokenUser();
+    }
+  }
+
+  void changePassword(BuildContext context) {
+    if (isStoreRequest) {
+      changePasswordEmployee(context);
+    } else {
+      changePasswordUser();
+    }
+  }
+
   void validateChangePasswordTokenUser() {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
@@ -40,7 +53,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
         notifyListeners();
       } else {
         messageModal = SFMessageModal(
-          message: response.userMessage!,
+          title: response.responseTitle!,
           onTap: () => validateChangePasswordTokenUser(),
           isHappy: false,
           buttonText: "Tentar novamente",
@@ -51,20 +64,68 @@ class ChangePasswordViewModel extends ChangeNotifier {
     });
   }
 
-  void changePassword() {
+  void validateChangePasswordTokenEmployee() {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+    changePasswordRepo
+        .validateChangePasswordTokenEmployee(token)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        pageStatus = PageStatus.OK;
+        notifyListeners();
+      } else {
+        messageModal = SFMessageModal(
+          title: response.responseTitle!,
+          description: response.responseDescription,
+          onTap: () {},
+          hideButton: true,
+          isHappy: false,
+        );
+        pageStatus = PageStatus.WARNING;
+        notifyListeners();
+      }
+    });
+  }
+
+  void changePasswordUser() {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     changePasswordRepo
         .changePasswordUser(token, newPasswordController.text)
         .then((response) {
       messageModal = SFMessageModal(
-        message: response.userMessage!,
+        title: response.responseTitle!,
         onTap: () {},
         isHappy: response.responseStatus == NetworkResponseStatus.alert,
         hideButton: true,
       );
       pageStatus = PageStatus.WARNING;
       notifyListeners();
+    });
+  }
+
+  void changePasswordEmployee(BuildContext context) {
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+    changePasswordRepo
+        .changePasswordEmployee(token, newPasswordController.text)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Navigator.pushNamed(context, '/login');
+      } else {
+        messageModal = SFMessageModal(
+          title: response.responseTitle!,
+          description: response.responseDescription,
+          onTap: () {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          },
+          isHappy: response.responseStatus == NetworkResponseStatus.alert,
+          hideButton: true,
+        );
+        pageStatus = PageStatus.WARNING;
+        notifyListeners();
+      }
     });
   }
 }

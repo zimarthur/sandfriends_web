@@ -24,8 +24,6 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    LoginViewModel loginViewModel = LoginViewModel();
 
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),

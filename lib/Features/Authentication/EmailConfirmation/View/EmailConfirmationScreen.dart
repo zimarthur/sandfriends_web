@@ -8,6 +8,7 @@ import '../../../../SharedComponents/View/SFLoading.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../../Utils/PageStatus.dart';
 import '../../../../Utils/Responsive.dart';
+import 'EmailConfirmationWidget.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   String token;
@@ -29,6 +30,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   @override
   void initState() {
     viewModel.initEmailConfirmationViewModel(
+      context,
       widget.token,
       widget.isStoreRequest,
     );
@@ -59,74 +61,8 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                         )
                       : viewModel.pageStatus == PageStatus.WARNING
                           ? viewModel.messageModal
-                          : Container(
-                              padding: const EdgeInsets.all(2 * defaultPadding),
-                              width: Responsive.isMobile(context)
-                                  ? width * 0.8
-                                  : width * 0.3 < 350
-                                      ? 350
-                                      : width * 0.3,
-                              decoration: BoxDecoration(
-                                color: secondaryPaper,
-                                borderRadius:
-                                    BorderRadius.circular(defaultBorderRadius),
-                                border: Border.all(
-                                  color: divider,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SvgPicture.asset(
-                                    viewModel.isStoreRequest
-                                        ? r"assets/people/email_confirmation_store.svg"
-                                        : r"assets/people/email_confirmation_user.svg",
-                                    height: Responsive.isMobile(context)
-                                        ? height * 0.4
-                                        : 150,
-                                  ),
-                                  const SizedBox(
-                                    height: 2 * defaultPadding,
-                                  ),
-                                  Text(
-                                    "Sua conta foi verificada!",
-                                    style: TextStyle(
-                                        color: textBlack,
-                                        fontSize: Responsive.isMobile(context)
-                                            ? 18
-                                            : 24),
-                                  ),
-                                  const SizedBox(
-                                    height: defaultPadding / 2,
-                                  ),
-                                  Text(
-                                    viewModel.isStoreRequest
-                                        ? "Faça login e comece a gerenciar as partidas da quadra!"
-                                        : "Entre no app e comece a agendar suas partidas",
-                                    style: TextStyle(
-                                      color: textDarkGrey,
-                                      fontSize: Responsive.isMobile(context)
-                                          ? 14
-                                          : 16,
-                                    ),
-                                  ),
-                                  if (viewModel.isStoreRequest)
-                                    Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: defaultPadding * 2,
-                                        ),
-                                        SFButton(
-                                          buttonLabel: "Login",
-                                          buttonType: ButtonType.Primary,
-                                          onTap: () =>
-                                              viewModel.goToLogin(context),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
+                          : EmailConfirmationWidget(
+                              viewModel: viewModel,
                             ),
                 ),
               ),

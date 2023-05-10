@@ -21,9 +21,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: ChangeNotifierProvider<ForgotPasswordViewModel>(
         create: (BuildContext context) => viewModel,

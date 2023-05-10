@@ -12,18 +12,14 @@ import '../Model/CreateAccountStore.dart';
 import '../Repository/CreateAccountRepoImp.dart';
 
 class CreateAccountViewModel extends ChangeNotifier {
-  final _createAccountRepo = CreateAccountRepoImp();
+  final createAccountRepo = CreateAccountRepoImp();
 
   PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
-
-  void goToCreateAccountEmployee(BuildContext context) {
-    Navigator.pushNamed(context, '/create_account_employee');
-  }
 
   int _currentCreateAccountFormIndex = 0;
   int get currentCreateAccountFormIndex => _currentCreateAccountFormIndex;
@@ -37,38 +33,20 @@ class CreateAccountViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextForm() {
-    String missingfields = "";
+  void nextForm(BuildContext context) {
     if (_currentCreateAccountFormIndex == 0) {
-      missingfields = missingCourtFormFields();
+      if (courtFormKey.currentState?.validate() == true) {
+        _currentCreateAccountFormIndex++;
+        notifyListeners();
+      }
     } else {
-      missingfields = missingOwnerFormFields();
+      if (ownerFormKey.currentState?.validate() == true) {
+        submitCreateAccount(context);
+      }
     }
-
-    if (missingfields.isNotEmpty) {
-      messageModal = SFMessageModal(
-        message:
-            "Para posseguir, preencha:$titleDescriptionSeparator$missingfields",
-        onTap: () {
-          pageStatus = PageStatus.OK;
-          notifyListeners();
-        },
-        isHappy: false,
-      );
-      pageStatus = PageStatus.WARNING;
-      notifyListeners();
-      return;
-    }
-
-    if (_currentCreateAccountFormIndex == 1) {
-      submitCreateAccount();
-    } else {
-      _currentCreateAccountFormIndex++;
-    }
-
-    notifyListeners();
   }
 
+  final courtFormKey = GlobalKey<FormState>();
   TextEditingController cnpjController =
       MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController cpfController =
@@ -82,6 +60,7 @@ class CreateAccountViewModel extends ChangeNotifier {
   TextEditingController addressNumberController = TextEditingController();
   bool noCnpj = false;
 
+  final ownerFormKey = GlobalKey<FormState>();
   TextEditingController ownerFirstNameController = TextEditingController();
   TextEditingController ownerLastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -89,8 +68,20 @@ class CreateAccountViewModel extends ChangeNotifier {
       MaskedTextController(mask: '(00) 00000-0000');
   TextEditingController telephoneOwnerController =
       MaskedTextController(mask: '(00) 00000-0000');
-  bool isAbove18 = true;
-  bool termsAgree = true;
+
+  bool _isAbove18 = true;
+  bool get isAbove18 => _isAbove18;
+  set isAbove18(bool newValue) {
+    _isAbove18 = newValue;
+    notifyListeners();
+  }
+
+  bool _termsAgree = true;
+  bool get termsAgree => _termsAgree;
+  set termsAgree(bool newValue) {
+    termsAgree = newValue;
+    notifyListeners();
+  }
 
   void onTapSearchCnpj() {
     if (cnpjController.text.isNotEmpty) {
@@ -100,8 +91,17 @@ class CreateAccountViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchCnpj(String cnpj) async {
-    _createAccountRepo.getStoreFromCnpj(cnpj).then((response) {
+  bool get buttonNextEnabled {
+    if (_currentCreateAccountFormIndex == 1 &&
+        (isAbove18 == false || termsAgree == false)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void fetchCnpj(String cnpj) {
+    createAccountRepo.getStoreFromCnpj(cnpj).then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(
           response.responseBody!,
@@ -111,7 +111,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         notifyListeners();
       } else {
         messageModal = SFMessageModal(
-          message: "CNPJ não encontrado",
+          title: "CNPJ não encontrado",
           onTap: () {
             pageStatus = PageStatus.OK;
             notifyListeners();
@@ -134,40 +134,10 @@ class CreateAccountViewModel extends ChangeNotifier {
     addressNumberController.text = cnpjInfo.number;
   }
 
-  String missingCourtFormFields() {
-    String missingFields = "";
-    if (noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
-    if (!noCnpj && cnpjController.text.isEmpty) missingFields += "CNPJ\n";
-    if (storeNameController.text.isEmpty) {
-      missingFields += "Nome do Estabelecimento\n";
-    }
-    if (cepController.text.isEmpty) missingFields += "CEP\n";
-    if (neighbourhoodController.text.isEmpty) missingFields += "Bairro\n";
-    if (stateController.text.isEmpty) missingFields += "Estado\n";
-    if (cityController.text.isEmpty) missingFields += "Cidade\n";
-    if (addressController.text.isEmpty) missingFields += "Enderaço\n";
-    if (addressNumberController.text.isEmpty) missingFields += "Nº\n";
-    return missingFields;
-  }
-
-  String missingOwnerFormFields() {
-    String missingFields = "";
-    if (!noCnpj && cpfController.text.isEmpty) missingFields += "CPF\n";
-    if (ownerFirstNameController.text.isEmpty) missingFields += "Nome\n";
-    if (ownerLastNameController.text.isEmpty) missingFields += "Sobrenome\n";
-    if (emailController.text.isEmpty) missingFields += "Email\n";
-    if (telephoneController.text.isEmpty) {
-      missingFields += "Telefone da Quadra\n";
-    }
-    if (!isAbove18) missingFields += "Confirmação de maioridade\n";
-    if (!termsAgree) missingFields += "Confirmação dos Termos\n";
-    return missingFields;
-  }
-
-  void submitCreateAccount() {
+  void submitCreateAccount(BuildContext context) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
-    _createAccountRepo
+    createAccountRepo
         .createAccount(
       CreateAccountStore(
         cnpj: cnpjController.text.isEmpty
@@ -192,10 +162,15 @@ class CreateAccountViewModel extends ChangeNotifier {
     )
         .then((response) {
       messageModal = SFMessageModal(
-        message: response.userMessage.toString(),
+        title: response.responseTitle!,
+        description: response.responseDescription,
         onTap: () {
-          pageStatus = PageStatus.OK;
-          notifyListeners();
+          if (response.responseStatus == NetworkResponseStatus.alert) {
+            Navigator.pushNamed(context, '/login');
+          } else {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          }
         },
         isHappy: response.responseStatus == NetworkResponseStatus.alert,
       );
@@ -210,5 +185,9 @@ class CreateAccountViewModel extends ChangeNotifier {
 
   void onTapPoliticaDePrivacidade(BuildContext context) {
     Navigator.pushNamed(context, '/privacy');
+  }
+
+  void goToCreateAccountEmployee(BuildContext context) {
+    Navigator.pushNamed(context, '/create_account_employee');
   }
 }

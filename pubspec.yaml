@@ -64,6 +64,7 @@ dev_dependencies:
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.1.0
+  localstorage: ^4.0.1+2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

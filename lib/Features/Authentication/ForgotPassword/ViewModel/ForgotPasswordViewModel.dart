@@ -8,11 +8,11 @@ import '../../../../Utils/PageStatus.dart';
 import '../Repository/ForgotPasswordRepoImp.dart';
 
 class ForgotPasswordViewModel extends ChangeNotifier {
-  final _forgotPasswordRepo = ForgotPasswordRepoImp();
+  final forgotPasswordRepo = ForgotPasswordRepoImp();
 
   PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
-    message: "",
+    title: "",
     onTap: () {},
     isHappy: true,
   );
@@ -21,18 +21,27 @@ class ForgotPasswordViewModel extends ChangeNotifier {
   TextEditingController forgotPasswordEmailController = TextEditingController();
 
   void sendForgotPassword(BuildContext context) {
-    _forgotPasswordRepo
-        .forgotPassword(forgotPasswordEmailController.text)
+    pageStatus = PageStatus.LOADING;
+    notifyListeners();
+    forgotPasswordRepo
+        .forgotPassword(
+      forgotPasswordEmailController.text,
+    )
         .then((response) {
       messageModal = SFMessageModal(
-        message:
-            "Email enviado! ${titleDescriptionSeparator}Verifique sua caixa de email e crie uma nova senha",
+        title: response.responseTitle!,
+        description: response.responseDescription,
         onTap: () {
-          goToLogin(context);
+          if (response.responseStatus == NetworkResponseStatus.alert) {
+            goToLogin(context);
+          } else {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          }
         },
         isHappy: response.responseStatus == NetworkResponseStatus.alert,
       );
-      pageStatus = PageStatus.OK;
+      pageStatus = PageStatus.WARNING;
       notifyListeners();
     });
   }

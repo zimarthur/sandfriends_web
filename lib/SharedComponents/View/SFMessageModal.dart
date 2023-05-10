@@ -5,7 +5,8 @@ import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'SFButton.dart';
 
 class SFMessageModal extends StatefulWidget {
-  String message;
+  String title;
+  String? description;
   VoidCallback onTap;
   String buttonText;
   bool isHappy;
@@ -13,7 +14,8 @@ class SFMessageModal extends StatefulWidget {
 
   SFMessageModal({
     super.key,
-    required this.message,
+    required this.title,
+    this.description,
     required this.onTap,
     this.buttonText = "Voltar",
     required this.isHappy,
@@ -25,21 +27,6 @@ class SFMessageModal extends StatefulWidget {
 }
 
 class _SFMessageModalState extends State<SFMessageModal> {
-  late String title;
-  late String? description;
-
-  @override
-  void initState() {
-    if (widget.message.contains(titleDescriptionSeparator)) {
-      title = widget.message.split(titleDescriptionSeparator)[0];
-      description = widget.message.split(titleDescriptionSeparator)[1];
-    } else {
-      title = widget.message;
-      description = null;
-    }
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -72,19 +59,19 @@ class _SFMessageModalState extends State<SFMessageModal> {
             height: 2 * defaultPadding,
           ),
           Text(
-            title,
+            widget.title,
             style: TextStyle(
                 color: textBlack,
                 fontSize: Responsive.isMobile(context) ? 18 : 24),
           ),
-          if (description != null)
+          if (widget.description != null)
             Column(
               children: [
                 const SizedBox(
                   height: defaultPadding / 2,
                 ),
                 Text(
-                  description!,
+                  widget.description!,
                   style: TextStyle(
                       color: textDarkGrey,
                       fontSize: Responsive.isMobile(context) ? 14 : 16),
