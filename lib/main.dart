@@ -65,15 +65,15 @@ class MyApp extends StatelessWidget {
           fontFamily: "Lexend",
         ),
         onGenerateRoute: (settings) {
-          String newAccountEmployee = '/create_account_employee';
-          String emailConfirmation = '/emcf';
-          String changePassword = '/cgpw';
-
+          String newAccountEmployee = '/adem'; //add employee
+          String emailConfirmation = '/emcf'; //email confirmation
+          String changePassword = '/cgpw'; //change password
           if (settings.name!.startsWith(newAccountEmployee)) {
+            final token = settings.name!.split("?")[1].split("=")[1];
             return MaterialPageRoute(
               builder: (context) {
                 return CreateAccountEmployeeScreen(
-                  token: settings.name!.split(newAccountEmployee)[1],
+                  token: token,
                 );
               },
             );

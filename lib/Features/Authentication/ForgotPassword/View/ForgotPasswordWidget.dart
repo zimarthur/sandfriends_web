@@ -46,12 +46,24 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: () => widget.viewModel.goToLogin(context),
-              child: SvgPicture.asset(
-                r"assets/icon/arrow_left.svg",
-                height: 25,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () => widget.viewModel.goToLogin(context),
+                  child: SvgPicture.asset(
+                    r"assets/icon/arrow_left.svg",
+                    height: 25,
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: SvgPicture.asset(
+                      r'assets/icon/full_logo_positive.svg',
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               height: 2 * defaultPadding,

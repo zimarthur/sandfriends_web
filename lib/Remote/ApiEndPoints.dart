@@ -1,18 +1,26 @@
 class ApiEndPoints {
+  //login
+  final String login = "/EmployeeLogin";
+  final String validateToken = "/ValidateEmployeeAccessToken";
+
+  //create account
   final String createAccount = "/AddStore";
-  final String login = "/StoreLogin";
+
+  //new password
   final String forgotPassword = "/ChangePasswordRequestEmployee";
   final String changePasswordValidateTokenEmployee =
       "/ValidateChangePasswordTokenEmployee";
   final String changePasswordEmployee = "/ChangePasswordEmployee";
 
-  //add employee
-  final String validateNewEmployeeToken = "/ValidateNewEmployeeToken";
-  final String createAccountEmployee = "/AddStoreEmployee";
-  final String emailConfirmationStore = "/EmailConfirmationEmployee";
-
-  final String emailConfirmationUser = "/EmailConfirmationUser";
   final String changePasswordValidateTokenUser =
       "/ValidateChangePasswordTokenUser";
   final String changePasswordUser = "/ChangePasswordUser";
+
+  //email confirmation
+  final String emailConfirmationStore = "/EmailConfirmationEmployee";
+  final String emailConfirmationUser = "/EmailConfirmationUser";
+
+  //add employee
+  final String validateNewEmployeeToken = "/ValidateNewEmployeeEmail";
+  final String createAccountEmployee = "/AddEmployeeInformation";
 }

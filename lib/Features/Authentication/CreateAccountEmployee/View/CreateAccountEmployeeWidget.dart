@@ -7,21 +7,22 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFTextfield.dart';
+import '../../../../Utils/Responsive.dart';
 import '../ViewModel/CreateAccountEmployeeViewModel.dart';
 
-class CreateAccountEmployeeWidgetMobile extends StatefulWidget {
+class CreateAccountEmployeeWidget extends StatefulWidget {
   CreateAccountEmployeeViewModel viewModel;
-  CreateAccountEmployeeWidgetMobile({
+  CreateAccountEmployeeWidget({
     super.key,
     required this.viewModel,
   });
   @override
-  State<CreateAccountEmployeeWidgetMobile> createState() =>
-      _CreateAccountEmployeeWidgetMobileState();
+  State<CreateAccountEmployeeWidget> createState() =>
+      _CreateAccountEmployeeWidgetState();
 }
 
-class _CreateAccountEmployeeWidgetMobileState
-    extends State<CreateAccountEmployeeWidgetMobile> {
+class _CreateAccountEmployeeWidgetState
+    extends State<CreateAccountEmployeeWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -29,8 +30,12 @@ class _CreateAccountEmployeeWidgetMobileState
 
     return Container(
       padding: const EdgeInsets.all(2 * defaultPadding),
-      width: width * 0.9,
-      height: height * 0.9,
+      width: Responsive.isMobile(context)
+          ? width * 0.9
+          : width * 0.4 < 350
+              ? 350
+              : width * 0.4,
+      margin: EdgeInsets.symmetric(vertical: height * 0.05),
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -46,8 +51,16 @@ class _CreateAccountEmployeeWidgetMobileState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: SvgPicture.asset(
+                  r'assets/icon/full_logo_positive.svg',
+                ),
+              ),
+              const SizedBox(
+                height: defaultPadding,
+              ),
               const Text(
-                "Seja bem vindo ao sandfriends!",
+                "Seja bem vindo!",
                 style: TextStyle(color: textBlack, fontSize: 24),
               ),
               const SizedBox(
@@ -136,17 +149,10 @@ class _CreateAccountEmployeeWidgetMobileState
                 suffixIconPressed:
                     SvgPicture.asset(r"assets/icon/eye_open.svg"),
                 pourpose: TextFieldPourpose.Password,
-                validator: (value) {
-                  if (widget.viewModel.createAccountEmployeePasswordController
-                          .text !=
-                      widget
-                          .viewModel
-                          .createAccountEmployeePasswordConfirmController
-                          .text) {
-                    return "As senhas não estão iguais";
-                  }
-                  return null;
-                },
+                validator: (value) => confirmPasswordValidator(
+                  value,
+                  widget.viewModel.createAccountEmployeePasswordController.text,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: defaultPadding),
@@ -180,7 +186,6 @@ class _CreateAccountEmployeeWidgetMobileState
                       height: defaultPadding / 2,
                     ),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Checkbox(
                             activeColor: primaryBlue,

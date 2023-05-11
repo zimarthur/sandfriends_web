@@ -59,7 +59,7 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
       String token, String newPassword) async {
     NetworkResponse response = await _apiService.postResponse(
       _apiService.sandfriendsUrl,
-      ApiEndPoints().changePasswordUser,
+      ApiEndPoints().changePasswordEmployee,
       jsonEncode(
         <String, Object>{
           "ResetPasswordToken": token,

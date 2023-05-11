@@ -9,6 +9,4 @@ class CreateAccountRepo {
   }
 
   Future<NetworkResponse?> createAccount(CreateAccountStore store) async {}
-  Future<NetworkResponse?> createAccountEmployee(
-      String email, String password) async {}
 }

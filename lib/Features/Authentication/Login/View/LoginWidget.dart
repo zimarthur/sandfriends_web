@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/Login/ViewModel/LoginViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../SharedComponents/View/SFButton.dart';
@@ -51,7 +50,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 InkWell(
                   onTap: () => Navigator.pushNamed(
                     context,
-                    "/cgpw?str=1&tk=1683684049.1963621683680830.2978246",
+                    "/adem?tk=",
                   ),
                   child: SvgPicture.asset(
                     r'assets/icon/full_logo_positive.svg',
@@ -92,28 +91,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                       height: defaultPadding,
                     ),
                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          Provider.of<LoginViewModel>(context, listen: false)
-                              .keepConnected = !Provider.of<LoginViewModel>(
-                                  context,
-                                  listen: false)
-                              .keepConnected;
-                        });
-                      },
+                      onTap: () => widget.viewModel.keepConnected =
+                          !widget.viewModel.keepConnected,
                       child: Row(
                         children: [
                           Checkbox(
-                              activeColor: primaryBlue,
-                              value: Provider.of<LoginViewModel>(context)
-                                  .keepConnected,
-                              onChanged: (value) {
-                                setState(() {
-                                  Provider.of<LoginViewModel>(context,
-                                          listen: false)
-                                      .keepConnected = value!;
-                                });
-                              }),
+                            activeColor: primaryBlue,
+                            value: widget.viewModel.keepConnected,
+                            onChanged: (value) =>
+                                widget.viewModel.keepConnected = value!,
+                          ),
                           const Text(
                             "Mantenha-me conectado",
                             style: TextStyle(color: textDarkGrey),
@@ -133,8 +120,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       buttonLabel: "Entrar",
                       buttonType: ButtonType.Primary,
                       onTap: (() {
-                        Provider.of<LoginViewModel>(context, listen: false)
-                            .onTapLogin(context);
+                        widget.viewModel.onTapLogin(context);
                       }),
                     ),
                     const SizedBox(

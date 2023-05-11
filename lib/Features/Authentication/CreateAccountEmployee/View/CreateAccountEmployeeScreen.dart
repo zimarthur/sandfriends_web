@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidgetMobile.dart';
-import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeWidgetWeb.dart';
 import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/ViewModel/CreateAccountEmployeeViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFStandardScreen.dart';
@@ -10,6 +8,7 @@ import 'dart:html';
 import '../../../../SharedComponents/View/SFLoading.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../../Utils/PageStatus.dart';
+import 'CreateAccountEmployeeWidget.dart';
 
 class CreateAccountEmployeeScreen extends StatefulWidget {
   String token;
@@ -28,8 +27,7 @@ class _CreateAccountEmployeeScreenState
 
   @override
   void initState() {
-    viewModel.addEmployeeToken = widget.token;
-    viewModel.initCreateAccountEmployeeViewModel(context);
+    viewModel.initCreateAccountEmployeeViewModel(context, widget.token);
     super.initState();
   }
 
@@ -44,13 +42,9 @@ class _CreateAccountEmployeeScreenState
         builder: (context, viewModel, _) {
           return SFStandardScreen(
             pageStatus: viewModel.pageStatus,
-            child: Responsive.isMobile(context)
-                ? CreateAccountEmployeeWidgetMobile(
-                    viewModel: viewModel,
-                  )
-                : CreateAccountEmployeeWidgetWeb(
-                    viewModel: viewModel,
-                  ),
+            child: CreateAccountEmployeeWidget(
+              viewModel: viewModel,
+            ),
             messageModalWidget: viewModel.messageModal,
           );
         },

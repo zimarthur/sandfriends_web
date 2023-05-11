@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../SharedComponents/View/SFTextfield.dart';
 import '../../../../../Utils/Validators.dart';
 import '../../ViewModel/CreateAccountViewModel.dart';
@@ -62,15 +62,6 @@ class _CreateAccountOwnerWidgetMobileState
                     const SizedBox(
                       height: defaultPadding,
                     ),
-                    SFTextField(
-                      labelText: "Email",
-                      pourpose: TextFieldPourpose.Standard,
-                      controller: widget.viewModel.emailController,
-                      validator: (value) => emailValidator(value),
-                    ),
-                    const SizedBox(
-                      height: defaultPadding,
-                    ),
                     !widget.viewModel.noCnpj
                         ? Column(
                             children: [
@@ -88,6 +79,48 @@ class _CreateAccountOwnerWidgetMobileState
                             ],
                           )
                         : Container(),
+                    SFTextField(
+                      labelText: "Email",
+                      pourpose: TextFieldPourpose.Standard,
+                      controller: widget.viewModel.emailController,
+                      validator: (value) => emailValidator(value),
+                    ),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    SFTextField(
+                      controller: widget.viewModel.passwordController,
+                      labelText: "Senha",
+                      suffixIcon:
+                          SvgPicture.asset(r"assets/icon/eye_closed.svg"),
+                      suffixIconPressed:
+                          SvgPicture.asset(r"assets/icon/eye_open.svg"),
+                      pourpose: TextFieldPourpose.Password,
+                      validator: (value) {
+                        return passwordValidator(value);
+                      },
+                    ),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    SFTextField(
+                      controller: widget.viewModel.confirmPasswordController,
+                      labelText: "Confirme sua senha",
+                      suffixIcon:
+                          SvgPicture.asset(r"assets/icon/eye_closed.svg"),
+                      suffixIconPressed:
+                          SvgPicture.asset(r"assets/icon/eye_open.svg"),
+                      pourpose: TextFieldPourpose.Password,
+                      validator: (value) {
+                        return confirmPasswordValidator(
+                          value,
+                          widget.viewModel.passwordController.text,
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
                     SFTextField(
                       labelText: "Telefone da Quadra",
                       pourpose: TextFieldPourpose.Numeric,

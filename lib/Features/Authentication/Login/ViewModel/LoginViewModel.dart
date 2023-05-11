@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localstorage/localstorage.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
+import 'dart:html';
 
 class LoginViewModel extends ChangeNotifier {
   final loginRepo = LoginRepoImp();
@@ -31,13 +32,18 @@ class LoginViewModel extends ChangeNotifier {
 
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool keepConnected = true;
 
-  Future<void> validateToken(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString("AccessToken");
-    if (accessToken != null) {
-      loginRepo.validateLogin(accessToken).then((response) {
+  bool _keepConnected = true;
+  bool get keepConnected => _keepConnected;
+  set keepConnected(bool newValue) {
+    _keepConnected = newValue;
+    notifyListeners();
+  }
+
+  void validateToken(BuildContext context) {
+    String? storedToken = getToken();
+    if (storedToken != null) {
+      loginRepo.validateToken(storedToken).then((response) {
         if (response.responseStatus == NetworkResponseStatus.success) {
           setLoginResponse(context, response.responseBody!);
           Navigator.pushNamed(context, '/home');
@@ -51,7 +57,7 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onTapLogin(BuildContext context) async {
+  void onTapLogin(BuildContext context) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
 
@@ -69,12 +75,20 @@ class LoginViewModel extends ChangeNotifier {
             pageStatus = PageStatus.OK;
             notifyListeners();
           },
-          isHappy: false,
+          isHappy: response.responseStatus == NetworkResponseStatus.alert,
         );
         pageStatus = PageStatus.WARNING;
         notifyListeners();
       }
     });
+  }
+
+  void storeToken(String accessToken) {
+    window.localStorage["sfToken"] = accessToken;
+  }
+
+  String? getToken() {
+    return window.localStorage["sfToken"];
   }
 
   void setLoginResponse(BuildContext context, String response) {
@@ -91,9 +105,9 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void setAccessToken(BuildContext context, Map<String, dynamic> responseBody) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setString("AccessToken", responseBody['AccessToken']);
-    });
+    if (keepConnected) {
+      storeToken(responseBody['AccessToken']);
+    }
   }
 
   void setLoggedUser(BuildContext context, Map<String, dynamic> responseBody) {

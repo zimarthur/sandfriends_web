@@ -110,22 +110,21 @@ class ChangePasswordViewModel extends ChangeNotifier {
     changePasswordRepo
         .changePasswordEmployee(token, newPasswordController.text)
         .then((response) {
-      if (response.responseStatus == NetworkResponseStatus.success) {
-        Navigator.pushNamed(context, '/login');
-      } else {
-        messageModal = SFMessageModal(
-          title: response.responseTitle!,
-          description: response.responseDescription,
-          onTap: () {
+      messageModal = SFMessageModal(
+        title: response.responseTitle!,
+        description: response.responseDescription,
+        onTap: () {
+          if (response.responseStatus == NetworkResponseStatus.alert) {
+            Navigator.pushNamed(context, '/login');
+          } else {
             pageStatus = PageStatus.OK;
             notifyListeners();
-          },
-          isHappy: response.responseStatus == NetworkResponseStatus.alert,
-          hideButton: true,
-        );
-        pageStatus = PageStatus.WARNING;
-        notifyListeners();
-      }
+          }
+        },
+        isHappy: response.responseStatus == NetworkResponseStatus.alert,
+      );
+      pageStatus = PageStatus.WARNING;
+      notifyListeners();
     });
   }
 }

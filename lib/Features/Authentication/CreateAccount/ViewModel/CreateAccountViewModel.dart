@@ -64,6 +64,8 @@ class CreateAccountViewModel extends ChangeNotifier {
   TextEditingController ownerFirstNameController = TextEditingController();
   TextEditingController ownerLastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController telephoneController =
       MaskedTextController(mask: '(00) 00000-0000');
   TextEditingController telephoneOwnerController =
@@ -153,6 +155,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         ownerFirstName: ownerFirstNameController.text,
         ownerLastName: ownerLastNameController.text,
         email: emailController.text,
+        password: passwordController.text,
         cpf: cpfController.text.replaceAll(RegExp('[^0-9]'), ''),
         telephone: telephoneController.text.replaceAll(RegExp('[^0-9]'), ''),
         telephoneOwner: telephoneOwnerController.text.isEmpty
@@ -172,6 +175,9 @@ class CreateAccountViewModel extends ChangeNotifier {
             notifyListeners();
           }
         },
+        buttonText: response.responseStatus == NetworkResponseStatus.alert
+            ? "Concluído"
+            : "Voltar",
         isHappy: response.responseStatus == NetworkResponseStatus.alert,
       );
       pageStatus = PageStatus.WARNING;
@@ -185,9 +191,5 @@ class CreateAccountViewModel extends ChangeNotifier {
 
   void onTapPoliticaDePrivacidade(BuildContext context) {
     Navigator.pushNamed(context, '/privacy');
-  }
-
-  void goToCreateAccountEmployee(BuildContext context) {
-    Navigator.pushNamed(context, '/create_account_employee');
   }
 }

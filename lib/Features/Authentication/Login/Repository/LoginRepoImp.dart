@@ -28,10 +28,10 @@ class LoginRepoImp implements LoginRepo {
   }
 
   @override
-  Future<NetworkResponse> validateLogin(String accessToken) async {
+  Future<NetworkResponse> validateToken(String accessToken) async {
     NetworkResponse response = await _apiService.postResponse(
       _apiService.sandfriendsUrl,
-      ApiEndPoints().login,
+      ApiEndPoints().validateToken,
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,

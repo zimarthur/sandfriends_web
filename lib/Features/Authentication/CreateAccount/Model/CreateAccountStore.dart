@@ -12,6 +12,7 @@ class CreateAccountStore {
   String ownerFirstName;
   String ownerLastName;
   String email;
+  String password;
   String cpf;
   String telephone;
   String telephoneOwner;
@@ -28,6 +29,7 @@ class CreateAccountStore {
     required this.ownerFirstName,
     required this.ownerLastName,
     required this.email,
+    required this.password,
     required this.cpf,
     required this.telephone,
     required this.telephoneOwner,
@@ -48,6 +50,7 @@ String CreateAccountStoreToJson(CreateAccountStore store) {
       "FirstName": store.ownerFirstName,
       "LastName": store.ownerLastName,
       "Email": store.email,
+      "Password": store.password,
       "CPF": store.cpf,
       "PhoneStore": store.telephone,
       "PhoneOwner": store.telephoneOwner,

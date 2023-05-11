@@ -28,6 +28,13 @@ String? passwordValidator(String? value) {
   }
 }
 
+String? confirmPasswordValidator(String? value, String password) {
+  if (value != password) {
+    return "As senhas não estão iguais";
+  }
+  return null;
+}
+
 String? max255(String? value) {
   if (value!.isNotEmpty && value.length > 255) {
     return "Máx 255 caracteres";

@@ -43,7 +43,7 @@ class EmailConfirmationWidget extends StatelessWidget {
             height: 2 * defaultPadding,
           ),
           Text(
-            "Sua conta foi verificada!",
+            "Parabéns, sua conta foi criada!",
             style: TextStyle(
                 color: textBlack,
                 fontSize: Responsive.isMobile(context) ? 18 : 24),
@@ -53,26 +53,16 @@ class EmailConfirmationWidget extends StatelessWidget {
           ),
           Text(
             viewModel.isStoreRequest
-                ? "Faça login e comece a gerenciar as partidas da quadra!"
+                ? "Em breve entraremos em contato para apresentar a plataforma e todas suas funcionalidades.\nQualquer dúvida, basta chamar nossa equipe de suporte."
                 : "Entre no app e comece a agendar suas partidas",
             style: TextStyle(
               color: textDarkGrey,
               fontSize: Responsive.isMobile(context) ? 14 : 16,
             ),
           ),
-          if (viewModel.isStoreRequest)
-            Column(
-              children: [
-                const SizedBox(
-                  height: defaultPadding * 2,
-                ),
-                SFButton(
-                  buttonLabel: "Login",
-                  buttonType: ButtonType.Primary,
-                  onTap: () => viewModel.goToLogin(context),
-                ),
-              ],
-            ),
+          const SizedBox(
+            height: defaultPadding * 2,
+          ),
         ],
       ),
     );

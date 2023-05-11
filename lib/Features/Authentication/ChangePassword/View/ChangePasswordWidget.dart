@@ -40,6 +40,14 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: SvgPicture.asset(
+                  r'assets/icon/full_logo_positive.svg',
+                ),
+              ),
+              const SizedBox(
+                height: defaultPadding,
+              ),
               const Text(
                 "Troque sua senha",
                 style: TextStyle(color: textBlack, fontSize: 24),
@@ -75,13 +83,10 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                 suffixIconPressed:
                     SvgPicture.asset(r"assets/icon/eye_open.svg"),
                 pourpose: TextFieldPourpose.Password,
-                validator: (value) {
-                  if (widget.viewModel.newPasswordController.text !=
-                      widget.viewModel.confirmNewPasswordController.text) {
-                    return "As senhas não estão iguais";
-                  }
-                  return null;
-                },
+                validator: (value) => confirmPasswordValidator(
+                  value,
+                  widget.viewModel.newPasswordController.text,
+                ),
               ),
               const SizedBox(
                 height: defaultPadding * 2,

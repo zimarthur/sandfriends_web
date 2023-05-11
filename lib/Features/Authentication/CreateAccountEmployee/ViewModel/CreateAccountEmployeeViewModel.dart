@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/Repository/CreateAccountEmployeeRepoImp.dart';
+import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 
 import '../../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../../Utils/PageStatus.dart';
 import '../Repository/CreateAccountEmployeeRepo.dart';
 
 class CreateAccountEmployeeViewModel extends ChangeNotifier {
-  final _createAccountEmployeeRepo = CreateAccountEmployeeRepo();
+  final _createAccountEmployeeRepo = CreateAccountEmployeeRepoImp();
 
   PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
@@ -15,8 +19,8 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
   );
 
   String addEmployeeToken = "";
-  String email = "zim.arthur97@gmail.com";
-  String storeName = "Beach Brasil";
+  String email = "";
+  String storeName = "";
 
   TextEditingController createAccountEmployeeFirstNameController =
       TextEditingController();
@@ -31,26 +35,33 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
 
   final createAccountEmployeeFormKey = GlobalKey<FormState>();
 
-  void initCreateAccountEmployeeViewModel(BuildContext context) {
+  void initCreateAccountEmployeeViewModel(BuildContext context, String token) {
+    addEmployeeToken = token;
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     _createAccountEmployeeRepo
         .validateNewEmployeeToken(addEmployeeToken)
         .then((response) {
-      email = response["Email"];
-      storeName = response["Store"];
-      pageStatus = PageStatus.OK;
-      notifyListeners();
-    }).onError((error, stackTrace) {
-      messageModal = SFMessageModal(
-        title: error.toString(),
-        onTap: () {
-          Navigator.pushNamed(context, '/login');
-        },
-        isHappy: false,
-      );
-      pageStatus = PageStatus.WARNING;
-      notifyListeners();
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        email = responseBody["Email"];
+        storeName = responseBody["StoreName"];
+        pageStatus = PageStatus.OK;
+        notifyListeners();
+      } else {
+        messageModal = SFMessageModal(
+          title: response.responseTitle!,
+          description: response.responseDescription,
+          onTap: () {
+            Navigator.pushNamed(context, '/login');
+          },
+          isHappy: response.responseStatus == NetworkResponseStatus.alert,
+        );
+        pageStatus = PageStatus.WARNING;
+        notifyListeners();
+      }
     });
   }
 
@@ -65,25 +76,22 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
       createAccountEmployeePasswordController.text,
     )
         .then((response) {
-      //   messageModal = SFMessageModal(
-      //     message: "feito",
-      //     onTap: () {
-      //       Navigator.pushNamed(context, '/login');
-      //     },
-      //     isHappy: true,
-      //   );
-      //   pageStatus = PageStatus.WARNING;
-      //   notifyListeners();
-      // }).onError((error, stackTrace) {
-      //   messageModal = SFMessageModal(
-      //     message: error.toString(),
-      //     onTap: () {
-      //       pageStatus = PageStatus.OK;
-      //       notifyListeners();
-      //     },
-      //     isHappy: false,
-      //   );
-
+      messageModal = SFMessageModal(
+        title: response.responseTitle!,
+        description: response.responseDescription,
+        onTap: () {
+          if (response.responseStatus == NetworkResponseStatus.alert) {
+            Navigator.pushNamed(context, '/login');
+          } else {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          }
+        },
+        isHappy: response.responseStatus == NetworkResponseStatus.alert,
+        buttonText: response.responseStatus == NetworkResponseStatus.alert
+            ? "Concluído"
+            : "Voltar",
+      );
       pageStatus = PageStatus.WARNING;
       notifyListeners();
     });
