@@ -14,11 +14,10 @@ class Store {
   String? ownerPhoneNumber;
   String? description;
   String? instagram;
-  String email;
   String? cnpj;
   String cep;
   String cpf;
-  String ownerName;
+  String? bankAccount;
   String neighbourhood;
   int? hoursBeforeCancellation;
   City city;
@@ -39,11 +38,10 @@ class Store {
     required this.description,
     required this.instagram,
     required this.hoursBeforeCancellation,
-    required this.email,
     required this.cnpj,
     required this.cep,
+    required this.bankAccount,
     required this.cpf,
-    required this.ownerName,
     required this.neighbourhood,
     required this.city,
     required this.approvalDate,
@@ -55,7 +53,6 @@ class Store {
         name: parsedJson["Name"],
         address: parsedJson["Address"],
         addressNumber: parsedJson["AddressNumber"],
-        email: parsedJson["Email"],
         phoneNumber: parsedJson["PhoneNumber1"],
         ownerPhoneNumber: parsedJson["PhoneNumber2"],
         logo: parsedJson["Logo"],
@@ -63,14 +60,38 @@ class Store {
         instagram: parsedJson["Instagram"],
         cnpj: parsedJson["Cnpj"],
         cep: parsedJson["Cep"],
+        bankAccount: parsedJson["BankAccount"],
         neighbourhood: parsedJson["Neighbourhood"],
         cpf: parsedJson["Cpf"],
-        ownerName: parsedJson["OwnerName"],
         hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
         city: City.fromJson(
           parsedJson["City"],
         ),
         approvalDate:
             DateFormat("dd/MM/yyyy").parse(parsedJson["ApprovalDate"]));
+  }
+
+  factory Store.copyWith(Store storeRef) {
+    var store = Store(
+      idStore: storeRef.idStore,
+      name: storeRef.name,
+      logo: storeRef.logo,
+      address: storeRef.address,
+      addressNumber: storeRef.addressNumber,
+      phoneNumber: storeRef.phoneNumber,
+      ownerPhoneNumber: storeRef.ownerPhoneNumber,
+      description: storeRef.description,
+      instagram: storeRef.instagram,
+      hoursBeforeCancellation: storeRef.hoursBeforeCancellation,
+      cnpj: storeRef.cnpj,
+      cep: storeRef.cep,
+      bankAccount: storeRef.bankAccount,
+      cpf: storeRef.cpf,
+      neighbourhood: storeRef.neighbourhood,
+      city: City.copyWith(storeRef.city),
+      approvalDate: storeRef.approvalDate,
+    );
+    store.photos = storeRef.photos;
+    return store;
   }
 }

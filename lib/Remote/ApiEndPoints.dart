@@ -20,7 +20,8 @@ class ApiEndPoints {
   final String emailConfirmationStore = "/EmailConfirmationEmployee";
   final String emailConfirmationUser = "/EmailConfirmationUser";
 
-  //add employee
+  //settings
+  final String updateStoreInfo = "/UpdateStoreInfo";
   final String validateNewEmployeeToken = "/ValidateNewEmployeeEmail";
   final String createAccountEmployee = "/AddEmployeeInformation";
 }

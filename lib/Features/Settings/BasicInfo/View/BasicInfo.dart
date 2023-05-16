@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Features/Settings/BasicInfo/ViewModel/BasicInfoViewModel.dart';
 import 'package:sandfriends_web/Features/Settings/View/FormItem.dart';
 import 'package:sandfriends_web/Features/Settings/ViewModel/SettingsViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
@@ -7,7 +6,7 @@ import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
 class BasicInfo extends StatefulWidget {
-  BasicInfoViewModel viewModel;
+  SettingsViewModel viewModel;
 
   BasicInfo({super.key, required this.viewModel});
 
@@ -29,17 +28,20 @@ class _BasicInfoState extends State<BasicInfo> {
                   FormItem(
                     name: "Nome",
                     controller: widget.viewModel.nameController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedName(newValue),
                   ),
                   FormItem(
                     name: "Telefone da empresa",
                     controller: widget.viewModel.telephoneController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedPhoneNumber(newValue),
                   ),
                   FormItem(
                     name: "Telefone pessoal",
                     controller: widget.viewModel.telephoneOwnerController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedPhoneNumber(newValue),
                   ),
                 ],
               ),
@@ -55,7 +57,10 @@ class _BasicInfoState extends State<BasicInfo> {
                     hasSecondItem: true,
                     secondName: "Bairro",
                     secondController: widget.viewModel.neighbourhoodController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedCep(newValue),
+                    onChangedSecond: (newValue) =>
+                        widget.viewModel.onChangedNeighbourhood(newValue),
                   ),
                   FormItem(
                     name: "Rua",
@@ -63,7 +68,10 @@ class _BasicInfoState extends State<BasicInfo> {
                     hasSecondItem: true,
                     secondName: "N°",
                     secondController: widget.viewModel.addressNumberController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedAddress(newValue),
+                    onChangedSecond: (newValue) =>
+                        widget.viewModel.onChangedAddressNumber(newValue),
                   ),
                   FormItem(
                     name: "Cidade",
@@ -71,35 +79,13 @@ class _BasicInfoState extends State<BasicInfo> {
                     hasSecondItem: true,
                     secondName: "Estado(UF)",
                     secondController: widget.viewModel.stateController,
-                    onChanged: (p0) {},
+                    onChanged: (newValue) =>
+                        widget.viewModel.onChangedCity(newValue),
+                    onChangedSecond: (newValue) =>
+                        widget.viewModel.onChangedState(newValue),
                   ),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: defaultPadding),
-                child: SFDivider(),
-              ),
-              FormItem(
-                name: "Email",
-                controller: widget.viewModel.emailController,
-                onChanged: (p0) {},
-                controllerEnabled: false,
-                hasSecondItem: true,
-                customWidget: Row(
-                  children: [
-                    Expanded(
-                      child: SFButton(
-                        buttonLabel: "Alterar senha",
-                        buttonType: ButtonType.Secondary,
-                        onTap: () {},
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),

@@ -96,7 +96,6 @@ class LoginViewModel extends ChangeNotifier {
       response,
     );
     setLoggedUser(context, responseBody);
-    setAccessToken(context, responseBody);
     setEmployees(context, responseBody);
     setSports(context, responseBody);
     setAvailableHours(context, responseBody);
@@ -104,22 +103,21 @@ class LoginViewModel extends ChangeNotifier {
     setCourts(context, responseBody);
   }
 
-  void setAccessToken(BuildContext context, Map<String, dynamic> responseBody) {
+  void setLoggedUser(BuildContext context, Map<String, dynamic> responseBody) {
+    Provider.of<DataProvider>(context, listen: false).loggedAccessToken =
+        responseBody["AccessToken"];
+    Provider.of<DataProvider>(context, listen: false).loggedEmail =
+        responseBody["LoggedEmail"];
     if (keepConnected) {
       storeToken(responseBody['AccessToken']);
     }
-  }
-
-  void setLoggedUser(BuildContext context, Map<String, dynamic> responseBody) {
-    Provider.of<DataProvider>(context, listen: false).loggedEmail =
-        responseBody["LoggedIdEmployee"];
   }
 
   void setEmployees(BuildContext context, Map<String, dynamic> responseBody) {
     final loggedEmail =
         Provider.of<DataProvider>(context, listen: false).loggedEmail;
 
-    for (var employee in responseBody['Employees']) {
+    for (var employee in responseBody['Store']['Employees']) {
       Provider.of<DataProvider>(context, listen: false)
           .employees
           .add(Employee.fromJson(employee));
@@ -127,7 +125,7 @@ class LoginViewModel extends ChangeNotifier {
     Provider.of<DataProvider>(context, listen: false)
         .employees
         .firstWhere(
-          (employee) => employee.idEmployee == loggedEmail,
+          (employee) => employee.email == loggedEmail,
         )
         .isLoggedUser = true;
   }
@@ -169,20 +167,23 @@ class LoginViewModel extends ChangeNotifier {
             .add(AvailableSport(sport: sport, isAvailable: foundSport));
       }
       for (var courtPrices in court["Prices"]) {
-        newCourt.prices.add(HourPrice(
-          startingHour: Provider.of<DataProvider>(context, listen: false)
-              .availableHours
-              .firstWhere((hour) =>
-                  hour.hour == courtPrices["Hour"]["IdAvailableHour"]),
-          weekday: courtPrices["Weekday"],
-          allowReccurrent: courtPrices["AllowRecurrent"],
-          price: courtPrices["Price"],
-          recurrentPrice: courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
-          endingHour: Provider.of<DataProvider>(context, listen: false)
-              .availableHours
-              .firstWhere(
-                  (hour) => hour.hour > courtPrices["Hour"]["IdAvailableHour"]),
-        ));
+        newCourt.prices.add(
+          HourPrice(
+            startingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .firstWhere(
+                    (hour) => hour.hour == courtPrices["IdAvailableHour"]),
+            weekday: courtPrices["Day"],
+            allowReccurrent: courtPrices["AllowRecurrent"],
+            price: courtPrices["Price"],
+            recurrentPrice:
+                courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
+            endingHour: Provider.of<DataProvider>(context, listen: false)
+                .availableHours
+                .firstWhere(
+                    (hour) => hour.hour > courtPrices["IdAvailableHour"]),
+          ),
+        );
       }
 
       Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);

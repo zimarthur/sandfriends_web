@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Features/Settings/BasicInfo/ViewModel/BasicInfoViewModel.dart';
-import 'package:sandfriends_web/Features/Settings/BrandInfo/ViewModel/BrandInfoViewModel.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
-import 'package:sandfriends_web/Features/Settings/FinanceInfo/ViewModel/FinanceInfoViewModel.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
+import 'package:provider/provider.dart';
+import 'package:image/image.dart' as IMG;
+import 'package:flutter/foundation.dart';
+
+import 'package:image_picker/image_picker.dart';
+import '../../../SharedComponents/Model/Store.dart';
+import '../../../Utils/SFImage.dart';
+import '../../Menu/ViewModel/DataProvider.dart';
 
 class SettingsViewModel extends ChangeNotifier {
-  final basicInfoViewModel = BasicInfoViewModel();
-  final brandInfoViewModel = BrandInfoViewModel();
-  final financeInfoViewModel = FinanceInfoViewModel();
-  final employeeInfoViewModel = EmployeeInfoViewModel();
-
   int _currentForm = 0;
   int get currentForm => _currentForm;
   set currentForm(int value) {
@@ -20,46 +21,203 @@ class SettingsViewModel extends ChangeNotifier {
   List<String> get formsTitle =>
       ["Dados básicos", "Marca", "Dados financeiros", "Equipe"];
 
-  bool _storeInfoDif = false;
-  bool get storeInfoDif => _storeInfoDif;
+  late Store storeRef;
+  late Store storeEdit;
 
-  void setFields(BuildContext context) {
-    basicInfoViewModel.setBasicInfoFields(context);
-    brandInfoViewModel.setBrandInfoFields(context);
+  TextEditingController nameController = TextEditingController();
+  TextEditingController telephoneController =
+      MaskedTextController(mask: '(00) 00000-0000');
+  TextEditingController cnpjController =
+      MaskedTextController(mask: '00.000.000/0000-00');
+  TextEditingController cpfController =
+      MaskedTextController(mask: '000.000.000-00');
+  TextEditingController stateController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController cepController = MaskedTextController(mask: '00000-000');
+  TextEditingController neighbourhoodController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController addressNumberController = TextEditingController();
+  TextEditingController ownerNameController = TextEditingController();
+  TextEditingController telephoneOwnerController =
+      MaskedTextController(mask: '(00) 00000-0000');
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController instagramController = TextEditingController();
+  TextEditingController bankAccountController = TextEditingController();
+
+  int get descriptionLength =>
+      storeEdit.description == null ? 0 : storeEdit.description!.length;
+
+  Uint8List? storeAvatarRef;
+
+  Uint8List? _storeAvatar;
+  Uint8List? get storeAvatar => _storeAvatar;
+  set storeAvatar(Uint8List? newFile) {
+    _storeAvatar = newFile;
     notifyListeners();
   }
 
-  void storeInfoChanged(BuildContext context) {
-    _storeInfoDif = basicInfoViewModel.basicInfoChanged(context) ||
-        brandInfoViewModel.brandInfoChanged(context);
+  List<Uint8List> storePhotosRef = [];
+  final List<Uint8List> _storePhotos = [];
+  List<Uint8List> get storePhotos => _storePhotos;
+
+  void initSettingsViewModel(BuildContext context) {
+    storeRef = Store.copyWith(
+        Provider.of<DataProvider>(context, listen: false).store!);
+    storeEdit = Store.copyWith(
+        Provider.of<DataProvider>(context, listen: false).store!);
+    nameController.text = storeEdit.name;
+    telephoneController.text = storeEdit.phoneNumber;
+    telephoneOwnerController.text = storeEdit.ownerPhoneNumber ?? "";
+    cepController.text = storeEdit.cep;
+    neighbourhoodController.text = storeEdit.neighbourhood;
+    addressController.text = storeEdit.address;
+    addressNumberController.text = storeEdit.addressNumber;
+    cityController.text = storeEdit.city.name;
+    stateController.text = storeEdit.city.state.uf;
+    descriptionController.text = storeEdit.description ?? "";
+    instagramController.text = storeEdit.instagram ?? "";
     notifyListeners();
   }
 
-  void saveStoreDifChanges(BuildContext context) {
-    // Provider.of<DataProvider>(context, listen: false).store!.name =
-    //     nameController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.phoneNumber =
-    //     telephoneController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.ownerPhoneNumber =
-    //     telephoneOwnerController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.cep =
-    //     cepController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.neighbourhood =
-    //     neighbourhoodController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.address =
-    //     addressController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.addressNumber =
-    //     addressNumberController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.city.name =
-    //     cityController.text; //tem q chegar do servidor a classe city certa
-    // Provider.of<DataProvider>(context, listen: false).store!.city.state.uf =
-    //     stateController.text; //tem q chegar do servidor a classe state certa
-    // Provider.of<DataProvider>(context, listen: false).store!.description =
-    //     descriptionController.text;
-    // Provider.of<DataProvider>(context, listen: false).store!.instagram =
-    //     instagramController.text;
-    // storeAvatarRef = storeAvatar;
-    // storePhotosRef = List.from(storePhotos);
-    // storeInfoChanged(context);
+  bool get infoChanged =>
+      storeRef.name != storeEdit.name ||
+      storeRef.phoneNumber != storeEdit.phoneNumber ||
+      storeRef.ownerPhoneNumber != storeEdit.ownerPhoneNumber ||
+      storeRef.cep != storeEdit.cep ||
+      storeRef.address != storeEdit.address ||
+      storeRef.addressNumber != storeEdit.addressNumber ||
+      storeRef.city.name != storeEdit.city.name ||
+      storeRef.city.state.uf != storeEdit.city.state.uf ||
+      storeRef.neighbourhood != storeEdit.neighbourhood ||
+      storeRef.description != storeEdit.description ||
+      storeRef.instagram != storeEdit.instagram;
+
+  Future setStoreAvatar(BuildContext context) async {
+    XFile? pickedImage = await pickImage();
+    if (pickedImage == null) return;
+
+    IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
+
+    double aspectRatio = decodedImage!.data!.height / decodedImage.data!.width;
+    IMG.Image? resizedImage;
+    if (aspectRatio > 1.0) {
+      resizedImage = await resizeImage(decodedImage, 400, 400 ~/ aspectRatio);
+    } else {
+      resizedImage =
+          await resizeImage(decodedImage, (400 * aspectRatio).toInt(), 400);
+    }
+
+    Uint8List? croppedImage = await cropImage(
+      context,
+      pickedImage,
+      'circle',
+      resizedImage!.height > resizedImage.width
+          ? resizedImage.width
+          : resizedImage.height,
+      resizedImage.height > resizedImage.width
+          ? resizedImage.width
+          : resizedImage.height,
+      resizedImage.height,
+      resizedImage.width,
+    );
+    if (croppedImage == null) return;
+    storeAvatar = croppedImage;
+  }
+
+  Future addStorePhoto(BuildContext context) async {
+    XFile? pickedImage = await pickImage();
+    if (pickedImage == null) return;
+
+    IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
+
+    IMG.Image? resizedImage = await resizeImage(
+      decodedImage!,
+      null,
+      300,
+    );
+
+    Uint8List? croppedImage = await cropImage(
+      context,
+      pickedImage,
+      null,
+      170,
+      300,
+      resizedImage!.height,
+      resizedImage.width,
+    );
+    if (croppedImage == null) return;
+    _storePhotos.add(croppedImage);
+    notifyListeners();
+  }
+
+  void deleteStorePhoto(BuildContext context, int index) {
+    _storePhotos.removeAt(index);
+
+    notifyListeners();
+  }
+
+  void onChangedName(String newValue) {
+    storeEdit.name = newValue;
+    notifyListeners();
+  }
+
+  void onChangedPhoneNumber(String newValue) {
+    storeEdit.phoneNumber = newValue;
+    notifyListeners();
+  }
+
+  void onChangedOwnerPhoneNumber(String newValue) {
+    storeEdit.ownerPhoneNumber = newValue;
+    notifyListeners();
+  }
+
+  void onChangedCep(String newValue) {
+    storeEdit.cep = newValue;
+    notifyListeners();
+  }
+
+  void onChangedAddress(String newValue) {
+    storeEdit.address = newValue;
+    notifyListeners();
+  }
+
+  void onChangedAddressNumber(String newValue) {
+    storeEdit.addressNumber = newValue;
+    notifyListeners();
+  }
+
+  void onChangedNeighbourhood(String newValue) {
+    storeEdit.neighbourhood = newValue;
+    notifyListeners();
+  }
+
+  void onChangedCity(String newValue) {
+    storeEdit.city.name = newValue;
+    notifyListeners();
+  }
+
+  void onChangedState(String newValue) {
+    storeEdit.city.state.uf = newValue;
+    notifyListeners();
+  }
+
+  void onChangedDescription(String newValue) {
+    storeEdit.description = newValue;
+    notifyListeners();
+  }
+
+  void onChangedInstagram(String newValue) {
+    storeEdit.instagram = newValue;
+    notifyListeners();
+  }
+
+  void onChangedBankAccount(String newValue) {
+    storeEdit.bankAccount = newValue;
+    notifyListeners();
+  }
+
+  void onChangedCnpj(String newValue) {
+    storeEdit.cnpj = newValue;
+    notifyListeners();
   }
 }

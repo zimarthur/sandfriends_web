@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Finances/ViewModel/FinancesViewModel.dart';
-import 'package:sandfriends_web/Features/Settings/BasicInfo/ViewModel/BasicInfoViewModel.dart';
 import 'package:sandfriends_web/Features/Settings/BrandInfo/View/BrandInfo.dart';
-import 'package:sandfriends_web/Features/Settings/BrandInfo/ViewModel/BrandInfoViewModel.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/EmployeeInfo.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
 import 'package:sandfriends_web/Features/Settings/FinanceInfo/View/FinanceInfo.dart';
-import 'package:sandfriends_web/Features/Settings/FinanceInfo/ViewModel/FinanceInfoViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../SharedComponents/View/SFButton.dart';
@@ -30,16 +27,15 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final viewModel = SettingsViewModel();
 
-  final basicInfoViewModel = BasicInfoViewModel();
-  final brandInfoViewModel = BrandInfoViewModel();
-  final financesInfoViewModel = FinanceInfoViewModel();
-  final employeeInfoViewModel = EmployeeInfoViewModel();
+  // final basicInfoViewModel = BasicInfoViewModel();
+  // final brandInfoViewModel = BrandInfoViewModel();
+  // final financesInfoViewModel = FinanceInfoViewModel();
+  // final employeeInfoViewModel = EmployeeInfoViewModel();
 
   @override
   void initState() {
     super.initState();
-    viewModel.setFields(context);
-    basicInfoViewModel.setBasicInfoFields(context);
+    viewModel.initSettingsViewModel(context);
     if (widget.initForm != null) {
       setState(() {
         viewModel.currentForm = widget.initForm!;
@@ -68,12 +64,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             "Gerencie as informações e a identidade visual do seu negócio, bem como seus dados financeiros",
                       ),
                     ),
-                    basicInfoViewModel.basicInfoChanged(context)
+                    viewModel.infoChanged
                         ? SFButton(
                             buttonLabel: "Salvar",
                             buttonType: ButtonType.Primary,
                             onTap: () {
-                              viewModel.saveStoreDifChanges(context);
+                              //viewModel.saveStoreDifChanges(context);
                             },
                             textPadding: const EdgeInsets.symmetric(
                               vertical: defaultPadding,
@@ -97,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Provider.of<SettingsViewModel>(context).currentForm ==
                           0
                       ? BasicInfo(
-                          viewModel: basicInfoViewModel,
+                          viewModel: viewModel,
                         )
                       : Provider.of<SettingsViewModel>(context).currentForm == 1
                           ? BrandInfo(
@@ -106,7 +102,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           : Provider.of<SettingsViewModel>(context)
                                       .currentForm ==
                                   2
-                              ? FinanceInfo()
+                              ? FinanceInfo(
+                                  viewModel: viewModel,
+                                )
                               : EmployeeInfo(),
                 ),
               ],

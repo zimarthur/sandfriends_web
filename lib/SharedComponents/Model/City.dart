@@ -18,4 +18,14 @@ class City {
       state: State.fromJson(parsedJson["State"]),
     );
   }
+
+  factory City.copyWith(City cityRef) {
+    return City(
+      idCity: cityRef.idCity,
+      name: cityRef.name,
+      state: State.copyWith(
+        cityRef.state,
+      ),
+    );
+  }
 }

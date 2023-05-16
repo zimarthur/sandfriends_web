@@ -1,4 +1,3 @@
-
 class State {
   int idState;
   String name;
@@ -15,6 +14,14 @@ class State {
       idState: parsedJson["IdState"],
       name: parsedJson["State"],
       uf: parsedJson["UF"],
+    );
+  }
+
+  factory State.copyWith(State stateRef) {
+    return State(
+      idState: stateRef.idState,
+      name: stateRef.name,
+      uf: stateRef.uf,
     );
   }
 }

@@ -45,9 +45,7 @@ class _BrandInfoState extends State<BrandInfo> {
                               buttonLabel: "Escolher arquivo",
                               buttonType: ButtonType.Secondary,
                               onTap: () {
-                                widget.viewModel.brandInfoViewModel
-                                    .setStoreAvatar(context);
-                                widget.viewModel.storeInfoChanged(context);
+                                widget.viewModel.setStoreAvatar(context);
                               },
                             ),
                           ),
@@ -62,8 +60,7 @@ class _BrandInfoState extends State<BrandInfo> {
                     flex: 3,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: widget.viewModel.brandInfoViewModel.storeAvatar ==
-                              null
+                      child: widget.viewModel.storeAvatar == null
                           ? CircleAvatar(
                               radius: 80,
                               child: AspectRatio(
@@ -78,7 +75,7 @@ class _BrandInfoState extends State<BrandInfo> {
                               ),
                             )
                           : Image.memory(
-                              widget.viewModel.brandInfoViewModel.storeAvatar!,
+                              widget.viewModel.storeAvatar!,
                               height: 160,
                               width: 160,
                             ),
@@ -123,8 +120,8 @@ class _BrandInfoState extends State<BrandInfo> {
                             SFTextField(
                               labelText: "",
                               pourpose: TextFieldPourpose.Multiline,
-                              controller: widget.viewModel.brandInfoViewModel
-                                  .descriptionController,
+                              controller:
+                                  widget.viewModel.descriptionController,
                               validator: (a) {
                                 return null;
                               },
@@ -132,11 +129,11 @@ class _BrandInfoState extends State<BrandInfo> {
                               maxLines: 5,
                               hintText:
                                   "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
-                              onChanged: (p0) =>
-                                  widget.viewModel.storeInfoChanged(context),
+                              onChanged: (newValue) => widget.viewModel
+                                  .onChangedDescription(newValue),
                             ),
                             Text(
-                              "${widget.viewModel.brandInfoViewModel.descriptionLength}/255",
+                              "${widget.viewModel.descriptionLength}/255",
                               style: const TextStyle(color: textDarkGrey),
                             )
                           ],
@@ -172,15 +169,15 @@ class _BrandInfoState extends State<BrandInfo> {
                           children: [
                             Expanded(
                               child: SFTextField(
-                                controller: widget.viewModel.brandInfoViewModel
-                                    .instagramController,
+                                controller:
+                                    widget.viewModel.instagramController,
                                 labelText: "",
                                 pourpose: TextFieldPourpose.Standard,
                                 validator: (value) {
                                   return null;
                                 },
-                                onChanged: (p0) =>
-                                    widget.viewModel.storeInfoChanged(context),
+                                onChanged: (newValue) => widget.viewModel
+                                    .onChangedInstagram(newValue),
                               ),
                             ),
                             Expanded(
@@ -222,9 +219,7 @@ class _BrandInfoState extends State<BrandInfo> {
                               buttonLabel: "Adicionar foto",
                               buttonType: ButtonType.Secondary,
                               onTap: () {
-                                widget.viewModel.brandInfoViewModel
-                                    .addStorePhoto(context);
-                                widget.viewModel.storeInfoChanged(context);
+                                widget.viewModel.addStorePhoto(context);
                               },
                             ),
                           ),
@@ -237,31 +232,24 @@ class _BrandInfoState extends State<BrandInfo> {
                   ),
                   Expanded(
                     flex: 3,
-                    child:
-                        widget.viewModel.brandInfoViewModel.storePhotos.isEmpty
-                            ? Container()
-                            : SizedBox(
-                                height: 220,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: widget.viewModel.brandInfoViewModel
-                                      .storePhotos.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return SFStorePhoto(
-                                        image: widget
-                                            .viewModel
-                                            .brandInfoViewModel
-                                            .storePhotos[index],
-                                        delete: () {
-                                          widget.viewModel.brandInfoViewModel
-                                              .deleteStorePhoto(context, index);
-                                          widget.viewModel
-                                              .storeInfoChanged(context);
-                                        });
-                                  },
-                                ),
-                              ),
+                    child: widget.viewModel.storePhotos.isEmpty
+                        ? Container()
+                        : SizedBox(
+                            height: 220,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: widget.viewModel.storePhotos.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return SFStorePhoto(
+                                    image: widget.viewModel.storePhotos[index],
+                                    delete: () {
+                                      widget.viewModel
+                                          .deleteStorePhoto(context, index);
+                                    });
+                              },
+                            ),
+                          ),
                   ),
                 ],
               ),

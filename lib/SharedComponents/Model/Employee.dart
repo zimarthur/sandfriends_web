@@ -29,8 +29,8 @@ class Employee {
         email: parsedJson["Email"],
         admin: parsedJson["Admin"],
         registrationDate:
-            DateFormat("dd/MM/yyyy").parse(parsedJson["RegistrationDate"]),
+            DateFormat("dd/MM/yyyy").parse(parsedJson["EmailConfirmationDate"]),
         isLoggedUser: false,
-        isCourtOwner: parsedJson["CourtOwner"]);
+        isCourtOwner: parsedJson["StoreOwner"]);
   }
 }

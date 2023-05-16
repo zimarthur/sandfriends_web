@@ -12,12 +12,14 @@ class FormItem extends StatefulWidget {
   TextEditingController? secondController;
   Widget? customWidget;
   final Function(String)? onChanged;
+  final Function(String)? onChangedSecond;
 
   FormItem({
     super.key,
     required this.name,
     required this.controller,
     required this.onChanged,
+    this.onChangedSecond,
     this.controllerEnabled = true,
     this.hasSecondItem = false,
     this.secondName,
@@ -81,7 +83,7 @@ class _FormItemState extends State<FormItem> {
                                 validator: (a) {
                                   return null;
                                 },
-                                onChanged: widget.onChanged,
+                                onChanged: widget.onChangedSecond,
                               ),
                             ),
                           ],
