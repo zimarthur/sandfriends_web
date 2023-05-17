@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class Store {
   int idStore;
   String name;
-  String? logo;
+  dynamic logo;
   String address;
   String addressNumber;
   String phoneNumber;
@@ -48,27 +48,37 @@ class Store {
   });
 
   factory Store.fromJson(Map<String, dynamic> parsedJson) {
-    return Store(
-        idStore: parsedJson["IdStore"],
-        name: parsedJson["Name"],
-        address: parsedJson["Address"],
-        addressNumber: parsedJson["AddressNumber"],
-        phoneNumber: parsedJson["PhoneNumber1"],
-        ownerPhoneNumber: parsedJson["PhoneNumber2"],
-        logo: parsedJson["Logo"],
-        description: parsedJson["Description"],
-        instagram: parsedJson["Instagram"],
-        cnpj: parsedJson["Cnpj"],
-        cep: parsedJson["Cep"],
-        bankAccount: parsedJson["BankAccount"],
-        neighbourhood: parsedJson["Neighbourhood"],
-        cpf: parsedJson["Cpf"],
-        hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
-        city: City.fromJson(
-          parsedJson["City"],
+    var store = Store(
+      idStore: parsedJson["IdStore"],
+      name: parsedJson["Name"],
+      address: parsedJson["Address"],
+      addressNumber: parsedJson["AddressNumber"],
+      phoneNumber: parsedJson["PhoneNumber1"],
+      ownerPhoneNumber: parsedJson["PhoneNumber2"],
+      logo: parsedJson["Logo"],
+      description: parsedJson["Description"],
+      instagram: parsedJson["Instagram"],
+      cnpj: parsedJson["Cnpj"],
+      cep: parsedJson["Cep"],
+      bankAccount: parsedJson["BankAccount"],
+      neighbourhood: parsedJson["Neighbourhood"],
+      cpf: parsedJson["Cpf"],
+      hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
+      city: City.fromJson(
+        parsedJson["City"],
+      ),
+      approvalDate: DateFormat("dd/MM/yyyy").parse(
+        parsedJson["ApprovalDate"],
+      ),
+    );
+    for (var photo in parsedJson["StorePhotos"]) {
+      store.photos.add(
+        StorePhoto.fromJson(
+          photo,
         ),
-        approvalDate:
-            DateFormat("dd/MM/yyyy").parse(parsedJson["ApprovalDate"]));
+      );
+    }
+    return store;
   }
 
   factory Store.copyWith(Store storeRef) {

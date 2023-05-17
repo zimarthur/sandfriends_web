@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Menu/View/Drawer/SFDrawer.dart';
 import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
+import '../../../SharedComponents/View/SFStandardScreen.dart';
 import '../../../Utils/PageStatus.dart';
 import '../ViewModel/MenuProvider.dart';
 import '../../../Utils/Responsive.dart';
@@ -17,6 +18,12 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final MenuProvider viewModel = MenuProvider();
+
+  @override
+  void initState() {
+    viewModel.validateAuthentication(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,70 +40,43 @@ class _MenuScreenState extends State<MenuScreen> {
         create: (BuildContext context) => viewModel,
         child: Consumer<MenuProvider>(
           builder: (context, viewModel, _) {
-            return SafeArea(
-              child: Stack(
+            return SFStandardScreen(
+              pageStatus: viewModel.pageStatus,
+              messageModalWidget: viewModel.messageModal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SFDrawer(),
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          color: secondaryBack,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Responsive.isMobile(context)
-                                  ? IconButton(
-                                      icon: const Icon(
-                                        Icons.menu,
-                                        color: textDarkGrey,
-                                      ),
-                                      onPressed: context
-                                          .read<MenuProvider>()
-                                          .controlMenu,
-                                    )
-                                  : Container(),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2 * defaultPadding,
-                                      vertical: defaultPadding),
-                                  child: Provider.of<MenuProvider>(context)
-                                      .currentMenuWidget,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                  const SFDrawer(),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      color: secondaryBack,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Responsive.isMobile(context)
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.menu,
+                                    color: textDarkGrey,
+                                  ),
+                                  onPressed:
+                                      context.read<MenuProvider>().controlMenu,
+                                )
+                              : Container(),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 2 * defaultPadding,
+                                  vertical: defaultPadding),
+                              child: Provider.of<MenuProvider>(context)
+                                  .currentMenuWidget,
+                            ),
+                          )
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  viewModel.pageStatus != PageStatus.OK
-                      ? Container(
-                          color: primaryBlue.withOpacity(0.4),
-                          height: height,
-                          width: width,
-                          child: Center(
-                              child: viewModel.pageStatus == PageStatus.LOADING
-                                  ? SizedBox(
-                                      height: 300,
-                                      width: 300,
-                                      child: SFLoading(size: 80),
-                                    )
-                                  : viewModel.pageStatus == PageStatus.FORM
-                                      ? viewModel.modalFormWidget
-                                      : SFMessageModal(
-                                          title: viewModel.modalTitle,
-                                          onTap: viewModel.modalCallback,
-                                          isHappy: viewModel.pageStatus ==
-                                                  PageStatus.WARNING
-                                              ? false
-                                              : true,
-                                        )),
-                        )
-                      : Container(),
                 ],
               ),
             );

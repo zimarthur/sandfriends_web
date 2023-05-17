@@ -68,9 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ? SFButton(
                             buttonLabel: "Salvar",
                             buttonType: ButtonType.Primary,
-                            onTap: () {
-                              //viewModel.saveStoreDifChanges(context);
-                            },
+                            onTap: () => viewModel.updateUser(context),
                             textPadding: const EdgeInsets.symmetric(
                               vertical: defaultPadding,
                               horizontal: defaultPadding * 2,

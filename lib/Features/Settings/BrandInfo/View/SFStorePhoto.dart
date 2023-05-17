@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sandfriends_web/SharedComponents/Model/StorePhoto.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-class SFStorePhoto extends StatelessWidget {
-  Uint8List image;
+import '../../../../SharedComponents/View/SFLoading.dart';
+
+class StorePhotoCard extends StatefulWidget {
+  StorePhoto storePhoto;
   VoidCallback delete;
 
-  SFStorePhoto({super.key, 
-    required this.image,
+  StorePhotoCard({
+    super.key,
+    required this.storePhoto,
     required this.delete,
   });
 
+  @override
+  State<StorePhotoCard> createState() => _StorePhotoCardState();
+}
+
+class _StorePhotoCardState extends State<StorePhotoCard> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -24,16 +34,29 @@ class SFStorePhoto extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(defaultBorderRadius),
-                child: Image.memory(
-                  image,
-                  fit: BoxFit.cover,
-                ),
+                child: widget.storePhoto.isNewPhoto
+                    ? Image.memory(
+                        widget.storePhoto.newPhoto!,
+                        fit: BoxFit.cover,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: widget.storePhoto.photo,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: SFLoading(
+                            size: 50,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Center(
+                          child: Icon(Icons.error),
+                        ),
+                      ),
               ),
               Positioned(
                 top: 0,
                 right: 0,
                 child: InkWell(
-                  onTap: delete,
+                  onTap: widget.delete,
                   child: Container(
                     height: 40,
                     width: 40,

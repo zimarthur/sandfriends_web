@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
@@ -6,11 +9,20 @@ import 'package:image/image.dart' as IMG;
 import 'package:flutter/foundation.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:sandfriends_web/Features/Settings/Repository/SettingsRepoImp.dart';
+import 'package:sandfriends_web/SharedComponents/Model/StorePhoto.dart';
+import 'package:sandfriends_web/Utils/Numbers.dart';
+import '../../../Remote/NetworkResponse.dart';
 import '../../../SharedComponents/Model/Store.dart';
+import '../../../SharedComponents/View/SFMessageModal.dart';
+import '../../../Utils/PageStatus.dart';
 import '../../../Utils/SFImage.dart';
 import '../../Menu/ViewModel/DataProvider.dart';
+import '../../Menu/ViewModel/MenuProvider.dart';
 
 class SettingsViewModel extends ChangeNotifier {
+  final settingsRepo = SettingsRepoImp();
+
   int _currentForm = 0;
   int get currentForm => _currentForm;
   set currentForm(int value) {
@@ -23,6 +35,8 @@ class SettingsViewModel extends ChangeNotifier {
 
   late Store storeRef;
   late Store storeEdit;
+
+  bool hasChangedPhoto = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController telephoneController =
@@ -56,10 +70,6 @@ class SettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Uint8List> storePhotosRef = [];
-  final List<Uint8List> _storePhotos = [];
-  List<Uint8List> get storePhotos => _storePhotos;
-
   void initSettingsViewModel(BuildContext context) {
     storeRef = Store.copyWith(
         Provider.of<DataProvider>(context, listen: false).store!);
@@ -76,6 +86,7 @@ class SettingsViewModel extends ChangeNotifier {
     stateController.text = storeEdit.city.state.uf;
     descriptionController.text = storeEdit.description ?? "";
     instagramController.text = storeEdit.instagram ?? "";
+    print(storeEdit.photos.length);
     notifyListeners();
   }
 
@@ -90,7 +101,43 @@ class SettingsViewModel extends ChangeNotifier {
       storeRef.city.state.uf != storeEdit.city.state.uf ||
       storeRef.neighbourhood != storeEdit.neighbourhood ||
       storeRef.description != storeEdit.description ||
-      storeRef.instagram != storeEdit.instagram;
+      storeRef.instagram != storeEdit.instagram ||
+      storeRef.bankAccount != storeEdit.bankAccount ||
+      storeRef.cnpj != storeEdit.cnpj ||
+      storeAvatar != null ||
+      hasChangedPhoto;
+
+  void updateUser(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    if (storeAvatar != null) {
+      storeEdit.logo = base64Encode(storeAvatar!);
+    }
+
+    settingsRepo.updateStoreInfo(storeEdit).then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        Provider.of<DataProvider>(context, listen: false).store =
+            Store.fromJson(
+          responseBody["Store"],
+        );
+        initSettingsViewModel(context);
+        hasChangedPhoto = false;
+        storeAvatar = null;
+        Provider.of<MenuProvider>(context, listen: false).setMessageModal(
+          "Seus dados foram atualizados!",
+          null,
+          true,
+        );
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
+  }
 
   Future setStoreAvatar(BuildContext context) async {
     XFile? pickedImage = await pickImage();
@@ -146,13 +193,23 @@ class SettingsViewModel extends ChangeNotifier {
       resizedImage.width,
     );
     if (croppedImage == null) return;
-    _storePhotos.add(croppedImage);
+    storeEdit.photos.add(
+      StorePhoto(
+        idStorePhoto: storeEdit.photos.last.idStorePhoto + 1,
+        photo: "",
+        isNewPhoto: true,
+        newPhoto: croppedImage,
+      ),
+    );
+    hasChangedPhoto = true;
     notifyListeners();
   }
 
-  void deleteStorePhoto(BuildContext context, int index) {
-    _storePhotos.removeAt(index);
-
+  void deleteStorePhoto(int idStorePhoto) {
+    storeEdit.photos.removeWhere(
+      (element) => element.idStorePhoto == idStorePhoto,
+    );
+    hasChangedPhoto = true;
     notifyListeners();
   }
 
@@ -162,17 +219,17 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   void onChangedPhoneNumber(String newValue) {
-    storeEdit.phoneNumber = newValue;
+    storeEdit.phoneNumber = getRawNumber(newValue);
     notifyListeners();
   }
 
   void onChangedOwnerPhoneNumber(String newValue) {
-    storeEdit.ownerPhoneNumber = newValue;
+    storeEdit.ownerPhoneNumber = getRawNumber(newValue);
     notifyListeners();
   }
 
   void onChangedCep(String newValue) {
-    storeEdit.cep = newValue;
+    storeEdit.cep = getRawNumber(newValue);
     notifyListeners();
   }
 
@@ -217,7 +274,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   void onChangedCnpj(String newValue) {
-    storeEdit.cnpj = newValue;
+    storeEdit.cnpj = getRawNumber(newValue);
     notifyListeners();
   }
 }

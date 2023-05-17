@@ -65,6 +65,7 @@ dev_dependencies:
     sdk: flutter
   shared_preferences: ^2.1.0
   localstorage: ^4.0.1+2
+  cached_network_image: ^3.2.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -115,6 +116,7 @@ flutter:
     - assets/icon/forecast.svg
     - assets/icon/money.svg
     - assets/icon/check.svg
+    - assets/icon/attention.svg
 
     - assets/people/calendar.svg
     - assets/people/onboarding.svg

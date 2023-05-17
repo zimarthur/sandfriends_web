@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Menu/View/Drawer/SFDrawerPopup.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:provider/provider.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {
   bool fullSize;
@@ -19,83 +22,91 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
     return widget.fullSize
         ? Row(
             children: [
-              CircleAvatar(
-                backgroundColor: textWhite,
-                radius: 25,
-                child: CircleAvatar(
-                  radius: 23,
-                  child: AspectRatio(
-                    aspectRatio: 1 / 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(23),
-                      child: Image.asset(
-                        r"assets/Arthur.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+              SFAvatar(
+                height: 75,
+                image:
+                    Provider.of<DataProvider>(context, listen: false).store ==
+                            null
+                        ? null
+                        : Provider.of<DataProvider>(context, listen: false)
+                            .store!
+                            .logo,
               ),
               const SizedBox(
                 width: defaultPadding,
               ),
-              const Text(
-                "Beach Brasil",
-                style: TextStyle(color: textWhite),
-              ),
               Expanded(
-                child: Container(),
-              ),
-              InkWell(
-                onTap: () {},
-                onHover: (value) {
-                  setState(() {
-                    if (value == true) {
-                      isOnHover = true;
-                    } else {
-                      isOnHover = false;
-                    }
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: isOnHover
-                        ? primaryDarkBlue.withOpacity(0.3)
-                        : primaryBlue,
-                    borderRadius: BorderRadius.circular(
-                      defaultBorderRadius,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Olá, ${Provider.of<DataProvider>(context, listen: false).loggedEmployee.firstName}!",
+                            style: TextStyle(
+                              color: textWhite,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          onHover: (value) {
+                            setState(() {
+                              if (value == true) {
+                                isOnHover = true;
+                              } else {
+                                isOnHover = false;
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: isOnHover
+                                  ? primaryDarkBlue.withOpacity(0.3)
+                                  : primaryBlue,
+                              borderRadius: BorderRadius.circular(
+                                defaultBorderRadius,
+                              ),
+                            ),
+                            child: SFDrawerPopup(
+                              onTap: (value) {
+                                widget.onTap(value);
+                              },
+                              showIcon: true,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: SFDrawerPopup(
-                    onTap: (value) {
-                      widget.onTap(value);
-                    },
-                    showIcon: true,
-                  ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        Provider.of<DataProvider>(context, listen: false)
+                            .store!
+                            .name,
+                        style: TextStyle(
+                          color: textLightGrey,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           )
         : Stack(
             children: [
-              CircleAvatar(
-                backgroundColor: textWhite,
-                radius: 25,
-                child: CircleAvatar(
-                  radius: 23,
-                  child: AspectRatio(
-                    aspectRatio: 1 / 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(23),
-                      child: Image.asset(
-                        r"assets/Arthur.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+              SFAvatar(
+                height: 50,
+                image:
+                    Provider.of<DataProvider>(context, listen: false).store ==
+                            null
+                        ? null
+                        : Provider.of<DataProvider>(context, listen: false)
+                            .store!
+                            .logo,
               ),
               InkWell(
                 onTap: () {},

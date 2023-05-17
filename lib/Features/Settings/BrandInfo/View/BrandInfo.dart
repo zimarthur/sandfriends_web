@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Settings/BrandInfo/View/SFStorePhoto.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -60,25 +61,11 @@ class _BrandInfoState extends State<BrandInfo> {
                     flex: 3,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: widget.viewModel.storeAvatar == null
-                          ? CircleAvatar(
-                              radius: 80,
-                              child: AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(80),
-                                  child: Image.asset(
-                                    r"assets/Arthur.jpg",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Image.memory(
-                              widget.viewModel.storeAvatar!,
-                              height: 160,
-                              width: 160,
-                            ),
+                      child: SFAvatar(
+                        height: 160,
+                        image: widget.viewModel.storeEdit.logo,
+                        editImage: widget.viewModel.storeAvatar,
+                      ),
                     ),
                   ),
                 ],
@@ -195,6 +182,7 @@ class _BrandInfoState extends State<BrandInfo> {
                 child: SFDivider(),
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     flex: 2,
@@ -232,20 +220,24 @@ class _BrandInfoState extends State<BrandInfo> {
                   ),
                   Expanded(
                     flex: 3,
-                    child: widget.viewModel.storePhotos.isEmpty
+                    child: widget.viewModel.storeEdit.photos.isEmpty
                         ? Container()
                         : SizedBox(
                             height: 220,
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: widget.viewModel.storePhotos.length,
+                              itemCount:
+                                  widget.viewModel.storeEdit.photos.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
-                                return SFStorePhoto(
-                                    image: widget.viewModel.storePhotos[index],
+                                return StorePhotoCard(
+                                    storePhoto: widget
+                                        .viewModel.storeEdit.photos[index],
                                     delete: () {
-                                      widget.viewModel
-                                          .deleteStorePhoto(context, index);
+                                      widget.viewModel.deleteStorePhoto(
+                                        widget.viewModel.storeEdit.photos[index]
+                                            .idStorePhoto,
+                                      );
                                     });
                               },
                             ),

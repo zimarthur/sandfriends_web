@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Authentication/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Features/Calendar/View/CalendarScreen.dart';
 import 'package:sandfriends_web/Features/Help/View/HelpScreen.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/MyCourtsScreen.dart';
 import 'package:sandfriends_web/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Features/Menu/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Features/Finances/View/FinancesScreen.dart';
 import 'package:sandfriends_web/Features/Home/View/HomeScreen.dart';
 import 'package:sandfriends_web/Features/Rewards/View/RewardsScreen.dart';
+import 'package:sandfriends_web/Remote/NetworkResponse.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFMessageModal.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFModalConfirmation.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
-
+import 'package:provider/provider.dart';
+import '../../../Utils/LocalStorage.dart';
 import '../../../Utils/PageStatus.dart';
 
 class MenuProvider extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+
+  final loginRepo = LoginRepoImp();
 
   void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
@@ -24,10 +31,33 @@ class MenuProvider extends ChangeNotifier {
   }
 
   PageStatus pageStatus = PageStatus.OK;
-  String modalTitle = "";
-  String modalDescription = "";
-  VoidCallback modalCallback = () {};
+  SFMessageModal messageModal = SFMessageModal(
+    title: "",
+    onTap: () {},
+    isHappy: true,
+  );
+
   Widget? modalFormWidget;
+
+  void validateAuthentication(BuildContext context) {
+    if (Provider.of<DataProvider>(context, listen: false).store == null) {
+      pageStatus = PageStatus.LOADING;
+      notifyListeners();
+      String? storedToken = getToken();
+      if (storedToken != null) {
+        loginRepo.validateToken(storedToken).then((response) {
+          if (response.responseStatus == NetworkResponseStatus.success) {
+            Provider.of<DataProvider>(context, listen: false)
+                .setLoginResponse(response.responseBody!, true);
+            Navigator.pushNamed(context, '/home');
+          } else {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          }
+        });
+      }
+    }
+  }
 
   void setModalLoading() {
     pageStatus = PageStatus.LOADING;
@@ -39,19 +69,25 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setModalError(String title, String description) {
-    modalTitle = title;
-    modalDescription = description;
-    modalCallback = () {
-      closeModal();
-    };
+  void setMessageModal(String title, String? description, bool isHappy) {
+    messageModal = SFMessageModal(
+      title: title,
+      description: description,
+      onTap: () {
+        closeModal();
+      },
+      isHappy: isHappy,
+    );
     pageStatus = PageStatus.WARNING;
     notifyListeners();
   }
 
-  void setModalAccomplished() {
-    pageStatus = PageStatus.OK;
-    notifyListeners();
+  void setMessageModalFromResponse(NetworkResponse response) {
+    setMessageModal(
+      response.responseTitle!,
+      response.responseDescription,
+      response.responseStatus == NetworkResponseStatus.alert,
+    );
   }
 
   void setModalForm(Widget widget) {

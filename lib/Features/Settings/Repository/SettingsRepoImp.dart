@@ -16,7 +16,36 @@ class SettingsRepoImp implements SettingsRepo {
       _apiService.sandfriendsUrl,
       ApiEndPoints().updateStoreInfo,
       jsonEncode(
-        <String, Object>{},
+        <String, Object>{
+          "IdStore": store.idStore,
+          "Name": store.name,
+          "Address": store.address,
+          "AddressNumber": store.addressNumber,
+          "City": store.city.name,
+          "State": store.city.state.uf,
+          "PhoneNumber1": store.phoneNumber,
+          "PhoneNumber2": store.ownerPhoneNumber ?? "",
+          "Description": store.description ?? "",
+          "Instagram": store.instagram ?? "",
+          "Cnpj": store.cnpj ?? "",
+          "Cep": store.cep,
+          "Neighbourhood": store.neighbourhood,
+          "BankAccount": store.bankAccount ?? "",
+          "Logo": store.logo ?? "",
+          "Photos": [
+            for (var photo in store.photos)
+              if (photo.isNewPhoto)
+                {
+                  "IdStorePhoto": "",
+                  "Photo": base64Encode(photo.newPhoto),
+                }
+              else
+                {
+                  "IdStorePhoto": photo.idStorePhoto,
+                  "Photo": photo.photo,
+                }
+          ]
+        },
       ),
     );
     return response;
