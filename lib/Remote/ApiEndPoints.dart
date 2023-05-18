@@ -23,5 +23,10 @@ class ApiEndPoints {
   //settings
   final String updateStoreInfo = "/UpdateStoreInfo";
   final String validateNewEmployeeToken = "/ValidateNewEmployeeEmail";
+  final String addEmployee = "/AddEmployee";
+  final String changeEmployeeAdmin = "/SetEmployeeAdmin";
+  final String renameEmployee = "/RenameEmployee";
+  final String removeEmployee = "/RemoveEmployee";
+
   final String createAccountEmployee = "/AddEmployeeInformation";
 }

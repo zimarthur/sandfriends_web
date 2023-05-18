@@ -1,14 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/RenameEmployeeWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
+import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import '../../../../SharedComponents/Model/Employee.dart';
+import '../../../../Utils/LocalStorage.dart';
 import '../../../Menu/ViewModel/DataProvider.dart';
 import '../Model/EmployeeDataSource.dart';
 import '../Model/EmployeeTableCallbacks.dart';
+import '../Repository/EmployeeInfoRepoImp.dart';
 import '../View/AddEmployeeWidget.dart';
 
 class EmployeeInfoViewModel extends ChangeNotifier {
+  final employeeInfoRepo = EmployeeInfoRepoImp();
+
   EmployeeDataSource? employeesDataSource;
 
   void setFinancesDataSource(BuildContext context) {
@@ -19,6 +26,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         employees: Provider.of<DataProvider>(context, listen: false).employees,
         tableCallback: tableCallback,
         context: context);
+    notifyListeners();
   }
 
   void tableCallback(
@@ -29,16 +37,23 @@ class EmployeeInfoViewModel extends ChangeNotifier {
     switch (callbackCode) {
       case EmployeeTableCallbacks.Rename:
         Provider.of<MenuProvider>(context, listen: false)
-            .setModalForm(RenameEmployeeWidget());
-        print("rename ${employee.firstName}");
+            .setModalForm(RenameEmployeeWidget(
+          onRename: (firstName, lastName) => renameEmployee(
+            context,
+            firstName,
+            lastName,
+          ),
+          onReturn: () =>
+              Provider.of<MenuProvider>(context, listen: false).closeModal(),
+        ));
+
         break;
       case EmployeeTableCallbacks.GiveAdmin:
         Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
             "Deseja mesmo conceder admin a ${employee.firstName}?",
             "${employee.firstName} terá acesso a todos seus relatórios financeiros",
             () {
-          print("give admin ${employee.firstName}");
-          Provider.of<MenuProvider>(context, listen: false).closeModal();
+          changeEmployeeAdmin(context, employee, true);
         }, () {
           Provider.of<MenuProvider>(context, listen: false).closeModal();
         });
@@ -47,8 +62,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
       case EmployeeTableCallbacks.RemoveAdmin:
         Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
             "Deseja mesmo retirar admin de ${employee.firstName}?", "", () {
-          print("remove admin ${employee.firstName}");
-          Provider.of<MenuProvider>(context, listen: false).closeModal();
+          changeEmployeeAdmin(context, employee, false);
         }, () {
           Provider.of<MenuProvider>(context, listen: false).closeModal();
         });
@@ -57,8 +71,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
             "Deseja mesmo remover ${employee.firstName} de sua equipe?", "",
             () {
-          print("remove ${employee.firstName}");
-          Provider.of<MenuProvider>(context, listen: false).closeModal();
+          removeEmployee(context, employee);
         }, () {
           Provider.of<MenuProvider>(context, listen: false).closeModal();
         });
@@ -67,25 +80,120 @@ class EmployeeInfoViewModel extends ChangeNotifier {
   }
 
   void goToAddEmployee(BuildContext context, EmployeeInfoViewModel viewModel) {
-    addEmployeeController.text = "";
-    Provider.of<MenuProvider>(context, listen: false)
-        .setModalForm(AddEmployeeWidget(viewModel: viewModel));
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      AddEmployeeWidget(
+        onAdd: (p0) => addEmployee(context, p0),
+        onReturn: () =>
+            Provider.of<MenuProvider>(context, listen: false).closeModal(),
+      ),
+    );
   }
 
   void closeModal(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
   }
 
-  TextEditingController addEmployeeController = TextEditingController();
+  void addEmployee(BuildContext context, String employeeEmail) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    employeeInfoRepo
+        .addEmployee(
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      employeeEmail,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setEmployeesFromResponse(context, response.responseBody!);
+        setFinancesDataSource(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Membro adicionado!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
+  }
 
-  final renameEmployeeFormKey = GlobalKey<FormState>();
-  TextEditingController renameFirstNameController = TextEditingController();
-  TextEditingController renameLastNameController = TextEditingController();
+  void changeEmployeeAdmin(
+    BuildContext context,
+    Employee employee,
+    bool isAdmin,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    employeeInfoRepo
+        .changeEmployeeAdmin(
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            employee.idEmployee,
+            isAdmin)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setEmployeesFromResponse(context, response.responseBody!);
+        setFinancesDataSource(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Sua equipe foi atualizada!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
+  }
 
-  void addEmployee(BuildContext context) {}
+  void renameEmployee(
+    BuildContext context,
+    String firstName,
+    String lastName,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    employeeInfoRepo
+        .renameEmployee(
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      firstName,
+      lastName,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setEmployeesFromResponse(context, response.responseBody!);
+        setFinancesDataSource(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Seu nome foi atualizado!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
+  }
 
-  void renameEmployee(BuildContext context) {
-    print("RENAMEE");
-    Provider.of<MenuProvider>(context, listen: false).closeModal();
+  void removeEmployee(
+    BuildContext context,
+    Employee employee,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    employeeInfoRepo
+        .removeEmployee(
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      employee.idEmployee,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setEmployeesFromResponse(context, response.responseBody!);
+        setFinancesDataSource(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Sua equipe foi atualizada!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
   }
 }

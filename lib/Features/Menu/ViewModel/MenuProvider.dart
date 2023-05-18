@@ -55,6 +55,8 @@ class MenuProvider extends ChangeNotifier {
             notifyListeners();
           }
         });
+      } else {
+        Navigator.pushNamed(context, "/login");
       }
     }
   }

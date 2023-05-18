@@ -9,16 +9,21 @@ import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../Menu/ViewModel/MenuProvider.dart';
 
 class RenameEmployeeWidget extends StatelessWidget {
-  final viewModel = EmployeeInfoViewModel();
-
-  RenameEmployeeWidget({super.key});
+  Function(String, String) onRename;
+  VoidCallback onReturn;
+  RenameEmployeeWidget({
+    required this.onRename,
+    required this.onReturn,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final renameEmployeeFormKey = GlobalKey<FormState>();
+    TextEditingController renameFirstNameController = TextEditingController();
+    TextEditingController renameLastNameController = TextEditingController();
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
-    double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return Container(
-      width: 500,
+      width: width * 0.4 < 350 ? 350 : width * 0.4,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -29,7 +34,7 @@ class RenameEmployeeWidget extends StatelessWidget {
         ),
       ),
       child: Form(
-        key: viewModel.renameEmployeeFormKey,
+        key: renameEmployeeFormKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +49,7 @@ class RenameEmployeeWidget extends StatelessWidget {
             SFTextField(
               labelText: "nome",
               pourpose: TextFieldPourpose.Standard,
-              controller: viewModel.renameFirstNameController,
+              controller: renameFirstNameController,
               validator: (value) => emptyCheck(value, "digite seu nome"),
             ),
             const SizedBox(
@@ -53,7 +58,7 @@ class RenameEmployeeWidget extends StatelessWidget {
             SFTextField(
               labelText: "sobrenome",
               pourpose: TextFieldPourpose.Standard,
-              controller: viewModel.renameLastNameController,
+              controller: renameLastNameController,
               validator: (value) => emptyCheck(value, "digite seu sobrenome"),
             ),
             const SizedBox(
@@ -65,9 +70,7 @@ class RenameEmployeeWidget extends StatelessWidget {
                   child: SFButton(
                     buttonLabel: "Voltar",
                     buttonType: ButtonType.Secondary,
-                    onTap: () {
-                      viewModel.closeModal(context);
-                    },
+                    onTap: onReturn,
                   ),
                 ),
                 const SizedBox(
@@ -75,16 +78,15 @@ class RenameEmployeeWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: SFButton(
-                    buttonLabel: "Salvar",
-                    buttonType: ButtonType.Primary,
-                    onTap: () {
-                      if (viewModel.renameEmployeeFormKey.currentState
-                              ?.validate() ==
-                          true) {
-                        viewModel.renameEmployee(context);
-                      }
-                    },
-                  ),
+                      buttonLabel: "Salvar",
+                      buttonType: ButtonType.Primary,
+                      onTap: () {
+                        if (renameEmployeeFormKey.currentState?.validate() ==
+                            true) {
+                          onRename(renameFirstNameController.text,
+                              renameLastNameController.text);
+                        }
+                      }),
                 ),
               ],
             )

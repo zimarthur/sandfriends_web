@@ -43,6 +43,7 @@ class _MenuScreenState extends State<MenuScreen> {
             return SFStandardScreen(
               pageStatus: viewModel.pageStatus,
               messageModalWidget: viewModel.messageModal,
+              modalFormWidget: viewModel.modalFormWidget,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

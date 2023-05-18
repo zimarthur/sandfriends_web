@@ -34,13 +34,33 @@ class DataProvider extends ChangeNotifier {
   final List<Employee> _employees = [];
   List<Employee> get employees {
     _employees.sort((a, b) {
-      if (a.admin == b.admin) {
-        return a.registrationDate.compareTo(b.registrationDate);
+      if (a.admin == b.admin &&
+          a.registrationDate != null &&
+          b.registrationDate != null) {
+        return a.registrationDate!.compareTo(b.registrationDate!);
       } else {
         return 1;
       }
     });
     return _employees;
+  }
+
+  void setEmployeesFromResponse(BuildContext context, String body) {
+    Map<String, dynamic> responseBody = json.decode(
+      body,
+    );
+    _employees.clear();
+    for (var employee in responseBody["Employees"]) {
+      _employees.add(
+        Employee.fromJson(
+          employee,
+        ),
+      );
+    }
+    _employees
+        .firstWhere((employee) => employee.email == loggedEmail)
+        .isLoggedUser = true;
+    notifyListeners();
   }
 
   void addEmployee(Employee employee) {
@@ -61,14 +81,12 @@ class DataProvider extends ChangeNotifier {
     );
     loggedAccessToken = responseBody["AccessToken"];
     loggedEmail = responseBody["LoggedEmail"];
-    if (keepConnected) {
-      storeToken(responseBody['AccessToken']);
-    }
+    storeToken(responseBody['AccessToken']);
 
     for (var employee in responseBody['Store']['Employees']) {
-      employees.add(Employee.fromJson(employee));
+      _employees.add(Employee.fromJson(employee));
     }
-    employees
+    _employees
         .firstWhere((employee) => employee.email == loggedEmail)
         .isLoggedUser = true;
 

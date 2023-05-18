@@ -28,9 +28,21 @@ class EmployeeDataSource extends DataGridSource {
                 columnName: 'email',
                 value: employee.email,
               ),
-              DataGridCell<String>(
+              DataGridCell<Widget>(
                 columnName: 'date',
-                value: DateFormat('dd/MM/yy').format(employee.registrationDate),
+                value: employee.registrationDate == null
+                    ? Center(
+                        child: Text(
+                          "Aguardando conf.",
+                          style: TextStyle(color: secondaryYellow),
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          DateFormat('dd/MM/yy')
+                              .format(employee.registrationDate!),
+                        ),
+                      ),
               ),
               DataGridCell<Widget>(
                 columnName: 'admin',

@@ -6,7 +6,7 @@ class Employee {
   String lastName;
   String email;
   bool admin;
-  DateTime registrationDate;
+  DateTime? registrationDate;
   bool isLoggedUser;
   bool isCourtOwner;
 
@@ -23,14 +23,16 @@ class Employee {
 
   factory Employee.fromJson(Map<String, dynamic> parsedJson) {
     return Employee(
-        idEmployee: parsedJson["IdEmployee"],
-        firstName: parsedJson["FirstName"],
-        lastName: parsedJson["LastName"],
-        email: parsedJson["Email"],
-        admin: parsedJson["Admin"],
-        registrationDate:
-            DateFormat("dd/MM/yyyy").parse(parsedJson["EmailConfirmationDate"]),
-        isLoggedUser: false,
-        isCourtOwner: parsedJson["StoreOwner"]);
+      idEmployee: parsedJson["IdEmployee"],
+      firstName: parsedJson["FirstName"] ?? "",
+      lastName: parsedJson["LastName"] ?? "",
+      email: parsedJson["Email"],
+      admin: parsedJson["Admin"],
+      registrationDate: parsedJson["EmailConfirmationDate"] == null
+          ? null
+          : DateFormat("dd/MM/yyyy").parse(parsedJson["EmailConfirmationDate"]),
+      isLoggedUser: false,
+      isCourtOwner: parsedJson["StoreOwner"],
+    );
   }
 }
