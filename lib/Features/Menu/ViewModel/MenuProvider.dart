@@ -51,8 +51,7 @@ class MenuProvider extends ChangeNotifier {
                 .setLoginResponse(response.responseBody!, true);
             Navigator.pushNamed(context, '/home');
           } else {
-            pageStatus = PageStatus.OK;
-            notifyListeners();
+            Navigator.pushNamed(context, "/login");
           }
         });
       } else {
@@ -218,7 +217,7 @@ class MenuProvider extends ChangeNotifier {
   void quickLinkWorkingHours() {
     _indexSelectedDrawerTile = 4;
     _currentMenuWidget = MyCourtsScreen(
-      showWorkingHours: true,
+      quickLinkWorkingHours: true,
     );
     notifyListeners();
   }

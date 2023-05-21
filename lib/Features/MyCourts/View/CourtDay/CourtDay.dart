@@ -17,15 +17,15 @@ import 'PriceSelectorHeader.dart';
 class CourtDay extends StatefulWidget {
   double width;
   double height;
-  int dayIndex;
-  Court court;
+  OperationDay operationDay;
+  MyCourtsViewModel viewModel;
 
   CourtDay({
     super.key,
     required this.width,
     required this.height,
-    required this.dayIndex,
-    required this.court,
+    required this.operationDay,
+    required this.viewModel,
   });
 
   @override
@@ -42,27 +42,27 @@ class _CourtDayState extends State<CourtDay> {
 
   List<HourPrice> priceRules = [];
 
+  bool forceIsPriceCustom = false;
+
   @override
   Widget build(BuildContext context) {
     double mainRowHeight = widget.height - 2 * borderSize;
     double secondaryRowHeight = mainRowHeight * 0.7;
-    int numberRules = widget.court.priceRules
-        .where((element) => element.weekday == widget.dayIndex)
-        .toList()
-        .length;
+    int numberRules = widget.operationDay.priceRules.length;
     double standardHeight =
         mainRowHeight * 2 + secondaryRowHeight + mainRowHeight;
     double customHeight =
         mainRowHeight * 2 + secondaryRowHeight + numberRules * mainRowHeight;
-    double expandedHeight =
-        Provider.of<MyCourtsViewModel>(context).isPriceStandard
-            ? standardHeight - mainRowHeight - 2
-            : customHeight - mainRowHeight - 2;
+    bool isPriceStandard =
+        widget.operationDay.priceRules.length == 1 || forceIsPriceCustom;
+    double expandedHeight = isPriceStandard
+        ? standardHeight - mainRowHeight - 2
+        : customHeight - mainRowHeight - 2;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: isExpanded
-          ? Provider.of<MyCourtsViewModel>(context).isPriceStandard
+          ? isPriceStandard
               ? standardHeight + borderSize + arrowHeight
               : customHeight + borderSize + arrowHeight
           : widget.height,
@@ -80,8 +80,7 @@ class _CourtDayState extends State<CourtDay> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     height: isExpanded
-                        ? Provider.of<MyCourtsViewModel>(context)
-                                .isPriceStandard
+                        ? isPriceStandard
                             ? standardHeight
                             : customHeight
                         : mainRowHeight,
@@ -97,23 +96,16 @@ class _CourtDayState extends State<CourtDay> {
                                 right: isExpanded ? editIconWidth : 0),
                             height: mainRowHeight,
                             child: ResumedInfoRow(
-                                isEnabled: Provider.of<DataProvider>(context)
-                                    .operationDays
-                                    .firstWhere((opDay) =>
-                                        opDay.weekDay == widget.dayIndex)
-                                    .isEnabled,
-                                day: widget.dayIndex,
-                                hourPriceList: widget.court.prices
-                                    .where((hourPrice) =>
-                                        hourPrice.weekday == widget.dayIndex)
-                                    .toList(),
+                                operationDay: widget.operationDay,
                                 isEditing: isExpanded,
                                 rowHeight: mainRowHeight,
                                 setAllowRecurrent: (newValue) {
                                   Provider.of<MyCourtsViewModel>(context,
                                           listen: false)
                                       .setAllowRecurrent(
-                                          widget.dayIndex, newValue);
+                                    widget.operationDay,
+                                    newValue,
+                                  );
                                 }),
                           ),
                           AnimatedSize(
@@ -143,18 +135,22 @@ class _CourtDayState extends State<CourtDay> {
                                                     PriceSelectorRadio(
                                                         height:
                                                             secondaryRowHeight,
-                                                        isPriceStandard: Provider
-                                                                .of<MyCourtsViewModel>(
-                                                                    context)
-                                                            .isPriceStandard,
+                                                        isPriceStandard:
+                                                            isPriceStandard,
                                                         onChange: (value) {
+                                                          setState(() {
+                                                            if (value != null) {
+                                                              forceIsPriceCustom =
+                                                                  value;
+                                                            }
+                                                          });
                                                           Provider.of<MyCourtsViewModel>(
                                                                   context,
                                                                   listen: false)
-                                                              .setIsPriceStandart(
-                                                                  value!,
-                                                                  widget
-                                                                      .dayIndex);
+                                                              .setIsPriceStandard(
+                                                            widget.operationDay,
+                                                            value!,
+                                                          );
                                                         }),
                                                   ],
                                                 ),
@@ -167,48 +163,25 @@ class _CourtDayState extends State<CourtDay> {
                                                         child:
                                                             PriceSelectorHeader(
                                                           allowRecurrent: widget
-                                                              .court.prices
-                                                              .firstWhere((hourPrice) =>
-                                                                  hourPrice
-                                                                      .weekday ==
-                                                                  widget
-                                                                      .dayIndex)
+                                                              .operationDay
                                                               .allowReccurrent,
                                                         ),
                                                       ),
                                                       Expanded(
                                                         child: ListView.builder(
                                                           itemCount: widget
-                                                              .court.priceRules
-                                                              .where((element) =>
-                                                                  element
-                                                                      .weekday ==
-                                                                  widget
-                                                                      .dayIndex)
-                                                              .toList()
+                                                              .operationDay
+                                                              .priceRules
                                                               .length,
                                                           itemBuilder:
                                                               (context, index) {
                                                             return PriceSelector(
                                                               allowRecurrent: widget
-                                                                  .court.prices
-                                                                  .firstWhere((hourPrice) =>
-                                                                      hourPrice
-                                                                          .weekday ==
-                                                                      widget
-                                                                          .dayIndex)
+                                                                  .operationDay
                                                                   .allowReccurrent,
-                                                              dayIndex: widget
-                                                                  .dayIndex,
                                                               priceRule: widget
-                                                                  .court
-                                                                  .priceRules
-                                                                  .where((element) =>
-                                                                      element
-                                                                          .weekday ==
-                                                                      widget
-                                                                          .dayIndex)
-                                                                  .toList()[index],
+                                                                  .operationDay
+                                                                  .priceRules[index],
                                                               height:
                                                                   mainRowHeight,
                                                               availableHours: Provider.of<
@@ -219,30 +192,66 @@ class _CourtDayState extends State<CourtDay> {
                                                                   .availableHours
                                                                   .where(
                                                                       (hour) {
-                                                                OperationDay validDay = Provider.of<
-                                                                            DataProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .operationDays
-                                                                    .firstWhere((opDay) =>
-                                                                        opDay
-                                                                            .weekDay ==
+                                                                var validDay = widget
+                                                                    .viewModel
+                                                                    .storeWorkingDays
+                                                                    .firstWhere((workingDay) =>
+                                                                        workingDay
+                                                                            .weekday ==
                                                                         widget
-                                                                            .dayIndex);
+                                                                            .operationDay
+                                                                            .weekday);
                                                                 return hour.hour >=
                                                                         validDay
-                                                                            .startingHour
+                                                                            .startingHour!
                                                                             .hour &&
                                                                     hour.hour <=
                                                                         validDay
-                                                                            .endingHour
+                                                                            .endingHour!
                                                                             .hour;
                                                               }).toList(),
-                                                              editHour: !Provider
-                                                                      .of<MyCourtsViewModel>(
-                                                                          context)
-                                                                  .isPriceStandard,
+                                                              editHour:
+                                                                  !isPriceStandard,
+                                                              onChangedStartingHour: (oldHour,
+                                                                      newHour) =>
+                                                                  widget
+                                                                      .viewModel
+                                                                      .onChangedRuleStartingHour(
+                                                                context,
+                                                                widget
+                                                                    .operationDay,
+                                                                oldHour,
+                                                                newHour,
+                                                              ),
+                                                              onChangedEndingHour: (oldHour,
+                                                                      newHour) =>
+                                                                  widget
+                                                                      .viewModel
+                                                                      .onChangedRuleEndingHour(
+                                                                context,
+                                                                widget
+                                                                    .operationDay,
+                                                                oldHour,
+                                                                newHour,
+                                                              ),
+                                                              onChangedPrice: (newPrice,
+                                                                      priceRule) =>
+                                                                  widget.viewModel.onChangedPrice(
+                                                                      newPrice,
+                                                                      priceRule,
+                                                                      widget
+                                                                          .operationDay,
+                                                                      false),
+                                                              onChangedRecurrentPrice: (newPrice,
+                                                                      priceRule) =>
+                                                                  widget
+                                                                      .viewModel
+                                                                      .onChangedPrice(
+                                                                          newPrice,
+                                                                          priceRule,
+                                                                          widget
+                                                                              .operationDay,
+                                                                          true),
                                                             );
                                                           },
                                                         ),
@@ -266,23 +275,11 @@ class _CourtDayState extends State<CourtDay> {
                     ? Container()
                     : InkWell(
                         onTap: () {
-                          setState(() {
-                            if (Provider.of<DataProvider>(context,
-                                    listen: false)
-                                .operationDays
-                                .firstWhere(
-                                    (opDay) => opDay.weekDay == widget.dayIndex)
-                                .isEnabled) {
-                              Provider.of<MyCourtsViewModel>(context,
-                                      listen: false)
-                                  .isPriceStandard = widget.court.priceRules
-                                      .where((priceRule) =>
-                                          priceRule.weekday == widget.dayIndex)
-                                      .length ==
-                                  1;
+                          if (widget.operationDay.isEnabled) {
+                            setState(() {
                               isExpanded = !isExpanded;
-                            }
-                          });
+                            });
+                          }
                         },
                         child: SizedBox(
                           width: editIconWidth,

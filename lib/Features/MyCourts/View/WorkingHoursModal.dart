@@ -3,36 +3,35 @@ import 'package:sandfriends_web/Features/MyCourts/ViewModel/MyCourtsViewModel.da
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
+import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 
 import '../../../SharedComponents/View/SFButton.dart';
 import '../../../Utils/Constants.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import 'HourSelector.dart';
 
-class WorkingHoursWidget extends StatefulWidget {
+class WorkingHoursModal extends StatefulWidget {
   MyCourtsViewModel viewModel;
 
-  WorkingHoursWidget({
+  WorkingHoursModal({
     super.key,
     required this.viewModel,
   });
 
   @override
-  State<WorkingHoursWidget> createState() => _WorkingHoursWidgetState();
+  State<WorkingHoursModal> createState() => _WorkingHoursWidgetState();
 }
 
-class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
-  List<OperationDay> newOperationDays = [];
+class _WorkingHoursWidgetState extends State<WorkingHoursModal> {
+  List<StoreWorkingDay> storeWorkingDays = [];
 
   @override
   void initState() {
-    if (Provider.of<DataProvider>(context, listen: false)
-        .operationDays
-        .isEmpty) {
+    if (widget.viewModel.storeWorkingDays.isEmpty) {
       for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
-        newOperationDays.add(
-          OperationDay(
-            weekDay: dayIndex,
+        storeWorkingDays.add(
+          StoreWorkingDay(
+            weekday: dayIndex,
             startingHour: Provider.of<DataProvider>(context, listen: false)
                 .availableHours
                 .first,
@@ -44,17 +43,13 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
         );
       }
     } else {
-      newOperationDays = Provider.of<DataProvider>(context, listen: false)
-          .operationDays
-          .map(
-            (opDay) => OperationDay(
-              weekDay: opDay.weekDay,
-              startingHour: opDay.startingHour,
-              endingHour: opDay.endingHour,
-              isEnabled: opDay.isEnabled,
-            ),
-          )
-          .toList();
+      for (var storeWorkingHours in widget.viewModel.storeWorkingDays) {
+        storeWorkingDays.add(
+          StoreWorkingDay.copyFrom(
+            storeWorkingHours,
+          ),
+        );
+      }
     }
     super.initState();
   }
@@ -102,10 +97,10 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        for (int i = 0; i < newOperationDays.length; i++)
+                        for (var storeWorkingDay in storeWorkingDays)
                           Expanded(
                             child: HourSelector(
-                              operationDay: newOperationDays[i],
+                              storeWorkingDay: storeWorkingDay,
                               availableHours: Provider.of<DataProvider>(context,
                                       listen: false)
                                   .availableHours,
@@ -125,7 +120,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                   buttonLabel: "Voltar",
                   buttonType: ButtonType.Secondary,
                   onTap: () {
-                    widget.viewModel.returnMainView(context);
+                    widget.viewModel.closeModal(context);
                   },
                 ),
               ),
@@ -138,7 +133,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursWidget> {
                   buttonType: ButtonType.Primary,
                   onTap: () {
                     widget.viewModel
-                        .saveNewOperationDays(context, newOperationDays);
+                        .saveNewStoreWorkingSDays(context, storeWorkingDays);
                   },
                 ),
               ),

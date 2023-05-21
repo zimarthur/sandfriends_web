@@ -13,7 +13,10 @@ class PriceSelector extends StatefulWidget {
   bool allowRecurrent;
   double height;
   List<Hour> availableHours;
-  int dayIndex;
+  Function(Hour, String?) onChangedStartingHour;
+  Function(Hour, String?) onChangedEndingHour;
+  Function(String, PriceRule) onChangedPrice;
+  Function(String, PriceRule) onChangedRecurrentPrice;
 
   PriceSelector({
     super.key,
@@ -21,8 +24,11 @@ class PriceSelector extends StatefulWidget {
     this.editHour = false,
     required this.height,
     required this.availableHours,
-    required this.dayIndex,
     required this.allowRecurrent,
+    required this.onChangedStartingHour,
+    required this.onChangedEndingHour,
+    required this.onChangedPrice,
+    required this.onChangedRecurrentPrice,
   });
 
   @override
@@ -58,29 +64,23 @@ class _PriceSelectorState extends State<PriceSelector> {
                       SizedBox(
                         height: widget.height,
                         child: SFDropdown(
-                          enableBorder: true,
-                          textColor: textDarkGrey,
-                          labelText: widget.priceRule.startingHour.hourString,
-                          items: widget.availableHours
-                              .where(
-                                (hour) =>
-                                    hour.hour <
-                                    widget.priceRule.endingHour.hour,
-                              )
-                              .map((hour) => hour.hourString)
-                              .toList(),
-                          validator: (a) {
-                            return null;
-                          },
-                          onChanged: (newHour) {
-                            setState(() {
-                              Provider.of<MyCourtsViewModel>(context,
-                                      listen: false)
-                                  .setNewRuleStartHour(widget.dayIndex,
-                                      newHour!, context, widget.priceRule);
-                            });
-                          },
-                        ),
+                            enableBorder: true,
+                            textColor: textDarkGrey,
+                            labelText: widget.priceRule.startingHour.hourString,
+                            items: widget.availableHours
+                                .where(
+                                  (hour) =>
+                                      hour.hour <
+                                      widget.priceRule.endingHour.hour,
+                                )
+                                .map((hour) => hour.hourString)
+                                .toList(),
+                            validator: (a) {
+                              return null;
+                            },
+                            onChanged: (newHour) =>
+                                widget.onChangedStartingHour(
+                                    widget.priceRule.startingHour, newHour)),
                       ),
                       const Text(
                         " - ",
@@ -89,29 +89,22 @@ class _PriceSelectorState extends State<PriceSelector> {
                       SizedBox(
                         height: widget.height,
                         child: SFDropdown(
-                          enableBorder: true,
-                          textColor: textDarkGrey,
-                          labelText: widget.priceRule.endingHour.hourString,
-                          items: widget.availableHours
-                              .where(
-                                (hour) =>
-                                    hour.hour >
-                                    widget.priceRule.startingHour.hour,
-                              )
-                              .map((hour) => hour.hourString)
-                              .toList(),
-                          validator: (a) {
-                            return null;
-                          },
-                          onChanged: (newHour) {
-                            setState(() {
-                              Provider.of<MyCourtsViewModel>(context,
-                                      listen: false)
-                                  .setNewRuleEndHour(widget.dayIndex, newHour!,
-                                      context, widget.priceRule);
-                            });
-                          },
-                        ),
+                            enableBorder: true,
+                            textColor: textDarkGrey,
+                            labelText: widget.priceRule.endingHour.hourString,
+                            items: widget.availableHours
+                                .where(
+                                  (hour) =>
+                                      hour.hour >
+                                      widget.priceRule.startingHour.hour,
+                                )
+                                .map((hour) => hour.hourString)
+                                .toList(),
+                            validator: (a) {
+                              return null;
+                            },
+                            onChanged: (newHour) => widget.onChangedEndingHour(
+                                widget.priceRule.endingHour, newHour)),
                       ),
                     ],
                   )
@@ -136,11 +129,8 @@ class _PriceSelectorState extends State<PriceSelector> {
                 validator: (value) {
                   return null;
                 },
-                onChanged: (newPrice) {
-                  Provider.of<MyCourtsViewModel>(context, listen: false)
-                      .priceChange(
-                          newPrice, widget.priceRule, widget.dayIndex, false);
-                },
+                onChanged: (newPrice) =>
+                    widget.onChangedPrice(newPrice, widget.priceRule),
               ),
             ),
           ),
@@ -160,11 +150,9 @@ class _PriceSelectorState extends State<PriceSelector> {
                       validator: (value) {
                         return null;
                       },
-                      onChanged: (newPrice) {
-                        Provider.of<MyCourtsViewModel>(context, listen: false)
-                            .priceChange(newPrice, widget.priceRule,
-                                widget.dayIndex, true);
-                      },
+                      onChanged: (newRecurrentPrice) =>
+                          widget.onChangedRecurrentPrice(
+                              newRecurrentPrice, widget.priceRule),
                     )
                   : Container(),
             ),

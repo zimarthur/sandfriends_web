@@ -11,6 +11,7 @@ import '../../../SharedComponents/Model/HourPrice.dart';
 import '../../../SharedComponents/Model/Sport.dart';
 import '../../../SharedComponents/Model/Store.dart';
 import '../../../SharedComponents/Model/Match.dart';
+import '../../../SharedComponents/Model/StoreWorkingHours.dart';
 import '../../../Utils/LocalStorage.dart';
 
 class DataProvider extends ChangeNotifier {
@@ -21,7 +22,30 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<OperationDay> operationDays = [];
+  List<StoreWorkingDay>? get storeWorkingDays {
+    if (courts.isEmpty) {
+      return null;
+    }
+    List<StoreWorkingDay> storeWorkingDays = [];
+    for (var opDay in courts.first.operationDays) {
+      var storeWorkingDay = StoreWorkingDay(
+        weekday: opDay.weekday,
+        isEnabled: opDay.prices.isNotEmpty,
+      );
+      if (storeWorkingDay.isEnabled) {
+        storeWorkingDay.startingHour = opDay.prices
+            .reduce((a, b) => a.startingHour.hour < b.startingHour.hour ? a : b)
+            .startingHour;
+        storeWorkingDay.endingHour = opDay.prices
+            .reduce((a, b) => a.endingHour.hour > b.endingHour.hour ? a : b)
+            .endingHour;
+      }
+      storeWorkingDays.add(
+        storeWorkingDay,
+      );
+    }
+    return storeWorkingDays;
+  }
 
   List<Court> courts = [];
 
@@ -112,45 +136,27 @@ class DataProvider extends ChangeNotifier {
         newCourt.sports
             .add(AvailableSport(sport: sport, isAvailable: foundSport));
       }
+
       for (var courtPrices in court["Prices"]) {
-        newCourt.prices.add(
-          HourPrice(
-            startingHour: availableHours.firstWhere(
-                (hour) => hour.hour == courtPrices["IdAvailableHour"]),
-            weekday: courtPrices["Day"],
-            allowReccurrent: courtPrices["AllowRecurrent"],
-            price: courtPrices["Price"],
-            recurrentPrice:
-                courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
-            endingHour: availableHours.firstWhere(
-                (hour) => hour.hour > courtPrices["IdAvailableHour"]),
-          ),
-        );
+        newCourt.operationDays
+            .firstWhere((opDay) => opDay.weekday == courtPrices["Day"])
+            .prices
+            .add(
+              HourPrice(
+                startingHour: availableHours.firstWhere(
+                    (hour) => hour.hour == courtPrices["IdAvailableHour"]),
+                price: courtPrices["Price"],
+                recurrentPrice:
+                    courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
+                endingHour: availableHours.firstWhere(
+                    (hour) => hour.hour > courtPrices["IdAvailableHour"]),
+              ),
+            );
       }
 
       courts.add(newCourt);
     }
-    if (courts.isNotEmpty) {
-      List<HourPrice> courtPrices = courts.first.prices;
-      if (courtPrices.isNotEmpty) {
-        for (int weekday = 0; weekday < 7; weekday++) {
-          List<HourPrice> filteredPrices = courtPrices
-              .where((hourPrice) => hourPrice.weekday == weekday)
-              .toList();
-          operationDays.add(
-            OperationDay(
-              weekDay: weekday,
-              startingHour: filteredPrices
-                  .map((hourPrice) => hourPrice.startingHour)
-                  .reduce((a, b) => a.hour < b.hour ? a : b),
-              endingHour: filteredPrices
-                  .map((hourPrice) => hourPrice.startingHour)
-                  .reduce((a, b) => a.hour > b.hour ? a : b),
-            ),
-          );
-        }
-      }
-    }
+
     notifyListeners();
   }
 }

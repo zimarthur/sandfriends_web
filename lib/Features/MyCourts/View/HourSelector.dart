@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
+import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
@@ -7,12 +8,12 @@ import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/View/SFDropDown.dart';
 
 class HourSelector extends StatefulWidget {
-  OperationDay operationDay;
+  StoreWorkingDay storeWorkingDay;
   List<Hour> availableHours;
 
   HourSelector({
     super.key,
-    required this.operationDay,
+    required this.storeWorkingDay,
     required this.availableHours,
   });
 
@@ -23,99 +24,80 @@ class HourSelector extends StatefulWidget {
 class _HourSelectorState extends State<HourSelector> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Checkbox(
-              value: widget.operationDay.isEnabled,
-              onChanged: (value) {
-                setState(() {
-                  widget.operationDay.isEnabled = value!;
-                });
-              }),
-          const SizedBox(
-            width: defaultPadding,
+    return Row(
+      children: [
+        Checkbox(
+            value: widget.storeWorkingDay.isEnabled,
+            onChanged: (value) {
+              setState(() {
+                widget.storeWorkingDay.isEnabled = value!;
+              });
+            }),
+        const SizedBox(
+          width: defaultPadding,
+        ),
+        Expanded(
+          child: Text(
+            weekdayFull[widget.storeWorkingDay.weekday],
+            style: TextStyle(
+                color: widget.storeWorkingDay.isEnabled
+                    ? textBlack
+                    : textLightGrey),
+            overflow: TextOverflow.ellipsis,
           ),
-          Expanded(
-            child: Text(
-              weekdayFull[widget.operationDay.weekDay],
-              style: TextStyle(
-                  color: widget.operationDay.isEnabled
-                      ? textBlack
-                      : textLightGrey),
-              overflow: TextOverflow.ellipsis,
-            ),
+        ),
+        if (widget.storeWorkingDay.isEnabled)
+          Row(
+            children: [
+              SFDropdown(
+                labelText: widget.storeWorkingDay.startingHour!.hourString,
+                items: widget.availableHours
+                    .where((hour) =>
+                        hour.hour < widget.storeWorkingDay.endingHour!.hour)
+                    .map((hour) => hour.hourString)
+                    .toList(),
+                validator: (a) {
+                  return null;
+                },
+                onChanged: (newStartingHour) {
+                  setState(() {
+                    widget.storeWorkingDay.startingHour = widget.availableHours
+                        .firstWhere(
+                            (element) => element.hourString == newStartingHour);
+                  });
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text(
+                  "até",
+                  style: TextStyle(
+                      color: widget.storeWorkingDay.isEnabled
+                          ? textBlack
+                          : textLightGrey),
+                ),
+              ),
+              SFDropdown(
+                labelText: widget.storeWorkingDay.endingHour!.hourString,
+                items: widget.availableHours
+                    .where((hour) =>
+                        hour.hour > widget.storeWorkingDay.startingHour!.hour)
+                    .map((hour) => hour.hourString)
+                    .toList(),
+                validator: (newEndingHour) {
+                  return null;
+                },
+                onChanged: (newEndingHour) {
+                  setState(() {
+                    widget.storeWorkingDay.endingHour = widget.availableHours
+                        .firstWhere(
+                            (element) => element.hourString == newEndingHour);
+                  });
+                },
+              ),
+            ],
           ),
-          widget.operationDay.isEnabled
-              ? Row(
-                  children: [
-                    SFDropdown(
-                      labelText: widget.operationDay.startingHour.hourString,
-                      items: widget.operationDay.endingHour == null
-                          ? widget.availableHours
-                              .where((hour) =>
-                                  hour.hour < widget.availableHours.last.hour)
-                              .map((hour) => hour.hourString)
-                              .toList()
-                          : widget.availableHours
-                              .where((hour) =>
-                                  hour.hour <
-                                  widget.operationDay.endingHour.hour)
-                              .map((hour) => hour.hourString)
-                              .toList(),
-                      validator: (a) {
-                        return null;
-                      },
-                      onChanged: (a) {
-                        setState(() {
-                          widget.operationDay.startingHour = widget
-                              .availableHours
-                              .firstWhere((element) => element.hourString == a);
-                        });
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding),
-                      child: Text(
-                        "até",
-                        style: TextStyle(
-                            color: widget.operationDay.isEnabled
-                                ? textBlack
-                                : textLightGrey),
-                      ),
-                    ),
-                    SFDropdown(
-                      labelText: widget.operationDay.endingHour == null
-                          ? widget.availableHours.last.hourString
-                          : widget.operationDay.endingHour.hourString,
-                      items: widget.operationDay.startingHour == null
-                          ? widget.availableHours
-                              .where((hour) =>
-                                  hour.hour > widget.availableHours.first.hour)
-                              .map((hour) => hour.hourString)
-                              .toList()
-                          : widget.availableHours
-                              .where((hour) =>
-                                  hour.hour >
-                                  widget.operationDay.startingHour.hour)
-                              .map((hour) => hour.hourString)
-                              .toList(),
-                      validator: (a) {
-                        return null;
-                      },
-                      onChanged: (a) {
-                        setState(() {
-                          widget.operationDay.endingHour = widget.availableHours
-                              .firstWhere((element) => element.hourString == a);
-                        });
-                      },
-                    ),
-                  ],
-                )
-              : Container(),
-        ],
-      ),
+      ],
     );
   }
 }

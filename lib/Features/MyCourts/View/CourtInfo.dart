@@ -81,18 +81,8 @@ class _CourtInfoState extends State<CourtInfo> {
                               validator: (value) {
                                 return null;
                               },
-                              onChanged: (newText) {
-                                if (widget.viewModel.selectedCourtIndex == -1) {
-                                  widget.viewModel.newCourtName = newText;
-                                } else {
-                                  widget
-                                      .viewModel
-                                      .courts[
-                                          widget.viewModel.selectedCourtIndex]
-                                      .description = newText;
-                                }
-                                widget.viewModel.checkCourtInfoChanges(context);
-                              },
+                              onChanged: (newText) =>
+                                  widget.viewModel.onChangedCourtName(newText),
                             ),
                           ),
                         ],
@@ -121,32 +111,10 @@ class _CourtInfoState extends State<CourtInfo> {
                                     Radio(
                                       value: true,
                                       activeColor: primaryBlue,
-                                      groupValue: widget.viewModel
-                                                  .selectedCourtIndex ==
-                                              -1
-                                          ? widget.viewModel.newCourtIsIndoor
-                                          : widget
-                                              .viewModel
-                                              .courts[widget
-                                                  .viewModel.selectedCourtIndex]
-                                              .isIndoor,
-                                      onChanged: (value) {
-                                        if (widget
-                                                .viewModel.selectedCourtIndex ==
-                                            -1) {
-                                          widget.viewModel.newCourtIsIndoor =
-                                              value!;
-                                        } else {
-                                          widget
-                                              .viewModel
-                                              .courts[widget
-                                                  .viewModel.selectedCourtIndex]
-                                              .isIndoor = value!;
-                                        }
-
-                                        widget.viewModel
-                                            .checkCourtInfoChanges(context);
-                                      },
+                                      groupValue: widget
+                                          .viewModel.currentCourt.isIndoor,
+                                      onChanged: (isIndoor) => widget.viewModel
+                                          .onChangedIsIndoor(isIndoor),
                                     ),
                                     const SizedBox(
                                       width: defaultPadding,
@@ -164,32 +132,10 @@ class _CourtInfoState extends State<CourtInfo> {
                                     Radio(
                                       value: false,
                                       activeColor: primaryBlue,
-                                      groupValue: widget.viewModel
-                                                  .selectedCourtIndex ==
-                                              -1
-                                          ? widget.viewModel.newCourtIsIndoor
-                                          : widget
-                                              .viewModel
-                                              .courts[widget
-                                                  .viewModel.selectedCourtIndex]
-                                              .isIndoor,
-                                      onChanged: (value) {
-                                        if (widget
-                                                .viewModel.selectedCourtIndex ==
-                                            -1) {
-                                          widget.viewModel.newCourtIsIndoor =
-                                              value!;
-                                        } else {
-                                          widget
-                                              .viewModel
-                                              .courts[widget
-                                                  .viewModel.selectedCourtIndex]
-                                              .isIndoor = value!;
-                                        }
-
-                                        widget.viewModel
-                                            .checkCourtInfoChanges(context);
-                                      },
+                                      groupValue: widget
+                                          .viewModel.currentCourt.isIndoor,
+                                      onChanged: (isIndoor) => widget.viewModel
+                                          .onChangedIsIndoor(isIndoor),
                                     ),
                                     const SizedBox(
                                       width: defaultPadding,
@@ -240,69 +186,21 @@ class _CourtInfoState extends State<CourtInfo> {
                               ),
                               child: Column(
                                 children: [
-                                  for (int sportIndex = 0;
-                                      sportIndex <
-                                          Provider.of<DataProvider>(context,
-                                                  listen: false)
-                                              .availableSports
-                                              .length;
-                                      sportIndex++)
+                                  for (var sport
+                                      in widget.viewModel.currentCourt.sports)
                                     Row(
                                       children: [
                                         Checkbox(
-                                          value: widget.viewModel
-                                                      .selectedCourtIndex ==
-                                                  -1
-                                              ? widget
-                                                  .viewModel
-                                                  .newCourtSports[sportIndex]
-                                                  .isAvailable
-                                              : widget
-                                                  .viewModel
-                                                  .courts[widget.viewModel
-                                                      .selectedCourtIndex]
-                                                  .sports[sportIndex]
-                                                  .isAvailable,
-                                          activeColor: primaryBlue,
-                                          onChanged: (newValue) {
-                                            if (widget.viewModel
-                                                    .selectedCourtIndex ==
-                                                -1) {
-                                              widget
-                                                  .viewModel
-                                                  .newCourtSports[sportIndex]
-                                                  .isAvailable = newValue!;
-                                            } else {
-                                              widget
-                                                  .viewModel
-                                                  .courts[widget.viewModel
-                                                      .selectedCourtIndex]
-                                                  .sports[sportIndex]
-                                                  .isAvailable = newValue!;
-                                            }
-
-                                            widget.viewModel
-                                                .checkCourtInfoChanges(context);
-                                          },
-                                        ),
+                                            value: sport.isAvailable,
+                                            activeColor: primaryBlue,
+                                            onChanged: (newValue) =>
+                                                widget.viewModel.onChangedSport(
+                                                    sport, newValue)),
                                         const SizedBox(
                                           width: defaultPadding,
                                         ),
                                         Text(
-                                          widget.viewModel.selectedCourtIndex ==
-                                                  -1
-                                              ? widget
-                                                  .viewModel
-                                                  .newCourtSports[sportIndex]
-                                                  .sport
-                                                  .description
-                                              : widget
-                                                  .viewModel
-                                                  .courts[widget.viewModel
-                                                      .selectedCourtIndex]
-                                                  .sports[sportIndex]
-                                                  .sport
-                                                  .description,
+                                          sport.sport.description,
                                           style: const TextStyle(
                                             color: textDarkGrey,
                                           ),

@@ -13,11 +13,11 @@ import '../../../SharedComponents/Model/Hour.dart';
 
 class CalendarViewModel extends ChangeNotifier {
   void initCalendarViewModel(BuildContext context) {
-    setWorkingHours(
-        Provider.of<DataProvider>(context, listen: false).operationDays,
-        Provider.of<DataProvider>(context, listen: false).availableHours);
-    operationDays =
-        Provider.of<DataProvider>(context, listen: false).operationDays;
+    // setWorkingHours(
+    //     Provider.of<DataProvider>(context, listen: false).operationDays,
+    //     Provider.of<DataProvider>(context, listen: false).availableHours);
+    // operationDays =
+    //     Provider.of<DataProvider>(context, listen: false).operationDays;
   }
 
   CalendarType _calendarView = CalendarType.Weekly;

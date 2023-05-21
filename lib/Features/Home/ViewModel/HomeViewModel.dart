@@ -27,13 +27,8 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   bool opDaysSet(BuildContext context) {
-    if (Provider.of<DataProvider>(context, listen: false)
-        .operationDays
-        .isNotEmpty) {
-      return true;
-    } else {
-      return false;
-    }
+    return Provider.of<DataProvider>(context, listen: false).storeWorkingDays ==
+        null;
   }
 
   bool courtsSet(BuildContext context) {

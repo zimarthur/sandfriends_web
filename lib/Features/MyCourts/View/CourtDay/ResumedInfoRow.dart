@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
+import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
@@ -8,19 +9,15 @@ import '../../../../SharedComponents/Model/HourPrice.dart';
 import 'package:provider/provider.dart';
 
 class ResumedInfoRow extends StatefulWidget {
-  int day;
-  List<HourPrice> hourPriceList;
+  OperationDay operationDay;
   bool isEditing;
-  bool isEnabled;
   double rowHeight;
   Function(bool) setAllowRecurrent;
 
   ResumedInfoRow({
     super.key,
-    required this.day,
-    required this.hourPriceList,
+    required this.operationDay,
     required this.isEditing,
-    required this.isEnabled,
     required this.rowHeight,
     required this.setAllowRecurrent,
   });
@@ -29,44 +26,34 @@ class ResumedInfoRow extends StatefulWidget {
 }
 
 class _ResumedInfoRowState extends State<ResumedInfoRow> {
+  String priceText = "";
+  String? priceRecurrentText;
   @override
   Widget build(BuildContext context) {
-    int smallestPrice = widget.hourPriceList
-        .where((hourPrice) => hourPrice.weekday == widget.day)
-        .reduce((current, next) => current.price < next.price ? current : next)
-        .price;
-    int highestPrice = widget.hourPriceList
-        .where((hourPrice) => hourPrice.weekday == widget.day)
-        .reduce((current, next) => current.price > next.price ? current : next)
-        .price;
-    int smallestPriceRecurrent = widget.hourPriceList
-        .where((hourPrice) => hourPrice.weekday == widget.day)
-        .reduce((current, next) =>
-            current.recurrentPrice < next.recurrentPrice ? current : next)
-        .recurrentPrice;
-    int highestPriceRecurrent = widget.hourPriceList
-        .where((hourPrice) => hourPrice.weekday == widget.day)
-        .reduce((current, next) =>
-            current.recurrentPrice > next.recurrentPrice ? current : next)
-        .recurrentPrice;
-    String priceText = smallestPrice == highestPrice
-        ? "R\$$highestPrice"
-        : "R\$$smallestPrice - R\$$highestPrice";
-    String priceRecurrentText = smallestPriceRecurrent == highestPriceRecurrent
-        ? "R\$$smallestPriceRecurrent"
-        : "R\$$smallestPriceRecurrent - R\$$highestPriceRecurrent";
+    if (widget.operationDay.isEnabled) {
+      priceText = widget.operationDay.lowestPrice ==
+              widget.operationDay.highestPrice
+          ? "R\$${widget.operationDay.highestPrice}"
+          : "R\$${widget.operationDay.lowestPrice} - R\$${widget.operationDay.highestPrice}";
+      priceRecurrentText = widget.operationDay.lowestRecurrentPrice == null
+          ? null
+          : widget.operationDay.lowestRecurrentPrice ==
+                  widget.operationDay.highestRecurrentPrice
+              ? "R\$${widget.operationDay.lowestRecurrentPrice}"
+              : "R\$${widget.operationDay.lowestRecurrentPrice} - R\$${widget.operationDay.highestRecurrentPrice}";
+    }
 
     return Row(
       children: [
         Expanded(
           flex: 1,
           child: Text(
-            weekday[widget.day],
+            weekday[widget.operationDay.weekday],
             style: const TextStyle(color: textDarkGrey),
             textAlign: TextAlign.center,
           ),
         ),
-        widget.isEnabled
+        widget.operationDay.isEnabled
             ? Expanded(
                 flex: 3,
                 child: Row(
@@ -74,7 +61,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        "${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).first.startingHour.hourString} - ${widget.hourPriceList.where((hourPrice) => hourPrice.weekday == widget.day).last.endingHour.hourString}",
+                        "${widget.operationDay.startingHour.hourString} - ${widget.operationDay.endingHour.hourString}",
                         style: const TextStyle(color: textDarkGrey),
                         textAlign: TextAlign.center,
                       ),
@@ -87,11 +74,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                             ? SizedBox(
                                 height: widget.rowHeight * 0.7,
                                 child: SFDropdown(
-                                  labelText: widget.hourPriceList
-                                          .where((hourPrice) =>
-                                              hourPrice.weekday == widget.day)
-                                          .first
-                                          .allowReccurrent
+                                  labelText: widget.operationDay.allowReccurrent
                                       ? "Sim"
                                       : "Não",
                                   items: const ["Sim", "Não"],
@@ -106,11 +89,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                                 ),
                               )
                             : Text(
-                                widget.hourPriceList
-                                        .where((hourPrice) =>
-                                            hourPrice.weekday == widget.day)
-                                        .first
-                                        .allowReccurrent
+                                widget.operationDay.allowReccurrent
                                     ? "Sim"
                                     : "Não",
                                 style: const TextStyle(color: textDarkGrey),
@@ -119,11 +98,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: widget.hourPriceList
-                              .where((hourPrice) =>
-                                  hourPrice.weekday == widget.day)
-                              .first
-                              .allowReccurrent
+                      child: widget.operationDay.allowReccurrent
                           ? RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
@@ -156,8 +131,8 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                                   Provider.of<MyCourtsViewModel>(context,
                                       listen: false),
                                   context,
-                                  widget.hourPriceList,
-                                  widget.day),
+                                  widget.operationDay.prices,
+                                  widget.operationDay.weekday),
                       child: Padding(
                         padding:
                             const EdgeInsets.only(right: defaultPadding * 2),
@@ -177,7 +152,7 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                 child: Text(
                   "Fechado",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: textDarkGrey),
+                  style: TextStyle(color: red),
                 ))
       ],
     );

@@ -13,8 +13,8 @@ import '../../Menu/ViewModel/DataProvider.dart';
 import 'CourtInfo.dart';
 
 class MyCourtsScreen extends StatefulWidget {
-  bool? showWorkingHours;
-  MyCourtsScreen({super.key, this.showWorkingHours = false});
+  bool? quickLinkWorkingHours;
+  MyCourtsScreen({super.key, this.quickLinkWorkingHours = false});
 
   @override
   State<MyCourtsScreen> createState() => _MyCourtsScreenState();
@@ -28,7 +28,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
     super.initState();
     viewModel.init(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.showWorkingHours == true) {
+      if (widget.quickLinkWorkingHours == true) {
         setState(() {
           viewModel.setWorkingHoursWidget(context, viewModel);
         });
@@ -104,8 +104,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                               viewModel.switchTabs(context, -1);
                             },
                             mouseCursor: Provider.of<DataProvider>(context)
-                                    .operationDays
-                                    .isEmpty
+                                        .storeWorkingDays ==
+                                    null
                                 ? SystemMouseCursors.basic
                                 : SystemMouseCursors.click,
                           ),
@@ -142,7 +142,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                 buttonLabel: "Salvar",
                                 buttonType: ButtonType.Primary,
                                 textPadding: const EdgeInsets.symmetric(
-                                    horizontal: defaultPadding),
+                                  horizontal: defaultPadding,
+                                ),
                                 onTap: () {},
                               ),
                             ),
@@ -171,9 +172,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                           bottomRight: Radius.circular(defaultBorderRadius),
                         ),
                       ),
-                      child: Provider.of<DataProvider>(context)
-                              .operationDays
-                              .isEmpty
+                      child: viewModel.storeWorkingDays.isEmpty
                           ? SizedBox(
                               width: width,
                               child: Column(
@@ -249,18 +248,25 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                           ),
                                           Expanded(
                                             child: ListView.builder(
-                                              itemCount: 7,
+                                              itemCount: viewModel.currentCourt
+                                                  .operationDays.length,
                                               itemBuilder: (context, index) {
                                                 return Column(
                                                   children: [
                                                     CourtDay(
                                                       width: courtWeekdayWidth,
                                                       height: myHeight,
-                                                      dayIndex: index,
-                                                      court: viewModel
-                                                          .currentCourt,
+                                                      operationDay: viewModel
+                                                          .currentCourt
+                                                          .operationDays[index],
+                                                      viewModel: viewModel,
                                                     ),
-                                                    if (index != 6)
+                                                    if (index !=
+                                                        viewModel
+                                                                .currentCourt
+                                                                .operationDays
+                                                                .length -
+                                                            1)
                                                       const SizedBox(
                                                         height: defaultPadding,
                                                       )

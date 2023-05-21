@@ -115,7 +115,7 @@ class PriceListWidget extends StatelessWidget {
           SFButton(
             buttonLabel: "Voltar",
             buttonType: ButtonType.Primary,
-            onTap: () => viewModel.returnMainView(context),
+            onTap: () => viewModel.closeModal(context),
           )
         ],
       ),
