@@ -101,7 +101,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                 : false,
                             iconPath: r'assets/icon/plus.svg',
                             onTap: () {
-                              viewModel.switchTabs(context, -1);
+                              viewModel.switchTabs(-1);
                             },
                             mouseCursor: Provider.of<DataProvider>(context)
                                         .storeWorkingDays ==
@@ -127,7 +127,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                           : false,
                                   onTap: () {
                                     setState(() {
-                                      viewModel.switchTabs(context, index);
+                                      viewModel.switchTabs(index);
                                     });
                                   },
                                 );
@@ -144,7 +144,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                                 textPadding: const EdgeInsets.symmetric(
                                   horizontal: defaultPadding,
                                 ),
-                                onTap: () {},
+                                onTap: () =>
+                                    viewModel.saveCourtChanges(context),
                               ),
                             ),
                         ],

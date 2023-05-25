@@ -86,7 +86,6 @@ class SettingsViewModel extends ChangeNotifier {
     stateController.text = storeEdit.city.state.uf;
     descriptionController.text = storeEdit.description ?? "";
     instagramController.text = storeEdit.instagram ?? "";
-    print(storeEdit.photos.length);
     notifyListeners();
   }
 

@@ -15,8 +15,8 @@ class PriceSelector extends StatefulWidget {
   List<Hour> availableHours;
   Function(Hour, String?) onChangedStartingHour;
   Function(Hour, String?) onChangedEndingHour;
-  Function(String, PriceRule) onChangedPrice;
-  Function(String, PriceRule) onChangedRecurrentPrice;
+  Function(String, PriceRule, TextEditingController) onChangedPrice;
+  Function(String, PriceRule, TextEditingController) onChangedRecurrentPrice;
 
   PriceSelector({
     super.key,
@@ -61,51 +61,44 @@ class _PriceSelectorState extends State<PriceSelector> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: widget.height,
-                        child: SFDropdown(
-                            enableBorder: true,
-                            textColor: textDarkGrey,
-                            labelText: widget.priceRule.startingHour.hourString,
-                            items: widget.availableHours
-                                .where(
-                                  (hour) =>
-                                      hour.hour <
-                                      widget.priceRule.endingHour.hour,
-                                )
-                                .map((hour) => hour.hourString)
-                                .toList(),
-                            validator: (a) {
-                              return null;
-                            },
-                            onChanged: (newHour) =>
-                                widget.onChangedStartingHour(
-                                    widget.priceRule.startingHour, newHour)),
-                      ),
+                      SFDropdown(
+                          enableBorder: true,
+                          textColor: textDarkGrey,
+                          labelText: widget.priceRule.startingHour.hourString,
+                          items: widget.availableHours
+                              .where(
+                                (hour) =>
+                                    hour.hour <
+                                    widget.priceRule.endingHour.hour,
+                              )
+                              .map((hour) => hour.hourString)
+                              .toList(),
+                          validator: (a) {
+                            return null;
+                          },
+                          onChanged: (newHour) => widget.onChangedStartingHour(
+                              widget.priceRule.startingHour, newHour)),
                       const Text(
                         " - ",
                         style: TextStyle(color: textDarkGrey),
                       ),
-                      SizedBox(
-                        height: widget.height,
-                        child: SFDropdown(
-                            enableBorder: true,
-                            textColor: textDarkGrey,
-                            labelText: widget.priceRule.endingHour.hourString,
-                            items: widget.availableHours
-                                .where(
-                                  (hour) =>
-                                      hour.hour >
-                                      widget.priceRule.startingHour.hour,
-                                )
-                                .map((hour) => hour.hourString)
-                                .toList(),
-                            validator: (a) {
-                              return null;
-                            },
-                            onChanged: (newHour) => widget.onChangedEndingHour(
-                                widget.priceRule.endingHour, newHour)),
-                      ),
+                      SFDropdown(
+                          enableBorder: true,
+                          textColor: textDarkGrey,
+                          labelText: widget.priceRule.endingHour.hourString,
+                          items: widget.availableHours
+                              .where(
+                                (hour) =>
+                                    hour.hour >
+                                    widget.priceRule.startingHour.hour,
+                              )
+                              .map((hour) => hour.hourString)
+                              .toList(),
+                          validator: (a) {
+                            return null;
+                          },
+                          onChanged: (newHour) => widget.onChangedEndingHour(
+                              widget.priceRule.endingHour, newHour)),
                     ],
                   )
                 : Text(
@@ -129,8 +122,8 @@ class _PriceSelectorState extends State<PriceSelector> {
                 validator: (value) {
                   return null;
                 },
-                onChanged: (newPrice) =>
-                    widget.onChangedPrice(newPrice, widget.priceRule),
+                onChanged: (newPrice) => widget.onChangedPrice(
+                    newPrice, widget.priceRule, priceController),
               ),
             ),
           ),
@@ -151,8 +144,8 @@ class _PriceSelectorState extends State<PriceSelector> {
                         return null;
                       },
                       onChanged: (newRecurrentPrice) =>
-                          widget.onChangedRecurrentPrice(
-                              newRecurrentPrice, widget.priceRule),
+                          widget.onChangedRecurrentPrice(newRecurrentPrice,
+                              widget.priceRule, recurrentPriceController),
                     )
                   : Container(),
             ),

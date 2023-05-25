@@ -71,8 +71,9 @@ class _ResumedInfoRowState extends State<ResumedInfoRow> {
                       child: Align(
                         alignment: Alignment.center,
                         child: widget.isEditing
-                            ? SizedBox(
-                                height: widget.rowHeight * 0.7,
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: defaultPadding / 2),
                                 child: SFDropdown(
                                   labelText: widget.operationDay.allowReccurrent
                                       ? "Sim"

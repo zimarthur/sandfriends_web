@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Features/MyCourts/Repository/MyCourtsRepoImp.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/PriceListWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
 import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
@@ -15,6 +19,8 @@ import '../../Menu/ViewModel/MenuProvider.dart';
 import '../View/WorkingHoursModal.dart';
 
 class MyCourtsViewModel extends ChangeNotifier {
+  final myCourtsRepo = MyCourtsRepoImp();
+
   TextEditingController nameController = TextEditingController();
 
   Court newCourt = Court(description: "", isIndoor: true);
@@ -23,25 +29,32 @@ class MyCourtsViewModel extends ChangeNotifier {
 
   List<Court> refCourts = [];
   List<Court> courts = [];
+  List<StoreWorkingDay> refStoreWorkingDays = [];
   List<StoreWorkingDay> storeWorkingDays = [];
 
   bool get courtInfoChanged {
+    if (selectedCourtIndex == -1) {
+      return false;
+    }
+    if (refStoreWorkingDays.isNotEmpty) {
+      for (var storeWorkingDay in storeWorkingDays) {
+        if (storeWorkingDay !=
+            refStoreWorkingDays.firstWhere((strWorkingDay) =>
+                strWorkingDay.weekday == storeWorkingDay.weekday)) {
+          return true;
+        }
+      }
+    }
     for (var refCourt in refCourts) {
-      if (selectedCourtIndex != -1) {
-        if (refCourt.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
-          print("");
-          print(refCourt.description);
-          print(currentCourt.description);
-          print("");
-          if (refCourt != currentCourt) {
-            return true;
-          }
-        } else {
-          if (refCourt !=
-              courts.firstWhere(
-                  (court) => court.idStoreCourt == refCourt.idStoreCourt)) {
-            return true;
-          }
+      if (refCourt.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
+        if (refCourt != currentCourt) {
+          return true;
+        }
+      } else {
+        if (refCourt !=
+            courts.firstWhere(
+                (court) => court.idStoreCourt == refCourt.idStoreCourt)) {
+          return true;
         }
       }
     }
@@ -56,6 +69,11 @@ class MyCourtsViewModel extends ChangeNotifier {
   }
 
   void init(BuildContext context) {
+    courts.clear();
+    refCourts.clear();
+    storeWorkingDays.clear();
+    refStoreWorkingDays.clear();
+    newCourt = Court(description: "", isIndoor: true);
     for (var court
         in Provider.of<DataProvider>(context, listen: false).courts) {
       courts.add(
@@ -89,6 +107,15 @@ class MyCourtsViewModel extends ChangeNotifier {
     }
     if (Provider.of<DataProvider>(context, listen: false).storeWorkingDays !=
         null) {
+      for (var strWorkingDay
+          in Provider.of<DataProvider>(context, listen: false)
+              .storeWorkingDays!) {
+        refStoreWorkingDays.add(
+          StoreWorkingDay.copyFrom(
+            strWorkingDay,
+          ),
+        );
+      }
       saveNewStoreWorkingSDays(
         context,
         Provider.of<DataProvider>(context, listen: false).storeWorkingDays!,
@@ -130,7 +157,7 @@ class MyCourtsViewModel extends ChangeNotifier {
       );
       updateCourtWorkingHours(newStoreWorkingDay, context);
     }
-    switchTabs(context, selectedCourtIndex);
+    setChangedCourt(selectedCourtIndex);
     notifyListeners();
     closeModal(context);
   }
@@ -145,6 +172,7 @@ class MyCourtsViewModel extends ChangeNotifier {
               .prices,
           context);
       for (var court in courts) {
+        print("SETTING ${court.description}");
         updateHourLimits(
             storeWorkingDay,
             court.operationDays
@@ -192,7 +220,6 @@ class MyCourtsViewModel extends ChangeNotifier {
       Hour maxHour = prices
           .reduce((a, b) => a.endingHour.hour > b.endingHour.hour ? a : b)
           .endingHour;
-
       if (minHour.hour < storeWorkingDay.startingHour!.hour) {
         prices.removeWhere((hourPrice) =>
             hourPrice.startingHour.hour < storeWorkingDay.startingHour!.hour);
@@ -228,7 +255,7 @@ class MyCourtsViewModel extends ChangeNotifier {
               recurrentPrice: prices.last.recurrentPrice,
               endingHour: Provider.of<DataProvider>(context, listen: false)
                   .availableHours
-                  .firstWhere((hr) => hr.hour >= i),
+                  .firstWhere((hr) => hr.hour > i),
             ),
           );
         }
@@ -318,31 +345,22 @@ class MyCourtsViewModel extends ChangeNotifier {
       int? nextRecurrentPrice = operationDay.prices
           .firstWhere((hrPrice) => hrPrice.endingHour.hour == newHour.hour)
           .recurrentPrice;
-      print("newHour: ${newHour.hourString}");
-      print("oldHour: ${oldEndingHour.hourString}");
+
       for (var hourPrice in operationDay.prices) {
-        print("Current starting hour: ${hourPrice.startingHour.hourString}");
-        print("Current ending hour: ${hourPrice.endingHour.hourString}");
         if (hourPrice.endingHour.hour == oldEndingHour.hour + 1) {
           hourPrice.newPriceRule = false;
-          print("starting ${hourPrice.startingHour} = false");
-          print("ending ${hourPrice.endingHour} = false");
         } else if (hourPrice.endingHour.hour == newHour.hour + 1) {
           hourPrice.newPriceRule = true;
-          print("starting ${hourPrice.startingHour} = true");
-          print("ending ${hourPrice.endingHour} = true");
         }
 
         if (newHour.hour < oldEndingHour.hour &&
             hourPrice.startingHour.hour > newHour.hour &&
             hourPrice.startingHour.hour <= oldEndingHour.hour) {
-          print("hourPrice.price = nextPrice");
           hourPrice.price = nextPrice;
           hourPrice.recurrentPrice = nextRecurrentPrice;
         } else if (newHour.hour > oldEndingHour.hour &&
             hourPrice.startingHour.hour >= oldEndingHour.hour &&
             hourPrice.startingHour.hour < newHour.hour) {
-          print("hourPrice.price = price");
           hourPrice.price = price;
           hourPrice.recurrentPrice = recurrentPrice;
         }
@@ -352,9 +370,18 @@ class MyCourtsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onChangedPrice(String stringNewPrice, PriceRule priceRule,
-      OperationDay operationDay, bool isRecurrent) {
-    int newPrice = int.parse(stringNewPrice);
+  void onChangedPrice(
+    String stringNewPrice,
+    PriceRule priceRule,
+    OperationDay operationDay,
+    bool isRecurrent,
+    TextEditingController controller,
+  ) {
+    int? newPrice = int.tryParse(stringNewPrice);
+    if (newPrice == null) {
+      controller.text = "0";
+      newPrice = 0;
+    }
     for (var hourPrice in operationDay.prices) {
       if (hourPrice.startingHour.hour >= priceRule.startingHour.hour &&
           hourPrice.startingHour.hour < priceRule.endingHour.hour) {
@@ -368,8 +395,8 @@ class MyCourtsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setIsPriceStandard(OperationDay opDay, bool newIsPriceStandard) {
-    if (newIsPriceStandard) {
+  void setIsPriceStandard(OperationDay opDay, bool isNewPriceCustom) {
+    if (!isNewPriceCustom) {
       int standardPrice = opDay.prices.first.price;
       int? standardRecurrentPrice = opDay.prices.first.recurrentPrice;
       for (var hourPrice in opDay.prices) {
@@ -396,12 +423,64 @@ class MyCourtsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switchTabs(BuildContext context, int index) {
+  void switchTabs(int index) {
+    saveChangedCourt();
+    setChangedCourt(index);
     selectedCourtIndex = index;
+    notifyListeners();
+  }
+
+  void saveChangedCourt() {
     if (selectedCourtIndex == -1) {
+      newCourt.description = nameController.text;
+      newCourt.description = currentCourt.description;
+      newCourt.isIndoor = currentCourt.isIndoor;
+      newCourt.operationDays.clear();
+      for (var opDay in currentCourt.operationDays) {
+        newCourt.operationDays.add(
+          OperationDay.copyFrom(
+            opDay,
+          ),
+        );
+      }
+      newCourt.sports.clear();
+      for (var sport in currentCourt.sports) {
+        newCourt.sports.add(
+          AvailableSport.copyFrom(
+            sport,
+          ),
+        );
+      }
+    } else {
+      courts[selectedCourtIndex].description = nameController.text;
+      courts[selectedCourtIndex].description = currentCourt.description;
+      courts[selectedCourtIndex].isIndoor = currentCourt.isIndoor;
+      courts[selectedCourtIndex].operationDays.clear();
+      for (var opDay in currentCourt.operationDays) {
+        courts[selectedCourtIndex].operationDays.add(
+              OperationDay.copyFrom(
+                opDay,
+              ),
+            );
+      }
+      courts[selectedCourtIndex].sports.clear();
+      for (var sport in currentCourt.sports) {
+        courts[selectedCourtIndex].sports.add(
+              AvailableSport.copyFrom(
+                sport,
+              ),
+            );
+      }
+    }
+    notifyListeners();
+  }
+
+  void setChangedCourt(int newIndex) {
+    if (newIndex == -1) {
       nameController.text = newCourt.description;
       currentCourt.description = newCourt.description;
       currentCourt.isIndoor = newCourt.isIndoor;
+      currentCourt.idStoreCourt = -1;
       currentCourt.operationDays.clear();
       for (var opDay in newCourt.operationDays) {
         currentCourt.operationDays.add(
@@ -410,86 +489,191 @@ class MyCourtsViewModel extends ChangeNotifier {
           ),
         );
       }
-
-      currentCourt.sports = newCourt.sports;
+      currentCourt.sports.clear();
+      for (var sport in newCourt.sports) {
+        currentCourt.sports.add(
+          AvailableSport.copyFrom(
+            sport,
+          ),
+        );
+      }
     } else {
-      nameController.text = courts[selectedCourtIndex].description;
-      currentCourt.description = courts[selectedCourtIndex].description;
-      currentCourt.isIndoor = courts[selectedCourtIndex].isIndoor;
-      currentCourt.operationDays = courts[selectedCourtIndex].operationDays;
-      currentCourt.sports = courts[selectedCourtIndex].sports;
+      nameController.text = courts[newIndex].description;
+      currentCourt.description = courts[newIndex].description;
+      currentCourt.isIndoor = courts[newIndex].isIndoor;
+      currentCourt.idStoreCourt = courts[newIndex].idStoreCourt;
+      currentCourt.operationDays.clear();
+      for (var opDay in courts[newIndex].operationDays) {
+        currentCourt.operationDays.add(
+          OperationDay.copyFrom(
+            opDay,
+          ),
+        );
+      }
+      currentCourt.sports.clear();
+      for (var sport in courts[newIndex].sports) {
+        currentCourt.sports.add(
+          AvailableSport.copyFrom(
+            sport,
+          ),
+        );
+      }
     }
     notifyListeners();
   }
 
-  void resetNewCourtStats() {
-    // newCourtName = "";
-    // newCourtIsIndoor = true;
-    // List<AvailableSport> newListSports = [];
-
-    // for (var avSport in newCourtSports) {
-    //   newListSports
-    //       .add(AvailableSport(sport: avSport.sport, isAvailable: false));
-    // }
-    // newCourtSports = newListSports;
-
-    // List<HourPrice> newListHourPrices = [];
-    // for (var hourPrice in newCourtHourPrices) {
-    //   newListHourPrices.add(HourPrice(
-    //       startingHour: hourPrice.startingHour,
-    //       weekday: hourPrice.weekday,
-    //       allowReccurrent: hourPrice.allowReccurrent,
-    //       price: 0,
-    //       recurrentPrice: 0,
-    //       endingHour: hourPrice.endingHour));
-    // }
-    // newCourtHourPrices = newListHourPrices;
+  String courtChangesMissingFields(BuildContext context, Court court) {
+    String missingInfo = "";
+    if (nameController.text.isEmpty) {
+      missingInfo = "Dê um nome a sua quadra!";
+    } else if (Provider.of<DataProvider>(context, listen: false)
+            .courts
+            .any((element) => element.description == nameController.text) &&
+        Provider.of<DataProvider>(context, listen: false)
+                .courts
+                .firstWhere(
+                    (element) => element.description == nameController.text)
+                .idStoreCourt !=
+            court.idStoreCourt) {
+      missingInfo = "Já existe uma quadra com esse nome no seu estabelecimento";
+    } else if (!court.sports.any((sport) => sport.isAvailable)) {
+      missingInfo = "Informe os esportes permitidos na quadra";
+    } else if (court.operationDays.any((opDay) => opDay.prices
+        .any((price) => price.price == 0 || price.recurrentPrice == 0))) {
+      missingInfo = "Opa! Você tem alguma quadra sem preço configurado";
+    }
+    return missingInfo;
   }
 
   void addCourt(BuildContext context) {
-    if (nameController.text.isEmpty) print("sem nome");
+    String missingInfo = "";
 
-    if (Provider.of<DataProvider>(context, listen: false)
-        .courts
-        .any((element) => element.description == nameController.text)) {
-      print("nome já existe");
+    missingInfo = courtChangesMissingFields(context, currentCourt);
+
+    if (courtInfoChanged) {
+      missingInfo =
+          "Opa! Você precisa salvar as alterações feitas nas outras quadras antes de adicionar uma nova quadra.";
     }
 
-    if (currentCourt.sports.any((element) => element.isAvailable == true) ==
-        false) print("selecione esporte");
-
-    //VAI TER Q ALTERAR PRA RECEBER O ID DO SERVIDOR
-    var newCourt = Court(
-        idStoreCourt:
-            Provider.of<DataProvider>(context, listen: false).courts.length,
-        description: nameController.text,
-        isIndoor: currentCourt.isIndoor);
-
-    for (var sport in currentCourt.sports) {
-      newCourt.sports.add(sport);
+    if (missingInfo == "") {
+      Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+      myCourtsRepo
+          .addCourt(
+        Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+        currentCourt,
+      )
+          .then((response) {
+        if (response.responseStatus == NetworkResponseStatus.success) {
+          Map<String, dynamic> responseBody = json.decode(
+            response.responseBody!,
+          );
+          Provider.of<DataProvider>(context, listen: false)
+              .setCourts(responseBody);
+          init(context);
+          Provider.of<MenuProvider>(context, listen: false)
+              .setMessageModal("Sua quadra foi criada!", null, true);
+        } else {
+          Provider.of<MenuProvider>(context, listen: false)
+              .setMessageModalFromResponse(response);
+        }
+      });
+    } else {
+      Provider.of<MenuProvider>(context, listen: false).setMessageModal(
+        missingInfo,
+        null,
+        true,
+      );
     }
-    // for (var hourPrice in currentCourt.prices) {
-    //   newCourt.prices.add(hourPrice);
-    // }
-
-    Provider.of<DataProvider>(context, listen: false).courts.add(newCourt);
-    courts.add(newCourt);
-    resetNewCourtStats();
-    switchTabs(
-        context,
-        Provider.of<DataProvider>(context, listen: false)
-            .courts
-            .firstWhere(
-                (element) => element.idStoreCourt == newCourt.idStoreCourt)
-            .idStoreCourt!);
-    notifyListeners();
   }
 
-  void deleteCourt(BuildContext context) {
-    Provider.of<DataProvider>(context, listen: false)
-        .courts
-        .removeAt(selectedCourtIndex);
-    selectedCourtIndex = -1;
+  void deleteCourt(
+    BuildContext context,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    myCourtsRepo
+        .removeCourt(
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      courts[selectedCourtIndex].idStoreCourt!,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        Provider.of<DataProvider>(context, listen: false)
+            .setCourts(responseBody);
+        init(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Sua quadra foi removida!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
+  }
+
+  void saveCourtChanges(
+    BuildContext context,
+  ) {
+    String missingInfo = "";
+    for (var court in courts) {
+      missingInfo = courtChangesMissingFields(context, currentCourt);
+      if (missingInfo != "") {
+        Provider.of<MenuProvider>(context, listen: false).setMessageModal(
+          missingInfo,
+          "Verifique ${court.description}",
+          true,
+        );
+        return;
+      }
+    }
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    List<Court> changedCourts = [];
+    // for (var court in courts) {
+    //   print(refCourts
+    //       .firstWhere(
+    //           (element) => element.idStoreCourt == currentCourt.idStoreCourt)
+    //       .description);
+    //   print(court.description);
+    //   print(court.idStoreCourt);
+    //   print(currentCourt.description);
+    //   print(currentCourt.idStoreCourt);
+    //   if (court.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
+    //     if (currentCourt !=
+    //         refCourts.firstWhere((element) =>
+    //             element.idStoreCourt == currentCourt.idStoreCourt)) {
+    //       print("changedCourts.add(currentCourt);");
+    //     }
+    //   } else {
+    //     if (court !=
+    //         refCourts.firstWhere(
+    //             (element) => element.idStoreCourt == court.idStoreCourt)) {
+    //       changedCourts.add(court);
+    //     }
+    //   }
+    //   print(court.idStoreCourt);
+    //   print(court.description);
+    // }
+    myCourtsRepo
+        .saveCourtChanges(
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      courts,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        Provider.of<DataProvider>(context, listen: false)
+            .setCourts(responseBody);
+        init(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Suas quadras foram atualizadas!", null, true);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
   }
 
   void onChangedCourtName(String newText) {

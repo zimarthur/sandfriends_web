@@ -124,6 +124,13 @@ class DataProvider extends ChangeNotifier {
 
     store = Store.fromJson(responseBody['Store']);
 
+    setCourts(responseBody);
+
+    notifyListeners();
+  }
+
+  void setCourts(Map<String, dynamic> responseBody) {
+    courts.clear();
     for (var court in responseBody['Courts']) {
       var newCourt = Court.fromJson(court);
       for (var sport in availableSports) {
@@ -146,8 +153,7 @@ class DataProvider extends ChangeNotifier {
                 startingHour: availableHours.firstWhere(
                     (hour) => hour.hour == courtPrices["IdAvailableHour"]),
                 price: courtPrices["Price"],
-                recurrentPrice:
-                    courtPrices["RecurrentPrice"] ?? courtPrices["Price"],
+                recurrentPrice: courtPrices["RecurrentPrice"],
                 endingHour: availableHours.firstWhere(
                     (hour) => hour.hour > courtPrices["IdAvailableHour"]),
               ),
@@ -156,7 +162,5 @@ class DataProvider extends ChangeNotifier {
 
       courts.add(newCourt);
     }
-
-    notifyListeners();
   }
 }

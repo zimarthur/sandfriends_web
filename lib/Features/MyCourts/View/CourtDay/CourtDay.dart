@@ -53,18 +53,18 @@ class _CourtDayState extends State<CourtDay> {
         mainRowHeight * 2 + secondaryRowHeight + mainRowHeight;
     double customHeight =
         mainRowHeight * 2 + secondaryRowHeight + numberRules * mainRowHeight;
-    bool isPriceStandard =
-        widget.operationDay.priceRules.length == 1 || forceIsPriceCustom;
-    double expandedHeight = isPriceStandard
-        ? standardHeight - mainRowHeight - 2
-        : customHeight - mainRowHeight - 2;
+    bool isPriceCustom =
+        widget.operationDay.priceRules.length > 1 || forceIsPriceCustom;
+    double expandedHeight = isPriceCustom
+        ? customHeight - mainRowHeight - 2
+        : standardHeight - mainRowHeight - 2;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: isExpanded
-          ? isPriceStandard
-              ? standardHeight + borderSize + arrowHeight
-              : customHeight + borderSize + arrowHeight
+          ? isPriceCustom
+              ? customHeight + borderSize + arrowHeight
+              : standardHeight + borderSize + arrowHeight
           : widget.height,
       width: widget.width,
       decoration: BoxDecoration(
@@ -80,9 +80,9 @@ class _CourtDayState extends State<CourtDay> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     height: isExpanded
-                        ? isPriceStandard
-                            ? standardHeight
-                            : customHeight
+                        ? isPriceCustom
+                            ? customHeight
+                            : standardHeight
                         : mainRowHeight,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(defaultBorderRadius),
@@ -136,8 +136,9 @@ class _CourtDayState extends State<CourtDay> {
                                                         height:
                                                             secondaryRowHeight,
                                                         isPriceStandard:
-                                                            isPriceStandard,
-                                                        onChange: (value) {
+                                                            isPriceCustom,
+                                                        onChangeIsCustom:
+                                                            (value) {
                                                           setState(() {
                                                             if (value != null) {
                                                               forceIsPriceCustom =
@@ -211,7 +212,7 @@ class _CourtDayState extends State<CourtDay> {
                                                                             .hour;
                                                               }).toList(),
                                                               editHour:
-                                                                  !isPriceStandard,
+                                                                  isPriceCustom,
                                                               onChangedStartingHour: (oldHour,
                                                                       newHour) =>
                                                                   widget
@@ -235,23 +236,25 @@ class _CourtDayState extends State<CourtDay> {
                                                                 newHour,
                                                               ),
                                                               onChangedPrice: (newPrice,
-                                                                      priceRule) =>
+                                                                      priceRule,
+                                                                      controller) =>
                                                                   widget.viewModel.onChangedPrice(
                                                                       newPrice,
                                                                       priceRule,
                                                                       widget
                                                                           .operationDay,
-                                                                      false),
+                                                                      false,
+                                                                      controller),
                                                               onChangedRecurrentPrice: (newPrice,
-                                                                      priceRule) =>
-                                                                  widget
-                                                                      .viewModel
-                                                                      .onChangedPrice(
-                                                                          newPrice,
-                                                                          priceRule,
-                                                                          widget
-                                                                              .operationDay,
-                                                                          true),
+                                                                      priceRule,
+                                                                      controller) =>
+                                                                  widget.viewModel.onChangedPrice(
+                                                                      newPrice,
+                                                                      priceRule,
+                                                                      widget
+                                                                          .operationDay,
+                                                                      true,
+                                                                      controller),
                                                             );
                                                           },
                                                         ),

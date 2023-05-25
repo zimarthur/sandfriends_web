@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
-
+import 'package:provider/provider.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/View/SFDropDown.dart';
 
@@ -31,6 +32,14 @@ class _HourSelectorState extends State<HourSelector> {
             onChanged: (value) {
               setState(() {
                 widget.storeWorkingDay.isEnabled = value!;
+                widget.storeWorkingDay.startingHour =
+                    Provider.of<DataProvider>(context, listen: false)
+                        .availableHours
+                        .first;
+                widget.storeWorkingDay.endingHour =
+                    Provider.of<DataProvider>(context, listen: false)
+                        .availableHours
+                        .last;
               });
             }),
         const SizedBox(

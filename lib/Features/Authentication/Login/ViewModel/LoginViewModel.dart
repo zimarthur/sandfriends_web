@@ -43,19 +43,19 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void validateToken(BuildContext context) {
-    // String? storedToken = getToken();
-    // if (storedToken != null) {
-    //   loginRepo.validateToken(storedToken).then((response) {
-    //     if (response.responseStatus == NetworkResponseStatus.success) {
-    //       Provider.of<DataProvider>(context, listen: false)
-    //           .setLoginResponse(response.responseBody!, keepConnected);
-    //       Navigator.pushNamed(context, '/home');
-    //     } else {
-    //       pageStatus = PageStatus.OK;
-    //       notifyListeners();
-    //     }
-    //   });
-    // }
+    String? storedToken = getToken();
+    if (storedToken != null) {
+      loginRepo.validateToken(storedToken).then((response) {
+        if (response.responseStatus == NetworkResponseStatus.success) {
+          Provider.of<DataProvider>(context, listen: false)
+              .setLoginResponse(response.responseBody!, keepConnected);
+          Navigator.pushNamed(context, '/home');
+        } else {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        }
+      });
+    }
     pageStatus = PageStatus.OK;
     notifyListeners();
   }

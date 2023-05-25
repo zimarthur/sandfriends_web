@@ -22,7 +22,6 @@ class Court {
     if (identical(this, other)) return true;
     if (other is Court == false) return false;
     Court otherCourt = other as Court;
-    print("START COMPARE");
     for (var avSport in sports) {
       if (avSport !=
           otherCourt.sports
@@ -30,8 +29,6 @@ class Court {
         return false;
       }
     }
-    print("SPORTS OK");
-    print("START COMPARE OP DAY");
     for (var operationDay in operationDays) {
       if (operationDay !=
           other.operationDays
@@ -39,10 +36,6 @@ class Court {
         return false;
       }
     }
-    print("COMPARE OP OK");
-    print("${description == otherCourt.description}");
-    print("${isIndoor == otherCourt.isIndoor}");
-
     return description == otherCourt.description &&
         isIndoor == otherCourt.isIndoor;
   }

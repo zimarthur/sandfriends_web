@@ -29,4 +29,9 @@ class ApiEndPoints {
   final String removeEmployee = "/RemoveEmployee";
 
   final String createAccountEmployee = "/AddEmployeeInformation";
+
+  //myCourts
+  final String addCourt = "/AddCourt";
+  final String removeCourt = "/RemoveCourt";
+  final String saveCourtChanges = "/SaveCourtChanges";
 }

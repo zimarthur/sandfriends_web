@@ -43,10 +43,10 @@ class _WorkingHoursWidgetState extends State<WorkingHoursModal> {
         );
       }
     } else {
-      for (var storeWorkingHours in widget.viewModel.storeWorkingDays) {
+      for (var storeWorkingDay in widget.viewModel.storeWorkingDays) {
         storeWorkingDays.add(
           StoreWorkingDay.copyFrom(
-            storeWorkingHours,
+            storeWorkingDay,
           ),
         );
       }

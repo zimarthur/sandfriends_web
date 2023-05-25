@@ -19,9 +19,6 @@ class EmployeeInfoViewModel extends ChangeNotifier {
   EmployeeDataSource? employeesDataSource;
 
   void setFinancesDataSource(BuildContext context) {
-    Provider.of<DataProvider>(context, listen: false).employees.forEach(
-          (element) => print(element.email),
-        );
     employeesDataSource = EmployeeDataSource(
         employees: Provider.of<DataProvider>(context, listen: false).employees,
         tableCallback: tableCallback,

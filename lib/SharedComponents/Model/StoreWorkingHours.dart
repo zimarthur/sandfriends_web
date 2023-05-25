@@ -13,6 +13,25 @@ class StoreWorkingDay {
     this.endingHour,
   });
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is StoreWorkingDay == false) return false;
+    StoreWorkingDay otherStoreWorkingDay = other as StoreWorkingDay;
+
+    return isEnabled == otherStoreWorkingDay.isEnabled &&
+        startingHour == otherStoreWorkingDay.startingHour &&
+        endingHour == otherStoreWorkingDay.endingHour &&
+        weekday == otherStoreWorkingDay.weekday;
+  }
+
+  @override
+  int get hashCode =>
+      weekday.hashCode ^
+      startingHour.hashCode ^
+      endingHour.hashCode ^
+      isEnabled.hashCode;
+
   factory StoreWorkingDay.copyFrom(StoreWorkingDay refWorkingHours) {
     return StoreWorkingDay(
       weekday: refWorkingHours.weekday,

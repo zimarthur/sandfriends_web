@@ -50,7 +50,6 @@ class OperationDay {
     if (identical(this, other)) return true;
     if (other is OperationDay == false) return false;
     OperationDay otherOpDay = other as OperationDay;
-    print("COMPARING DAY ${weekday}");
     for (var price in prices) {
       if (price !=
           otherOpDay.prices.firstWhere(

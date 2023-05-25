@@ -4,12 +4,13 @@ import 'package:sandfriends_web/Utils/constants.dart';
 class PriceSelectorRadio extends StatefulWidget {
   bool isPriceStandard;
   double height;
-  Function(bool?) onChange;
+  Function(bool?) onChangeIsCustom;
 
-  PriceSelectorRadio({super.key, 
+  PriceSelectorRadio({
+    super.key,
     required this.isPriceStandard,
     required this.height,
-    required this.onChange,
+    required this.onChangeIsCustom,
   });
 
   @override
@@ -25,9 +26,9 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
         Row(
           children: [
             Radio(
-              value: true,
+              value: false,
               groupValue: widget.isPriceStandard,
-              onChanged: widget.onChange,
+              onChanged: widget.onChangeIsCustom,
               activeColor: primaryBlue,
             ),
             const SizedBox(
@@ -44,9 +45,9 @@ class _PriceSelectorRadioState extends State<PriceSelectorRadio> {
         Row(
           children: [
             Radio(
-              value: false,
+              value: true,
               groupValue: widget.isPriceStandard,
-              onChanged: widget.onChange,
+              onChanged: widget.onChangeIsCustom,
               activeColor: primaryBlue,
             ),
             const SizedBox(
