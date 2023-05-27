@@ -3,7 +3,7 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter/material.dart';
 
 class CalendarToggle extends StatefulWidget {
-  List<CalendarType> labels = [CalendarType.Weekly, CalendarType.Daily];
+  List<CalendarType> labels = [CalendarType.Daily, CalendarType.Weekly];
   CalendarType selectedIndex;
   Function(CalendarType) onChanged;
 

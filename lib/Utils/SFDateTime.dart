@@ -64,3 +64,9 @@ int getBRWeekday(int weekday) {
 String getMonthYear(DateTime datetime) {
   return "${monthsPortuguese[datetime.month - 1]}/${datetime.year.toString().substring(datetime.year.toString().length - 2)}";
 }
+
+bool areTheSameDate(DateTime date, DateTime otherDate) {
+  return date.day == otherDate.day &&
+      date.month == otherDate.month &&
+      date.year == otherDate.year;
+}

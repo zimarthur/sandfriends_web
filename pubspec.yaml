@@ -117,8 +117,10 @@ flutter:
     - assets/icon/money.svg
     - assets/icon/check.svg
     - assets/icon/attention.svg
+    - assets/icon/block.svg
 
     - assets/people/calendar.svg
+    - assets/people/clock.svg
     - assets/people/onboarding.svg
     - assets/people/email_confirmation_store.svg
     - assets/people/email_confirmation_user.svg

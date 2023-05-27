@@ -629,35 +629,23 @@ class MyCourtsViewModel extends ChangeNotifier {
     }
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     List<Court> changedCourts = [];
-    // for (var court in courts) {
-    //   print(refCourts
-    //       .firstWhere(
-    //           (element) => element.idStoreCourt == currentCourt.idStoreCourt)
-    //       .description);
-    //   print(court.description);
-    //   print(court.idStoreCourt);
-    //   print(currentCourt.description);
-    //   print(currentCourt.idStoreCourt);
-    //   if (court.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
-    //     if (currentCourt !=
-    //         refCourts.firstWhere((element) =>
-    //             element.idStoreCourt == currentCourt.idStoreCourt)) {
-    //       print("changedCourts.add(currentCourt);");
-    //     }
-    //   } else {
-    //     if (court !=
-    //         refCourts.firstWhere(
-    //             (element) => element.idStoreCourt == court.idStoreCourt)) {
-    //       changedCourts.add(court);
-    //     }
-    //   }
-    //   print(court.idStoreCourt);
-    //   print(court.description);
-    // }
+    for (var court in courts) {
+      Court refCourt = refCourts.firstWhere(
+          (element) => element.idStoreCourt == currentCourt.idStoreCourt);
+      if (court.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
+        if (currentCourt != refCourt) {
+          changedCourts.add(currentCourt);
+        }
+      } else {
+        if (court != refCourt) {
+          changedCourts.add(court);
+        }
+      }
+    }
     myCourtsRepo
         .saveCourtChanges(
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-      courts,
+      changedCourts,
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {

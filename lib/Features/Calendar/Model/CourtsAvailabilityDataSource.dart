@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../../SharedComponents/Model/Match.dart';
 import 'package:intl/intl.dart';
 
+import '../../../SharedComponents/Model/AppMatch.dart';
+
 class CourtsAvailabilityDataSource extends DataGridSource {
-  CourtsAvailabilityDataSource({required List<Match> matches}) {
+  CourtsAvailabilityDataSource({required List<AppMatch> matches}) {
     _finances = matches
         .map<DataGridRow>(
           (match) => DataGridRow(
@@ -19,7 +20,7 @@ class CourtsAvailabilityDataSource extends DataGridSource {
                       "${match.startingHour.hourString} - ${match.endingHour.hourString}"),
               DataGridCell<String>(
                   columnName: 'court',
-                  value: "Quadra ${match.idStoreCOurt.toString()}"),
+                  value: "Quadra ${match.idStoreCourt.toString()}"),
               DataGridCell<String>(
                   columnName: 'price', value: "R\$${match.cost}"),
               const DataGridCell<String>(columnName: 'player', value: "Arthur"),

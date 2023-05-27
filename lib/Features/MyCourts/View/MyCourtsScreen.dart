@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/CourtDay/CourtDay.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/CourtDay/ResumedInfoRowHeader.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/MyCourtsTabSelector.dart';
+import 'package:sandfriends_web/Features/MyCourts/View/NoHoursFound.dart';
 import 'package:sandfriends_web/Features/MyCourts/ViewModel/MyCourtsViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -176,43 +177,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       child: viewModel.storeWorkingDays.isEmpty
                           ? SizedBox(
                               width: width,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  SvgPicture.asset(
-                                    r'assets/people/calendar.svg',
-                                    height: width * 0.25,
-                                    width: width * 0.4,
-                                  ),
-                                  SizedBox(
-                                    width: width * 0.5,
-                                    child: Column(
-                                      children: const [
-                                        Text(
-                                          "Você ainda não registrou os horários de funcionamento de seu estabelecimento",
-                                          style: TextStyle(
-                                            color: textDarkGrey,
-                                            fontSize: 18,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: defaultPadding,
-                                        ),
-                                        Text(
-                                          "Clique em \"Horário de funcionamento\" para informar os horários de funcionamento de seu estabelecimento e cadastrar suas quadras",
-                                          style: TextStyle(
-                                            color: textLightGrey,
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: NoHoursFound(),
                             )
                           : Row(
                               children: [

@@ -11,7 +11,8 @@ class HourWidget extends StatefulWidget {
   Function(bool) onChanged;
 
   HourWidget(this.hourIndex, this.columnIndex, this.hoveredHour,
-      this.hoveredColumn, this.height, this.width, this.onChanged, {super.key});
+      this.hoveredColumn, this.height, this.width, this.onChanged,
+      {super.key});
   @override
   State<HourWidget> createState() => _HourWidgetState();
 }
@@ -25,7 +26,7 @@ class _HourWidgetState extends State<HourWidget> {
         widget.onChanged(value);
       },
       child: Container(
-        width: widget.width * 0.6,
+        width: widget.width * 0.9,
         height: widget.height * 0.7,
         decoration: const BoxDecoration(
           color: divider,

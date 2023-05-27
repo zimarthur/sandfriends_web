@@ -6,6 +6,7 @@ import 'PriceRule.dart';
 class OperationDay {
   int weekday;
   List<HourPrice> prices = [];
+  bool isExpanded = false;
 
   bool get allowReccurrent =>
       prices.any((hourPrice) => hourPrice.recurrentPrice != null);

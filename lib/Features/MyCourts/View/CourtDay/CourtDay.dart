@@ -33,7 +33,6 @@ class CourtDay extends StatefulWidget {
 }
 
 class _CourtDayState extends State<CourtDay> {
-  bool isExpanded = false;
   double borderSize = 2;
   double editIconWidth = 50;
 
@@ -61,7 +60,7 @@ class _CourtDayState extends State<CourtDay> {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: isExpanded
+      height: widget.operationDay.isExpanded
           ? isPriceCustom
               ? customHeight + borderSize + arrowHeight
               : standardHeight + borderSize + arrowHeight
@@ -79,7 +78,7 @@ class _CourtDayState extends State<CourtDay> {
                 Expanded(
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    height: isExpanded
+                    height: widget.operationDay.isExpanded
                         ? isPriceCustom
                             ? customHeight
                             : standardHeight
@@ -93,11 +92,13 @@ class _CourtDayState extends State<CourtDay> {
                         children: [
                           Container(
                             padding: EdgeInsets.only(
-                                right: isExpanded ? editIconWidth : 0),
+                                right: widget.operationDay.isExpanded
+                                    ? editIconWidth
+                                    : 0),
                             height: mainRowHeight,
                             child: ResumedInfoRow(
                                 operationDay: widget.operationDay,
-                                isEditing: isExpanded,
+                                isEditing: widget.operationDay.isExpanded,
                                 rowHeight: mainRowHeight,
                                 setAllowRecurrent: (newValue) {
                                   Provider.of<MyCourtsViewModel>(context,
@@ -110,7 +111,7 @@ class _CourtDayState extends State<CourtDay> {
                           ),
                           AnimatedSize(
                               duration: const Duration(milliseconds: 200),
-                              child: isExpanded
+                              child: widget.operationDay.isExpanded
                                   ? Container(
                                       height: expandedHeight,
                                       padding: const EdgeInsets.symmetric(
@@ -274,13 +275,14 @@ class _CourtDayState extends State<CourtDay> {
                     ),
                   ),
                 ),
-                isExpanded
+                widget.operationDay.isExpanded
                     ? Container()
                     : InkWell(
                         onTap: () {
                           if (widget.operationDay.isEnabled) {
                             setState(() {
-                              isExpanded = !isExpanded;
+                              widget.operationDay.isExpanded =
+                                  !widget.operationDay.isExpanded;
                             });
                           }
                         },
@@ -296,11 +298,12 @@ class _CourtDayState extends State<CourtDay> {
               ],
             ),
           ),
-          isExpanded
+          widget.operationDay.isExpanded
               ? InkWell(
                   onTap: () {
                     setState(() {
-                      isExpanded = !isExpanded;
+                      widget.operationDay.isExpanded =
+                          !widget.operationDay.isExpanded;
                     });
                   },
                   child: SizedBox(

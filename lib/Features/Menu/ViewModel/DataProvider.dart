@@ -10,7 +10,7 @@ import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/Model/HourPrice.dart';
 import '../../../SharedComponents/Model/Sport.dart';
 import '../../../SharedComponents/Model/Store.dart';
-import '../../../SharedComponents/Model/Match.dart';
+import '../../../SharedComponents/Model/AppMatch.dart';
 import '../../../SharedComponents/Model/StoreWorkingHours.dart';
 import '../../../Utils/LocalStorage.dart';
 
@@ -53,7 +53,7 @@ class DataProvider extends ChangeNotifier {
 
   List<Hour> availableHours = [];
 
-  List<Match> matches = [];
+  List<AppMatch> matches = [];
 
   final List<Employee> _employees = [];
   List<Employee> get employees {
@@ -126,6 +126,8 @@ class DataProvider extends ChangeNotifier {
 
     setCourts(responseBody);
 
+    setMatches(responseBody);
+    print(matches.length);
     notifyListeners();
   }
 
@@ -161,6 +163,19 @@ class DataProvider extends ChangeNotifier {
       }
 
       courts.add(newCourt);
+    }
+  }
+
+  void setMatches(Map<String, dynamic> responseBody) {
+    matches.clear();
+    for (var match in responseBody['Matches']) {
+      matches.add(
+        AppMatch.fromJson(
+          match,
+          availableHours,
+          availableSports,
+        ),
+      );
     }
   }
 }

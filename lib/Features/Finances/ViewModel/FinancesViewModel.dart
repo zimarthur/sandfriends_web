@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
-import 'package:sandfriends_web/SharedComponents/Model/Match.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import '../../../SharedComponents/Model/AppMatch.dart';
 import '../../../SharedComponents/View/SFPieChart.dart';
 import '../../../Utils/SFDateTime.dart';
 import '../Model/FinancesDataSource.dart';
@@ -20,170 +20,8 @@ class FinancesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final List<Match> _matches = [
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 8, hourString: "08:00"),
-      endingHour: Hour(hour: 9, hourString: "09:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 90,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(idSport: 1, description: "Volei", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 10, hourString: "10:00"),
-      endingHour: Hour(hour: 11, hourString: "11:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 80,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 12, hourString: "12:00"),
-      endingHour: Hour(hour: 13, hourString: "13:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-07 15:00"),
-      cost: 70,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport:
-          Sport(idSport: 1, description: "Futevolei", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 7, hourString: "07:00"),
-      endingHour: Hour(hour: 8, hourString: "08:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-05 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-06 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-13 15:00"),
-      cost: 100,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: null,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-04-14 23:00"),
-      cost: 90,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 2,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-    Match(
-      idMatch: 1,
-      date: DateFormat('yyyy-MM-dd HH:mm').parse("2023-06-03 15:00"),
-      cost: 70,
-      openUsers: false,
-      maxUsers: 4,
-      canceled: false,
-      creationDate: DateTime.now(),
-      matchUrl: "matchUrl",
-      creatorNotes: "creatorNotes",
-      idRecurrentMatch: 1,
-      idStoreCOurt: 1,
-      sport: Sport(
-          idSport: 1, description: "Beach tenis", sportPhoto: "sportPhoto"),
-      startingHour: Hour(hour: 9, hourString: "09:00"),
-      endingHour: Hour(hour: 10, hourString: "10:00"),
-      membersUserIds: [],
-    ),
-  ];
-  List<Match> get matches {
+  final List<AppMatch> _matches = [];
+  List<AppMatch> get matches {
     if (selectedFilterIndex == 0) {
       return _matches
           .where((element) => isSameDate(element.date, DateTime.now()))
@@ -198,7 +36,7 @@ class FinancesViewModel extends ChangeNotifier {
   }
 
   int getRevenue() {
-    List<Match> currentMatches =
+    List<AppMatch> currentMatches =
         matches.where((match) => match.date.isBefore(DateTime.now())).toList();
     return currentMatches.fold(0, (sum, item) => sum + item.cost);
   }
@@ -360,7 +198,7 @@ class FinancesViewModel extends ChangeNotifier {
         matches.sort((a, b) => b.date.compareTo(a.date));
 
         final groupByMonth = groupBy(matches,
-            (Match match) => DateTime(match.date.year, match.date.month));
+            (AppMatch match) => DateTime(match.date.year, match.date.month));
         final matchesByMonth = groupByMonth.map((key, value) => MapEntry(
             key,
             value.fold(
