@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
+import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Calendar/Day/CourtsAvailabilityWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/BlockHourWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/MatchCancelWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/MatchDetailsWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
@@ -20,10 +24,14 @@ import '../Model/CalendarDailyCourtMatch.dart';
 import '../Model/DayMatch.dart';
 
 class CalendarViewModel extends ChangeNotifier {
+  final calendarRepo = CalendarRepoImp();
+
   List<Court> courts = [];
   List<StoreWorkingDay> storeWorkingDays = [];
   List<Hour> availableHours = [];
   List<AppMatch> matches = [];
+  late DateTime matchesStartDate;
+  late DateTime matchesEndDate;
 
   TextEditingController blockHourReasonController = TextEditingController();
 
@@ -34,7 +42,14 @@ class CalendarViewModel extends ChangeNotifier {
             [];
     availableHours =
         Provider.of<DataProvider>(context, listen: false).availableHours;
-    matches = Provider.of<DataProvider>(context, listen: false).matches;
+    matches = Provider.of<DataProvider>(context, listen: false)
+        .matches
+        .map((match) => AppMatch.copyWith(match))
+        .toList();
+    matchesStartDate =
+        Provider.of<DataProvider>(context, listen: false).matchesStartDate;
+    matchesEndDate =
+        Provider.of<DataProvider>(context, listen: false).matchesEndDate;
   }
 
   CalendarType _calendarView = CalendarType.Daily;
@@ -53,9 +68,48 @@ class CalendarViewModel extends ChangeNotifier {
 
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
-  void setSelectedDay(DateTime newSelectedDay) {
-    _selectedDay = newSelectedDay;
-    notifyListeners();
+  void setSelectedDay(BuildContext context, DateTime newSelectedDay) {
+    if (newSelectedDay.isAfter(matchesEndDate) ||
+        newSelectedDay.isBefore(matchesStartDate)) {
+      Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+      calendarRepo
+          .updateMatchesList(
+              Provider.of<DataProvider>(context, listen: false)
+                  .loggedAccessToken,
+              newSelectedDay)
+          .then((response) {
+        if (response.responseStatus == NetworkResponseStatus.success) {
+          Map<String, dynamic> responseBody = json.decode(
+            response.responseBody!,
+          );
+          matches.clear();
+          for (var match in responseBody['Matches']) {
+            matches.add(
+              AppMatch.fromJson(
+                match,
+                Provider.of<DataProvider>(context, listen: false)
+                    .availableHours,
+                Provider.of<DataProvider>(context, listen: false)
+                    .availableSports,
+              ),
+            );
+          }
+          matchesStartDate =
+              DateFormat("dd/MM/yyyy").parse(responseBody['MatchesStartDate']);
+          matchesEndDate =
+              DateFormat("dd/MM/yyyy").parse(responseBody['MatchesEndDate']);
+          Provider.of<MenuProvider>(context, listen: false).closeModal();
+          _selectedDay = newSelectedDay;
+          notifyListeners();
+        } else {
+          Provider.of<MenuProvider>(context, listen: false)
+              .setMessageModalFromResponse(response);
+        }
+      });
+    } else {
+      _selectedDay = newSelectedDay;
+      notifyListeners();
+    }
   }
 
   List<DateTime> get selectedWeek {

@@ -1,8 +1,6 @@
 import '../../../../Remote/NetworkResponse.dart';
 
 class EmployeeInfoRepo {
-  Future<NetworkResponse?> RenameEmployee(
-      String firstName, String lastName, String accessToken) async {}
   Future<NetworkResponse?> addEmployee(
     String accessToken,
     String employeeEmail,

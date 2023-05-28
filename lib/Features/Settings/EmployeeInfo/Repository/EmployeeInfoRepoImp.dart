@@ -10,13 +10,6 @@ class EmployeeInfoRepoImp implements EmployeeInfoRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> RenameEmployee(
-      String firstName, String lastName, String accessToken) {
-    // TODO: implement RenameEmployee
-    throw UnimplementedError();
-  }
-
-  @override
   Future<NetworkResponse> addEmployee(
       String accessToken, String employeeEmail) async {
     NetworkResponse response = await _apiService.postResponse(

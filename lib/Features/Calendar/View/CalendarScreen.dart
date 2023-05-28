@@ -106,7 +106,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     ),
                                     DatePicker(
                                       onDateSelected: (newDate) {
-                                        viewModel.setSelectedDay(newDate);
+                                        viewModel.setSelectedDay(
+                                            context, newDate);
                                       },
                                     ),
                                   ],

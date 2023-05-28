@@ -50,7 +50,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 InkWell(
                   onTap: () => Navigator.pushNamed(
                     context,
-                    "/adem?tk=",
+                    "/adem?tk=1685283329.77849732",
                   ),
                   child: SvgPicture.asset(
                     r'assets/icon/full_logo_positive.svg',
@@ -102,7 +102,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 widget.viewModel.keepConnected = value!,
                           ),
                           const Text(
-                            "Mantenha-me conectado",
+                            "Mantenha-me conectado teste",
                             style: TextStyle(color: textDarkGrey),
                           ),
                         ],

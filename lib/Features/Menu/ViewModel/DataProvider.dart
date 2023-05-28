@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
-
+import 'package:intl/intl.dart';
 import '../../../SharedComponents/Model/AvailableSport.dart';
 import '../../../SharedComponents/Model/Employee.dart';
 import '../../../SharedComponents/Model/Hour.dart';
@@ -54,6 +54,8 @@ class DataProvider extends ChangeNotifier {
   List<Hour> availableHours = [];
 
   List<AppMatch> matches = [];
+  late DateTime matchesStartDate;
+  late DateTime matchesEndDate;
 
   final List<Employee> _employees = [];
   List<Employee> get employees {
@@ -177,5 +179,9 @@ class DataProvider extends ChangeNotifier {
         ),
       );
     }
+    matchesStartDate =
+        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesStartDate']);
+    matchesEndDate =
+        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesEndDate']);
   }
 }

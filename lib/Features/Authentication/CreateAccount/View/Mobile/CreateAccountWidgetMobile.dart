@@ -62,7 +62,10 @@ class _CreateAccountWidgetMobileState extends State<CreateAccountWidgetMobile> {
               ),
               Expanded(
                 child: SFButton(
-                    buttonLabel: "Próximo",
+                    buttonLabel:
+                        widget.viewModel.currentCreateAccountFormIndex == 0
+                            ? "Próximo"
+                            : "Finalizar",
                     buttonType: widget.viewModel.buttonNextEnabled
                         ? ButtonType.Primary
                         : ButtonType.Disabled,
