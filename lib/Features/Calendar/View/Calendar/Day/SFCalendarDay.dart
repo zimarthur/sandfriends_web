@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../../Utils/Constants.dart';
 
+import '../../../../../Utils/SFDateTime.dart';
 import '../../HourWidget.dart';
 
 class SFCalendarDay extends StatefulWidget {
@@ -43,13 +44,6 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
 
   @override
   Widget build(BuildContext context) {
-    for (var a in widget.viewModel.selectedDayMatches) {
-      print(a.court.description);
-      for (var b in a.dayMatches) {
-        print(b.startingHour.hourString);
-        print(b.match == null);
-      }
-    }
     double tableHeight = widget.height * 0.95;
     double tableWidth = widget.width;
     double tableLineHeight =
@@ -58,8 +52,8 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
     double tableHeaderHeight = tableLineHeight * 1.5;
     double tableDayWidth = (tableWidth - tableColumnWidth) * 0.95;
     double tableColumnDataWidth =
-        tableDayWidth / widget.viewModel.courts.length < 70
-            ? 70
+        tableDayWidth / widget.viewModel.courts.length < 300
+            ? 300
             : tableDayWidth / widget.viewModel.courts.length;
     return SizedBox(
       width: tableWidth,
@@ -188,7 +182,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                         borderRadius:
                                             BorderRadius.circular(8.0)),
                                     child: Text(
-                                      "${hour.hour.toString().padLeft(2, '0')}:00",
+                                      hour.hourString,
                                       style: TextStyle(
                                           color: hoveredHour == hour.hour
                                               ? primaryDarkBlue
@@ -200,6 +194,9 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                           ),
                           Container(
                             width: tableDayWidth,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
                             child: Flexible(
                               child: SingleChildScrollView(
                                 controller: horizontalController,
@@ -231,18 +228,26 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                               width: tableColumnDataWidth,
                                               child: dayMatch.match == null
                                                   ? EmptyHourWidget(
-                                                      isEnabled: !widget
-                                                          .viewModel
-                                                          .isHourPast(dayMatch
+                                                      isEnabled: !isHourPast(
+                                                          widget.viewModel
+                                                              .selectedDay,
+                                                          dayMatch
                                                               .startingHour),
                                                       onBlockHour: () => widget
                                                           .viewModel
-                                                          .setBlockedHourWidget(
-                                                        context,
-                                                      ),
+                                                          .setBlockHourWidget(
+                                                              context,
+                                                              court
+                                                                  .idStoreCourt!,
+                                                              dayMatch
+                                                                  .startingHour),
                                                     )
                                                   : MatchHourWidget(
                                                       match: dayMatch.match!,
+                                                      onTapMatch: (match) => widget
+                                                          .viewModel
+                                                          .setMatchDetailsWidget(
+                                                              context, match),
                                                     ),
                                             ),
                                         ],

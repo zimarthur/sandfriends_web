@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../Menu/ViewModel/MenuProvider.dart';
+import 'package:intl/intl.dart';
 
 class MatchDetailsWidget extends StatelessWidget {
   CalendarViewModel viewModel;
+  AppMatch match;
 
-  MatchDetailsWidget({super.key, required this.viewModel});
+  MatchDetailsWidget({
+    required this.viewModel,
+    required this.match,
+  });
   TextEditingController controller = TextEditingController();
   PaymentType paymentStatus = PaymentType.NeedsPayment;
 
   @override
   Widget build(BuildContext context) {
-    controller.text = "Precisamos de raquetes";
+    controller.text = match.creatorNotes;
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return Container(
@@ -43,12 +51,29 @@ class MatchDetailsWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Partida agendada",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                        color: textBlue),
+                  Row(
+                    children: [
+                      const Text(
+                        "Partida agendada",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: textBlue),
+                      ),
+                      if (isHourPast(
+                        match.date,
+                        match.startingHour,
+                      ))
+                        Expanded(
+                            child: Text(
+                          "Encerrada",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: textLightGrey,
+                            fontSize: 18,
+                          ),
+                        ))
+                    ],
                   ),
                   const SizedBox(
                     height: 2 * defaultPadding,
@@ -57,39 +82,38 @@ class MatchDetailsWidget extends StatelessWidget {
                     title: "Criador",
                     customValue: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 25,
-                          child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                r"assets/Arthur.jpg",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
+                        SFAvatar(
+                          height: 50,
+                          image: match.matchCreatorPhoto,
+                          isPlayerAvatar: true,
+                          playerFirstName: match.matchCreatorFirstName,
+                          playerLastName: match.matchCreatorLastName,
                         ),
                         const SizedBox(
                           width: defaultPadding,
                         ),
-                        const Text(
-                          "Arthur Zim",
+                        Text(
+                          match.matchCreatorName,
                           style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
                   ),
-                  MatchDetailsWidgetRow(title: "Dia", value: "07/04/2023"),
                   MatchDetailsWidgetRow(
-                      title: "Horário", value: "16:00 - 17:00"),
-                  MatchDetailsWidgetRow(title: "Esporte", value: "Beach tenis"),
+                      title: "Dia",
+                      value: DateFormat("dd/MM/yyyy").format(match.date)),
+                  MatchDetailsWidgetRow(
+                      title: "Horário",
+                      value:
+                          "${match.startingHour.hourString} - ${match.endingHour.hourString}"),
+                  MatchDetailsWidgetRow(
+                      title: "Esporte", value: match.sport.description),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: defaultPadding),
                     child: SFDivider(),
                   ),
                   MatchDetailsWidgetRow(
-                    title: "Recado de Arthur",
+                    title: "Recado de ${match.matchCreatorFirstName}",
                     customValue: SFTextField(
                       labelText: "",
                       pourpose: TextFieldPourpose.Multiline,
@@ -138,7 +162,7 @@ class MatchDetailsWidget extends StatelessWidget {
                       )),
                   MatchDetailsWidgetRow(
                     title: "Preço",
-                    value: "R\$100,00",
+                    value: "R\$${match.cost},00",
                   ),
                 ],
               ),
@@ -155,18 +179,26 @@ class MatchDetailsWidget extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              Expanded(
-                child: SFButton(
-                  buttonLabel: "Cancelar partida",
-                  buttonType: ButtonType.Delete,
-                  onTap: () {
-                    viewModel.setMatchCancelWidget(context, viewModel);
-                  },
+              if (!isHourPast(
+                match.date,
+                match.startingHour,
+              ))
+                SizedBox(
+                  width: defaultPadding,
                 ),
-              ),
+              if (!isHourPast(
+                match.date,
+                match.startingHour,
+              ))
+                Expanded(
+                  child: SFButton(
+                    buttonLabel: "Cancelar partida",
+                    buttonType: ButtonType.Delete,
+                    onTap: () {
+                      viewModel.setMatchCancelWidget(context, viewModel);
+                    },
+                  ),
+                ),
             ],
           )
         ],

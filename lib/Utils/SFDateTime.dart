@@ -1,3 +1,6 @@
+import '../SharedComponents/Model/Hour.dart';
+import 'package:intl/intl.dart';
+
 DateTime lastDayOfMonth(DateTime date) {
   return DateTime(date.year, date.month + 1, 0);
 }
@@ -69,4 +72,11 @@ bool areTheSameDate(DateTime date, DateTime otherDate) {
   return date.day == otherDate.day &&
       date.month == otherDate.month &&
       date.year == otherDate.year;
+}
+
+bool isHourPast(DateTime date, Hour hour) {
+  DateTime fullDateTime = DateTime(date.year, date.month, date.day,
+      DateFormat('HH:mm').parse("${hour.hourString}").hour);
+
+  return fullDateTime.isBefore(DateTime.now());
 }

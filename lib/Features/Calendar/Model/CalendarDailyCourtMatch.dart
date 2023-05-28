@@ -1,11 +1,12 @@
-import 'Court.dart';
+
+import '../../../SharedComponents/Model/Court.dart';
 import 'DayMatch.dart';
 
-class CourtDayMatch {
+class CalendarDailyCourtMatch {
   Court court;
   List<DayMatch> dayMatches;
 
-  CourtDayMatch({
+  CalendarDailyCourtMatch({
     required this.court,
     required this.dayMatches,
   });

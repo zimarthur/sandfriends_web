@@ -42,7 +42,7 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Partida de ${widget.match.matchCreator}",
+              "Partida de ${widget.match.matchCreatorName}",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

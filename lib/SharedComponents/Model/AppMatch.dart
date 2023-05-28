@@ -13,11 +13,16 @@ class AppMatch {
   Sport sport;
   Hour startingHour;
   Hour endingHour;
-  String matchCreator;
+  String matchCreatorFirstName;
+  String matchCreatorLastName;
+  String? matchCreatorPhoto;
 
   int get matchDuration {
     return endingHour.hour - startingHour.hour;
   }
+
+  String get matchCreatorName =>
+      "${matchCreatorFirstName} ${matchCreatorLastName}";
 
   AppMatch({
     required this.idMatch,
@@ -30,7 +35,9 @@ class AppMatch {
     required this.sport,
     required this.startingHour,
     required this.endingHour,
-    required this.matchCreator,
+    required this.matchCreatorFirstName,
+    required this.matchCreatorLastName,
+    required this.matchCreatorPhoto,
   });
 
   factory AppMatch.fromJson(Map<String, dynamic> parsedJson,
@@ -52,8 +59,28 @@ class AppMatch {
       sport: referenceSports
           .firstWhere((sport) => sport.idSport == parsedJson["IdSport"]),
       creatorNotes: parsedJson["CreatorNotes"],
-      matchCreator: parsedJson["MatchCreator"],
+      matchCreatorFirstName: parsedJson["MatchCreatorFirstName"],
+      matchCreatorLastName: parsedJson["MatchCreatorLastName"],
+      matchCreatorPhoto: parsedJson["MatchCreatorPhoto"],
       idRecurrentMatch: parsedJson["IdRecurrentMatch"],
+    );
+  }
+
+  factory AppMatch.copyWith(AppMatch refMatch) {
+    return AppMatch(
+      idMatch: refMatch.idMatch,
+      date: refMatch.date,
+      cost: refMatch.cost,
+      creationDate: refMatch.creationDate,
+      creatorNotes: refMatch.creatorNotes,
+      idRecurrentMatch: refMatch.idRecurrentMatch,
+      idStoreCourt: refMatch.idStoreCourt,
+      sport: refMatch.sport,
+      startingHour: refMatch.startingHour,
+      endingHour: refMatch.endingHour,
+      matchCreatorFirstName: refMatch.matchCreatorFirstName,
+      matchCreatorLastName: refMatch.matchCreatorLastName,
+      matchCreatorPhoto: refMatch.matchCreatorPhoto,
     );
   }
 }

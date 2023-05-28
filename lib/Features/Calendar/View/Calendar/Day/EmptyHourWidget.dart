@@ -16,69 +16,79 @@ class EmptyHourWidget extends StatefulWidget {
 
 class _EmptyHourWidgetState extends State<EmptyHourWidget> {
   bool buttonExpanded = false;
+  bool isOnHover = false;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (layourContext, layoutConstraints) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(defaultBorderRadius),
-          border: Border.all(
-            color: divider,
-            width: 1,
-          ),
-          color: widget.isEnabled ? divider.withOpacity(0.3) : divider,
-        ),
-        margin: EdgeInsets.symmetric(
-            vertical: defaultPadding / 4, horizontal: defaultPadding / 2),
-        width: double.infinity,
-        height: layoutConstraints.maxHeight,
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(),
+      return InkWell(
+        onTap: () {},
+        mouseCursor: SystemMouseCursors.basic,
+        onHover: (value) {
+          setState(() {
+            isOnHover = value;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(defaultBorderRadius),
+            border: Border.all(
+              color: divider,
+              width: 1,
             ),
-            if (widget.isEnabled)
-              InkWell(
-                onTap: widget.onBlockHour,
-                onHover: (value) {
-                  setState(() {
-                    buttonExpanded = value;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: Duration(),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultBorderRadius),
-                    color: textWhite,
-                  ),
-                  padding: EdgeInsets.all(layoutConstraints.maxHeight * 0.1),
-                  margin: EdgeInsets.only(
-                    right: defaultPadding,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        r"assets/icon/block.svg",
-                        color: red,
-                      ),
-                      if (buttonExpanded)
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: layoutConstraints.maxHeight * 0.1,
-                            ),
-                            Text(
-                              "Bloquear Horário",
-                              style: TextStyle(color: red),
-                            )
-                          ],
-                        )
-                    ],
+            color: widget.isEnabled ? divider.withOpacity(0.3) : divider,
+          ),
+          margin: EdgeInsets.symmetric(
+              vertical: defaultPadding / 4, horizontal: defaultPadding / 2),
+          width: double.infinity,
+          height: layoutConstraints.maxHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(),
+              ),
+              if (widget.isEnabled && isOnHover)
+                InkWell(
+                  onTap: widget.onBlockHour,
+                  onHover: (value) {
+                    setState(() {
+                      buttonExpanded = value;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(defaultBorderRadius),
+                      color: textWhite,
+                    ),
+                    padding: EdgeInsets.all(layoutConstraints.maxHeight * 0.1),
+                    margin: EdgeInsets.only(
+                      right: defaultPadding,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          r"assets/icon/block.svg",
+                          color: red,
+                        ),
+                        if (buttonExpanded)
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: layoutConstraints.maxHeight * 0.1,
+                              ),
+                              Text(
+                                "Bloquear Horário",
+                                style: TextStyle(color: red),
+                              )
+                            ],
+                          )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       );
     });

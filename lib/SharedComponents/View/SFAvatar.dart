@@ -10,12 +10,18 @@ class SFAvatar extends StatefulWidget {
   final double height;
   final String? image;
   final Uint8List? editImage;
+  final bool isPlayerAvatar;
+  final String? playerFirstName;
+  final String? playerLastName;
 
   const SFAvatar({
     super.key,
     required this.height,
     required this.image,
     this.editImage,
+    this.isPlayerAvatar = false,
+    this.playerFirstName,
+    this.playerLastName,
   });
 
   @override
@@ -53,13 +59,30 @@ class _SFAvatarState extends State<SFAvatar> {
                           child: Icon(Icons.error),
                         ),
                       )
-                    : Container(
-                        color: secondaryBack,
-                        child: SvgPicture.asset(
-                          r"assets/icon/attention.svg",
-                          height: widget.height * 0.4,
-                        ),
-                      ),
+                    : widget.isPlayerAvatar
+                        ? Center(
+                            child: SizedBox(
+                              height: widget.height * 0.4,
+                              width: widget.height * 0.4,
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text(
+                                  "${widget.playerFirstName![0].toUpperCase()}${widget.playerLastName![0].toUpperCase()}",
+                                  style: TextStyle(
+                                    color: secondaryPaper,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            color: secondaryBack,
+                            child: SvgPicture.asset(
+                              r"assets/icon/attention.svg",
+                              height: widget.height * 0.4,
+                            ),
+                          ),
           ),
         ),
       ),

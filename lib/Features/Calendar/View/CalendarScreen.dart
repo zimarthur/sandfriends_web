@@ -43,24 +43,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
             color: secondaryBack,
             child: Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    viewModel.setNoMatchReservedWidget(context, viewModel);
-                  },
-                  child: const SFHeader(
-                      header: "Calendário",
-                      description:
-                          "Acompanhe as partidas agendadas e veja seus mensalistas"),
-                ),
+                const SFHeader(
+                    header: "Calendário",
+                    description:
+                        "Acompanhe as partidas agendadas e veja seus mensalistas"),
                 SFTabs(
                   tabs: const ["Partidas", "Mensalistas"],
                   onTap: (newValue) {
                     viewModel.matchRecurrentView = newValue;
                   },
                   selectedPosition: viewModel.matchRecurrentView,
-                ),
-                const SizedBox(
-                  height: defaultPadding,
                 ),
                 Expanded(
                   child: Provider.of<DataProvider>(context, listen: false)
@@ -85,6 +77,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                           CalendarType.Weekly
                                       ? SFCalendarWeek(
                                           viewModel: viewModel,
+                                          height: layoutConstraints.maxHeight,
+                                          width: layoutConstraints.maxWidth,
                                         )
                                       : SFCalendarDay(
                                           viewModel: viewModel,

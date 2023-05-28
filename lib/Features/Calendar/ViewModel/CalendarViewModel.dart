@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Match/BlockedHourWidget.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Calendar/Day/CourtsAvailabilityWidget.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Match/BlockHourWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/MatchCancelWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Match/MatchDetailsWidget.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Match/NoMatchReservedWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
-import '../../../SharedComponents/Model/CourtDayMatch.dart';
-import '../../../SharedComponents/Model/DayMatch.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import 'package:intl/intl.dart';
+
+import '../Model/CalendarDailyCourtMatch.dart';
+import '../Model/DayMatch.dart';
 
 class CalendarViewModel extends ChangeNotifier {
   List<Court> courts = [];
   List<StoreWorkingDay> storeWorkingDays = [];
   List<Hour> availableHours = [];
   List<AppMatch> matches = [];
+
+  TextEditingController blockHourReasonController = TextEditingController();
 
   void initCalendarViewModel(BuildContext context) {
     courts = Provider.of<DataProvider>(context, listen: false).courts;
@@ -66,10 +70,10 @@ class CalendarViewModel extends ChangeNotifier {
     return days;
   }
 
-  List<Hour> get selectedDayWorkingHours {
+  List<Hour> workingHoursFromDay(DateTime day) {
     StoreWorkingDay storeWorkingDay = storeWorkingDays.firstWhere(
         (storeWorkingDay) =>
-            storeWorkingDay.weekday == getBRWeekday(selectedDay.weekday));
+            storeWorkingDay.weekday == getBRWeekday(day.weekday));
     if (!storeWorkingDay.isEnabled) {
       return [];
     }
@@ -80,12 +84,17 @@ class CalendarViewModel extends ChangeNotifier {
         .toList();
   }
 
-  List<CourtDayMatch> get selectedDayMatches {
-    List<CourtDayMatch> selectedDayMatches = [];
+  List<Hour> get selectedDayWorkingHours {
+    return workingHoursFromDay(selectedDay);
+  }
+
+  List<CalendarDailyCourtMatch> get selectedDayMatches {
+    List<CalendarDailyCourtMatch> selectedDayMatches = [];
     List<DayMatch> dayMatches = [];
     int jumpToHour = -1;
     for (var court in courts) {
       dayMatches.clear();
+      jumpToHour = -1;
       List<AppMatch> filteredMatches = matches
           .where((match) =>
               match.idStoreCourt == court.idStoreCourt &&
@@ -99,12 +108,11 @@ class CalendarViewModel extends ChangeNotifier {
           dayMatches.add(
             DayMatch(
               startingHour: hour,
-              match: match,
+              match: AppMatch.copyWith(match),
             ),
           );
           jumpToHour = match.endingHour.hour;
-        }
-        if (hour.hour >= jumpToHour) {
+        } else if (hour.hour >= jumpToHour) {
           dayMatches.add(
             DayMatch(
               startingHour: hour,
@@ -113,39 +121,84 @@ class CalendarViewModel extends ChangeNotifier {
         }
       }
       selectedDayMatches.add(
-        CourtDayMatch(
+        CalendarDailyCourtMatch(
           court: court,
-          dayMatches: dayMatches,
+          dayMatches: dayMatches
+              .map((dayMatch) => DayMatch.copyWith(dayMatch))
+              .toList(),
         ),
       );
     }
+
     return selectedDayMatches;
   }
 
-  bool isHourPast(Hour hour) {
-    DateTime fullDateTime = DateTime(selectedDay.year, selectedDay.month,
-        selectedDay.day, DateFormat('HH:mm').parse("${hour.hourString}").hour);
+  List<CalendarWeeklyDayMatch> get selectedWeekMatches {
+    List<CalendarWeeklyDayMatch> selectedWeekMatches = [];
+    List<DayMatch> dayMatches = [];
 
-    return fullDateTime.isBefore(DateTime.now());
+    for (var day in selectedWeek) {
+      dayMatches.clear();
+      for (var hour in workingHoursFromDay(day)) {
+        List<AppMatch> filteredMatches = [];
+
+        for (var match in matches) {
+          if (areTheSameDate(match.date, day) &&
+              hour.hour >= match.startingHour.hour &&
+              hour.hour < match.endingHour.hour) {
+            filteredMatches.add(AppMatch.copyWith(match));
+          }
+        }
+
+        dayMatches.add(
+          DayMatch(
+            startingHour: hour,
+            matches: filteredMatches,
+          ),
+        );
+      }
+      selectedWeekMatches.add(
+        CalendarWeeklyDayMatch(
+          date: day,
+          dayMatches: dayMatches
+              .map((dayMatch) => DayMatch.copyWith(dayMatch))
+              .toList(),
+        ),
+      );
+    }
+    return selectedWeekMatches;
   }
 
-  void setMatchDetailsWidget(
-      BuildContext context, CalendarViewModel viewModel) {
+  void setBlockHourWidget(BuildContext context, int idStoreCourt, Hour hour) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      MatchDetailsWidget(viewModel: viewModel),
+      BlockHourWidget(
+        viewModel: this,
+        idStoreCourt: idStoreCourt,
+        day: selectedDay,
+        hour: hour,
+      ),
     );
   }
 
-  void setBlockedHourWidget(BuildContext context) {
+  void setMatchDetailsWidget(BuildContext context, AppMatch match) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      BlockedHourWidget(viewModel: this),
+      MatchDetailsWidget(viewModel: this, match: match),
     );
   }
 
-  void setNoMatchReservedWidget(
-      BuildContext context, CalendarViewModel viewModel) {
+  void setCourtsAvailabilityWidget(
+    BuildContext context,
+    DateTime day,
+    Hour hour,
+    List<AppMatch> matches,
+  ) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      NoMatchReservedWidget(viewModel: viewModel),
+      CourtsAvailabilityWidget(
+        viewModel: this,
+        day: day,
+        hour: hour,
+        matches: matches,
+      ),
     );
   }
 
@@ -158,4 +211,7 @@ class CalendarViewModel extends ChangeNotifier {
   void returnMainView(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
   }
+
+  void blockHour(
+      BuildContext context, int idStoreCourt, DateTime day, Hour hour) {}
 }

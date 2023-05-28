@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Utils/Constants.dart';
-import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
+
+import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../SharedComponents/View/SFTextfield.dart';
-import '../../../Menu/ViewModel/MenuProvider.dart';
-import '../../ViewModel/CalendarViewModel.dart';
+import '../../../../Utils/Constants.dart';
 
-class MatchCancelWidget extends StatelessWidget {
+class BlockHourWidget extends StatefulWidget {
   CalendarViewModel viewModel;
-
-  MatchCancelWidget({super.key, required this.viewModel});
-
-  TextEditingController controller = TextEditingController();
+  DateTime day;
+  Hour hour;
+  int idStoreCourt;
+  BlockHourWidget({
+    required this.viewModel,
+    required this.day,
+    required this.hour,
+    required this.idStoreCourt,
+  });
 
   @override
+  State<BlockHourWidget> createState() => _BlockHourWidgetState();
+}
+
+class _BlockHourWidgetState extends State<BlockHourWidget> {
+  @override
   Widget build(BuildContext context) {
-    double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
-    double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return Container(
       width: 500,
       padding: const EdgeInsets.all(defaultPadding),
@@ -32,7 +40,7 @@ class MatchCancelWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            "Deseja mesmo cancelar a partida de Arthur?",
+            "Gostaria de deixar um lembrete com o motivo do bloqueio?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -47,8 +55,8 @@ class MatchCancelWidget extends StatelessWidget {
             pourpose: TextFieldPourpose.Multiline,
             minLines: 4,
             maxLines: 4,
-            hintText: "Escreva o motivo do cancelamento",
-            controller: controller,
+            hintText: "Manutenção da quadra, nenhum funcionário nessa hora...",
+            controller: widget.viewModel.blockHourReasonController,
             validator: (a) {
               return null;
             },
@@ -63,7 +71,7 @@ class MatchCancelWidget extends StatelessWidget {
                   buttonLabel: "Voltar",
                   buttonType: ButtonType.Secondary,
                   onTap: () {
-                    //viewModel.setMatchDetailsWidget(context, );
+                    widget.viewModel.returnMainView(context);
                   },
                 ),
               ),
@@ -72,10 +80,11 @@ class MatchCancelWidget extends StatelessWidget {
               ),
               Expanded(
                 child: SFButton(
-                  buttonLabel: "Cancelar partida",
+                  buttonLabel: "Bloquear Horário",
                   buttonType: ButtonType.Delete,
                   onTap: () {
-                    viewModel.returnMainView(context);
+                    widget.viewModel.blockHour(
+                        context, widget.idStoreCourt, widget.day, widget.hour);
                   },
                 ),
               ),

@@ -6,7 +6,8 @@ class SFTabs extends StatefulWidget {
   Function(int) onTap;
   int selectedPosition;
 
-  SFTabs({super.key, 
+  SFTabs({
+    super.key,
     required this.tabs,
     required this.onTap,
     required this.selectedPosition,
@@ -27,7 +28,7 @@ class _SFTabsState extends State<SFTabs> {
       child: Column(
         children: [
           SizedBox(
-            height: 40,
+            height: 30,
             child: ListView.builder(
               itemCount: widget.tabs.length,
               scrollDirection: Axis.horizontal,

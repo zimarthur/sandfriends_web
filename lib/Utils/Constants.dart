@@ -5,8 +5,10 @@ const primaryLightBlue = Color.fromRGBO(24, 190, 203, 1);
 const primaryDarkBlue = Color.fromRGBO(15, 54, 168, 1);
 
 const secondaryLightBlue = Color.fromRGBO(22, 211, 220, 1);
-const secondaryYellow = Color.fromRGBO(251, 190, 41, 1);
-const secondaryGreen = Color.fromRGBO(154, 239, 79, 1);
+const secondaryYellow = Color.fromRGBO(253, 218, 65, 1);
+const secondaryYellowDark = Color.fromRGBO(251, 190, 41, 1);
+const secondaryGreen = Color.fromRGBO(124, 232, 97, 1);
+const secondaryGreenDark = Color.fromRGBO(135, 217, 63, 1);
 const secondaryBack = Color.fromRGBO(244, 244, 244, 1);
 const secondaryPaper = Color.fromRGBO(255, 255, 255, 1);
 
