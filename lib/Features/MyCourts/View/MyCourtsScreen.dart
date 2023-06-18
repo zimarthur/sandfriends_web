@@ -135,7 +135,8 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                               },
                             ),
                           ),
-                          if (viewModel.courtInfoChanged)
+                          if (viewModel.selectedCourtIndex != -1 &&
+                              viewModel.courtInfoChanged)
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: defaultPadding / 4),

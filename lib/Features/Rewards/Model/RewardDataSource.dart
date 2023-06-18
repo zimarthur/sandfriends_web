@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import 'Reward.dart';
+import '../../../SharedComponents/Model/Reward.dart';
 import 'package:intl/intl.dart';
 
 class RewardsDataSource extends DataGridSource {
@@ -11,11 +11,12 @@ class RewardsDataSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'date',
-                  value: DateFormat('dd/MM/yy').format(e.date)),
+                  value: DateFormat('dd/MM/yy').format(e.claimedDate)),
               DataGridCell<String>(columnName: 'hour', value: e.hour),
               DataGridCell<String>(
                   columnName: 'player', value: e.player.firstName),
-              DataGridCell<String>(columnName: 'reward', value: e.reward),
+              DataGridCell<String>(
+                  columnName: 'reward', value: e.rewardItem.description),
             ]))
         .toList();
   }

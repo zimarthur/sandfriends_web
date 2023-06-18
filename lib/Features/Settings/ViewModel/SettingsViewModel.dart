@@ -156,7 +156,7 @@ class SettingsViewModel extends ChangeNotifier {
     Uint8List? croppedImage = await cropImage(
       context,
       pickedImage,
-      'circle',
+      'square',
       resizedImage!.height > resizedImage.width
           ? resizedImage.width
           : resizedImage.height,
@@ -194,7 +194,12 @@ class SettingsViewModel extends ChangeNotifier {
     if (croppedImage == null) return;
     storeEdit.photos.add(
       StorePhoto(
-        idStorePhoto: storeEdit.photos.last.idStorePhoto + 1,
+        idStorePhoto: storeEdit.photos.isEmpty
+            ? 0
+            : storeEdit.photos
+                    .reduce((a, b) => a.idStorePhoto > b.idStorePhoto ? a : b)
+                    .idStorePhoto +
+                1,
         photo: "",
         isNewPhoto: true,
         newPhoto: croppedImage,

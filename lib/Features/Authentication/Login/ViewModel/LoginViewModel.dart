@@ -25,7 +25,7 @@ import '../../../../Utils/LocalStorage.dart';
 class LoginViewModel extends ChangeNotifier {
   final loginRepo = LoginRepoImp();
 
-  PageStatus pageStatus = PageStatus.LOADING;
+  PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
     title: "",
     onTap: () {},

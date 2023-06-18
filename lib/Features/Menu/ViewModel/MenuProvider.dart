@@ -49,10 +49,17 @@ class MenuProvider extends ChangeNotifier {
           if (response.responseStatus == NetworkResponseStatus.success) {
             Provider.of<DataProvider>(context, listen: false)
                 .setLoginResponse(response.responseBody!, true);
-            Navigator.pushNamed(context, '/home');
+            int? lastPage = getLastPage();
+            if (lastPage != null) {
+              onTabClick(lastPage, context);
+            } else {
+              Navigator.pushNamed(context, '/home');
+            }
           } else {
             Navigator.pushNamed(context, "/login");
           }
+          pageStatus = PageStatus.OK;
+          notifyListeners();
         });
       } else {
         Navigator.pushNamed(context, "/login");
@@ -170,8 +177,9 @@ class MenuProvider extends ChangeNotifier {
   ];
   List<DrawerItem> get drawerItems => _drawerItems;
 
-  void onTabClick(int index) {
+  void onTabClick(int index, BuildContext context) {
     _indexSelectedDrawerTile = index;
+    storeLastPage(index);
     switch (index) {
       case 0:
         _currentMenuWidget = const HomeScreen();
@@ -194,6 +202,9 @@ class MenuProvider extends ChangeNotifier {
       case -2:
         _currentMenuWidget = const HelpScreen();
         break;
+      case -3:
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/login', (Route<dynamic> route) => false);
     }
     notifyListeners();
   }

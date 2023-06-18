@@ -1,48 +1,179 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Finances/Repository/FinancesRepoImp.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Hour.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import '../../../Remote/NetworkResponse.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
+import '../../../SharedComponents/Model/EnumPeriodVisualization.dart';
+import '../../../SharedComponents/Model/SFBarChartItem.dart';
+import '../../../SharedComponents/View/DatePickerModal.dart';
 import '../../../SharedComponents/View/SFPieChart.dart';
 import '../../../Utils/SFDateTime.dart';
+import 'package:provider/provider.dart';
+import '../../Menu/ViewModel/DataProvider.dart';
+import '../../Menu/ViewModel/MenuProvider.dart';
 import '../Model/FinancesDataSource.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
 import 'package:collection/collection.dart';
 
 class FinancesViewModel extends ChangeNotifier {
-  int _selectedFilterIndex = 0;
-  int get selectedFilterIndex => _selectedFilterIndex;
-  set selectedFilterIndex(int index) {
-    _selectedFilterIndex = index;
+  final financesRepo = FinancesRepoImp();
+
+  void initFinancesScreen(BuildContext context) {
+    _matches = Provider.of<DataProvider>(context, listen: false)
+        .matches
+        .where((match) => match.blocked == false)
+        .toList();
     setFinancesDataSource();
-    notifyListeners();
   }
 
-  final List<AppMatch> _matches = [];
-  List<AppMatch> get matches {
-    if (selectedFilterIndex == 0) {
-      return _matches
-          .where((element) => isSameDate(element.date, DateTime.now()))
-          .toList();
-    } else if (selectedFilterIndex == 1) {
-      return _matches
-          .where((element) => isInCurrentMonth(element.date))
-          .toList();
+  EnumPeriodVisualization periodVisualization = EnumPeriodVisualization.Today;
+  void setPeriodVisualization(
+      BuildContext context, EnumPeriodVisualization newPeriodVisualization) {
+    print("setPeriodVisualization START ${DateTime.now()}");
+    if (newPeriodVisualization == EnumPeriodVisualization.Custom) {
+      setCustomPeriod(context);
     } else {
-      return _matches;
+      periodVisualization = newPeriodVisualization;
+      setFinancesDataSource();
+      notifyListeners();
     }
+    print("setPeriodVisualization END ${DateTime.now()}");
   }
 
-  int getRevenue() {
-    List<AppMatch> currentMatches =
-        matches.where((match) => match.date.isBefore(DateTime.now())).toList();
-    return currentMatches.fold(0, (sum, item) => sum + item.cost);
+  void setCustomPeriod(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false)
+        .setModalForm(DatePickerModal(
+      onDateSelected: (dateStart, dateEnd) {
+        customStartDate = dateStart;
+        customEndDate = dateEnd;
+        searchCustomMatches(context);
+      },
+      onReturn: () =>
+          Provider.of<MenuProvider>(context, listen: false).closeModal(),
+    ));
   }
 
-  int getExpectedRevenue() {
+  void searchCustomMatches(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    financesRepo
+        .searchCustomMatches(
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            customStartDate!,
+            customEndDate)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        customMatches.clear();
+        for (var match in responseBody['Matches']) {
+          customMatches.add(
+            AppMatch.fromJson(
+              match,
+              Provider.of<DataProvider>(context, listen: false).availableHours,
+              Provider.of<DataProvider>(context, listen: false).availableSports,
+            ),
+          );
+        }
+        Provider.of<MenuProvider>(context, listen: false).closeModal();
+        periodVisualization = EnumPeriodVisualization.Custom;
+        setFinancesDataSource();
+        notifyListeners();
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
+  }
+
+  List<AppMatch> _matches = [];
+  List<AppMatch> customMatches = [];
+  List<AppMatch> get matches {
+    List<AppMatch> filteredMatches = [];
+    if (periodVisualization == EnumPeriodVisualization.Today) {
+      filteredMatches = _matches
+          .where((element) => areInTheSameDay(element.date, DateTime.now()))
+          .toList();
+    } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
+      filteredMatches =
+          _matches.where((element) => isInCurrentMonth(element.date)).toList();
+    } else {
+      filteredMatches = customMatches;
+    }
+    filteredMatches.sort((a, b) => a.date.compareTo(b.date));
+    return filteredMatches;
+  }
+
+  int get revenue {
+    return matches.isEmpty
+        ? 0
+        : matches
+            .where((match) => match.date.isBefore(DateTime.now()))
+            .toList()
+            .fold(0, (sum, item) => sum + item.cost);
+  }
+
+  String get revenueTitle {
+    String titleDate;
+    if (periodVisualization == EnumPeriodVisualization.Today) {
+      titleDate = DateFormat('dd/MM').format(DateTime.now());
+    } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
+      titleDate =
+          "${monthsPortuguese[DateTime.now().month]}/${DateTime.now().year}";
+    } else {
+      titleDate = customDateTitle!;
+    }
+    return "Faturamento $titleDate";
+  }
+
+  int get expectedRevenue {
     return matches.fold(0, (sum, item) => sum + item.cost);
+  }
+
+  String get expectedRevenueTitle {
+    String titleDate;
+    if (periodVisualization == EnumPeriodVisualization.Today) {
+      titleDate = "de hoje";
+    } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
+      titleDate = "do mês";
+    } else {
+      titleDate = customEndDate != null
+          ? "até ${DateFormat('dd/MM').format(customEndDate!)}"
+          : DateFormat('dd/MM').format(customStartDate!);
+    }
+    return "Previsão de faturamento $titleDate";
+  }
+
+  DateTime? customStartDate;
+  DateTime? customEndDate;
+  String? get customDateTitle {
+    if (customStartDate != null) {
+      if (customEndDate == null) {
+        return DateFormat("dd/MM/yy").format(customStartDate!);
+      } else {
+        return "${DateFormat("dd/MM/yy").format(customStartDate!)} - ${DateFormat("dd/MM/yy").format(customEndDate!)}";
+      }
+    }
+    return null;
+  }
+
+  List<SFBarChartItem> get barChartItems {
+    List<SFBarChartItem> a = matches
+        .map(
+          (match) => SFBarChartItem(
+            date: match.date,
+            amount: match.cost,
+          ),
+        )
+        .toList();
+
+    return a;
   }
 
   //////// TABLE ////////////////////////////////////////
@@ -89,170 +220,4 @@ class FinancesViewModel extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////
-
-  //////// BAR CHART ////////////////////////////////////
-
-  Widget bottomTitles(double value, TitleMeta meta) {
-    final Widget text = Transform.rotate(
-      angle: -math.pi / 3,
-      child: Text(
-        selectedFilterIndex == 0
-            ? '$value\n'
-            : selectedFilterIndex == 1
-                ? '$value\n'
-                : '${getMonthYear(DateTime.parse(monthsOnChartData[value.toInt()]))}\n',
-        style: const TextStyle(
-          color: textDarkGrey,
-        ),
-      ),
-    );
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16, //margin top
-      child: text,
-    );
-  }
-
-  List<String> monthsOnChartData = [];
-  BarChartData get barChartData {
-    List<BarChartGroupData> chartData = [];
-    BarTouchTooltipData barTouchTooltipData = BarTouchTooltipData(
-      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-        return BarTooltipItem(
-          selectedFilterIndex == 0
-              ? '${group.x}:00\n'
-              : selectedFilterIndex == 1
-                  ? 'Dia ${group.x}\n'
-                  : '${getMonthYear(DateTime.parse(monthsOnChartData[group.x]))}\n',
-          const TextStyle(
-            color: textWhite,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-              text: "R\$ ${(rod.toY).toString()}",
-              style: const TextStyle(
-                color: primaryLightBlue,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    switch (selectedFilterIndex) {
-      case 0:
-        for (int hourIndex = 1; hourIndex < 25; hourIndex++) {
-          int revenue = 0;
-          for (var match in matches) {
-            if (isSameDate(match.date, DateTime.now()) &&
-                match.date.hour == hourIndex) {
-              revenue = revenue + match.cost;
-            }
-          }
-          chartData.add(
-            BarChartGroupData(
-              x: hourIndex,
-              barRods: [
-                BarChartRodData(
-                  toY: revenue.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-        }
-        break;
-      case 1:
-        for (int dayIndex = 1;
-            dayIndex < lastDayOfMonth(DateTime.now()).day;
-            dayIndex++) {
-          int revenue = 0;
-          for (var match in matches) {
-            if (isSameDate(
-                match.date,
-                DateTime(
-                    DateTime.now().year, DateTime.now().month, dayIndex))) {
-              revenue = revenue + match.cost;
-            }
-          }
-          chartData.add(
-            BarChartGroupData(
-              x: dayIndex,
-              barRods: [
-                BarChartRodData(
-                  toY: revenue.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-        }
-        break;
-      case 2:
-        matches.sort((a, b) => b.date.compareTo(a.date));
-
-        final groupByMonth = groupBy(matches,
-            (AppMatch match) => DateTime(match.date.year, match.date.month));
-        final matchesByMonth = groupByMonth.map((key, value) => MapEntry(
-            key,
-            value.fold(
-                0, (previousValue, element) => previousValue + element.cost)));
-
-        matchesByMonth.forEach((key, value) {
-          chartData.add(
-            BarChartGroupData(
-              x: matchesByMonth.keys.toList().indexOf(key),
-              showingTooltipIndicators: [1],
-              barRods: [
-                BarChartRodData(
-                  toY: value.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-          monthsOnChartData.add(key.toString());
-        });
-        break;
-    }
-    return BarChartData(
-      barTouchData: BarTouchData(
-        touchTooltipData: barTouchTooltipData,
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        // Add your x axis labels here
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: bottomTitles,
-            reservedSize: 42,
-          ),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-          border: const Border(
-        top: BorderSide.none,
-        right: BorderSide.none,
-        left: BorderSide.none,
-        bottom: BorderSide(width: 1),
-      )),
-      groupsSpace: 10,
-      barGroups: chartData,
-    );
-  }
-
-///////////////////////////////////////////////////////
 }

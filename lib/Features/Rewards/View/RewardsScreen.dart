@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFBarChart.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFPeriodToggle.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTable.dart';
 import 'package:sandfriends_web/SharedComponents/View/Table/SFTableHeader.dart';
@@ -25,7 +27,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
 
   @override
   void initState() {
-    viewModel.setRewardDataSource();
+    viewModel.initRewardsScreen(context);
     super.initState();
   }
 
@@ -67,12 +69,11 @@ class _RewardsScreenState extends State<RewardsScreen> {
               SizedBox(
                 height: height * 0.02,
               ),
-              SFToggle(
-                const ["Hoje", "Esse mês", "Histórico"],
-                viewModel.selectedFilterIndex,
-                (value) {
-                  viewModel.selectedFilterIndex = value;
-                },
+              SFPeriodToggle(
+                currentPeriodVisualization: viewModel.periodVisualization,
+                onChanged: (newPeriod) =>
+                    viewModel.setPeriodVisualization(context, newPeriod),
+                customText: viewModel.customDateTitle,
               ),
               SizedBox(
                 height: height * 0.01,
@@ -144,8 +145,12 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                 height: (widgetHeight - defaultPadding) / 2,
                                 width: width * 0.5 - defaultPadding,
                                 title: "Recompensas recolhidas por data",
-                                child: BarChart(
-                                  viewModel.barChartData,
+                                child: SFBarChart(
+                                  barChartItems: viewModel.barChartItems,
+                                  barChartVisualization:
+                                      viewModel.periodVisualization,
+                                  customStartDate: viewModel.customStartDate,
+                                  customEndDate: viewModel.customEndDate,
                                 ),
                               ),
                             ],

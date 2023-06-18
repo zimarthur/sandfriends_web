@@ -25,4 +25,96 @@ class CalendarRepoImp implements CalendarRepo {
     );
     return response;
   }
+
+  @override
+  Future<NetworkResponse> cancelMatch(
+    String accessToken,
+    int idMatch,
+    String? cancelationReason,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().cancelMatch,
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdMatch": idMatch,
+          "CancelationReason": cancelationReason ?? "",
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> cancelRecurrentMatch(
+    String accessToken,
+    int idRecurrentMatch,
+    String? cancelationReason,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().cancelRecurrentMatch,
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdRecurrentMatch": idRecurrentMatch,
+          "CancelationReason": cancelationReason ?? "",
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> blockUnblockHour(
+    String accessToken,
+    int idStoreCourt,
+    DateTime date,
+    int hour,
+    bool block,
+    String blockReson,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().blockUnblockHour,
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdStoreCourt": idStoreCourt,
+          "Date": DateFormat("dd/MM/yyyy").format(date),
+          "IdHour": hour,
+          "Blocked": block,
+          "BlockedReason": blockReson,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> recurrentBlockUnblockHour(
+    String accessToken,
+    int idStoreCourt,
+    int weekday,
+    int hour,
+    bool block,
+    String blockReson,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().recurrentBlockUnblockHour,
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdStoreCourt": idStoreCourt,
+          "Weekday": weekday,
+          "IdHour": hour,
+          "Blocked": block,
+          "BlockedReason": blockReson,
+        },
+      ),
+    );
+    return response;
+  }
 }

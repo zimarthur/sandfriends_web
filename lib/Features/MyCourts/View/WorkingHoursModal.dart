@@ -34,10 +34,10 @@ class _WorkingHoursWidgetState extends State<WorkingHoursModal> {
             weekday: dayIndex,
             startingHour: Provider.of<DataProvider>(context, listen: false)
                 .availableHours
-                .first,
+                .reduce((a, b) => a.hour < b.hour ? a : b),
             endingHour: Provider.of<DataProvider>(context, listen: false)
                 .availableHours
-                .last,
+                .reduce((a, b) => a.hour > b.hour ? a : b),
             isEnabled: true,
           ),
         );

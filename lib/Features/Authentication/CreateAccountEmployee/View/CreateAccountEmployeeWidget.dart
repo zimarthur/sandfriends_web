@@ -52,8 +52,8 @@ class _CreateAccountEmployeeWidgetState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: SvgPicture.asset(
-                  r'assets/icon/full_logo_positive.svg',
+                child: Image.asset(
+                  r'assets/full_logo_positive_284.png',
                 ),
               ),
               const SizedBox(

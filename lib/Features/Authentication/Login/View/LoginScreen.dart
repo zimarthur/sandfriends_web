@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    viewModel.validateToken(context);
+    //viewModel.validateToken(context);
     super.initState();
   }
 

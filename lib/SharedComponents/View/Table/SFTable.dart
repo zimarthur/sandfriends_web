@@ -10,7 +10,8 @@ class SFTable extends StatefulWidget {
   List<GridColumn> headers;
   DataGridSource source;
 
-  SFTable({super.key, 
+  SFTable({
+    super.key,
     required this.height,
     required this.width,
     required this.headers,
@@ -24,6 +25,7 @@ class SFTable extends StatefulWidget {
 class _SFTableState extends State<SFTable> {
   @override
   Widget build(BuildContext context) {
+    print("SFTable START ${DateTime.now()}");
     double columnWidth = widget.width / widget.headers.length < 100
         ? 100
         : widget.width / widget.headers.length;
@@ -47,7 +49,6 @@ class _SFTableState extends State<SFTable> {
             gridLinesVisibility: GridLinesVisibility.none,
             source: widget.source,
             columns: widget.headers,
-            allowColumnsResizing: true,
           ),
         ),
       ),

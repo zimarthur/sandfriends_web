@@ -7,9 +7,13 @@ import 'package:provider/provider.dart';
 var today = DateUtils.dateOnly(DateTime.now());
 
 class DatePicker extends StatefulWidget {
-  Function(DateTime) onDateSelected;
+  Function(DateTime)? onDateSelected;
+  Function(List<DateTime?>)? onMultiDateSelected;
+  bool multiDate;
   DatePicker({
-    required this.onDateSelected,
+    this.onDateSelected,
+    this.onMultiDateSelected,
+    this.multiDate = false,
   });
 
   @override
@@ -27,7 +31,9 @@ class _DatePickerState extends State<DatePicker> {
         firstDate: Provider.of<DataProvider>(context, listen: false)
             .store!
             .approvalDate,
-        calendarType: CalendarDatePicker2Type.single,
+        calendarType: widget.multiDate
+            ? CalendarDatePicker2Type.range
+            : CalendarDatePicker2Type.single,
         selectedDayHighlightColor: primaryBlue,
         weekdayLabelTextStyle: const TextStyle(
           color: Colors.black87,
@@ -41,8 +47,11 @@ class _DatePickerState extends State<DatePicker> {
       ),
       initialValue: initialDates,
       onValueChanged: (values) {
+        if (widget.multiDate) {
+          widget.onMultiDateSelected!(values);
+        }
         if (values.first != null) {
-          widget.onDateSelected(values.first!);
+          widget.onDateSelected!(values.first!);
         }
         setState(() {});
       },

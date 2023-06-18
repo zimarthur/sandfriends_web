@@ -1,73 +1,168 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
-import 'package:sandfriends_web/Features/Rewards/Model/Reward.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Features/Rewards/Repository/RewardsRepoImp.dart';
+import 'package:sandfriends_web/Features/Rewards/View/ChoseRewardModal.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
 import 'package:sandfriends_web/Features/Rewards/Model/RewardDataSource.dart';
-import 'package:sandfriends_web/Features/Rewards/View/AddRewardWidget.dart';
+import 'package:sandfriends_web/Features/Rewards/View/AddRewardModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
+import 'package:sandfriends_web/SharedComponents/Model/RewardItem.dart';
+import 'package:sandfriends_web/SharedComponents/Model/SFBarChartItem.dart';
+import 'package:sandfriends_web/SharedComponents/View/DatePickerModal.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
+import '../../../Remote/NetworkResponse.dart';
+import '../../../SharedComponents/Model/EnumPeriodVisualization.dart';
+
 class RewardsViewModel extends ChangeNotifier {
-  int _selectedFilterIndex = 0;
-  int get selectedFilterIndex => _selectedFilterIndex;
-  set selectedFilterIndex(int index) {
-    _selectedFilterIndex = index;
-    setRewardDataSource();
-    notifyListeners();
+  final rewardsRepo = RewardsRepoImp();
+
+  EnumPeriodVisualization periodVisualization = EnumPeriodVisualization.Today;
+  void setPeriodVisualization(
+      BuildContext context, EnumPeriodVisualization newPeriodVisualization) {
+    if (newPeriodVisualization == EnumPeriodVisualization.Custom) {
+      setCustomPeriod(context);
+    } else {
+      periodVisualization = newPeriodVisualization;
+      setRewardDataSource();
+      notifyListeners();
+    }
   }
 
-  void returnMainView(BuildContext context) {
-    Provider.of<MenuProvider>(context, listen: false).closeModal();
+  void setCustomPeriod(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false)
+        .setModalForm(DatePickerModal(
+      onDateSelected: (dateStart, dateEnd) {
+        customStartDate = dateStart;
+        customEndDate = dateEnd;
+        searchCustomRewards(context);
+      },
+      onReturn: () =>
+          Provider.of<MenuProvider>(context, listen: false).closeModal(),
+    ));
   }
 
   int get rewardsCounter => rewards.length;
 
-  final List<Reward> _rewards = [
-    Reward(reward: "Agua", date: DateTime.now(), player: arthur),
-    Reward(
-        reward: "Agua",
-        date: DateTime.now().subtract(const Duration(days: 5)),
-        player: pietro),
-    Reward(
-        reward: "Gatorade",
-        date: DateTime.now().subtract(const Duration(days: 15)),
-        player: arthur),
-    Reward(
-        reward: "Bolinha",
-        date: DateTime.now().subtract(const Duration(days: 20)),
-        player: pietro),
-    Reward(
-        reward: "Agua",
-        date: DateTime.now().subtract(const Duration(days: 50)),
-        player: arthur),
-  ];
+  List<Reward> _rewards = [];
+  List<Reward> customRewards = [];
+
   List<Reward> get rewards {
-    if (selectedFilterIndex == 0) {
-      return _rewards
-          .where((element) => isSameDate(element.date, DateTime.now()))
+    List<Reward> filteredRewards = [];
+    if (periodVisualization == EnumPeriodVisualization.Today) {
+      filteredRewards = _rewards
+          .where(
+              (element) => areInTheSameDay(element.claimedDate, DateTime.now()))
           .toList();
-    } else if (selectedFilterIndex == 1) {
-      return _rewards
-          .where((element) => isInCurrentMonth(element.date))
+    } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
+      filteredRewards = _rewards
+          .where((element) => isInCurrentMonth(element.claimedDate))
           .toList();
     } else {
-      return _rewards;
+      filteredRewards = customRewards;
     }
+    filteredRewards.sort((a, b) => a.claimedDate.compareTo(b.claimedDate));
+    return filteredRewards;
+  }
+
+  DateTime? customStartDate;
+  DateTime? customEndDate;
+  String? get customDateTitle {
+    if (customStartDate != null) {
+      if (customEndDate == null) {
+        return DateFormat("dd/MM/yy").format(customStartDate!);
+      } else {
+        return "${DateFormat("dd/MM/yy").format(customStartDate!)} - ${DateFormat("dd/MM/yy").format(customEndDate!)}";
+      }
+    }
+    return null;
+  }
+
+  List<RewardItem> possibleRewards = [];
+
+  void initRewardsScreen(BuildContext context) {
+    _rewards = Provider.of<DataProvider>(context, listen: false).rewards;
+    setRewardDataSource();
+  }
+
+  void searchCustomRewards(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    rewardsRepo
+        .searchCustomRewards(
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            customStartDate!,
+            customEndDate)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        customRewards.clear();
+        for (var reward in responseBody['Rewards']) {
+          customRewards.add(
+            Reward.fromJson(reward),
+          );
+        }
+        Provider.of<MenuProvider>(context, listen: false).closeModal();
+        periodVisualization = EnumPeriodVisualization.Custom;
+        setRewardDataSource();
+        notifyListeners();
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
+  }
+
+  void sendUserRewardCode(BuildContext context, String rewardCode) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    rewardsRepo.sendUserRewardCode(rewardCode).then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        possibleRewards.clear();
+        for (var rewardItem in responseBody['RewardItems']) {
+          possibleRewards.add(
+            RewardItem.fromJson(rewardItem),
+          );
+        }
+        Provider.of<MenuProvider>(context, listen: false)
+            .setModalForm(ChoseRewardModal(
+          rewardItems: possibleRewards,
+          onReturn: () =>
+              Provider.of<MenuProvider>(context, listen: false).closeModal(),
+          onTapRewardItem: (p0) {},
+        ));
+        notifyListeners();
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
   }
 
   /////////////ADD REWARD //////////////////////////////
   void addReward(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      AddRewardWidget(context),
+      AddRewardModal(
+        onSendRewardCode: (rewardCode) =>
+            sendUserRewardCode(context, rewardCode),
+        onReturn: () =>
+            Provider.of<MenuProvider>(context, listen: false).closeModal(),
+      ),
     );
   }
-
-  TextEditingController addRewardController = TextEditingController();
 
   void validateAddReward(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
@@ -88,10 +183,12 @@ class RewardsViewModel extends ChangeNotifier {
     List<PieChartItem> items = [];
     Map<String, int> nameCount = <String, int>{};
     for (var object in rewards) {
-      if (nameCount.containsKey(object.reward)) {
-        nameCount[object.reward] = nameCount[object.reward]! + 1;
+      print("Reward: ${object.rewardItem.description}");
+      if (nameCount.containsKey(object.rewardItem.description)) {
+        nameCount[object.rewardItem.description] =
+            nameCount[object.rewardItem.description]! + 1;
       } else {
-        nameCount[object.reward] = 1;
+        nameCount[object.rewardItem.description] = 1;
       }
     }
     nameCount.forEach((key, value) {
@@ -115,180 +212,9 @@ class RewardsViewModel extends ChangeNotifier {
 
   ///////////////////////////////////////////////////////
 
-  //////// BAR CHART ////////////////////////////////////
-
-  Widget bottomTitles(double value, TitleMeta meta) {
-    final Widget text = Transform.rotate(
-      angle: -math.pi / 3,
-      child: Text(
-        selectedFilterIndex == 0
-            ? '$value\n'
-            : selectedFilterIndex == 1
-                ? '$value\n'
-                : '${getMonthYear(DateTime.parse(monthsOnChartData[value.toInt()]))}\n',
-        style: const TextStyle(
-          color: textDarkGrey,
-        ),
-      ),
-    );
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16, //margin top
-      child: text,
-    );
+  List<SFBarChartItem> get barChartItems {
+    return rewards
+        .map((reward) => SFBarChartItem(date: reward.claimedDate, amount: 1))
+        .toList();
   }
-
-  List<String> monthsOnChartData = [];
-  BarChartData get barChartData {
-    List<BarChartGroupData> chartData = [];
-    BarTouchTooltipData barTouchTooltipData = BarTouchTooltipData(
-      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-        return BarTooltipItem(
-          selectedFilterIndex == 0
-              ? '${group.x}:00\n'
-              : selectedFilterIndex == 1
-                  ? 'Dia ${group.x}\n'
-                  : '${getMonthYear(DateTime.parse(monthsOnChartData[group.x]))}\n',
-          const TextStyle(
-            color: textWhite,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-              text: (rod.toY).toString(),
-              style: const TextStyle(
-                color: primaryLightBlue,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    switch (selectedFilterIndex) {
-      case 0:
-        for (int hourIndex = 1; hourIndex < 25; hourIndex++) {
-          int rewardsCounter = 0;
-          for (var element in rewards) {
-            if (isSameDate(element.date, DateTime.now()) &&
-                element.date.hour == hourIndex) {
-              rewardsCounter++;
-            }
-          }
-          chartData.add(
-            BarChartGroupData(
-              x: hourIndex,
-              barRods: [
-                BarChartRodData(
-                  toY: rewardsCounter.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-        }
-        break;
-      case 1:
-        for (int dayIndex = 1;
-            dayIndex < lastDayOfMonth(DateTime.now()).day;
-            dayIndex++) {
-          int rewardsCounter = 0;
-          for (var element in rewards) {
-            if (isSameDate(
-                element.date,
-                DateTime(
-                    DateTime.now().year, DateTime.now().month, dayIndex))) {
-              rewardsCounter++;
-            }
-          }
-          chartData.add(
-            BarChartGroupData(
-              x: dayIndex,
-              barRods: [
-                BarChartRodData(
-                  toY: rewardsCounter.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-        }
-        break;
-      case 2:
-        rewards.sort((a, b) => b.date.compareTo(a.date));
-
-        final groupByMonth = groupBy(rewards,
-            (Reward reward) => DateTime(reward.date.year, reward.date.month));
-        final rewardsByMonth = groupByMonth.map((key, value) => MapEntry(
-            key, value.fold(0, (previousValue, element) => previousValue + 1)));
-
-        rewardsByMonth.forEach((key, value) {
-          chartData.add(
-            BarChartGroupData(
-              x: rewardsByMonth.keys.toList().indexOf(key),
-              showingTooltipIndicators: [1],
-              barRods: [
-                BarChartRodData(
-                  toY: value.toDouble(),
-                  width: 15,
-                  color: primaryBlue,
-                ),
-              ],
-            ),
-          );
-          monthsOnChartData.add(key.toString());
-        });
-        break;
-    }
-    return BarChartData(
-      barTouchData: BarTouchData(
-        touchTooltipData: barTouchTooltipData,
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        // Add your x axis labels here
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: bottomTitles,
-            reservedSize: 42,
-          ),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-          border: const Border(
-        top: BorderSide.none,
-        right: BorderSide.none,
-        left: BorderSide.none,
-        bottom: BorderSide(width: 1),
-      )),
-      groupsSpace: 10,
-      barGroups: chartData,
-    );
-  }
-
-///////////////////////////////////////////////////////
 }
-
-Player arthur = Player(
-    idUser: 1,
-    firstName: "Arthur",
-    lastName: "Zim",
-    phoneNumber: "99",
-    photo: "img");
-Player pietro = Player(
-    idUser: 1,
-    firstName: "Pietro",
-    lastName: "Berger",
-    phoneNumber: "99",
-    photo: "img");

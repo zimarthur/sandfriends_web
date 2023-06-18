@@ -126,7 +126,7 @@ class OnboardingWidget extends StatelessWidget {
                               onTap: () {
                                 Provider.of<MenuProvider>(context,
                                         listen: false)
-                                    .onTabClick(4);
+                                    .onTabClick(4, context);
                               },
                             ),
                           ],

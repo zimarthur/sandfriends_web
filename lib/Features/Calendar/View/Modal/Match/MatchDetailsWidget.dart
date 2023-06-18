@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Match/MatchDetailsWidgetRow.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
@@ -9,16 +9,18 @@ import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
-import '../../../../SharedComponents/View/SFButton.dart';
-import '../../../Menu/ViewModel/MenuProvider.dart';
+import '../../../../../SharedComponents/View/SFButton.dart';
+import '../../../../Menu/ViewModel/MenuProvider.dart';
 import 'package:intl/intl.dart';
 
 class MatchDetailsWidget extends StatelessWidget {
-  CalendarViewModel viewModel;
+  VoidCallback onReturn;
+  VoidCallback onCancel;
   AppMatch match;
 
   MatchDetailsWidget({
-    required this.viewModel,
+    required this.onReturn,
+    required this.onCancel,
     required this.match,
   });
   TextEditingController controller = TextEditingController();
@@ -107,7 +109,7 @@ class MatchDetailsWidget extends StatelessWidget {
                       value:
                           "${match.startingHour.hourString} - ${match.endingHour.hourString}"),
                   MatchDetailsWidgetRow(
-                      title: "Esporte", value: match.sport.description),
+                      title: "Esporte", value: match.sport!.description),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: defaultPadding),
                     child: SFDivider(),
@@ -172,12 +174,9 @@ class MatchDetailsWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: SFButton(
-                  buttonLabel: "Voltar",
-                  buttonType: ButtonType.Secondary,
-                  onTap: () {
-                    viewModel.returnMainView(context);
-                  },
-                ),
+                    buttonLabel: "Voltar",
+                    buttonType: ButtonType.Secondary,
+                    onTap: onReturn),
               ),
               if (!isHourPast(
                 match.date,
@@ -194,9 +193,7 @@ class MatchDetailsWidget extends StatelessWidget {
                   child: SFButton(
                     buttonLabel: "Cancelar partida",
                     buttonType: ButtonType.Delete,
-                    onTap: () {
-                      viewModel.setMatchCancelWidget(context, viewModel);
-                    },
+                    onTap: onCancel,
                   ),
                 ),
             ],

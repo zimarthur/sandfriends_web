@@ -1,1 +1,1 @@
-enum CalendarType { Daily, Weekly }
+enum CalendarType { Match, RecurrentMatch }

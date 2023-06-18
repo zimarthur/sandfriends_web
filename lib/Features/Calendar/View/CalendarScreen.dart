@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/PeriodType.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Match/MatchFilter.dart';
 import 'package:sandfriends_web/Features/Calendar/View/NoCourtsFound.dart';
+import 'package:sandfriends_web/Features/Calendar/View/RecurrentMatch/RecurrentMatchFilter.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -10,8 +13,8 @@ import '../../../SharedComponents/View/SFHeader.dart';
 import '../../../SharedComponents/View/SFTabs.dart';
 import 'Calendar/Day/SFCalendarDay.dart';
 import 'CalendarToggle.dart';
-import 'Calendar/SFCalendarWeek.dart';
-import '../View/DatePicker.dart';
+import 'Calendar/Week/SFCalendarWeek.dart';
+import 'Match/DatePicker.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -33,7 +36,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
-    double calendarFilterWidth = 300;
 
     return ChangeNotifierProvider<CalendarViewModel>(
       create: (BuildContext context) => viewModel,
@@ -50,9 +52,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 SFTabs(
                   tabs: const ["Partidas", "Mensalistas"],
                   onTap: (newValue) {
-                    viewModel.matchRecurrentView = newValue;
+                    viewModel.setCalendarType(newValue);
                   },
-                  selectedPosition: viewModel.matchRecurrentView,
+                  selectedPosition: viewModel.calendarTypeIndex,
                 ),
                 Expanded(
                   child: Provider.of<DataProvider>(context, listen: false)
@@ -73,8 +75,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   padding: const EdgeInsets.symmetric(
                                     vertical: defaultPadding,
                                   ),
-                                  child: viewModel.calendarView ==
-                                          CalendarType.Weekly
+                                  child: viewModel.periodType ==
+                                          PeriodType.Weekly
                                       ? SFCalendarWeek(
                                           viewModel: viewModel,
                                           height: layoutConstraints.maxHeight,
@@ -91,29 +93,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             const SizedBox(
                               width: defaultPadding,
                             ),
-                            SizedBox(
-                              width: calendarFilterWidth,
-                              height: height,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    CalendarToggle(viewModel.calendarView,
-                                        (calType) {
-                                      viewModel.calendarView = calType;
-                                    }),
-                                    const SizedBox(
-                                      height: defaultPadding,
-                                    ),
-                                    DatePicker(
-                                      onDateSelected: (newDate) {
-                                        viewModel.setSelectedDay(
-                                            context, newDate);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            viewModel.calendarType == CalendarType.Match
+                                ? MatchFilter(
+                                    viewModel: viewModel,
+                                  )
+                                : RecurrentMatchFilter(
+                                    viewModel: viewModel,
+                                  ),
                           ],
                         ),
                 ),

@@ -35,11 +35,11 @@ class _HourSelectorState extends State<HourSelector> {
                 widget.storeWorkingDay.startingHour =
                     Provider.of<DataProvider>(context, listen: false)
                         .availableHours
-                        .first;
+                        .reduce((a, b) => a.hour < b.hour ? a : b);
                 widget.storeWorkingDay.endingHour =
                     Provider.of<DataProvider>(context, listen: false)
                         .availableHours
-                        .last;
+                        .reduce((a, b) => a.hour > b.hour ? a : b);
               });
             }),
         const SizedBox(

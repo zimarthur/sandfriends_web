@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
-import '../../../../SharedComponents/View/SFButton.dart';
-import '../../../../SharedComponents/View/SFTextfield.dart';
-import '../../../Menu/ViewModel/MenuProvider.dart';
-import '../../ViewModel/CalendarViewModel.dart';
+import '../../../../../SharedComponents/View/SFButton.dart';
+import '../../../../../SharedComponents/View/SFTextfield.dart';
+import '../../../../Menu/ViewModel/MenuProvider.dart';
+import '../../../ViewModel/CalendarViewModel.dart';
 
-class MatchCancelWidget extends StatelessWidget {
-  CalendarViewModel viewModel;
+class RecurrentMatchCancelWidget extends StatelessWidget {
+  VoidCallback onReturn;
+  VoidCallback onCancel;
+  AppRecurrentMatch recurrentMatch;
+  TextEditingController controller;
 
-  MatchCancelWidget({super.key, required this.viewModel});
-
-  TextEditingController controller = TextEditingController();
+  RecurrentMatchCancelWidget({
+    required this.onReturn,
+    required this.onCancel,
+    required this.recurrentMatch,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +39,8 @@ class MatchCancelWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            "Deseja mesmo cancelar a partida de Arthur?",
+          Text(
+            "Deseja mesmo cancelar o mensalista de ${recurrentMatch.creatorName}?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -56,15 +64,25 @@ class MatchCancelWidget extends StatelessWidget {
           const SizedBox(
             height: defaultPadding,
           ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "*As partidas já agendadas não serão canceladas",
+              style: TextStyle(
+                color: textDarkGrey,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: defaultPadding,
+          ),
           Row(
             children: [
               Expanded(
                 child: SFButton(
                   buttonLabel: "Voltar",
                   buttonType: ButtonType.Secondary,
-                  onTap: () {
-                    //viewModel.setMatchDetailsWidget(context, );
-                  },
+                  onTap: onReturn,
                 ),
               ),
               const SizedBox(
@@ -74,9 +92,7 @@ class MatchCancelWidget extends StatelessWidget {
                 child: SFButton(
                   buttonLabel: "Cancelar partida",
                   buttonType: ButtonType.Delete,
-                  onTap: () {
-                    viewModel.returnMainView(context);
-                  },
+                  onTap: onCancel,
                 ),
               ),
             ],

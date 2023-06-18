@@ -4,23 +4,28 @@ import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import 'package:provider/provider.dart';
-import '../../../SharedComponents/Model/Hour.dart';
+import '../../../../../SharedComponents/Model/Hour.dart';
+import '../../../Model/DayMatch.dart';
 
 class HourWidget extends StatefulWidget {
   bool isHovered;
   DateTime date;
-  Hour hour;
   double height;
   double width;
-  List<AppMatch> matches;
+  bool isOperationHour;
+  bool isExpired;
+  int matchesLength;
+  Hour startingHour;
   Function(bool) onChanged;
   VoidCallback onTap;
 
   HourWidget({
     required this.isHovered,
     required this.date,
-    required this.hour,
-    required this.matches,
+    required this.isOperationHour,
+    required this.isExpired,
+    required this.matchesLength,
+    required this.startingHour,
     required this.height,
     required this.width,
     required this.onChanged,
@@ -35,29 +40,37 @@ class _HourWidgetState extends State<HourWidget> {
   late Color onHoverColor;
 
   @override
-  void initState() {
-    if (widget.matches.length ==
+  Widget build(BuildContext context) {
+    if (!widget.isOperationHour) {
+      widgetColor = divider;
+      onHoverColor = divider;
+    } else if (widget.isExpired) {
+      if (widget.matchesLength ==
+          Provider.of<DataProvider>(context, listen: false).courts.length) {
+        widgetColor = secondaryYellow.withOpacity(0.4);
+        onHoverColor = secondaryYellowDark.withOpacity(0.4);
+      } else {
+        widgetColor = secondaryGreen.withOpacity(0.4);
+        onHoverColor = secondaryGreenDark.withOpacity(0.4);
+      }
+    } else if (widget.matchesLength ==
         Provider.of<DataProvider>(context, listen: false).courts.length) {
       widgetColor = secondaryYellow;
       onHoverColor = secondaryYellowDark;
-    } else if (isHourPast(widget.date, widget.hour)) {
-      widgetColor = divider.withOpacity(0.3);
-      onHoverColor = divider;
     } else {
       widgetColor = secondaryGreen;
       onHoverColor = secondaryGreenDark;
     }
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: widget.isOperationHour ? widget.onTap : () {},
       onHover: (value) {
-        widget.onChanged(value);
+        if (widget.isOperationHour) {
+          widget.onChanged(value);
+        }
       },
+      mouseCursor: widget.isOperationHour
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       child: Container(
         width: widget.width * 0.7,
         height: widget.height * 0.7,

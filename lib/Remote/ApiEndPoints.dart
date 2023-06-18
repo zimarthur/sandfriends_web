@@ -37,4 +37,15 @@ class ApiEndPoints {
 
   //calendar
   final String updateMatchesList = "/UpdateMatchesList";
+  final String blockUnblockHour = "/BlockUnblockHour";
+  final String recurrentBlockUnblockHour = "/RecurrentBlockUnblockHour";
+  final String cancelMatch = "/CancelMatchEmployee";
+  final String cancelRecurrentMatch = "/CancelRecurrentMatchEmployee";
+
+  //rewards
+  final String searchCustomRewards = "/SearchCustomRewards";
+  final String sendUserRewardCode = "/SendUserRewardCode";
+
+  //finances
+  final String searchCustomMatches = "/SearchCustomMatches";
 }

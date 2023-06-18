@@ -98,7 +98,9 @@ class PriceListWidget extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          "R\$${hourPriceList[index].recurrentPrice}",
+                          hourPriceList[index].recurrentPrice == null
+                              ? "-"
+                              : "R\$${hourPriceList[index].recurrentPrice}",
                           style: const TextStyle(color: textDarkGrey),
                           textAlign: TextAlign.center,
                         ),

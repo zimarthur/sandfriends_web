@@ -64,11 +64,13 @@ class _SFDrawerState extends State<SFDrawer> {
                         ),
                       )
                     : Container(),
-                SvgPicture.asset(
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                Image.asset(
                   fullSize
-                      ? r'assets/icon/full_logo_negative.svg'
-                      : r'assets/icon/logo_negative.svg',
-                  fit: BoxFit.fitWidth,
+                      ? r'assets/full_logo_negative_284.png'
+                      : r'assets/logo_64.png',
                 ),
                 const SFDrawerDivider(),
                 Expanded(
@@ -77,7 +79,7 @@ class _SFDrawerState extends State<SFDrawer> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          menuController.onTabClick(index);
+                          menuController.onTabClick(index, context);
                         },
                         onHover: (value) {},
                         child: SFDrawerListTile(
@@ -97,7 +99,7 @@ class _SFDrawerState extends State<SFDrawer> {
                 SFDrawerUserWidget(
                   fullSize: fullSize,
                   onTap: (value) {
-                    menuController.onTabClick(value);
+                    menuController.onTabClick(value, context);
                   },
                 )
               ],

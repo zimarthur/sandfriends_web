@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
-import '../../../../Utils/Constants.dart';
+import '../../../../../Utils/Constants.dart';
 import 'package:intl/intl.dart';
-import '../../../../Utils/SFDateTime.dart';
-import '../HourWidget.dart';
+import '../../../../../Utils/SFDateTime.dart';
+import 'HourWidget.dart';
 
 class SFCalendarWeek extends StatefulWidget {
   CalendarViewModel viewModel;
@@ -84,7 +85,11 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                       Border.all(color: primaryBlue, width: 2),
                                 ),
                                 child: Text(
-                                  "${weekdayShort[getBRWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}",
+                                  widget.viewModel.calendarType ==
+                                          CalendarType.Match
+                                      ? "${weekdayShort[getBRWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}"
+                                      : weekdayRecurrent[
+                                          getBRWeekday(day.weekday)],
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: textWhite),
                                 ),
@@ -106,14 +111,15 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                   Container(
                     child: Column(
                       children: [
-                        for (var hour
-                            in widget.viewModel.selectedDayWorkingHours)
+                        for (var hour in widget.viewModel.minMaxHourRangeWeek)
                           Container(
                             alignment: Alignment.center,
                             height: tableLineHeight,
                             child: Container(
-                              width: tableColumnWidth,
+                              width: tableColumnWidth * 0.7,
                               height: tableLineHeight * 0.7,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: tableColumnWidth * 0.15),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   color: hoveredHour == hour.hour
@@ -167,35 +173,78 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                       child: Container(
                                         alignment: Alignment.center,
                                         height: tableLineHeight,
-                                        child: HourWidget(
-                                          isHovered: day.date == hoveredDay &&
-                                              hour.startingHour.hour ==
-                                                  hoveredHour,
-                                          matches: hour.matches ?? [],
-                                          date: day.date,
-                                          hour: hour.startingHour,
-                                          height: tableLineHeight,
-                                          width: tableColumnWidth,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              if (value == false) {
-                                                hoveredHour = -1;
-                                                hoveredDay = null;
-                                              } else {
-                                                hoveredHour =
-                                                    hour.startingHour.hour;
-                                                hoveredDay = day.date;
-                                              }
-                                            });
-                                          },
-                                          onTap: () => widget.viewModel
-                                              .setCourtsAvailabilityWidget(
-                                            context,
-                                            day.date,
-                                            hour.startingHour,
-                                            hour.matches ?? [],
-                                          ),
-                                        ),
+                                        child: widget.viewModel.calendarType ==
+                                                CalendarType.Match
+                                            ? HourWidget(
+                                                isHovered: day.date ==
+                                                        hoveredDay &&
+                                                    hour.startingHour.hour ==
+                                                        hoveredHour,
+                                                isOperationHour:
+                                                    hour.operationHour,
+                                                isExpired: isHourPast(day.date,
+                                                    hour.startingHour),
+                                                startingHour: hour.startingHour,
+                                                matchesLength:
+                                                    hour.matches!.length,
+                                                date: day.date,
+                                                height: tableLineHeight,
+                                                width: tableColumnWidth,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    if (value == false) {
+                                                      hoveredHour = -1;
+                                                      hoveredDay = null;
+                                                    } else {
+                                                      hoveredHour = hour
+                                                          .startingHour.hour;
+                                                      hoveredDay = day.date;
+                                                    }
+                                                  });
+                                                },
+                                                onTap: () => widget.viewModel
+                                                    .setCourtsAvailabilityWidget(
+                                                  context,
+                                                  day.date,
+                                                  hour.startingHour,
+                                                  hour.matches ?? [],
+                                                ),
+                                              )
+                                            : HourWidget(
+                                                isHovered: day.date ==
+                                                        hoveredDay &&
+                                                    hour.startingHour.hour ==
+                                                        hoveredHour,
+                                                isOperationHour:
+                                                    hour.operationHour,
+                                                isExpired: false,
+                                                startingHour: hour.startingHour,
+                                                matchesLength: hour
+                                                    .recurrentMatches!.length,
+                                                date: day.date,
+                                                height: tableLineHeight,
+                                                width: tableColumnWidth,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    if (value == false) {
+                                                      hoveredHour = -1;
+                                                      hoveredDay = null;
+                                                    } else {
+                                                      hoveredHour = hour
+                                                          .startingHour.hour;
+                                                      hoveredDay = day.date;
+                                                    }
+                                                  });
+                                                },
+                                                onTap: () => widget.viewModel
+                                                    .setRecurrentCourtsAvailabilityWidget(
+                                                  context,
+                                                  getWeekdayTextFromDatetime(
+                                                      day.date),
+                                                  hour.startingHour,
+                                                  hour.recurrentMatches ?? [],
+                                                ),
+                                              ),
                                       ),
                                     ),
                                 ],
@@ -245,8 +294,9 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                   ),
                                 ),
                                 Container(
-                                  height: 2,
+                                  height: 4,
                                   width: tableColumnWidth - 4,
+                                  alignment: Alignment.topCenter,
                                   margin: EdgeInsets.symmetric(
                                       horizontal: tableColumnSpacing),
                                   color: secondaryPaper,

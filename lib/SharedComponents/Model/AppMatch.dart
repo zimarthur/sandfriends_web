@@ -10,12 +10,14 @@ class AppMatch {
   DateTime creationDate;
   String creatorNotes;
   int idStoreCourt;
-  Sport sport;
+  Sport? sport;
   Hour startingHour;
   Hour endingHour;
   String matchCreatorFirstName;
   String matchCreatorLastName;
   String? matchCreatorPhoto;
+  bool blocked;
+  String blockedReason;
 
   int get matchDuration {
     return endingHour.hour - startingHour.hour;
@@ -38,31 +40,39 @@ class AppMatch {
     required this.matchCreatorFirstName,
     required this.matchCreatorLastName,
     required this.matchCreatorPhoto,
+    required this.blocked,
+    required this.blockedReason,
   });
 
   factory AppMatch.fromJson(Map<String, dynamic> parsedJson,
       List<Hour> referenceHours, List<Sport> referenceSports) {
+    Hour timeBegin = referenceHours.firstWhere(
+      (hour) => hour.hour == parsedJson['TimeBegin'],
+    );
     return AppMatch(
       idMatch: parsedJson["IdMatch"],
       creationDate: DateFormat("dd/MM/yyyy").parse(
         parsedJson["Date"],
       ),
-      date: DateFormat("dd/MM/yyyy").parse(
-        parsedJson["Date"],
+      date: DateFormat("dd/MM/yyyy HH:mm").parse(
+        "${parsedJson["Date"]} ${timeBegin.hourString}",
       ),
-      startingHour: referenceHours
-          .firstWhere((hour) => hour.hour == parsedJson["TimeBegin"]),
+      startingHour: timeBegin,
       endingHour: referenceHours
           .firstWhere((hour) => hour.hour == parsedJson["TimeEnd"]),
       idStoreCourt: parsedJson["IdStoreCourt"],
       cost: parsedJson["Cost"],
-      sport: referenceSports
-          .firstWhere((sport) => sport.idSport == parsedJson["IdSport"]),
+      sport: parsedJson["IdSport"] == null
+          ? null
+          : referenceSports
+              .firstWhere((sport) => sport.idSport == parsedJson["IdSport"]),
       creatorNotes: parsedJson["CreatorNotes"],
       matchCreatorFirstName: parsedJson["MatchCreatorFirstName"],
       matchCreatorLastName: parsedJson["MatchCreatorLastName"],
       matchCreatorPhoto: parsedJson["MatchCreatorPhoto"],
       idRecurrentMatch: parsedJson["IdRecurrentMatch"],
+      blocked: parsedJson["Blocked"] ?? false,
+      blockedReason: parsedJson["BlockedReason"] ?? "",
     );
   }
 
@@ -81,6 +91,8 @@ class AppMatch {
       matchCreatorFirstName: refMatch.matchCreatorFirstName,
       matchCreatorLastName: refMatch.matchCreatorLastName,
       matchCreatorPhoto: refMatch.matchCreatorPhoto,
+      blocked: refMatch.blocked,
+      blockedReason: refMatch.blockedReason,
     );
   }
 }

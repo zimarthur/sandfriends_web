@@ -27,7 +27,7 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
     return Row(
       children: [
         SizedBox(
-          height: 190,
+          height: 280,
           width: 320,
           child: Stack(
             alignment: Alignment.bottomLeft,

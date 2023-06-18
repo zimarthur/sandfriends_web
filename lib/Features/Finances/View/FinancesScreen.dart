@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Finances/View/FinanceKpi.dart';
 import 'package:sandfriends_web/Features/Finances/ViewModel/FinancesViewModel.dart';
+import 'package:sandfriends_web/SharedComponents/Model/EnumPeriodVisualization.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFBarChart.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFPeriodToggle.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../SharedComponents/View/SFCard.dart';
@@ -26,7 +29,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   @override
   void initState() {
-    viewModel.setFinancesDataSource();
+    viewModel.initFinancesScreen(context);
     super.initState();
   }
 
@@ -34,6 +37,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
   Widget build(BuildContext context) {
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
+    print("build START ${DateTime.now()}");
     return ChangeNotifierProvider<FinancesViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<FinancesViewModel>(
@@ -49,12 +53,11 @@ class _FinanceScreenState extends State<FinanceScreen> {
               SizedBox(
                 height: height * 0.01,
               ),
-              SFToggle(
-                const ["Hoje", "Esse mês", "Histórico"],
-                viewModel.selectedFilterIndex,
-                (value) {
-                  viewModel.selectedFilterIndex = value;
-                },
+              SFPeriodToggle(
+                currentPeriodVisualization: viewModel.periodVisualization,
+                onChanged: (newPeriod) =>
+                    viewModel.setPeriodVisualization(context, newPeriod),
+                customText: viewModel.customDateTitle,
               ),
               SizedBox(
                 height: height * 0.02,
@@ -76,9 +79,8 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   FinanceKpi(
-                                    title:
-                                        "Faturamento ${viewModel.selectedFilterIndex == 0 ? DateFormat('dd/MM').format(viewModel.matches.first.date) : viewModel.selectedFilterIndex == 1 ? monthsPortuguese[viewModel.matches.first.date.month] + "/" + DateFormat('yy').format(viewModel.matches.first.date) : "geral"}",
-                                    value: "R\$ ${viewModel.getRevenue()},00",
+                                    title: viewModel.revenueTitle,
+                                    value: "R\$ ${viewModel.revenue},00",
                                     iconPath: r"assets/icon/money.svg",
                                     iconColor: success,
                                     iconColorBackground: success50,
@@ -87,10 +89,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                     height: defaultPadding,
                                   ),
                                   FinanceKpi(
-                                    title:
-                                        "Previsão ${viewModel.selectedFilterIndex == 0 ? "final do dia" : viewModel.selectedFilterIndex == 1 ? "final do mês" : "geral"}",
+                                    title: viewModel.expectedRevenueTitle,
                                     value:
-                                        "R\$ ${viewModel.getExpectedRevenue()},00",
+                                        "R\$ ${viewModel.expectedRevenue},00",
                                     iconPath: r"assets/icon/forecast.svg",
                                     iconColor: forecast,
                                     iconColorBackground: forecast50,
@@ -140,8 +141,12 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           height: dashboardHeight * 0.6,
                           width: width,
                           title: "Faturamento por data",
-                          child: BarChart(
-                            viewModel.barChartData,
+                          child: SFBarChart(
+                            barChartItems: viewModel.barChartItems,
+                            barChartVisualization:
+                                viewModel.periodVisualization,
+                            customStartDate: viewModel.customStartDate,
+                            customEndDate: viewModel.customEndDate,
                           ),
                         )
                       ],

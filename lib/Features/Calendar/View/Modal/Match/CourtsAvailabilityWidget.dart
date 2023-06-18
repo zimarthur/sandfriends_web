@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Match/MatchDetailsWidgetRow.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Suas quadras para",
+                  "Partidas do dia",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 22,
@@ -142,7 +143,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                           Expanded(
                             child: match != null
                                 ? Text(
-                                    match.sport.description,
+                                    match.sport!.description,
                                     textAlign: TextAlign.center,
                                     style:
                                         TextStyle(fontWeight: FontWeight.w300),
@@ -175,18 +176,6 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                   buttonType: ButtonType.Secondary,
                   onTap: () {
                     viewModel.returnMainView(context);
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              Expanded(
-                child: SFButton(
-                  buttonLabel: "Cancelar partida",
-                  buttonType: ButtonType.Delete,
-                  onTap: () {
-                    viewModel.setMatchCancelWidget(context, viewModel);
                   },
                 ),
               ),

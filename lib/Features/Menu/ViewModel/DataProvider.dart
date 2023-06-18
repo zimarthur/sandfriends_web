@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:intl/intl.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
 import '../../../SharedComponents/Model/AvailableSport.dart';
 import '../../../SharedComponents/Model/Employee.dart';
 import '../../../SharedComponents/Model/Hour.dart';
@@ -56,6 +58,10 @@ class DataProvider extends ChangeNotifier {
   List<AppMatch> matches = [];
   late DateTime matchesStartDate;
   late DateTime matchesEndDate;
+
+  List<AppRecurrentMatch> recurrentMatches = [];
+
+  List<Reward> rewards = [];
 
   final List<Employee> _employees = [];
   List<Employee> get employees {
@@ -129,7 +135,14 @@ class DataProvider extends ChangeNotifier {
     setCourts(responseBody);
 
     setMatches(responseBody);
-    print(matches.length);
+    setRecurrentMatches(responseBody);
+    setRewards(responseBody);
+
+    matchesStartDate =
+        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesStartDate']);
+    matchesEndDate =
+        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesEndDate']);
+
     notifyListeners();
   }
 
@@ -179,9 +192,27 @@ class DataProvider extends ChangeNotifier {
         ),
       );
     }
-    matchesStartDate =
-        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesStartDate']);
-    matchesEndDate =
-        DateFormat("dd/MM/yyyy").parse(responseBody['MatchesEndDate']);
+  }
+
+  void setRecurrentMatches(Map<String, dynamic> responseBody) {
+    recurrentMatches.clear();
+    for (var recurrentMatch in responseBody['RecurrentMatches']) {
+      recurrentMatches.add(
+        AppRecurrentMatch.fromJson(
+          recurrentMatch,
+          availableHours,
+          availableSports,
+        ),
+      );
+    }
+  }
+
+  void setRewards(Map<String, dynamic> responseBody) {
+    rewards.clear();
+    for (var reward in responseBody['Rewards']) {
+      rewards.add(
+        Reward.fromJson(reward),
+      );
+    }
   }
 }

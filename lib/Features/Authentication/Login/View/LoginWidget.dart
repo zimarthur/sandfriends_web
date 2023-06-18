@@ -25,8 +25,9 @@ class _LoginWidgetState extends State<LoginWidget> {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: const EdgeInsets.all(2 * defaultPadding),
-      height: height * 0.85 > 700 ? 700 : height * 0.85,
+      padding: const EdgeInsets.symmetric(
+          vertical: defaultPadding, horizontal: 2 * defaultPadding),
+      height: height * 0.9 > 750 ? 750 : height * 0.9,
       width: width * 0.3 < 350
           ? 350
           : width * 0.3 > 500
@@ -47,14 +48,8 @@ class _LoginWidgetState extends State<LoginWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InkWell(
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    "/adem?tk=1685283329.77849732",
-                  ),
-                  child: SvgPicture.asset(
-                    r'assets/icon/full_logo_positive.svg',
-                  ),
+                Image.asset(
+                  r'assets/full_logo_positive_284.png',
                 ),
                 const SizedBox(
                   height: defaultPadding * 2,
@@ -102,7 +97,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 widget.viewModel.keepConnected = value!,
                           ),
                           const Text(
-                            "Mantenha-me conectado teste",
+                            "Mantenha-me conectado",
                             style: TextStyle(color: textDarkGrey),
                           ),
                         ],

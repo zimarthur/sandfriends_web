@@ -56,13 +56,9 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                     height: 25,
                   ),
                 ),
-                Expanded(
-                  child: Center(
-                    child: SvgPicture.asset(
-                      r'assets/icon/full_logo_positive.svg',
-                    ),
-                  ),
-                )
+                Image.asset(
+                  r'assets/full_logo_positive_284.png',
+                ),
               ],
             ),
             const SizedBox(

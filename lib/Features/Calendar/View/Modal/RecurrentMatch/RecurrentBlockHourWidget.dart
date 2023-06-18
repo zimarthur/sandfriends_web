@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 
-import '../../../../SharedComponents/Model/Hour.dart';
-import '../../../../SharedComponents/View/SFButton.dart';
-import '../../../../SharedComponents/View/SFTextfield.dart';
-import '../../../../Utils/Constants.dart';
+import '../../../../../SharedComponents/Model/Hour.dart';
+import '../../../../../SharedComponents/View/SFButton.dart';
+import '../../../../../SharedComponents/View/SFTextfield.dart';
+import '../../../../../Utils/Constants.dart';
 
-class BlockHourWidget extends StatefulWidget {
-  CalendarViewModel viewModel;
+class RecurrentBlockHourWidget extends StatefulWidget {
   DateTime day;
   Hour hour;
   int idStoreCourt;
-  BlockHourWidget({
-    required this.viewModel,
+  VoidCallback onReturn;
+  VoidCallback onBlock;
+  TextEditingController controller;
+
+  RecurrentBlockHourWidget({
     required this.day,
     required this.hour,
     required this.idStoreCourt,
+    required this.onReturn,
+    required this.onBlock,
+    required this.controller,
   });
 
   @override
-  State<BlockHourWidget> createState() => _BlockHourWidgetState();
+  State<RecurrentBlockHourWidget> createState() =>
+      _RecurrentBlockHourWidgetState();
 }
 
-class _BlockHourWidgetState extends State<BlockHourWidget> {
+class _RecurrentBlockHourWidgetState extends State<RecurrentBlockHourWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,10 +62,22 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
             minLines: 4,
             maxLines: 4,
             hintText: "Manutenção da quadra, nenhum funcionário nessa hora...",
-            controller: widget.viewModel.blockHourReasonController,
+            controller: widget.controller,
             validator: (a) {
               return null;
             },
+          ),
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "*Ao bloquear um horário mensalista, nenhuma partida poderá ser agendada até que ele seja desbloqueado.\nAs partidas já agendadas nesse horário serão mantidas.",
+              style: TextStyle(
+                color: textDarkGrey,
+              ),
+            ),
           ),
           const SizedBox(
             height: defaultPadding,
@@ -70,9 +88,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                 child: SFButton(
                   buttonLabel: "Voltar",
                   buttonType: ButtonType.Secondary,
-                  onTap: () {
-                    widget.viewModel.returnMainView(context);
-                  },
+                  onTap: widget.onReturn,
                 ),
               ),
               const SizedBox(
@@ -82,10 +98,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                 child: SFButton(
                   buttonLabel: "Bloquear Horário",
                   buttonType: ButtonType.Delete,
-                  onTap: () {
-                    widget.viewModel.blockHour(
-                        context, widget.idStoreCourt, widget.day, widget.hour);
-                  },
+                  onTap: widget.onBlock,
                 ),
               ),
             ],

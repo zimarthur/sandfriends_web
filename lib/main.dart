@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             PointerDeviceKind.unknown
           },
         ),
-        title: 'Sandfriends Web',
+        title: 'Sandfriends',
         theme: ThemeData(
           scaffoldBackgroundColor: secondaryBack,
           fontFamily: "Lexend",

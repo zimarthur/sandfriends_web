@@ -33,9 +33,6 @@ class MyCourtsViewModel extends ChangeNotifier {
   List<StoreWorkingDay> storeWorkingDays = [];
 
   bool get courtInfoChanged {
-    if (selectedCourtIndex == -1) {
-      return false;
-    }
     if (refStoreWorkingDays.isNotEmpty) {
       for (var storeWorkingDay in storeWorkingDays) {
         if (storeWorkingDay !=
@@ -46,7 +43,8 @@ class MyCourtsViewModel extends ChangeNotifier {
       }
     }
     for (var refCourt in refCourts) {
-      if (refCourt.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
+      if (selectedCourtIndex != -1 &&
+          refCourt.idStoreCourt == courts[selectedCourtIndex].idStoreCourt) {
         if (refCourt != currentCourt) {
           return true;
         }
@@ -74,6 +72,7 @@ class MyCourtsViewModel extends ChangeNotifier {
     storeWorkingDays.clear();
     refStoreWorkingDays.clear();
     newCourt = Court(description: "", isIndoor: true);
+    selectedCourtIndex = -1;
     for (var court
         in Provider.of<DataProvider>(context, listen: false).courts) {
       courts.add(
@@ -172,7 +171,6 @@ class MyCourtsViewModel extends ChangeNotifier {
               .prices,
           context);
       for (var court in courts) {
-        print("SETTING ${court.description}");
         updateHourLimits(
             storeWorkingDay,
             court.operationDays

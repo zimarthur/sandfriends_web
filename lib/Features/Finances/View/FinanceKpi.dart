@@ -9,7 +9,8 @@ class FinanceKpi extends StatelessWidget {
   Color iconColor;
   Color iconColorBackground;
 
-  FinanceKpi({super.key, 
+  FinanceKpi({
+    super.key,
     required this.title,
     required this.value,
     required this.iconPath,

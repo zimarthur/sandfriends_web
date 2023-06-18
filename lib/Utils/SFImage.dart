@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 Future<XFile?> pickImage() async {
   final image = await ImagePicker().pickImage(
     source: ImageSource.gallery,
+    imageQuality: 100,
   );
   if (image == null) return null;
 
@@ -54,6 +55,7 @@ Future<Uint8List?> cropImage(
         ),
       ),
     ],
+    compressQuality: 100,
   );
   if (croppedFile == null) return null;
   return await croppedFile.readAsBytes();

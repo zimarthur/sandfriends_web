@@ -8,7 +8,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 class SFPieChart extends StatefulWidget {
   List<PieChartItem> pieChartItems;
 
-  SFPieChart({super.key, 
+  SFPieChart({
+    super.key,
     required this.pieChartItems,
   });
 
@@ -33,124 +34,129 @@ class _SFPieChartState extends State<SFPieChart> {
                 .withOpacity(1.0);
       }
     }
-    return LayoutBuilder(
-      builder: (layoutContext, layoutConstaints) {
-        return Row(
-          children: [
-            Expanded(
-              child: PieChart(
-                PieChartData(
-                  centerSpaceRadius: layoutConstaints.maxHeight * 0.1,
-                  pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        } else {
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                          if (touchedIndex >= 0) {
-                            _scrollController.scrollTo(
-                                index: touchedIndex,
-                                duration: const Duration(milliseconds: 150));
-                          }
-                        }
-                      });
-                    },
-                  ),
-                  sections: <PieChartSectionData>[
-                    for (int i = 0; i < widget.pieChartItems.length; i++)
-                      PieChartSectionData(
-                        title:
-                            "${(widget.pieChartItems[i].value * 100 / chartValuesSum).toStringAsFixed(0)}%",
-                        value: widget.pieChartItems[i].value,
-                        color: widget.pieChartItems[i].color,
-                        radius: i == touchedIndex
-                            ? layoutConstaints.maxHeight * 0.4
-                            : layoutConstaints.maxHeight * 0.3,
-                      ),
-                  ],
-                ),
-                swapAnimationDuration: const Duration(milliseconds: 150), // Optional
-                swapAnimationCurve: Curves.linear, // Optional
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding / 2),
-              child: SizedBox(
-                width: 150,
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: _scrollController,
-                  itemCount: widget.pieChartItems.length,
-                  itemBuilder: (context, index) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      padding: index == touchedIndex
-                          ? const EdgeInsets.all(defaultPadding / 2)
-                          : const EdgeInsets.all(0),
-                      decoration: BoxDecoration(
-                          color: index == touchedIndex
-                              ? secondaryBack
-                              : secondaryPaper,
-                          border: index == touchedIndex
-                              ? Border.all(color: primaryBlue, width: 2)
-                              : const Border(),
-                          borderRadius:
-                              BorderRadius.circular(defaultBorderRadius)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 10,
-                                width: 10,
-                                color: widget.pieChartItems[index].color,
-                              ),
-                              const SizedBox(
-                                width: defaultPadding,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  widget.pieChartItems[index].name,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (index == touchedIndex)
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: defaultPadding + 10,
-                                ),
-                                Expanded(
-                                  child: AutoSizeText(
-                                    "${widget.pieChartItems[index].prefix == null ? "" : "${widget.pieChartItems[index].prefix} "}${widget.pieChartItems[index].value.toString()} (${(widget.pieChartItems[index].value * 100 / chartValuesSum).toStringAsFixed(0)}%)",
-                                    minFontSize: 8,
-                                    maxFontSize: 18,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                      color: textDarkGrey,
-                                    ),
-                                  ),
-                                ),
-                              ],
+    return widget.pieChartItems.isEmpty
+        ? Container()
+        : LayoutBuilder(
+            builder: (layoutContext, layoutConstaints) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: PieChart(
+                      PieChartData(
+                        centerSpaceRadius: layoutConstaints.maxHeight * 0.1,
+                        pieTouchData: PieTouchData(
+                          touchCallback:
+                              (FlTouchEvent event, pieTouchResponse) {
+                            setState(() {
+                              if (!event.isInterestedForInteractions ||
+                                  pieTouchResponse == null ||
+                                  pieTouchResponse.touchedSection == null) {
+                                touchedIndex = -1;
+                                return;
+                              } else {
+                                touchedIndex = pieTouchResponse
+                                    .touchedSection!.touchedSectionIndex;
+                                if (touchedIndex >= 0) {
+                                  _scrollController.scrollTo(
+                                      index: touchedIndex,
+                                      duration:
+                                          const Duration(milliseconds: 150));
+                                }
+                              }
+                            });
+                          },
+                        ),
+                        sections: <PieChartSectionData>[
+                          for (int i = 0; i < widget.pieChartItems.length; i++)
+                            PieChartSectionData(
+                              title:
+                                  "${(widget.pieChartItems[i].value * 100 / chartValuesSum).toStringAsFixed(0)}%",
+                              value: widget.pieChartItems[i].value,
+                              color: widget.pieChartItems[i].color,
+                              radius: i == touchedIndex
+                                  ? layoutConstaints.maxHeight * 0.4
+                                  : layoutConstaints.maxHeight * 0.3,
                             ),
                         ],
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+                      swapAnimationDuration:
+                          const Duration(milliseconds: 150), // Optional
+                      swapAnimationCurve: Curves.linear, // Optional
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding / 2),
+                    child: SizedBox(
+                      width: 150,
+                      child: ScrollablePositionedList.builder(
+                        itemScrollController: _scrollController,
+                        itemCount: widget.pieChartItems.length,
+                        itemBuilder: (context, index) {
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: index == touchedIndex
+                                ? const EdgeInsets.all(defaultPadding / 2)
+                                : const EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                                color: index == touchedIndex
+                                    ? secondaryBack
+                                    : secondaryPaper,
+                                border: index == touchedIndex
+                                    ? Border.all(color: primaryBlue, width: 2)
+                                    : const Border(),
+                                borderRadius:
+                                    BorderRadius.circular(defaultBorderRadius)),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 10,
+                                      width: 10,
+                                      color: widget.pieChartItems[index].color,
+                                    ),
+                                    const SizedBox(
+                                      width: defaultPadding,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        widget.pieChartItems[index].name,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (index == touchedIndex)
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: defaultPadding + 10,
+                                      ),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          "${widget.pieChartItems[index].prefix == null ? "" : "${widget.pieChartItems[index].prefix} "}${widget.pieChartItems[index].value.toString()} (${(widget.pieChartItems[index].value * 100 / chartValuesSum).toStringAsFixed(0)}%)",
+                                          minFontSize: 8,
+                                          maxFontSize: 18,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            color: textDarkGrey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
   }
 }
 

@@ -13,7 +13,6 @@ class EmployeeDataSource extends DataGridSource {
         tableCallback,
     required BuildContext context,
   }) {
-    print("Start: ${DateTime.now()}");
     _loggedUser = employees.firstWhere((employee) => employee.isLoggedUser);
     _employees = employees
         .map<DataGridRow>(
@@ -64,7 +63,6 @@ class EmployeeDataSource extends DataGridSource {
           ),
         )
         .toList();
-    print("end: ${DateTime.now()}");
   }
 
   List<DataGridRow> _employees = [];
