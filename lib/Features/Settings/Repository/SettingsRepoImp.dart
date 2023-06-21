@@ -11,7 +11,7 @@ class SettingsRepoImp implements SettingsRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> updateStoreInfo(Store store) async {
+  Future<NetworkResponse> updateStoreInfo(Store store, bool changedLogo) async {
     NetworkResponse response = await _apiService.postResponse(
       _apiService.sandfriendsUrl,
       ApiEndPoints().updateStoreInfo,
@@ -31,7 +31,7 @@ class SettingsRepoImp implements SettingsRepo {
           "Cep": store.cep,
           "Neighbourhood": store.neighbourhood,
           "BankAccount": store.bankAccount ?? "",
-          "Logo": store.logo ?? "",
+          "Logo": changedLogo ? store.logo : "",
           "Photos": [
             for (var photo in store.photos)
               if (photo.isNewPhoto)

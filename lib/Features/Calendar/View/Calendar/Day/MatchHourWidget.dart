@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../../../SharedComponents/Model/AppMatch.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../SharedComponents/Model/Sport.dart';
+import '../../../Model/PeriodType.dart';
 
 class MatchHourWidget extends StatefulWidget {
   VoidCallback onTapMatch;
@@ -16,6 +18,7 @@ class MatchHourWidget extends StatefulWidget {
   Hour startingHour;
   Hour endingHour;
   Sport? sport;
+  CalendarType calendarType;
 
   MatchHourWidget({
     required this.onTapMatch,
@@ -27,6 +30,7 @@ class MatchHourWidget extends StatefulWidget {
     required this.startingHour,
     required this.endingHour,
     required this.sport,
+    required this.calendarType,
   });
 
   @override
@@ -101,7 +105,9 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
                           ),
                         ],
                       ),
-                      if (isOnHover && !widget.isExpired)
+                      if (isOnHover &&
+                          !widget.isExpired &&
+                          widget.calendarType == CalendarType.Match)
                         Align(
                           alignment: Alignment.centerRight,
                           child: InkWell(

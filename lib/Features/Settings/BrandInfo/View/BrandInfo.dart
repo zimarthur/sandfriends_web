@@ -223,7 +223,7 @@ class _BrandInfoState extends State<BrandInfo> {
                     child: widget.viewModel.storeEdit.photos.isEmpty
                         ? Container()
                         : SizedBox(
-                            height: 300,
+                            height: 230,
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount:

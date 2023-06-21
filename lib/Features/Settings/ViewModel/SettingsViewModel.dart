@@ -112,7 +112,9 @@ class SettingsViewModel extends ChangeNotifier {
       storeEdit.logo = base64Encode(storeAvatar!);
     }
 
-    settingsRepo.updateStoreInfo(storeEdit).then((response) {
+    settingsRepo
+        .updateStoreInfo(storeEdit, storeAvatar != null)
+        .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(
           response.responseBody!,
@@ -186,7 +188,7 @@ class SettingsViewModel extends ChangeNotifier {
       context,
       pickedImage,
       null,
-      170,
+      210,
       300,
       resizedImage!.height,
       resizedImage.width,

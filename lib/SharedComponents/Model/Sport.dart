@@ -1,3 +1,5 @@
+import 'package:sandfriends_web/Remote/Url.dart';
+
 class Sport {
   int idSport;
   String description;
@@ -25,7 +27,7 @@ class Sport {
     return Sport(
       idSport: parsedJson["IdSport"],
       description: parsedJson["Description"],
-      sportPhoto: parsedJson["SportPhoto"],
+      sportPhoto: sandfriendsRequestsUrl + parsedJson["SportPhoto"],
     );
   }
 }

@@ -212,6 +212,7 @@ class CalendarViewModel extends ChangeNotifier {
             .toList();
         for (var hour in selectedDayWorkingHours) {
           AppMatch? match;
+          AppRecurrentMatch? recMatch;
           if (filteredMatches.any((element) => element.startingHour == hour)) {
             match = filteredMatches
                 .firstWhere((element) => element.startingHour == hour);
@@ -222,6 +223,26 @@ class CalendarViewModel extends ChangeNotifier {
               ),
             );
             jumpToHour = match.endingHour.hour;
+          }
+          //PAREI AQUI
+          else if (recurrentMatches.any((recMatch) =>
+              recMatch.weekday == selectedWeekday &&
+              recMatch.startingHour == hour &&
+              recMatch.idStoreCourt == court.idStoreCourt)) {
+            print("block rec ${hour.hourString}");
+            print("block rec ${selectedWeekday}");
+            print("block rec ${court.idStoreCourt}");
+            recMatch = recurrentMatches.firstWhere((recMatch) =>
+                recMatch.weekday == selectedWeekday &&
+                recMatch.startingHour == hour &&
+                recMatch.idStoreCourt == court.idStoreCourt);
+            dayMatches.add(
+              DayMatch(
+                startingHour: hour,
+                recurrentMatch: AppRecurrentMatch.copyWith(recMatch),
+              ),
+            );
+            jumpToHour = recMatch.endingHour.hour;
           } else if (hour.hour >= jumpToHour) {
             dayMatches.add(
               DayMatch(
@@ -558,40 +579,27 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  void setBlockHourWidget(BuildContext context, int idStoreCourt, Hour hour) {
+  void setBlockHourWidget(BuildContext context, Court court, Hour hour) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       BlockHourWidget(
-        idStoreCourt: idStoreCourt,
+        court: court,
         day: selectedDay,
         hour: hour,
         onBlock: () => blockUnblockHour(
           context,
-          idStoreCourt,
+          court.idStoreCourt!,
           selectedDay,
+          hour,
+          true,
+        ),
+        onBlockPermanent: () => recurrentBlockUnblockHour(
+          context,
+          court.idStoreCourt!,
           hour,
           true,
         ),
         onReturn: () => returnMainView(context),
         controller: blockHourReasonController,
-      ),
-    );
-  }
-
-  void setRecurrentBlockHourWidget(
-      BuildContext context, int idStoreCourt, Hour hour) {
-    Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      RecurrentBlockHourWidget(
-        idStoreCourt: idStoreCourt,
-        day: selectedDay,
-        hour: hour,
-        onBlock: () => recurrentBlockUnblockHour(
-          context,
-          idStoreCourt,
-          hour,
-          true,
-        ),
-        onReturn: () => returnMainView(context),
-        controller: recurrentBlockHourReasonController,
       ),
     );
   }

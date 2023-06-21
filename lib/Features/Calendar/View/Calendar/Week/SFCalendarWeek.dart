@@ -57,47 +57,41 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
               Container(
                 width: tableColumnWidth,
               ),
-              Flexible(
+              Expanded(
                 child: SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: headerController,
                   scrollDirection: Axis.horizontal,
-                  child: Flexible(
-                    child: Container(
-                      child: Row(
-                        children: [
-                          for (var day in widget.viewModel.selectedWeek)
-                            Container(
-                              width: tableColumnWidth,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: tableColumnSpacing),
-                              child: Container(
-                                height: tableHeaderHeight,
-                                alignment: Alignment.center,
-                                width: tableColumnWidth,
-                                decoration: BoxDecoration(
-                                  color: primaryBlue,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                  ),
-                                  border:
-                                      Border.all(color: primaryBlue, width: 2),
-                                ),
-                                child: Text(
-                                  widget.viewModel.calendarType ==
-                                          CalendarType.Match
-                                      ? "${weekdayShort[getBRWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}"
-                                      : weekdayRecurrent[
-                                          getBRWeekday(day.weekday)],
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: textWhite),
-                                ),
+                  child: Row(
+                    children: [
+                      for (var day in widget.viewModel.selectedWeek)
+                        Container(
+                          width: tableColumnWidth,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: tableColumnSpacing),
+                          child: Container(
+                            height: tableHeaderHeight,
+                            alignment: Alignment.center,
+                            width: tableColumnWidth,
+                            decoration: BoxDecoration(
+                              color: primaryBlue,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
                               ),
+                              border: Border.all(color: primaryBlue, width: 2),
                             ),
-                        ],
-                      ),
-                    ),
+                            child: Text(
+                              widget.viewModel.calendarType ==
+                                      CalendarType.Match
+                                  ? "${weekdayShort[getBRWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}"
+                                  : weekdayRecurrent[getBRWeekday(day.weekday)],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: textWhite),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -108,37 +102,36 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
               controller: verticalController,
               child: Row(
                 children: [
-                  Container(
-                    child: Column(
-                      children: [
-                        for (var hour in widget.viewModel.minMaxHourRangeWeek)
-                          Container(
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var hour in widget.viewModel.minMaxHourRangeWeek)
+                        Container(
+                          alignment: Alignment.center,
+                          height: tableLineHeight,
+                          child: Container(
+                            width: tableColumnWidth * 0.7,
+                            height: tableLineHeight * 0.7,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: tableColumnWidth * 0.15),
                             alignment: Alignment.center,
-                            height: tableLineHeight,
-                            child: Container(
-                              width: tableColumnWidth * 0.7,
-                              height: tableLineHeight * 0.7,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: tableColumnWidth * 0.15),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
+                            decoration: BoxDecoration(
+                                color: hoveredHour == hour.hour
+                                    ? primaryBlue.withOpacity(0.3)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: Text(
+                              hour.hourString,
+                              style: TextStyle(
                                   color: hoveredHour == hour.hour
-                                      ? primaryBlue.withOpacity(0.3)
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(8.0)),
-                              child: Text(
-                                hour.hourString,
-                                style: TextStyle(
-                                    color: hoveredHour == hour.hour
-                                        ? primaryDarkBlue
-                                        : textDarkGrey),
-                              ),
+                                      ? primaryDarkBlue
+                                      : textDarkGrey),
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                  Flexible(
+                  Expanded(
                     child: SingleChildScrollView(
                       controller: horizontalController,
                       scrollDirection: Axis.horizontal,

@@ -1,8 +1,11 @@
+import 'package:sandfriends_web/Remote/Url.dart';
+
 import 'City.dart';
 import 'Court.dart';
 import 'HourPrice.dart';
 import 'StorePhoto.dart';
 import 'package:intl/intl.dart';
+import '../../Remote/NetworkApiService.dart';
 
 class Store {
   int idStore;
@@ -55,7 +58,9 @@ class Store {
       addressNumber: parsedJson["AddressNumber"],
       phoneNumber: parsedJson["PhoneNumber1"],
       ownerPhoneNumber: parsedJson["PhoneNumber2"],
-      logo: parsedJson["Logo"],
+      logo: parsedJson["Logo"] != null
+          ? sandfriendsRequestsUrl + parsedJson["Logo"]
+          : null,
       description: parsedJson["Description"],
       instagram: parsedJson["Instagram"],
       cnpj: parsedJson["Cnpj"],

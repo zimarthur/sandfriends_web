@@ -1,3 +1,5 @@
+import '../../Remote/Url.dart';
+
 class Player {
   int idUser;
   String firstName;
@@ -16,7 +18,9 @@ class Player {
       idUser: parsedJson["IdUser"],
       firstName: parsedJson["FirstName"],
       lastName: parsedJson["LastName"],
-      photo: parsedJson["Photo"],
+      photo: parsedJson["Photo"] != null
+          ? sandfriendsRequestsUrl + parsedJson["Photo"]
+          : null,
     );
   }
 }

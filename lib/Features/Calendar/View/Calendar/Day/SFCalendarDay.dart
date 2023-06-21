@@ -116,44 +116,39 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                           ),
                         ),
                       ),
-                      child: Flexible(
-                        child: SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: headerController,
-                          scrollDirection: Axis.horizontal,
-                          child: Flexible(
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                child: widget.viewModel.selectedDayWorkingHours
-                                        .isNotEmpty
-                                    ? Row(
-                                        children: [
-                                          for (var court
-                                              in widget.viewModel.courts)
-                                            Container(
-                                              width: tableColumnDataWidth,
-                                              height: tableHeaderHeight,
-                                              alignment: Alignment.center,
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  right: BorderSide(
-                                                    color: divider,
-                                                    width: 2,
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                court.description,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color: textBlue),
-                                              ),
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: headerController,
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: widget
+                                  .viewModel.selectedDayWorkingHours.isNotEmpty
+                              ? Row(
+                                  children: [
+                                    for (var court in widget.viewModel.courts)
+                                      Container(
+                                        width: tableColumnDataWidth,
+                                        height: tableHeaderHeight,
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            right: BorderSide(
+                                              color: divider,
+                                              width: 2,
                                             ),
-                                        ],
-                                      )
-                                    : Container()),
-                          ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          court.description,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(color: textBlue),
+                                        ),
+                                      ),
+                                  ],
+                                )
+                              : Container(),
                         ),
                       ),
                     ),
@@ -198,152 +193,150 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                             padding: EdgeInsets.symmetric(
                               horizontal: 2,
                             ),
-                            child: Flexible(
-                              child: SingleChildScrollView(
-                                controller: horizontalController,
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for (var court in widget.viewModel.courts)
-                                      Column(
-                                        children: [
-                                          for (var dayMatch in widget
-                                              .viewModel.selectedDayMatches
-                                              .firstWhere((element) =>
-                                                  element.court == court)
-                                              .dayMatches)
-                                            Container(
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  right: BorderSide(
-                                                    color: divider,
-                                                  ),
+                            child: SingleChildScrollView(
+                              controller: horizontalController,
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for (var court in widget.viewModel.courts)
+                                    Column(
+                                      children: [
+                                        for (var dayMatch in widget
+                                            .viewModel.selectedDayMatches
+                                            .firstWhere((element) =>
+                                                element.court == court)
+                                            .dayMatches)
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                right: BorderSide(
+                                                  color: divider,
                                                 ),
                                               ),
-                                              alignment: Alignment.center,
-                                              height: dayMatch.match != null
-                                                  ? hourHeight *
-                                                      dayMatch
-                                                          .match!.matchDuration
-                                                  : dayMatch.recurrentMatch !=
-                                                          null
-                                                      ? hourHeight *
-                                                          dayMatch
-                                                              .recurrentMatch!
-                                                              .recurrentMatchDuration
-                                                      : hourHeight,
-                                              width: tableColumnDataWidth,
-                                              child: widget.viewModel
-                                                          .calendarType ==
-                                                      CalendarType.Match
-                                                  ? dayMatch.match == null
-                                                      ? EmptyHourWidget(
-                                                          isEnabled: !isHourPast(
-                                                              widget.viewModel
-                                                                  .selectedDay,
-                                                              dayMatch
-                                                                  .startingHour),
-                                                          onBlockHour: () => widget
-                                                              .viewModel
-                                                              .setBlockHourWidget(
-                                                                  context,
-                                                                  court
-                                                                      .idStoreCourt!,
-                                                                  dayMatch
-                                                                      .startingHour),
-                                                        )
-                                                      : MatchHourWidget(
-                                                          blocked: dayMatch
-                                                              .match!.blocked,
-                                                          blockedReason: dayMatch
-                                                              .match!
-                                                              .blockedReason,
-                                                          isExpired: isHourPast(
-                                                              dayMatch
-                                                                  .match!.date,
-                                                              dayMatch.match!
-                                                                  .startingHour),
-                                                          title:
-                                                              "Partida de ${dayMatch.match!.matchCreatorName}",
-                                                          startingHour: dayMatch
-                                                              .match!
-                                                              .startingHour,
-                                                          endingHour: dayMatch
-                                                              .match!
-                                                              .endingHour,
-                                                          sport: dayMatch
-                                                              .match!.sport,
-                                                          onTapMatch: () => widget
-                                                              .viewModel
-                                                              .setMatchDetailsWidget(
-                                                                  context,
-                                                                  dayMatch
-                                                                      .match!),
-                                                          onUnblockHour: () =>
-                                                              widget.viewModel
-                                                                  .blockUnblockHour(
-                                                            context,
-                                                            court.idStoreCourt!,
+                                            ),
+                                            alignment: Alignment.center,
+                                            height: dayMatch.match != null
+                                                ? hourHeight *
+                                                    dayMatch
+                                                        .match!.matchDuration
+                                                : dayMatch.recurrentMatch !=
+                                                        null
+                                                    ? hourHeight *
+                                                        dayMatch.recurrentMatch!
+                                                            .recurrentMatchDuration
+                                                    : hourHeight,
+                                            width: tableColumnDataWidth,
+                                            child: widget.viewModel
+                                                        .calendarType ==
+                                                    CalendarType.Match
+                                                ? dayMatch.match == null
+                                                    ? EmptyHourWidget(
+                                                        calendarType: widget
+                                                            .viewModel
+                                                            .calendarType,
+                                                        isEnabled: !isHourPast(
                                                             widget.viewModel
                                                                 .selectedDay,
                                                             dayMatch
-                                                                .startingHour,
-                                                            false,
-                                                          ),
-                                                        )
-                                                  : dayMatch.recurrentMatch ==
-                                                          null
-                                                      ? EmptyHourWidget(
-                                                          isEnabled: true,
-                                                          onBlockHour: () => widget
-                                                              .viewModel
-                                                              .setRecurrentBlockHourWidget(
-                                                                  context,
-                                                                  court
-                                                                      .idStoreCourt!,
-                                                                  dayMatch
-                                                                      .startingHour),
-                                                        )
-                                                      : MatchHourWidget(
-                                                          blocked: dayMatch
-                                                              .recurrentMatch!
-                                                              .blocked,
-                                                          blockedReason: dayMatch
-                                                              .recurrentMatch!
-                                                              .blockedReason,
-                                                          isExpired: false,
-                                                          title:
-                                                              "Mensalista de ${dayMatch.recurrentMatch!.creatorName}",
-                                                          startingHour: dayMatch
-                                                              .recurrentMatch!
-                                                              .startingHour,
-                                                          endingHour: dayMatch
-                                                              .recurrentMatch!
-                                                              .endingHour,
-                                                          sport: dayMatch
-                                                              .recurrentMatch!
-                                                              .sport,
-                                                          onTapMatch: () => widget
-                                                              .viewModel
-                                                              .setRecurrentMatchDetailsWidget(
-                                                                  context,
-                                                                  dayMatch
-                                                                      .recurrentMatch!),
-                                                          onUnblockHour: () =>
-                                                              widget.viewModel
-                                                                  .recurrentBlockUnblockHour(
-                                                            context,
-                                                            court.idStoreCourt!,
+                                                                .startingHour),
+                                                        onBlockHour: () => widget
+                                                            .viewModel
+                                                            .setBlockHourWidget(
+                                                                context,
+                                                                court,
+                                                                dayMatch
+                                                                    .startingHour),
+                                                      )
+                                                    : MatchHourWidget(
+                                                        calendarType: widget
+                                                            .viewModel
+                                                            .calendarType,
+                                                        blocked: dayMatch
+                                                            .match!.blocked,
+                                                        blockedReason: dayMatch
+                                                            .match!
+                                                            .blockedReason,
+                                                        isExpired: isHourPast(
                                                             dayMatch
-                                                                .startingHour,
-                                                            false,
-                                                          ),
+                                                                .match!.date,
+                                                            dayMatch.match!
+                                                                .startingHour),
+                                                        title:
+                                                            "Partida de ${dayMatch.match!.matchCreatorName}",
+                                                        startingHour: dayMatch
+                                                            .match!
+                                                            .startingHour,
+                                                        endingHour: dayMatch
+                                                            .match!.endingHour,
+                                                        sport: dayMatch
+                                                            .match!.sport,
+                                                        onTapMatch: () => widget
+                                                            .viewModel
+                                                            .setMatchDetailsWidget(
+                                                                context,
+                                                                dayMatch
+                                                                    .match!),
+                                                        onUnblockHour: () =>
+                                                            widget.viewModel
+                                                                .blockUnblockHour(
+                                                          context,
+                                                          court.idStoreCourt!,
+                                                          widget.viewModel
+                                                              .selectedDay,
+                                                          dayMatch.startingHour,
+                                                          false,
                                                         ),
-                                            ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
+                                                      )
+                                                : dayMatch.recurrentMatch ==
+                                                        null
+                                                    ? EmptyHourWidget(
+                                                        calendarType: widget
+                                                            .viewModel
+                                                            .calendarType,
+                                                        isEnabled: true,
+                                                        onBlockHour: () {},
+                                                      )
+                                                    : MatchHourWidget(
+                                                        calendarType: widget
+                                                            .viewModel
+                                                            .calendarType,
+                                                        blocked: dayMatch
+                                                            .recurrentMatch!
+                                                            .blocked,
+                                                        blockedReason: dayMatch
+                                                            .recurrentMatch!
+                                                            .blockedReason,
+                                                        isExpired: false,
+                                                        title:
+                                                            "Mensalista de ${dayMatch.recurrentMatch!.creatorName}",
+                                                        startingHour: dayMatch
+                                                            .recurrentMatch!
+                                                            .startingHour,
+                                                        endingHour: dayMatch
+                                                            .recurrentMatch!
+                                                            .endingHour,
+                                                        sport: dayMatch
+                                                            .recurrentMatch!
+                                                            .sport,
+                                                        onTapMatch: () => widget
+                                                            .viewModel
+                                                            .setRecurrentMatchDetailsWidget(
+                                                                context,
+                                                                dayMatch
+                                                                    .recurrentMatch!),
+                                                        onUnblockHour: () => widget
+                                                            .viewModel
+                                                            .recurrentBlockUnblockHour(
+                                                          context,
+                                                          court.idStoreCourt!,
+                                                          dayMatch.startingHour,
+                                                          false,
+                                                        ),
+                                                      ),
+                                          ),
+                                      ],
+                                    ),
+                                ],
                               ),
                             ),
                           ),

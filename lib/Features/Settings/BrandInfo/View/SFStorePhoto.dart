@@ -22,13 +22,17 @@ class StorePhotoCard extends StatefulWidget {
 }
 
 class _StorePhotoCardState extends State<StorePhotoCard> {
+  double deleteButtonSize = 40.0;
+  double imageHeight = 210;
+  double imageWidth = 300;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          height: 280,
-          width: 320,
+    return LayoutBuilder(
+      builder: (layoutContext, layoutConstraints) {
+        return Container(
+          height: layoutConstraints.maxHeight,
+          width: imageWidth + (deleteButtonSize / 2),
+          margin: EdgeInsets.only(right: defaultPadding * 2),
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
@@ -37,11 +41,13 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
                 child: widget.storePhoto.isNewPhoto
                     ? Image.memory(
                         widget.storePhoto.newPhoto!,
-                        fit: BoxFit.cover,
+                        width: imageWidth,
+                        height: imageHeight,
                       )
                     : CachedNetworkImage(
                         imageUrl: widget.storePhoto.photo,
-                        fit: BoxFit.cover,
+                        width: imageWidth,
+                        height: imageHeight,
                         placeholder: (context, url) => Center(
                           child: SFLoading(
                             size: 50,
@@ -58,8 +64,8 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
                 child: InkWell(
                   onTap: widget.delete,
                   child: Container(
-                    height: 40,
-                    width: 40,
+                    height: deleteButtonSize,
+                    width: deleteButtonSize,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: primaryBlue,
@@ -74,11 +80,8 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
               ),
             ],
           ),
-        ),
-        const SizedBox(
-          width: 2 * defaultPadding,
-        )
-      ],
+        );
+      },
     );
   }
 }
