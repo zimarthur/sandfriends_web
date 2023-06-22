@@ -229,11 +229,10 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                             child: widget.viewModel
                                                         .calendarType ==
                                                     CalendarType.Match
-                                                ? dayMatch.match == null
+                                                ? dayMatch.match == null &&
+                                                        dayMatch.recurrentMatch ==
+                                                            null
                                                     ? EmptyHourWidget(
-                                                        calendarType: widget
-                                                            .viewModel
-                                                            .calendarType,
                                                         isEnabled: !isHourPast(
                                                             widget.viewModel
                                                                 .selectedDay,
@@ -242,34 +241,18 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                         onBlockHour: () => widget
                                                             .viewModel
                                                             .setBlockHourWidget(
-                                                                context,
-                                                                court,
-                                                                dayMatch
-                                                                    .startingHour),
+                                                          context,
+                                                          court,
+                                                          dayMatch.startingHour,
+                                                        ),
                                                       )
                                                     : MatchHourWidget(
                                                         calendarType: widget
                                                             .viewModel
                                                             .calendarType,
-                                                        blocked: dayMatch
-                                                            .match!.blocked,
-                                                        blockedReason: dayMatch
-                                                            .match!
-                                                            .blockedReason,
-                                                        isExpired: isHourPast(
-                                                            dayMatch
-                                                                .match!.date,
-                                                            dayMatch.match!
-                                                                .startingHour),
-                                                        title:
-                                                            "Partida de ${dayMatch.match!.matchCreatorName}",
-                                                        startingHour: dayMatch
-                                                            .match!
-                                                            .startingHour,
-                                                        endingHour: dayMatch
-                                                            .match!.endingHour,
-                                                        sport: dayMatch
-                                                            .match!.sport,
+                                                        match: dayMatch.match,
+                                                        recurrentMatch: dayMatch
+                                                            .recurrentMatch,
                                                         onTapMatch: () => widget
                                                             .viewModel
                                                             .setMatchDetailsWidget(
@@ -290,34 +273,22 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                 : dayMatch.recurrentMatch ==
                                                         null
                                                     ? EmptyHourWidget(
-                                                        calendarType: widget
-                                                            .viewModel
-                                                            .calendarType,
                                                         isEnabled: true,
-                                                        onBlockHour: () {},
+                                                        onBlockHour: () => widget
+                                                            .viewModel
+                                                            .setRecurrentBlockHourWidget(
+                                                          context,
+                                                          court,
+                                                          dayMatch.startingHour,
+                                                        ),
                                                       )
                                                     : MatchHourWidget(
                                                         calendarType: widget
                                                             .viewModel
                                                             .calendarType,
-                                                        blocked: dayMatch
-                                                            .recurrentMatch!
-                                                            .blocked,
-                                                        blockedReason: dayMatch
-                                                            .recurrentMatch!
-                                                            .blockedReason,
-                                                        isExpired: false,
-                                                        title:
-                                                            "Mensalista de ${dayMatch.recurrentMatch!.creatorName}",
-                                                        startingHour: dayMatch
-                                                            .recurrentMatch!
-                                                            .startingHour,
-                                                        endingHour: dayMatch
-                                                            .recurrentMatch!
-                                                            .endingHour,
-                                                        sport: dayMatch
-                                                            .recurrentMatch!
-                                                            .sport,
+                                                        match: dayMatch.match,
+                                                        recurrentMatch: dayMatch
+                                                            .recurrentMatch,
                                                         onTapMatch: () => widget
                                                             .viewModel
                                                             .setRecurrentMatchDetailsWidget(
@@ -331,6 +302,8 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                           court.idStoreCourt!,
                                                           dayMatch.startingHour,
                                                           false,
+                                                          "",
+                                                          -1,
                                                         ),
                                                       ),
                                           ),

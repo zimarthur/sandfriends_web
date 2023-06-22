@@ -15,7 +15,6 @@ class BlockHourWidget extends StatefulWidget {
   TextEditingController controller;
   VoidCallback onReturn;
   VoidCallback onBlock;
-  VoidCallback onBlockPermanent;
 
   BlockHourWidget({
     required this.day,
@@ -24,7 +23,6 @@ class BlockHourWidget extends StatefulWidget {
     required this.controller,
     required this.onReturn,
     required this.onBlock,
-    required this.onBlockPermanent,
   });
 
   @override
@@ -32,8 +30,6 @@ class BlockHourWidget extends StatefulWidget {
 }
 
 class _BlockHourWidgetState extends State<BlockHourWidget> {
-  bool blockedPermanent = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,35 +69,6 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
             },
           ),
           const SizedBox(
-            height: defaultPadding,
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                      activeColor: primaryBlue,
-                      value: blockedPermanent,
-                      onChanged: (value) {
-                        setState(() {
-                          blockedPermanent = value!;
-                        });
-                      }),
-                  const Text(
-                    "Bloquear horário permanentemente",
-                    style: TextStyle(color: textDarkGrey),
-                  ),
-                ],
-              ),
-              if (blockedPermanent)
-                Text(
-                  "*Até que o horário seja desbloqueado, nenhuma partida ou mensalista poderá ser agendada nas ${weekdayRecurrent[getBRWeekday(widget.day.weekday)]} às ${widget.hour.hourString} na ${widget.court.description}",
-                  style: TextStyle(color: textDarkGrey),
-                  textScaleFactor: 0.85,
-                ),
-            ],
-          ),
-          const SizedBox(
             height: 2 * defaultPadding,
           ),
           Row(
@@ -120,13 +87,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                 child: SFButton(
                   buttonLabel: "Bloquear Horário",
                   buttonType: ButtonType.Delete,
-                  onTap: () {
-                    if (blockedPermanent) {
-                      widget.onBlockPermanent();
-                    } else {
-                      widget.onBlock();
-                    }
-                  },
+                  onTap: () => widget.onBlock(),
                 ),
               ),
             ],

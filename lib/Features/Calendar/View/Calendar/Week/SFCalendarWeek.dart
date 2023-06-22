@@ -261,44 +261,40 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                   physics: const NeverScrollableScrollPhysics(),
                   controller: headerController,
                   scrollDirection: Axis.horizontal,
-                  child: Flexible(
-                    child: Container(
-                      child: Row(
-                        children: [
-                          for (var day in widget.viewModel.selectedWeek)
-                            Stack(
-                              alignment: Alignment.topCenter,
-                              children: [
-                                Container(
-                                  height: 16,
-                                  width: tableColumnWidth,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: tableColumnSpacing),
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    border: Border.all(
-                                        color: primaryBlue, width: 2),
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
-                                      topLeft: Radius.circular(0),
-                                      topRight: Radius.circular(0),
-                                    ),
-                                  ),
+                  child: Row(
+                    children: [
+                      for (var day in widget.viewModel.selectedWeek)
+                        Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            Container(
+                              height: 16,
+                              width: tableColumnWidth,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: tableColumnSpacing),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border:
+                                    Border.all(color: primaryBlue, width: 2),
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
                                 ),
-                                Container(
-                                  height: 4,
-                                  width: tableColumnWidth - 4,
-                                  alignment: Alignment.topCenter,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: tableColumnSpacing),
-                                  color: secondaryPaper,
-                                ),
-                              ],
+                              ),
                             ),
-                        ],
-                      ),
-                    ),
+                            Container(
+                              height: 4,
+                              width: tableColumnWidth - 4,
+                              alignment: Alignment.topCenter,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: tableColumnSpacing),
+                              color: secondaryPaper,
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ),
               ),

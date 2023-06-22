@@ -12,14 +12,12 @@ GridColumn SFTableHeader(String columnName, String columnTitle) {
         Expanded(
           child: Container(
             alignment: Alignment.center,
-            child: Flexible(
-              child: Text(
-                columnTitle,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: textDarkGrey,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: Text(
+              columnTitle,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: textDarkGrey,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

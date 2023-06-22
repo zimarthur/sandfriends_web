@@ -7,7 +7,6 @@ import '../../../SharedComponents/Model/AppMatch.dart';
 
 class FinancesDataSource extends DataGridSource {
   FinancesDataSource({required List<AppMatch> matches}) {
-    print("START ${DateTime.now()}");
     _finances = matches
         .map<DataGridRow>(
           (match) => DataGridRow(
@@ -33,7 +32,6 @@ class FinancesDataSource extends DataGridSource {
           ),
         )
         .toList();
-    print("END ${DateTime.now()}");
   }
 
   List<DataGridRow> _finances = [];
@@ -51,11 +49,9 @@ class FinancesDataSource extends DataGridSource {
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(
                   horizontal: 10.0, vertical: defaultPadding),
-              child: Flexible(
-                child: Text(
-                  dataGridCell.value.toString(),
-                  overflow: TextOverflow.ellipsis,
-                ),
+              child: Text(
+                dataGridCell.value.toString(),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Container(

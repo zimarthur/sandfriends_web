@@ -33,6 +33,7 @@ class CalendarRepo {
     int weekday,
     int hour,
     bool block,
-    String blockReson,
+    String blockReason,
+    int idSport,
   ) async {}
 }

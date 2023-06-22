@@ -35,7 +35,6 @@ class FinancesViewModel extends ChangeNotifier {
   EnumPeriodVisualization periodVisualization = EnumPeriodVisualization.Today;
   void setPeriodVisualization(
       BuildContext context, EnumPeriodVisualization newPeriodVisualization) {
-    print("setPeriodVisualization START ${DateTime.now()}");
     if (newPeriodVisualization == EnumPeriodVisualization.Custom) {
       setCustomPeriod(context);
     } else {
@@ -43,7 +42,6 @@ class FinancesViewModel extends ChangeNotifier {
       setFinancesDataSource();
       notifyListeners();
     }
-    print("setPeriodVisualization END ${DateTime.now()}");
   }
 
   void setCustomPeriod(BuildContext context) {

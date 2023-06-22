@@ -183,7 +183,6 @@ class RewardsViewModel extends ChangeNotifier {
     List<PieChartItem> items = [];
     Map<String, int> nameCount = <String, int>{};
     for (var object in rewards) {
-      print("Reward: ${object.rewardItem.description}");
       if (nameCount.containsKey(object.rewardItem.description)) {
         nameCount[object.rewardItem.description] =
             nameCount[object.rewardItem.description]! + 1;

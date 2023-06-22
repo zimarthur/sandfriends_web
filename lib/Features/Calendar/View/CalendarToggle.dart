@@ -62,37 +62,34 @@ class _CalendarToggleState extends State<CalendarToggle> {
                   ),
               ],
             )
-          : ListView(
-              shrinkWrap: true,
+          : Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 for (int labelIndex = 0;
                     labelIndex < widget.labels.length;
                     labelIndex++)
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        widget.onChanged(widget.labels[labelIndex]);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(defaultPadding),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          color:
-                              widget.labels[labelIndex] == widget.selectedIndex
-                                  ? primaryBlue
-                                  : textDisabled,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.labels[labelIndex] == PeriodType.Weekly
-                              ? "Semanal"
-                              : "Diário",
-                          style: TextStyle(
-                              color: widget.labels[labelIndex] ==
-                                      widget.selectedIndex
-                                  ? textWhite
-                                  : textDarkGrey),
-                        ),
+                  InkWell(
+                    onTap: () {
+                      widget.onChanged(widget.labels[labelIndex]);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: widget.labels[labelIndex] == widget.selectedIndex
+                            ? primaryBlue
+                            : textDisabled,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        widget.labels[labelIndex] == PeriodType.Weekly
+                            ? "Semanal"
+                            : "Diário",
+                        style: TextStyle(
+                            color: widget.labels[labelIndex] ==
+                                    widget.selectedIndex
+                                ? textWhite
+                                : textDarkGrey),
                       ),
                     ),
                   ),

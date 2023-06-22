@@ -41,8 +41,6 @@ class CalendarViewModel extends ChangeNotifier {
   late DateTime matchesEndDate;
 
   TextEditingController blockHourReasonController = TextEditingController();
-  TextEditingController recurrentBlockHourReasonController =
-      TextEditingController();
   TextEditingController cancelMatchReasonController = TextEditingController();
   TextEditingController cancelRecurrentMatchReasonController =
       TextEditingController();
@@ -223,17 +221,12 @@ class CalendarViewModel extends ChangeNotifier {
               ),
             );
             jumpToHour = match.endingHour.hour;
-          }
-          //PAREI AQUI
-          else if (recurrentMatches.any((recMatch) =>
-              recMatch.weekday == selectedWeekday &&
+          } else if (recurrentMatches.any((recMatch) =>
+              recMatch.weekday == getBRWeekday(selectedDay.weekday) &&
               recMatch.startingHour == hour &&
               recMatch.idStoreCourt == court.idStoreCourt)) {
-            print("block rec ${hour.hourString}");
-            print("block rec ${selectedWeekday}");
-            print("block rec ${court.idStoreCourt}");
             recMatch = recurrentMatches.firstWhere((recMatch) =>
-                recMatch.weekday == selectedWeekday &&
+                recMatch.weekday == getBRWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
                 recMatch.idStoreCourt == court.idStoreCourt);
             dayMatches.add(
@@ -461,21 +454,22 @@ class CalendarViewModel extends ChangeNotifier {
     int idStoreCourt,
     Hour hour,
     bool block,
+    String name,
+    int idSport,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .recurrentBlockUnblockHour(
-      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-      idStoreCourt,
-      selectedWeekday,
-      hour.hour,
-      block,
-      recurrentBlockHourReasonController.text,
-    )
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            idStoreCourt,
+            selectedWeekday,
+            hour.hour,
+            block,
+            name,
+            idSport)
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setRecurrentMatchesFromResponse(context, response.responseBody!);
-        recurrentBlockHourReasonController.text = "";
         Provider.of<MenuProvider>(context, listen: false).closeModal();
       } else {
         Provider.of<MenuProvider>(context, listen: false)
@@ -592,14 +586,30 @@ class CalendarViewModel extends ChangeNotifier {
           hour,
           true,
         ),
-        onBlockPermanent: () => recurrentBlockUnblockHour(
+        onReturn: () => returnMainView(context),
+        controller: blockHourReasonController,
+      ),
+    );
+  }
+
+  void setRecurrentBlockHourWidget(
+      BuildContext context, Court court, Hour hour) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      RecurrentBlockHourWidget(
+        court: court,
+        day: selectedDay,
+        sports:
+            Provider.of<DataProvider>(context, listen: false).availableSports,
+        hour: hour,
+        onBlock: (name, idSport) => recurrentBlockUnblockHour(
           context,
           court.idStoreCourt!,
           hour,
           true,
+          name,
+          idSport,
         ),
         onReturn: () => returnMainView(context),
-        controller: blockHourReasonController,
       ),
     );
   }

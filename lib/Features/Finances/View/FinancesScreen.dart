@@ -37,7 +37,6 @@ class _FinanceScreenState extends State<FinanceScreen> {
   Widget build(BuildContext context) {
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
-    print("build START ${DateTime.now()}");
     return ChangeNotifierProvider<FinancesViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<FinancesViewModel>(

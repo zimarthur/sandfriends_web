@@ -99,7 +99,8 @@ class CalendarRepoImp implements CalendarRepo {
     int weekday,
     int hour,
     bool block,
-    String blockReson,
+    String blockReason,
+    int idSport,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       _apiService.sandfriendsUrl,
@@ -111,7 +112,8 @@ class CalendarRepoImp implements CalendarRepo {
           "Weekday": weekday,
           "IdHour": hour,
           "Blocked": block,
-          "BlockedReason": blockReson,
+          "BlockedReason": blockReason,
+          "IdSport": idSport,
         },
       ),
     );

@@ -25,7 +25,6 @@ class SFTable extends StatefulWidget {
 class _SFTableState extends State<SFTable> {
   @override
   Widget build(BuildContext context) {
-    print("SFTable START ${DateTime.now()}");
     double columnWidth = widget.width / widget.headers.length < 100
         ? 100
         : widget.width / widget.headers.length;

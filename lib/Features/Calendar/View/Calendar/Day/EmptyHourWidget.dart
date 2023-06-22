@@ -6,12 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 class EmptyHourWidget extends StatefulWidget {
   VoidCallback onBlockHour;
   bool isEnabled;
-  CalendarType calendarType;
 
   EmptyHourWidget({
     required this.isEnabled,
     required this.onBlockHour,
-    required this.calendarType,
   });
 
   @override
@@ -50,9 +48,7 @@ class _EmptyHourWidgetState extends State<EmptyHourWidget> {
               Expanded(
                 child: Container(),
               ),
-              if (widget.isEnabled &&
-                  isOnHover &&
-                  widget.calendarType == CalendarType.Match)
+              if (widget.isEnabled && isOnHover)
                 InkWell(
                   onTap: widget.onBlockHour,
                   onHover: (value) {
