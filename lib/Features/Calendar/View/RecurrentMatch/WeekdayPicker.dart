@@ -5,10 +5,12 @@ import '../../../../Utils/Constants.dart';
 import '../../../../Utils/SFDateTime.dart';
 
 class WeekdayPicker extends StatefulWidget {
-  Function(String) onChanged;
+  Function(int) onChanged;
+  int selectedIndex;
 
   WeekdayPicker({
     required this.onChanged,
+    required this.selectedIndex,
   });
 
   @override
@@ -16,7 +18,6 @@ class WeekdayPicker extends StatefulWidget {
 }
 
 class _WeekdayPickerState extends State<WeekdayPicker> {
-  String selectedIndex = weekdayRecurrent.first;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -29,10 +30,9 @@ class _WeekdayPickerState extends State<WeekdayPicker> {
                 Radio(
                   value: day,
                   activeColor: primaryBlue,
-                  groupValue: selectedIndex,
+                  groupValue: weekdayRecurrent[widget.selectedIndex],
                   onChanged: (newValue) => setState(() {
-                    selectedIndex = day;
-                    widget.onChanged(day);
+                    widget.onChanged(weekdayRecurrent.indexOf(day));
                   }),
                 ),
                 const SizedBox(

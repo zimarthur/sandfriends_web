@@ -83,6 +83,9 @@ class FinancesViewModel extends ChangeNotifier {
         periodVisualization = EnumPeriodVisualization.Custom;
         setFinancesDataSource();
         notifyListeners();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -123,7 +126,7 @@ class FinancesViewModel extends ChangeNotifier {
       titleDate = DateFormat('dd/MM').format(DateTime.now());
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
       titleDate =
-          "${monthsPortuguese[DateTime.now().month]}/${DateTime.now().year}";
+          "${monthsPortuguese[getSFMonthIndex(DateTime.now())]}/${DateTime.now().year}";
     } else {
       titleDate = customDateTitle!;
     }

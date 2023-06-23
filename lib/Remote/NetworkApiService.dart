@@ -8,7 +8,9 @@ import 'NetworkResponse.dart';
 class NetworkApiService extends BaseApiService {
   @override
   Future<NetworkResponse> getResponse(
-      String baseUrl, String aditionalUrl) async {
+    String baseUrl,
+    String aditionalUrl,
+  ) async {
     try {
       final response = await http.get(Uri.parse(baseUrl + aditionalUrl));
       print(response);
@@ -71,6 +73,13 @@ class NetworkApiService extends BaseApiService {
         return NetworkResponse(
           responseStatus: NetworkResponseStatus.success,
           responseBody: response.body,
+        );
+      }
+      if (statusCode == "232") {
+        return NetworkResponse(
+          responseStatus: NetworkResponseStatus.expiredToken,
+          responseTitle: "",
+          responseDescription: "",
         );
       }
       Map<String, dynamic> responseBody = json.decode(

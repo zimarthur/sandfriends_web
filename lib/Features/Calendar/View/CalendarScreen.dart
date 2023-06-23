@@ -28,7 +28,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
-    viewModel.initCalendarViewModel(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.initCalendarViewModel(context);
+    });
+
     super.initState();
   }
 

@@ -36,7 +36,8 @@ class RecurrentMatchFilter extends StatelessWidget {
             ),
             if (viewModel.periodType == PeriodType.Daily)
               WeekdayPicker(
-                onChanged: (p0) => viewModel.setSelectedWeekdayText(p0),
+                onChanged: (p0) => viewModel.setSelectedWeekday(p0),
+                selectedIndex: viewModel.selectedWeekday,
               ),
           ],
         ),

@@ -104,6 +104,9 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         setFinancesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Membro adicionado!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(
@@ -131,6 +134,9 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         setFinancesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Sua equipe foi atualizada!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(
@@ -159,6 +165,9 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         setFinancesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Seu nome foi atualizado!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(
@@ -185,6 +194,9 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         setFinancesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Sua equipe foi atualizada!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(

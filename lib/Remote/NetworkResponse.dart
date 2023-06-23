@@ -12,4 +12,4 @@ class NetworkResponse {
   });
 }
 
-enum NetworkResponseStatus { success, alert, error }
+enum NetworkResponseStatus { success, alert, error, expiredToken }

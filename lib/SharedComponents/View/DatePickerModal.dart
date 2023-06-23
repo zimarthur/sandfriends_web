@@ -7,9 +7,11 @@ import '../../Utils/Constants.dart';
 class DatePickerModal extends StatefulWidget {
   Function(DateTime, DateTime?) onDateSelected;
   VoidCallback onReturn;
+  bool allowFutureDates;
   DatePickerModal({
     required this.onDateSelected,
     required this.onReturn,
+    this.allowFutureDates = true,
   });
 
   @override
@@ -93,6 +95,7 @@ class _DatePickerModalState extends State<DatePickerModal> {
                 }
               });
             },
+            allowFutureDates: widget.allowFutureDates,
           ),
           SizedBox(
             height: defaultPadding,

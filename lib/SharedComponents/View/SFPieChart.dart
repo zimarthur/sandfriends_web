@@ -87,7 +87,7 @@ class _SFPieChartState extends State<SFPieChart> {
                   Padding(
                     padding: const EdgeInsets.all(defaultPadding / 2),
                     child: SizedBox(
-                      width: 150,
+                      width: 200,
                       child: ScrollablePositionedList.builder(
                         itemScrollController: _scrollController,
                         itemCount: widget.pieChartItems.length,

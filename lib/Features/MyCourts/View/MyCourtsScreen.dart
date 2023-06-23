@@ -27,12 +27,10 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel.init(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.init(context);
       if (widget.quickLinkWorkingHours == true) {
-        setState(() {
-          viewModel.setWorkingHoursWidget(context, viewModel);
-        });
+        viewModel.setWorkingHoursWidget(context, viewModel);
       }
     });
   }

@@ -42,7 +42,8 @@ class _SFBarChartState extends State<SFBarChart> {
         toolTipLabel = (value) => 'Dia $value\n';
         break;
       case EnumPeriodVisualization.Custom:
-        if (areInTheSameDay(widget.customStartDate!, widget.customEndDate!)) {
+        if (widget.customEndDate == null ||
+            areInTheSameDay(widget.customStartDate!, widget.customEndDate!)) {
           chartData = dayData(widget.barChartItems);
           toolTipLabel = (value) => '$value:00\n';
         } else if (areInTheSameMonth(

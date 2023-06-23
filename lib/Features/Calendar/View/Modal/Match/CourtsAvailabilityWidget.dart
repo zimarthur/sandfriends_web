@@ -19,6 +19,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
   Hour hour;
   DateTime day;
   List<AppMatch> matches;
+  List<AppRecurrentMatch> recurrentMatches;
 
   CourtsAvailabilityWidget({
     super.key,
@@ -26,6 +27,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
     required this.hour,
     required this.day,
     required this.matches,
+    required this.recurrentMatches,
   });
 
   @override
@@ -83,6 +85,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                       .length,
                   itemBuilder: (context, index) {
                     AppMatch? match;
+                    AppRecurrentMatch? recurrentMatch;
                     Court court =
                         Provider.of<DataProvider>(context, listen: false)
                             .courts[index];
@@ -90,6 +93,13 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                         (match) => match.idStoreCourt == court.idStoreCourt)) {
                       match = matches.firstWhere((match) =>
                           match.idStoreCourt ==
+                          Provider.of<DataProvider>(context, listen: false)
+                              .courts[index]
+                              .idStoreCourt);
+                    } else if (recurrentMatches.any((recMatch) =>
+                        recMatch.idStoreCourt == court.idStoreCourt)) {
+                      recurrentMatch = recurrentMatches.firstWhere((recMatch) =>
+                          recMatch.idStoreCourt ==
                           Provider.of<DataProvider>(context, listen: false)
                               .courts[index]
                               .idStoreCourt);
@@ -120,11 +130,13 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(defaultBorderRadius),
-                                color: match != null
+                                color: match != null || recurrentMatch != null
                                     ? secondaryYellow
                                     : secondaryGreen),
                             child: Text(
-                              match != null ? "Ocupado" : "Livre",
+                              match != null || recurrentMatch != null
+                                  ? "Ocupado"
+                                  : "Livre",
                               style: TextStyle(
                                 color: textWhite,
                               ),
@@ -138,7 +150,14 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w300),
                                   )
-                                : Container(),
+                                : recurrentMatch != null
+                                    ? Text(
+                                        recurrentMatch.blockedReason,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w300),
+                                      )
+                                    : Container(),
                           ),
                           Expanded(
                             child: match != null
@@ -148,10 +167,17 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w300),
                                   )
-                                : Container(),
+                                : recurrentMatch != null
+                                    ? Text(
+                                        recurrentMatch.sport!.description,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w300),
+                                      )
+                                    : Container(),
                           ),
                           Expanded(
-                            child: match != null
+                            child: match != null || recurrentMatch != null
                                 ? Text(
                                     "Pago",
                                     textAlign: TextAlign.center,

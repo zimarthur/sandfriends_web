@@ -570,6 +570,9 @@ class MyCourtsViewModel extends ChangeNotifier {
           init(context);
           Provider.of<MenuProvider>(context, listen: false)
               .setMessageModal("Sua quadra foi criada!", null, true);
+        } else if (response.responseStatus ==
+            NetworkResponseStatus.expiredToken) {
+          Provider.of<MenuProvider>(context, listen: false).logout(context);
         } else {
           Provider.of<MenuProvider>(context, listen: false)
               .setMessageModalFromResponse(response);
@@ -603,6 +606,9 @@ class MyCourtsViewModel extends ChangeNotifier {
         init(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Sua quadra foi removida!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -655,6 +661,9 @@ class MyCourtsViewModel extends ChangeNotifier {
         init(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Suas quadras foram atualizadas!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);

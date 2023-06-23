@@ -57,7 +57,7 @@ List<String> weekdayShort = [
   "dom",
 ];
 
-int getBRWeekday(int weekday) {
+int getSFWeekday(int weekday) {
   if (weekday == 0) {
     return 6;
   } else {
@@ -65,8 +65,12 @@ int getBRWeekday(int weekday) {
   }
 }
 
+int getSFMonthIndex(DateTime date) {
+  return date.month - 1;
+}
+
 String getWeekdayTextFromDatetime(DateTime date) {
-  return weekday[getBRWeekday(date.weekday)];
+  return weekday[getSFWeekday(date.weekday)];
 }
 
 String getMonthYear(DateTime datetime) {

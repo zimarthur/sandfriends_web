@@ -84,8 +84,8 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                             child: Text(
                               widget.viewModel.calendarType ==
                                       CalendarType.Match
-                                  ? "${weekdayShort[getBRWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}"
-                                  : weekdayRecurrent[getBRWeekday(day.weekday)],
+                                  ? "${weekdayShort[getSFWeekday(day.weekday)]}\n${DateFormat('dd/MM').format(day)}"
+                                  : weekdayRecurrent[getSFWeekday(day.weekday)],
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: textWhite),
                             ),
@@ -179,7 +179,9 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                     hour.startingHour),
                                                 startingHour: hour.startingHour,
                                                 matchesLength:
-                                                    hour.matches!.length,
+                                                    hour.matches!.length +
+                                                        hour.recurrentMatches!
+                                                            .length,
                                                 date: day.date,
                                                 height: tableLineHeight,
                                                 width: tableColumnWidth,
@@ -201,6 +203,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                   day.date,
                                                   hour.startingHour,
                                                   hour.matches ?? [],
+                                                  hour.recurrentMatches ?? [],
                                                 ),
                                               )
                                             : HourWidget(

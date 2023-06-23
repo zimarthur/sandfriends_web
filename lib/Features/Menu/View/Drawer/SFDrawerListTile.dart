@@ -2,32 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
-class SFDrawerListTile extends StatelessWidget {
+class SFDrawerListTile extends StatefulWidget {
   SFDrawerListTile({
     Key? key,
     required this.title,
     required this.svgSrc,
-    this.isSelected = false,
+    required this.isSelected,
+    required this.isHovered,
     required this.fullSize,
   }) : super(key: key);
 
   final String title, svgSrc;
-  bool isSelected, fullSize;
+  bool isSelected, fullSize, isHovered;
 
+  @override
+  State<SFDrawerListTile> createState() => _SFDrawerListTileState();
+}
+
+class _SFDrawerListTileState extends State<SFDrawerListTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isSelected ? primaryDarkBlue : primaryBlue,
+        color: widget.isSelected
+            ? primaryDarkBlue
+            : widget.isHovered
+                ? primaryLightBlue.withOpacity(0.5)
+                : primaryBlue,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
       ),
       padding: const EdgeInsets.all(defaultPadding),
-      child: fullSize
+      child: widget.fullSize
           ? Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  svgSrc,
+                  widget.svgSrc,
                   color: Colors.white,
                   height: 16,
                 ),
@@ -36,7 +46,7 @@ class SFDrawerListTile extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       color: Colors.white,
                     ),
@@ -45,7 +55,7 @@ class SFDrawerListTile extends StatelessWidget {
               ],
             )
           : SvgPicture.asset(
-              svgSrc,
+              widget.svgSrc,
               color: Colors.white,
               height: 16,
             ),

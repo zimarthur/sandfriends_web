@@ -10,10 +10,12 @@ class DatePicker extends StatefulWidget {
   Function(DateTime)? onDateSelected;
   Function(List<DateTime?>)? onMultiDateSelected;
   bool multiDate;
+  bool allowFutureDates;
   DatePicker({
     this.onDateSelected,
     this.onMultiDateSelected,
     this.multiDate = false,
+    this.allowFutureDates = true,
   });
 
   @override
@@ -44,6 +46,7 @@ class _DatePickerState extends State<DatePicker> {
           fontSize: 15,
           fontWeight: FontWeight.bold,
         ),
+        lastDate: widget.allowFutureDates ? null : DateTime.now(),
       ),
       initialValue: initialDates,
       onValueChanged: (values) {

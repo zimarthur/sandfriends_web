@@ -133,6 +133,13 @@ class MenuProvider extends ChangeNotifier {
   int _indexSelectedDrawerTile = 0;
   int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
 
+  int _indexHoveredDrawerTile = -1;
+  int get indexHoveredDrawerTile => _indexHoveredDrawerTile;
+  void setIndexHoveredDrawerTile(int newIndex) {
+    _indexHoveredDrawerTile = newIndex;
+    notifyListeners();
+  }
+
   Widget _currentMenuWidget = const HomeScreen();
   Widget get currentMenuWidget => _currentMenuWidget;
 
@@ -203,8 +210,7 @@ class MenuProvider extends ChangeNotifier {
         _currentMenuWidget = const HelpScreen();
         break;
       case -3:
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/login', (Route<dynamic> route) => false);
+        logout(context);
     }
     notifyListeners();
   }
@@ -231,5 +237,13 @@ class MenuProvider extends ChangeNotifier {
       quickLinkWorkingHours: true,
     );
     notifyListeners();
+  }
+
+  void logout(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+      (Route<dynamic> route) => false,
+    );
   }
 }

@@ -81,7 +81,10 @@ class _SFDrawerState extends State<SFDrawer> {
                         onTap: () {
                           menuController.onTabClick(index, context);
                         },
-                        onHover: (value) {},
+                        onHover: (value) {
+                          menuController
+                              .setIndexHoveredDrawerTile(value ? index : -1);
+                        },
                         child: SFDrawerListTile(
                           title: menuController.drawerItems[index].title,
                           svgSrc: menuController.drawerItems[index].icon,
@@ -90,6 +93,8 @@ class _SFDrawerState extends State<SFDrawer> {
                                   ? true
                                   : false,
                           fullSize: fullSize,
+                          isHovered:
+                              menuController.indexHoveredDrawerTile == index,
                         ),
                       );
                     },

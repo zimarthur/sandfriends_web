@@ -87,6 +87,7 @@ class CalendarViewModel extends ChangeNotifier {
       _calendarType = CalendarType.Match;
     } else {
       _calendarType = CalendarType.RecurrentMatch;
+      setSelectedWeekday(getSFWeekday(selectedDay.weekday));
     }
     notifyListeners();
   }
@@ -99,14 +100,12 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  String _selectedWeekdayText = weekdayRecurrent.first;
-  String get selectedWeekdayText => _selectedWeekdayText;
-  void setSelectedWeekdayText(String newValue) {
-    _selectedWeekdayText = newValue;
+  int _selectedWeekday = 0;
+  int get selectedWeekday => _selectedWeekday;
+  void setSelectedWeekday(int newValue) {
+    _selectedWeekday = newValue;
     notifyListeners();
   }
-
-  int get selectedWeekday => weekdayRecurrent.indexOf(selectedWeekdayText);
 
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
@@ -143,6 +142,9 @@ class CalendarViewModel extends ChangeNotifier {
           Provider.of<MenuProvider>(context, listen: false).closeModal();
           _selectedDay = newSelectedDay;
           notifyListeners();
+        } else if (response.responseStatus ==
+            NetworkResponseStatus.expiredToken) {
+          Provider.of<MenuProvider>(context, listen: false).logout(context);
         } else {
           Provider.of<MenuProvider>(context, listen: false)
               .setMessageModalFromResponse(response);
@@ -156,9 +158,9 @@ class CalendarViewModel extends ChangeNotifier {
 
   List<DateTime> get selectedWeek {
     DateTime dayStart = _selectedDay
-        .subtract(Duration(days: getBRWeekday(_selectedDay.weekday)));
+        .subtract(Duration(days: getSFWeekday(_selectedDay.weekday)));
     DateTime dayEnd = _selectedDay
-        .add(Duration(days: 6 - getBRWeekday(_selectedDay.weekday)));
+        .add(Duration(days: 6 - getSFWeekday(_selectedDay.weekday)));
     List<DateTime> days = [];
     for (int i = 0; i <= dayEnd.difference(dayStart).inDays; i++) {
       days.add(dayStart.add(Duration(days: i)));
@@ -181,7 +183,7 @@ class CalendarViewModel extends ChangeNotifier {
 
   List<Hour> get selectedDayWorkingHours {
     if (calendarType == CalendarType.Match) {
-      return workingHoursFromDay(getBRWeekday(selectedDay.weekday));
+      return workingHoursFromDay(getSFWeekday(selectedDay.weekday));
     } else {
       return workingHoursFromDay(selectedWeekday);
     }
@@ -191,7 +193,7 @@ class CalendarViewModel extends ChangeNotifier {
     if (calendarType == CalendarType.Match) {
       return "dia\n${DateFormat('dd/MM').format(selectedDay)}";
     } else {
-      return selectedWeekdayText;
+      return weekdayRecurrent[selectedWeekday];
     }
   }
 
@@ -222,11 +224,11 @@ class CalendarViewModel extends ChangeNotifier {
             );
             jumpToHour = match.endingHour.hour;
           } else if (recurrentMatches.any((recMatch) =>
-              recMatch.weekday == getBRWeekday(selectedDay.weekday) &&
+              recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
               recMatch.startingHour == hour &&
               recMatch.idStoreCourt == court.idStoreCourt)) {
             recMatch = recurrentMatches.firstWhere((recMatch) =>
-                recMatch.weekday == getBRWeekday(selectedDay.weekday) &&
+                recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
                 recMatch.idStoreCourt == court.idStoreCourt);
             dayMatches.add(
@@ -326,6 +328,7 @@ class CalendarViewModel extends ChangeNotifier {
 
         for (var hour in minMaxHourRangeWeek) {
           List<AppMatch> filteredMatches = [];
+          List<AppRecurrentMatch> filteredRecurrentMatches = [];
 
           for (var match in matches) {
             if (areInTheSameDay(match.date, day) &&
@@ -334,24 +337,33 @@ class CalendarViewModel extends ChangeNotifier {
               filteredMatches.add(AppMatch.copyWith(match));
             }
           }
+          for (var recurrentMatch in recurrentMatches) {
+            if (getSFWeekday(day.weekday) == recurrentMatch.weekday &&
+                hour.hour >= recurrentMatch.startingHour.hour &&
+                hour.hour < recurrentMatch.endingHour.hour) {
+              filteredRecurrentMatches
+                  .add(AppRecurrentMatch.copyWith(recurrentMatch));
+            }
+          }
 
           dayMatches.add(
             DayMatch(
               startingHour: hour,
               matches: filteredMatches,
+              recurrentMatches: filteredRecurrentMatches,
               operationHour: storeWorkingDays
                       .firstWhere((workingDay) =>
-                          workingDay.weekday == getBRWeekday(day.weekday))
+                          workingDay.weekday == getSFWeekday(day.weekday))
                       .isEnabled &&
                   storeWorkingDays
                           .firstWhere((workingDay) =>
-                              workingDay.weekday == getBRWeekday(day.weekday))
+                              workingDay.weekday == getSFWeekday(day.weekday))
                           .startingHour!
                           .hour <=
                       hour.hour &&
                   storeWorkingDays
                           .firstWhere((workingDay) =>
-                              workingDay.weekday == getBRWeekday(day.weekday))
+                              workingDay.weekday == getSFWeekday(day.weekday))
                           .endingHour!
                           .hour >
                       hour.hour,
@@ -375,7 +387,7 @@ class CalendarViewModel extends ChangeNotifier {
           List<AppRecurrentMatch> filteredRecurrentMatches = [];
 
           for (var recurrentMatch in recurrentMatches) {
-            if (recurrentMatch.weekday == getBRWeekday(day.weekday) &&
+            if (recurrentMatch.weekday == getSFWeekday(day.weekday) &&
                 hour.hour >= recurrentMatch.startingHour.hour &&
                 hour.hour < recurrentMatch.endingHour.hour) {
               filteredRecurrentMatches
@@ -389,17 +401,17 @@ class CalendarViewModel extends ChangeNotifier {
               recurrentMatches: filteredRecurrentMatches,
               operationHour: storeWorkingDays
                       .firstWhere((workingDay) =>
-                          workingDay.weekday == getBRWeekday(day.weekday))
+                          workingDay.weekday == getSFWeekday(day.weekday))
                       .isEnabled &&
                   storeWorkingDays
                           .firstWhere((workingDay) =>
-                              workingDay.weekday == getBRWeekday(day.weekday))
+                              workingDay.weekday == getSFWeekday(day.weekday))
                           .startingHour!
                           .hour <=
                       hour.hour &&
                   storeWorkingDays
                           .firstWhere((workingDay) =>
-                              workingDay.weekday == getBRWeekday(day.weekday))
+                              workingDay.weekday == getSFWeekday(day.weekday))
                           .endingHour!
                           .hour >
                       hour.hour,
@@ -442,6 +454,9 @@ class CalendarViewModel extends ChangeNotifier {
         setMatchesFromResponse(context, response.responseBody!);
         blockHourReasonController.text = "";
         Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -471,6 +486,9 @@ class CalendarViewModel extends ChangeNotifier {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setRecurrentMatchesFromResponse(context, response.responseBody!);
         Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -495,6 +513,9 @@ class CalendarViewModel extends ChangeNotifier {
 
         cancelMatchReasonController.text = "";
         Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -519,6 +540,9 @@ class CalendarViewModel extends ChangeNotifier {
 
         cancelRecurrentMatchReasonController.text = "";
         Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -646,6 +670,7 @@ class CalendarViewModel extends ChangeNotifier {
     DateTime day,
     Hour hour,
     List<AppMatch> matches,
+    List<AppRecurrentMatch> recurrentMatches,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       CourtsAvailabilityWidget(
@@ -653,6 +678,7 @@ class CalendarViewModel extends ChangeNotifier {
         day: day,
         hour: hour,
         matches: matches,
+        recurrentMatches: recurrentMatches,
       ),
     );
   }

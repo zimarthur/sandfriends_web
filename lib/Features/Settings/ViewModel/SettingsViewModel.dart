@@ -131,6 +131,9 @@ class SettingsViewModel extends ChangeNotifier {
           null,
           true,
         );
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(

@@ -40,16 +40,18 @@ class RewardsViewModel extends ChangeNotifier {
   }
 
   void setCustomPeriod(BuildContext context) {
-    Provider.of<MenuProvider>(context, listen: false)
-        .setModalForm(DatePickerModal(
-      onDateSelected: (dateStart, dateEnd) {
-        customStartDate = dateStart;
-        customEndDate = dateEnd;
-        searchCustomRewards(context);
-      },
-      onReturn: () =>
-          Provider.of<MenuProvider>(context, listen: false).closeModal(),
-    ));
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      DatePickerModal(
+        onDateSelected: (dateStart, dateEnd) {
+          customStartDate = dateStart;
+          customEndDate = dateEnd;
+          searchCustomRewards(context);
+        },
+        onReturn: () =>
+            Provider.of<MenuProvider>(context, listen: false).closeModal(),
+        allowFutureDates: false,
+      ),
+    );
   }
 
   int get rewardsCounter => rewards.length;
@@ -71,7 +73,7 @@ class RewardsViewModel extends ChangeNotifier {
     } else {
       filteredRewards = customRewards;
     }
-    filteredRewards.sort((a, b) => a.claimedDate.compareTo(b.claimedDate));
+    filteredRewards.sort((a, b) => b.claimedDate.compareTo(a.claimedDate));
     return filteredRewards;
   }
 
@@ -117,6 +119,9 @@ class RewardsViewModel extends ChangeNotifier {
         periodVisualization = EnumPeriodVisualization.Custom;
         setRewardDataSource();
         notifyListeners();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
@@ -145,6 +150,9 @@ class RewardsViewModel extends ChangeNotifier {
           onTapRewardItem: (p0) {},
         ));
         notifyListeners();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
       } else {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
