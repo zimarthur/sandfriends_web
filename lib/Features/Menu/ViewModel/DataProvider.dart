@@ -104,6 +104,10 @@ class DataProvider extends ChangeNotifier {
     return employees.firstWhere((employee) => employee.isLoggedUser);
   }
 
+  bool isLoggedEmployeeAdmin() {
+    return loggedEmployee.admin;
+  }
+
   String loggedAccessToken = "";
   String loggedEmail = "";
 

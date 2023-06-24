@@ -17,6 +17,7 @@ import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
+import '../../../SharedComponents/Model/TabItem.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import 'package:intl/intl.dart';
@@ -71,6 +72,7 @@ class CalendarViewModel extends ChangeNotifier {
         Provider.of<DataProvider>(context, listen: false).matchesStartDate;
     matchesEndDate =
         Provider.of<DataProvider>(context, listen: false).matchesEndDate;
+    initTabs();
   }
 
   PeriodType _periodType = PeriodType.Daily;
@@ -82,22 +84,43 @@ class CalendarViewModel extends ChangeNotifier {
 
   CalendarType _calendarType = CalendarType.Match;
   CalendarType get calendarType => _calendarType;
-  void setCalendarType(int newCalendarType) {
-    if (newCalendarType == 0) {
-      _calendarType = CalendarType.Match;
-    } else {
-      _calendarType = CalendarType.RecurrentMatch;
-      setSelectedWeekday(getSFWeekday(selectedDay.weekday));
-    }
+  void setCalendarType(CalendarType newCalendarType) {
+    _calendarType = newCalendarType;
     notifyListeners();
   }
 
-  int get calendarTypeIndex {
-    if (_calendarType == CalendarType.Match) {
-      return 0;
-    } else {
-      return 1;
-    }
+  void initTabs() {
+    tabItems = [
+      SFTabItem(
+        name: "Partidas",
+        onTap: (newTab) {
+          setCalendarType(CalendarType.Match);
+          setSelectedTab(newTab);
+        },
+        displayWidget: Container(),
+      ),
+      SFTabItem(
+        name: "Mensalistas",
+        onTap: (newTab) {
+          setCalendarType(CalendarType.RecurrentMatch);
+          setSelectedWeekday(getSFWeekday(selectedDay.weekday));
+          setSelectedTab(newTab);
+        },
+        displayWidget: Container(),
+      ),
+    ];
+    _selectedTab = tabItems.first;
+    notifyListeners();
+  }
+
+  List<SFTabItem> tabItems = [];
+
+  SFTabItem _selectedTab =
+      SFTabItem(name: "", displayWidget: Container(), onTap: (a) {});
+  SFTabItem get selectedTab => _selectedTab;
+  void setSelectedTab(SFTabItem newTab) {
+    _selectedTab = newTab;
+    notifyListeners();
   }
 
   int _selectedWeekday = 0;

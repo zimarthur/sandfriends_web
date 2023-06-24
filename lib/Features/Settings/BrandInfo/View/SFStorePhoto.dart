@@ -10,11 +10,13 @@ import '../../../../SharedComponents/View/SFLoading.dart';
 class StorePhotoCard extends StatefulWidget {
   StorePhoto storePhoto;
   VoidCallback delete;
+  bool isAdmin;
 
   StorePhotoCard({
     super.key,
     required this.storePhoto,
     required this.delete,
+    required this.isAdmin,
   });
 
   @override
@@ -58,26 +60,27 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
                         ),
                       ),
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: InkWell(
-                  onTap: widget.delete,
-                  child: Container(
-                    height: deleteButtonSize,
-                    width: deleteButtonSize,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: primaryBlue,
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      r'assets/icon/x.svg',
-                      color: secondaryPaper,
+              if (widget.isAdmin)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: widget.delete,
+                    child: Container(
+                      height: deleteButtonSize,
+                      width: deleteButtonSize,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: primaryBlue,
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        r'assets/icon/x.svg',
+                        color: secondaryPaper,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         );

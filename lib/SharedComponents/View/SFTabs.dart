@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/Model/TabItem.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFTabs extends StatefulWidget {
-  List<String> tabs;
-  Function(int) onTap;
-  int selectedPosition;
+  List<SFTabItem> tabs;
+  SFTabItem selectedPosition;
 
   SFTabs({
     super.key,
     required this.tabs,
-    required this.onTap,
     required this.selectedPosition,
   });
 
@@ -35,16 +34,18 @@ class _SFTabsState extends State<SFTabs> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (() {
-                    widget.onTap(index);
-                    widget.selectedPosition = index;
+                    setState(() {
+                      widget.tabs[index].onTap(widget.tabs[index]);
+                    });
                   }),
                   child: Container(
                     alignment: Alignment.center,
                     width: tabWidth,
                     child: Text(
-                      widget.tabs[index],
+                      widget.tabs[index].name,
                       style: TextStyle(
-                          color: index == widget.selectedPosition
+                          color: index ==
+                                  widget.tabs.indexOf(widget.selectedPosition)
                               ? textBlue
                               : textDarkGrey,
                           fontWeight: FontWeight.bold),
@@ -63,7 +64,7 @@ class _SFTabsState extends State<SFTabs> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 100),
-                left: tabWidth * widget.selectedPosition,
+                left: tabWidth * widget.tabs.indexOf(widget.selectedPosition),
                 child: Container(
                   height: 4,
                   width: tabWidth,

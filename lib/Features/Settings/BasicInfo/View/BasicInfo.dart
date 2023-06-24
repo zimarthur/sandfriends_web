@@ -30,18 +30,21 @@ class _BasicInfoState extends State<BasicInfo> {
                     controller: widget.viewModel.nameController,
                     onChanged: (newValue) =>
                         widget.viewModel.onChangedName(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                   FormItem(
                     name: "Telefone da empresa",
                     controller: widget.viewModel.telephoneController,
                     onChanged: (newValue) =>
                         widget.viewModel.onChangedPhoneNumber(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                   FormItem(
                     name: "Telefone pessoal",
                     controller: widget.viewModel.telephoneOwnerController,
                     onChanged: (newValue) =>
                         widget.viewModel.onChangedPhoneNumber(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                 ],
               ),
@@ -61,6 +64,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         widget.viewModel.onChangedCep(newValue),
                     onChangedSecond: (newValue) =>
                         widget.viewModel.onChangedNeighbourhood(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                   FormItem(
                     name: "Rua",
@@ -72,6 +76,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         widget.viewModel.onChangedAddress(newValue),
                     onChangedSecond: (newValue) =>
                         widget.viewModel.onChangedAddressNumber(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                   FormItem(
                     name: "Cidade",
@@ -83,6 +88,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         widget.viewModel.onChangedCity(newValue),
                     onChangedSecond: (newValue) =>
                         widget.viewModel.onChangedState(newValue),
+                    isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
                 ],
               ),

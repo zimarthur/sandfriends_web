@@ -23,6 +23,7 @@ class _FinanceInfoState extends State<FinanceInfo> {
           onChanged: (newValue) => widget.viewModel.onChangedBankAccount(
             newValue,
           ),
+          isAdmin: widget.viewModel.isEmployeeAdmin,
         ),
         FormItem(
           name: "CNPJ",
@@ -30,6 +31,7 @@ class _FinanceInfoState extends State<FinanceInfo> {
           onChanged: (newValue) => widget.viewModel.onChangedCnpj(
             newValue,
           ),
+          isAdmin: widget.viewModel.isEmployeeAdmin,
         ),
       ],
     );

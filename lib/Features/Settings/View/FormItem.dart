@@ -6,13 +6,13 @@ import '../../../SharedComponents/View/SFTextfield.dart';
 class FormItem extends StatefulWidget {
   String name;
   TextEditingController controller;
-  bool controllerEnabled;
   bool hasSecondItem;
   String? secondName;
   TextEditingController? secondController;
   Widget? customWidget;
   final Function(String)? onChanged;
   final Function(String)? onChangedSecond;
+  bool isAdmin;
 
   FormItem({
     super.key,
@@ -20,11 +20,11 @@ class FormItem extends StatefulWidget {
     required this.controller,
     required this.onChanged,
     this.onChangedSecond,
-    this.controllerEnabled = true,
     this.hasSecondItem = false,
     this.secondName,
     this.secondController,
     this.customWidget,
+    required this.isAdmin,
   });
 
   @override
@@ -54,7 +54,7 @@ class _FormItemState extends State<FormItem> {
               validator: (String? value) {
                 return null;
               },
-              enable: widget.controllerEnabled,
+              enable: widget.isAdmin,
               onChanged: widget.onChanged,
             ),
           ),
@@ -84,6 +84,7 @@ class _FormItemState extends State<FormItem> {
                                   return null;
                                 },
                                 onChanged: widget.onChangedSecond,
+                                enable: widget.isAdmin,
                               ),
                             ),
                           ],

@@ -14,7 +14,7 @@ import '../BasicInfo/View/BasicInfo.dart';
 import '../ViewModel/SettingsViewModel.dart';
 
 class SettingsScreen extends StatefulWidget {
-  int? initForm;
+  String? initForm;
   SettingsScreen({
     super.key,
     this.initForm,
@@ -27,26 +27,19 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final viewModel = SettingsViewModel();
 
-  // final basicInfoViewModel = BasicInfoViewModel();
-  // final brandInfoViewModel = BrandInfoViewModel();
-  // final financesInfoViewModel = FinanceInfoViewModel();
-  // final employeeInfoViewModel = EmployeeInfoViewModel();
-
   @override
   void initState() {
     super.initState();
     viewModel.initSettingsViewModel(context);
     if (widget.initForm != null) {
       setState(() {
-        viewModel.currentForm = widget.initForm!;
+        viewModel.setSelectedTabFromString(widget.initForm!);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
-    double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return ChangeNotifierProvider<SettingsViewModel>(
       create: (BuildContext context) => viewModel,
       child: Consumer<SettingsViewModel>(
@@ -78,32 +71,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
                 SFTabs(
-                  tabs: viewModel.formsTitle,
-                  onTap: (index) {
-                    viewModel.currentForm = index;
-                  },
-                  selectedPosition: viewModel.currentForm,
+                  tabs: viewModel.tabItems,
+                  selectedPosition: viewModel.selectedTab,
                 ),
                 const SizedBox(
                   height: defaultPadding,
                 ),
                 Expanded(
-                  child: Provider.of<SettingsViewModel>(context).currentForm ==
-                          0
-                      ? BasicInfo(
-                          viewModel: viewModel,
-                        )
-                      : Provider.of<SettingsViewModel>(context).currentForm == 1
-                          ? BrandInfo(
-                              viewModel: viewModel,
-                            )
-                          : Provider.of<SettingsViewModel>(context)
-                                      .currentForm ==
-                                  2
-                              ? FinanceInfo(
-                                  viewModel: viewModel,
-                                )
-                              : EmployeeInfo(),
+                  child: Provider.of<SettingsViewModel>(context)
+                      .selectedTab
+                      .displayWidget,
                 ),
               ],
             ),

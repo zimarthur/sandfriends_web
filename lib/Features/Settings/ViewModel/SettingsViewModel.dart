@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Settings/BasicInfo/View/BasicInfo.dart';
+import 'package:sandfriends_web/Features/Settings/BrandInfo/View/BrandInfo.dart';
+import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/EmployeeInfo.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +12,13 @@ import 'package:image/image.dart' as IMG;
 import 'package:flutter/foundation.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:sandfriends_web/Features/Settings/FinanceInfo/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Features/Settings/Repository/SettingsRepoImp.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StorePhoto.dart';
 import 'package:sandfriends_web/Utils/Numbers.dart';
 import '../../../Remote/NetworkResponse.dart';
 import '../../../SharedComponents/Model/Store.dart';
+import '../../../SharedComponents/Model/TabItem.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../Utils/PageStatus.dart';
 import '../../../Utils/SFImage.dart';
@@ -23,15 +28,60 @@ import '../../Menu/ViewModel/MenuProvider.dart';
 class SettingsViewModel extends ChangeNotifier {
   final settingsRepo = SettingsRepoImp();
 
-  int _currentForm = 0;
-  int get currentForm => _currentForm;
-  set currentForm(int value) {
-    _currentForm = value;
+  void initTabs() {
+    tabItems.add(
+      SFTabItem(
+        name: "Dados básicos",
+        displayWidget: BasicInfo(
+          viewModel: this,
+        ),
+        onTap: (newTab) => setSelectedTab(newTab),
+      ),
+    );
+    tabItems.add(
+      SFTabItem(
+        name: "Marca",
+        displayWidget: BrandInfo(
+          viewModel: this,
+        ),
+        onTap: (newTab) => setSelectedTab(newTab),
+      ),
+    );
+    if (isEmployeeAdmin) {
+      tabItems.add(
+        SFTabItem(
+          name: "Dados financeiros",
+          displayWidget: FinanceInfo(
+            viewModel: this,
+          ),
+          onTap: (newTab) => setSelectedTab(newTab),
+        ),
+      );
+    }
+    tabItems.add(
+      SFTabItem(
+        name: "Equipe",
+        displayWidget: EmployeeInfo(),
+        onTap: (newTab) => setSelectedTab(newTab),
+      ),
+    );
+    setSelectedTab(tabItems.first);
+  }
+
+  List<SFTabItem> tabItems = [];
+
+  SFTabItem _selectedTab =
+      SFTabItem(name: "", displayWidget: Container(), onTap: (a) {});
+  SFTabItem get selectedTab => _selectedTab;
+  void setSelectedTab(SFTabItem newTab) {
+    _selectedTab = newTab;
     notifyListeners();
   }
 
-  List<String> get formsTitle =>
-      ["Dados básicos", "Marca", "Dados financeiros", "Equipe"];
+  void setSelectedTabFromString(String tab) {
+    _selectedTab = tabItems.firstWhere((tabItem) => tabItem.name == tab);
+    notifyListeners();
+  }
 
   late Store storeRef;
   late Store storeEdit;
@@ -70,7 +120,16 @@ class SettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isEmployeeAdmin = false;
+  bool get isEmployeeAdmin => _isEmployeeAdmin;
+  void setIsEmployeeAdmin(bool newValue) {
+    _isEmployeeAdmin = newValue;
+    notifyListeners();
+  }
+
   void initSettingsViewModel(BuildContext context) {
+    setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
+        .isLoggedEmployeeAdmin());
     storeRef = Store.copyWith(
         Provider.of<DataProvider>(context, listen: false).store!);
     storeEdit = Store.copyWith(
@@ -86,6 +145,7 @@ class SettingsViewModel extends ChangeNotifier {
     stateController.text = storeEdit.city.state.uf;
     descriptionController.text = storeEdit.description ?? "";
     instagramController.text = storeEdit.instagram ?? "";
+    initTabs();
     notifyListeners();
   }
 

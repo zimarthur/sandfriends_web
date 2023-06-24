@@ -53,58 +53,60 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     description:
                         "Acompanhe as partidas agendadas e veja seus mensalistas"),
                 SFTabs(
-                  tabs: const ["Partidas", "Mensalistas"],
-                  onTap: (newValue) {
-                    viewModel.setCalendarType(newValue);
-                  },
-                  selectedPosition: viewModel.calendarTypeIndex,
+                  tabs: viewModel.tabItems,
+                  selectedPosition: viewModel.selectedTab,
                 ),
                 Expanded(
                   child: Provider.of<DataProvider>(context, listen: false)
                           .courts
                           .isEmpty
                       ? NoCourtsFound()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: LayoutBuilder(
-                                  builder: (layoutContext, layoutConstraints) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    color: secondaryPaper,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: defaultPadding,
-                                  ),
-                                  child: viewModel.periodType ==
-                                          PeriodType.Weekly
-                                      ? SFCalendarWeek(
-                                          viewModel: viewModel,
-                                          height: layoutConstraints.maxHeight,
-                                          width: layoutConstraints.maxWidth,
-                                        )
-                                      : SFCalendarDay(
-                                          viewModel: viewModel,
-                                          height: layoutConstraints.maxHeight,
-                                          width: layoutConstraints.maxWidth,
-                                        ),
-                                );
-                              }),
+                      : viewModel.selectedTab.name == ""
+                          ? Container()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: LayoutBuilder(builder:
+                                      (layoutContext, layoutConstraints) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        color: secondaryPaper,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: defaultPadding,
+                                      ),
+                                      child: viewModel.periodType ==
+                                              PeriodType.Weekly
+                                          ? SFCalendarWeek(
+                                              viewModel: viewModel,
+                                              height:
+                                                  layoutConstraints.maxHeight,
+                                              width: layoutConstraints.maxWidth,
+                                            )
+                                          : SFCalendarDay(
+                                              viewModel: viewModel,
+                                              height:
+                                                  layoutConstraints.maxHeight,
+                                              width: layoutConstraints.maxWidth,
+                                            ),
+                                    );
+                                  }),
+                                ),
+                                const SizedBox(
+                                  width: defaultPadding,
+                                ),
+                                viewModel.calendarType == CalendarType.Match
+                                    ? MatchFilter(
+                                        viewModel: viewModel,
+                                      )
+                                    : RecurrentMatchFilter(
+                                        viewModel: viewModel,
+                                      ),
+                              ],
                             ),
-                            const SizedBox(
-                              width: defaultPadding,
-                            ),
-                            viewModel.calendarType == CalendarType.Match
-                                ? MatchFilter(
-                                    viewModel: viewModel,
-                                  )
-                                : RecurrentMatchFilter(
-                                    viewModel: viewModel,
-                                  ),
-                          ],
-                        ),
                 ),
               ],
             ),

@@ -30,6 +30,13 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
+  bool _isEmployeeAdmin = false;
+  bool get isEmployeeAdmin => _isEmployeeAdmin;
+  void setIsEmployeeAdmin(bool newValue) {
+    _isEmployeeAdmin = newValue;
+    notifyListeners();
+  }
+
   PageStatus pageStatus = PageStatus.OK;
   SFMessageModal messageModal = SFMessageModal(
     title: "",
@@ -49,6 +56,8 @@ class MenuProvider extends ChangeNotifier {
           if (response.responseStatus == NetworkResponseStatus.success) {
             Provider.of<DataProvider>(context, listen: false)
                 .setLoginResponse(response.responseBody!, true);
+            setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
+                .isLoggedEmployeeAdmin());
             int? lastPage = getLastPage();
             if (lastPage != null) {
               onTabClick(lastPage, context);
@@ -64,6 +73,9 @@ class MenuProvider extends ChangeNotifier {
       } else {
         Navigator.pushNamed(context, "/login");
       }
+    } else {
+      setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
+          .isLoggedEmployeeAdmin());
     }
   }
 
@@ -164,25 +176,38 @@ class MenuProvider extends ChangeNotifier {
     DrawerItem(
       title: "Início",
       icon: r"assets/icon/home.svg",
+      requiresAdmin: false,
     ),
     DrawerItem(
       title: "Calendário",
       icon: r"assets/icon/calendar.svg",
+      requiresAdmin: false,
     ),
     DrawerItem(
       title: "Recompensas",
       icon: r"assets/icon/star.svg",
+      requiresAdmin: false,
     ),
     DrawerItem(
       title: "Financeiro",
       icon: r"assets/icon/finance.svg",
+      requiresAdmin: true,
     ),
     DrawerItem(
       title: "Minhas quadras",
       icon: r"assets/icon/court.svg",
+      requiresAdmin: false,
     ),
   ];
-  List<DrawerItem> get drawerItems => _drawerItems;
+  List<DrawerItem> get drawerItems {
+    if (isEmployeeAdmin) {
+      return _drawerItems;
+    } else {
+      return _drawerItems
+          .where((drawer) => drawer.requiresAdmin == false)
+          .toList();
+    }
+  }
 
   void onTabClick(int index, BuildContext context) {
     _indexSelectedDrawerTile = index;
@@ -218,7 +243,7 @@ class MenuProvider extends ChangeNotifier {
   void quickLinkBrand() {
     _indexSelectedDrawerTile = -1;
     _currentMenuWidget = SettingsScreen(
-      initForm: 1,
+      initForm: "Marca",
     );
     notifyListeners();
   }
@@ -226,7 +251,7 @@ class MenuProvider extends ChangeNotifier {
   void quickLinkFinanceSettings() {
     _indexSelectedDrawerTile = -1;
     _currentMenuWidget = SettingsScreen(
-      initForm: 2,
+      initForm: "Dados financeiros",
     );
     notifyListeners();
   }

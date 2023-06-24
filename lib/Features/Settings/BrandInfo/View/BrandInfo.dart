@@ -40,20 +40,21 @@ class _BrandInfoState extends State<BrandInfo> {
                         const SizedBox(
                           height: defaultPadding,
                         ),
-                        Row(children: [
-                          Expanded(
-                            child: SFButton(
-                              buttonLabel: "Escolher arquivo",
-                              buttonType: ButtonType.Secondary,
-                              onTap: () {
-                                widget.viewModel.setStoreAvatar(context);
-                              },
+                        if (widget.viewModel.isEmployeeAdmin)
+                          Row(children: [
+                            Expanded(
+                              child: SFButton(
+                                buttonLabel: "Escolher arquivo",
+                                buttonType: ButtonType.Secondary,
+                                onTap: () {
+                                  widget.viewModel.setStoreAvatar(context);
+                                },
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                        ]),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ]),
                       ],
                     ),
                   ),
@@ -118,6 +119,7 @@ class _BrandInfoState extends State<BrandInfo> {
                                   "Fale sobre seu estabelecimento, infraestrutura, estacionamento...",
                               onChanged: (newValue) => widget.viewModel
                                   .onChangedDescription(newValue),
+                              enable: widget.viewModel.isEmployeeAdmin,
                             ),
                             Text(
                               "${widget.viewModel.descriptionLength}/255",
@@ -165,6 +167,7 @@ class _BrandInfoState extends State<BrandInfo> {
                                 },
                                 onChanged: (newValue) => widget.viewModel
                                     .onChangedInstagram(newValue),
+                                enable: widget.viewModel.isEmployeeAdmin,
                               ),
                             ),
                             Expanded(
@@ -201,20 +204,21 @@ class _BrandInfoState extends State<BrandInfo> {
                         const SizedBox(
                           height: defaultPadding,
                         ),
-                        Row(children: [
-                          Expanded(
-                            child: SFButton(
-                              buttonLabel: "Adicionar foto",
-                              buttonType: ButtonType.Secondary,
-                              onTap: () {
-                                widget.viewModel.addStorePhoto(context);
-                              },
+                        if (widget.viewModel.isEmployeeAdmin)
+                          Row(children: [
+                            Expanded(
+                              child: SFButton(
+                                buttonLabel: "Adicionar foto",
+                                buttonType: ButtonType.Secondary,
+                                onTap: () {
+                                  widget.viewModel.addStorePhoto(context);
+                                },
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                        ]),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ]),
                       ],
                     ),
                   ),
@@ -231,14 +235,16 @@ class _BrandInfoState extends State<BrandInfo> {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return StorePhotoCard(
-                                    storePhoto: widget
-                                        .viewModel.storeEdit.photos[index],
-                                    delete: () {
-                                      widget.viewModel.deleteStorePhoto(
-                                        widget.viewModel.storeEdit.photos[index]
-                                            .idStorePhoto,
-                                      );
-                                    });
+                                  storePhoto:
+                                      widget.viewModel.storeEdit.photos[index],
+                                  delete: () {
+                                    widget.viewModel.deleteStorePhoto(
+                                      widget.viewModel.storeEdit.photos[index]
+                                          .idStorePhoto,
+                                    );
+                                  },
+                                  isAdmin: widget.viewModel.isEmployeeAdmin,
+                                );
                               },
                             ),
                           ),
