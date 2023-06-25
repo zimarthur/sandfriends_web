@@ -146,6 +146,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                 viewModel.periodVisualization,
                             customStartDate: viewModel.customStartDate,
                             customEndDate: viewModel.customEndDate,
+                            showCurrency: true,
                           ),
                         )
                       ],

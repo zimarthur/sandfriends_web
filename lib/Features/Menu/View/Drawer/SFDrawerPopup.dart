@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Menu/Model/DrawerItem.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SFDrawerPopup extends StatefulWidget {
-  Function(int) onTap;
   bool showIcon;
-  SFDrawerPopup({super.key, 
-    required this.onTap,
+  MenuProvider menuProvider;
+  SFDrawerPopup({
+    super.key,
     required this.showIcon,
+    required this.menuProvider,
   });
 
   @override
@@ -30,69 +33,30 @@ class _SFDrawerPopupState extends State<SFDrawerPopup> {
           : Container(),
       tooltip: "",
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        PopupMenuItem(
-          value: -1,
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                r'assets/icon/profile.svg',
-                color: textDarkGrey,
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              const Text(
-                'Meu perfil',
-                style: TextStyle(
-                  color: textDarkGrey,
+        for (var drawerItem in widget.menuProvider.secondaryDrawer)
+          PopupMenuItem(
+            value: drawerItem,
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  drawerItem.icon,
+                  color: drawerItem.color ?? textDarkGrey,
                 ),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: -2,
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                r'assets/icon/help.svg',
-                color: textDarkGrey,
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              const Text(
-                'Ajuda',
-                style: TextStyle(
-                  color: textDarkGrey,
+                const SizedBox(
+                  width: defaultPadding,
                 ),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: -3,
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                r'assets/icon/logout.svg',
-                color: Colors.red,
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              const Text(
-                'Sair',
-                style: TextStyle(
-                  color: Colors.red,
+                Text(
+                  drawerItem.title,
+                  style: TextStyle(
+                    color: drawerItem.color ?? textDarkGrey,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
       ],
       onSelected: (value) {
-        widget.onTap(value);
+        widget.menuProvider.onTabClick(value, context);
       },
     );
   }

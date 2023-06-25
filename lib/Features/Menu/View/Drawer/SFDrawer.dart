@@ -10,7 +10,10 @@ import '../../ViewModel/MenuProvider.dart';
 import 'SFDrawerDivider.dart';
 
 class SFDrawer extends StatefulWidget {
-  const SFDrawer({super.key});
+  MenuProvider viewModel;
+  SFDrawer({
+    required this.viewModel,
+  });
 
   @override
   State<SFDrawer> createState() => _SFDrawerState();
@@ -21,12 +24,11 @@ class _SFDrawerState extends State<SFDrawer> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    MenuProvider menuController = Provider.of<MenuProvider>(context);
     bool fullSize =
-        !Responsive.isMobile(context) && menuController.isDrawerExpanded ||
+        !Responsive.isMobile(context) && widget.viewModel.isDrawerExpanded ||
             Responsive.isMobile(context);
     return Responsive.isMobile(context) &&
-            menuController.isDrawerOpened == false
+            widget.viewModel.isDrawerOpened == false
         ? Container()
         : Container(
             decoration: const BoxDecoration(
@@ -45,8 +47,8 @@ class _SFDrawerState extends State<SFDrawer> {
               children: [
                 Responsive.isMobile(context) == false
                     ? InkWell(
-                        onTap: () => menuController.isDrawerExpanded =
-                            !menuController.isDrawerExpanded,
+                        onTap: () => widget.viewModel.isDrawerExpanded =
+                            !widget.viewModel.isDrawerExpanded,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           width: double.infinity,
@@ -75,26 +77,26 @@ class _SFDrawerState extends State<SFDrawer> {
                 const SFDrawerDivider(),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: menuController.drawerItems.length,
+                    itemCount: widget.viewModel.mainDrawer.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          menuController.onTabClick(index, context);
+                          widget.viewModel.onTabClick(
+                              widget.viewModel.mainDrawer[index], context);
                         },
                         onHover: (value) {
-                          menuController
-                              .setIndexHoveredDrawerTile(value ? index : -1);
+                          widget.viewModel.setHoveredDrawerTitle(value
+                              ? widget.viewModel.mainDrawer[index].title
+                              : "");
                         },
                         child: SFDrawerListTile(
-                          title: menuController.drawerItems[index].title,
-                          svgSrc: menuController.drawerItems[index].icon,
-                          isSelected:
-                              index == menuController.indexSelectedDrawerTile
-                                  ? true
-                                  : false,
+                          title: widget.viewModel.mainDrawer[index].title,
+                          svgSrc: widget.viewModel.mainDrawer[index].icon,
+                          isSelected: widget.viewModel.mainDrawer[index] ==
+                              widget.viewModel.selectedDrawerItem,
                           fullSize: fullSize,
-                          isHovered:
-                              menuController.indexHoveredDrawerTile == index,
+                          isHovered: widget.viewModel.hoveredDrawerTitle ==
+                              widget.viewModel.mainDrawer[index].title,
                         ),
                       );
                     },
@@ -103,9 +105,7 @@ class _SFDrawerState extends State<SFDrawer> {
                 const SFDrawerDivider(),
                 SFDrawerUserWidget(
                   fullSize: fullSize,
-                  onTap: (value) {
-                    menuController.onTabClick(value, context);
-                  },
+                  menuProvider: widget.viewModel,
                 )
               ],
             ),

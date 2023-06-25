@@ -8,12 +8,10 @@ String? getToken() {
   return window.localStorage["sfToken"];
 }
 
-void storeLastPage(int pageIndex) {
-  window.localStorage["sfLastPageIndex"] = pageIndex.toString();
+void storeLastPage(String pageName) {
+  window.localStorage["sfLastPageName"] = pageName;
 }
 
-int? getLastPage() {
-  return window.localStorage["sfLastPageIndex"] != null
-      ? int.parse(window.localStorage["sfLastPageIndex"]!)
-      : null;
+String? getLastPage() {
+  return window.localStorage["sfLastPageName"];
 }

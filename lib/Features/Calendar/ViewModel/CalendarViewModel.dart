@@ -47,6 +47,7 @@ class CalendarViewModel extends ChangeNotifier {
       TextEditingController();
 
   void initCalendarViewModel(BuildContext context) {
+    initTabs();
     Provider.of<MenuProvider>(context, listen: false).isDrawerExpanded = false;
     courts = Provider.of<DataProvider>(context, listen: false).courts;
     storeWorkingDays =
@@ -72,7 +73,6 @@ class CalendarViewModel extends ChangeNotifier {
         Provider.of<DataProvider>(context, listen: false).matchesStartDate;
     matchesEndDate =
         Provider.of<DataProvider>(context, listen: false).matchesEndDate;
-    initTabs();
   }
 
   PeriodType _periodType = PeriodType.Daily;

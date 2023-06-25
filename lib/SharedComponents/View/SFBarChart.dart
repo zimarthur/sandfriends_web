@@ -12,11 +12,13 @@ class SFBarChart extends StatefulWidget {
   EnumPeriodVisualization barChartVisualization;
   DateTime? customStartDate;
   DateTime? customEndDate;
+  bool showCurrency;
   SFBarChart({
     required this.barChartItems,
     required this.barChartVisualization,
     this.customStartDate,
     this.customEndDate,
+    this.showCurrency = false,
   });
 
   @override
@@ -89,7 +91,7 @@ class _SFBarChartState extends State<SFBarChart> {
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: (rod.toY).toString(),
+                    text: widget.showCurrency ? "R\$ ${rod.toY}" : "${rod.toY}",
                     style: const TextStyle(
                       color: primaryLightBlue,
                       fontSize: 16,

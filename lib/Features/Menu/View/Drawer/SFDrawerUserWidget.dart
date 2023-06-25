@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Menu/View/Drawer/SFDrawerPopup.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 
 class SFDrawerUserWidget extends StatefulWidget {
   bool fullSize;
-  Function(int) onTap;
+  MenuProvider menuProvider;
 
-  SFDrawerUserWidget({super.key, required this.fullSize, required this.onTap});
+  SFDrawerUserWidget({
+    required this.fullSize,
+    required this.menuProvider,
+  });
 
   @override
   State<SFDrawerUserWidget> createState() => _SFDrawerUserWidgetState();
@@ -71,10 +75,8 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                               ),
                             ),
                             child: SFDrawerPopup(
-                              onTap: (value) {
-                                widget.onTap(value);
-                              },
                               showIcon: true,
+                              menuProvider: widget.menuProvider,
                             ),
                           ),
                         ),
@@ -129,10 +131,8 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                           : Colors.transparent,
                     ),
                     child: SFDrawerPopup(
-                      onTap: (value) {
-                        widget.onTap(value);
-                      },
                       showIcon: isOnHover,
+                      menuProvider: widget.menuProvider,
                     )),
               ),
             ],

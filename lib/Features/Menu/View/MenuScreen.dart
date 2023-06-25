@@ -17,7 +17,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final MenuProvider viewModel = MenuProvider();
+  final viewModel = MenuProvider();
 
   @override
   void initState() {
@@ -27,10 +27,10 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      drawer: const SFDrawer(),
+      drawer: SFDrawer(
+        viewModel: viewModel,
+      ),
       onDrawerChanged: (isOpened) {
         Provider.of<MenuProvider>(context, listen: false).isDrawerOpened =
             isOpened;
@@ -47,7 +47,9 @@ class _MenuScreenState extends State<MenuScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SFDrawer(),
+                  SFDrawer(
+                    viewModel: viewModel,
+                  ),
                   Expanded(
                     flex: 5,
                     child: Container(
@@ -61,8 +63,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                     Icons.menu,
                                     color: textDarkGrey,
                                   ),
-                                  onPressed:
-                                      context.read<MenuProvider>().controlMenu,
+                                  onPressed: viewModel.controlMenu,
                                 )
                               : Container(),
                           Expanded(
@@ -70,8 +71,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 2 * defaultPadding,
                                   vertical: defaultPadding),
-                              child: Provider.of<MenuProvider>(context)
-                                  .currentMenuWidget,
+                              child: viewModel.selectedDrawerItem.widget,
                             ),
                           )
                         ],

@@ -58,9 +58,15 @@ class MenuProvider extends ChangeNotifier {
                 .setLoginResponse(response.responseBody!, true);
             setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
                 .isLoggedEmployeeAdmin());
-            int? lastPage = getLastPage();
-            if (lastPage != null) {
-              onTabClick(lastPage, context);
+            setSelectedDrawerItem(mainDrawer.first);
+            String? lastPage = getLastPage();
+            if (lastPage != null &&
+                permissionsDrawerItems
+                    .any((drawer) => drawer.title == lastPage)) {
+              onTabClick(
+                  permissionsDrawerItems
+                      .firstWhere((drawer) => drawer.title == lastPage),
+                  context);
             } else {
               Navigator.pushNamed(context, '/home');
             }
@@ -76,6 +82,7 @@ class MenuProvider extends ChangeNotifier {
     } else {
       setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
           .isLoggedEmployeeAdmin());
+      setSelectedDrawerItem(mainDrawer.first);
     }
   }
 
@@ -142,18 +149,12 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _indexSelectedDrawerTile = 0;
-  int get indexSelectedDrawerTile => _indexSelectedDrawerTile;
-
-  int _indexHoveredDrawerTile = -1;
-  int get indexHoveredDrawerTile => _indexHoveredDrawerTile;
-  void setIndexHoveredDrawerTile(int newIndex) {
-    _indexHoveredDrawerTile = newIndex;
+  String _hoveredDrawerTitle = "";
+  String get hoveredDrawerTitle => _hoveredDrawerTitle;
+  void setHoveredDrawerTitle(String newTitle) {
+    _hoveredDrawerTitle = newTitle;
     notifyListeners();
   }
-
-  Widget _currentMenuWidget = const HomeScreen();
-  Widget get currentMenuWidget => _currentMenuWidget;
 
   double getScreenWidth(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -177,29 +178,62 @@ class MenuProvider extends ChangeNotifier {
       title: "Início",
       icon: r"assets/icon/home.svg",
       requiresAdmin: false,
+      widget: HomeScreen(),
+      mainDrawer: true,
     ),
     DrawerItem(
       title: "Calendário",
       icon: r"assets/icon/calendar.svg",
       requiresAdmin: false,
+      widget: CalendarScreen(),
+      mainDrawer: true,
     ),
     DrawerItem(
       title: "Recompensas",
       icon: r"assets/icon/star.svg",
       requiresAdmin: false,
+      widget: RewardsScreen(),
+      mainDrawer: true,
     ),
     DrawerItem(
       title: "Financeiro",
       icon: r"assets/icon/finance.svg",
       requiresAdmin: true,
+      widget: FinanceScreen(),
+      mainDrawer: true,
     ),
     DrawerItem(
       title: "Minhas quadras",
       icon: r"assets/icon/court.svg",
       requiresAdmin: false,
+      widget: MyCourtsScreen(),
+      mainDrawer: true,
+    ),
+    DrawerItem(
+      title: "Meu perfil",
+      icon: r"assets/icon/profile.svg",
+      requiresAdmin: false,
+      widget: SettingsScreen(),
+      mainDrawer: false,
+    ),
+    DrawerItem(
+      title: "Ajuda",
+      icon: r"assets/icon/help.svg",
+      requiresAdmin: false,
+      widget: HelpScreen(),
+      mainDrawer: false,
+    ),
+    DrawerItem(
+      title: "Sair",
+      icon: r"assets/icon/logout.svg",
+      requiresAdmin: false,
+      widget: Container(),
+      mainDrawer: false,
+      color: Colors.red,
+      logout: true,
     ),
   ];
-  List<DrawerItem> get drawerItems {
+  List<DrawerItem> get permissionsDrawerItems {
     if (isEmployeeAdmin) {
       return _drawerItems;
     } else {
@@ -209,62 +243,64 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
-  void onTabClick(int index, BuildContext context) {
-    _indexSelectedDrawerTile = index;
-    storeLastPage(index);
-    switch (index) {
-      case 0:
-        _currentMenuWidget = const HomeScreen();
-        break;
-      case 1:
-        _currentMenuWidget = const CalendarScreen();
-        break;
-      case 2:
-        _currentMenuWidget = const RewardsScreen();
-        break;
-      case 3:
-        _currentMenuWidget = const FinanceScreen();
-        break;
-      case 4:
-        _currentMenuWidget = MyCourtsScreen();
-        break;
-      case -1:
-        _currentMenuWidget = SettingsScreen();
-        break;
-      case -2:
-        _currentMenuWidget = const HelpScreen();
-        break;
-      case -3:
-        logout(context);
+  List<DrawerItem> get mainDrawer {
+    return permissionsDrawerItems.where((drawer) => drawer.mainDrawer).toList();
+  }
+
+  List<DrawerItem> get secondaryDrawer {
+    return permissionsDrawerItems
+        .where((drawer) => !drawer.mainDrawer)
+        .toList();
+  }
+
+  DrawerItem _selectedDrawerItem = DrawerItem(
+      title: "title",
+      icon: "",
+      requiresAdmin: false,
+      mainDrawer: false,
+      widget: Container());
+  DrawerItem get selectedDrawerItem => _selectedDrawerItem;
+  void setSelectedDrawerItem(DrawerItem drawer) {
+    _selectedDrawerItem = drawer;
+    notifyListeners();
+  }
+
+  void onTabClick(DrawerItem drawerItem, BuildContext context) {
+    storeLastPage(drawerItem.title);
+    setSelectedDrawerItem(drawerItem);
+    if (drawerItem.logout) {
+      logout(context);
     }
+
     notifyListeners();
   }
 
-  void quickLinkBrand() {
-    _indexSelectedDrawerTile = -1;
-    _currentMenuWidget = SettingsScreen(
-      initForm: "Marca",
-    );
-    notifyListeners();
-  }
+  // void quickLinkBrand() {
+  //   _indexSelectedDrawerTile = -1;
+  //   _currentMenuWidget = SettingsScreen(
+  //     initForm: "Marca",
+  //   );
+  //   notifyListeners();
+  // }
 
-  void quickLinkFinanceSettings() {
-    _indexSelectedDrawerTile = -1;
-    _currentMenuWidget = SettingsScreen(
-      initForm: "Dados financeiros",
-    );
-    notifyListeners();
-  }
+  // void quickLinkFinanceSettings() {
+  //   _indexSelectedDrawerTile = -1;
+  //   _currentMenuWidget = SettingsScreen(
+  //     initForm: "Dados financeiros",
+  //   );
+  //   notifyListeners();
+  // }
 
-  void quickLinkWorkingHours() {
-    _indexSelectedDrawerTile = 4;
-    _currentMenuWidget = MyCourtsScreen(
-      quickLinkWorkingHours: true,
-    );
-    notifyListeners();
-  }
+  // void quickLinkWorkingHours() {
+  //   _indexSelectedDrawerTile = 4;
+  //   _currentMenuWidget = MyCourtsScreen(
+  //     quickLinkWorkingHours: true,
+  //   );
+  //   notifyListeners();
+  // }
 
   void logout(BuildContext context) {
+    Provider.of<DataProvider>(context, listen: false).clearDataProvider();
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/login',

@@ -24,6 +24,17 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearDataProvider() {
+    _employees.clear();
+    _store = null;
+    courts.clear();
+    availableHours.clear();
+    availableSports.clear();
+    matches.clear();
+    rewards.clear();
+    recurrentMatches.clear();
+  }
+
   List<StoreWorkingDay>? get storeWorkingDays {
     if (courts.isEmpty) {
       return null;
@@ -66,12 +77,22 @@ class DataProvider extends ChangeNotifier {
   final List<Employee> _employees = [];
   List<Employee> get employees {
     _employees.sort((a, b) {
-      if (a.admin == b.admin &&
-          a.registrationDate != null &&
-          b.registrationDate != null) {
+      if (a.admin && b.admin) {
         return a.registrationDate!.compareTo(b.registrationDate!);
-      } else {
+      } else if (a.admin) {
+        return -1;
+      } else if (b.admin) {
         return 1;
+      } else {
+        if (a.registrationDate != null && b.registrationDate != null) {
+          return a.registrationDate!.compareTo(b.registrationDate!);
+        } else if (a.registrationDate != null) {
+          return -1;
+        } else if (b.registrationDate != null) {
+          return 1;
+        } else {
+          return 0;
+        }
       }
     });
     return _employees;
