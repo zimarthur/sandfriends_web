@@ -178,6 +178,8 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                 isExpired: isHourPast(day.date,
                                                     hour.startingHour),
                                                 startingHour: hour.startingHour,
+                                                calendarType: widget
+                                                    .viewModel.calendarType,
                                                 matchesLength:
                                                     hour.matches!.length +
                                                         hour.recurrentMatches!
@@ -214,6 +216,8 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                 isOperationHour:
                                                     hour.operationHour,
                                                 isExpired: false,
+                                                calendarType: widget
+                                                    .viewModel.calendarType,
                                                 startingHour: hour.startingHour,
                                                 matchesLength: hour
                                                     .recurrentMatches!.length,
@@ -235,8 +239,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                 onTap: () => widget.viewModel
                                                     .setRecurrentCourtsAvailabilityWidget(
                                                   context,
-                                                  getWeekdayTextFromDatetime(
-                                                      day.date),
+                                                  day.date,
                                                   hour.startingHour,
                                                   hour.recurrentMatches ?? [],
                                                 ),

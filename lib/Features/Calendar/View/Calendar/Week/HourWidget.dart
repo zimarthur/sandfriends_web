@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
@@ -16,6 +17,7 @@ class HourWidget extends StatefulWidget {
   bool isExpired;
   int matchesLength;
   Hour startingHour;
+  CalendarType calendarType;
   Function(bool) onChanged;
   VoidCallback onTap;
 
@@ -28,6 +30,7 @@ class HourWidget extends StatefulWidget {
     required this.startingHour,
     required this.height,
     required this.width,
+    required this.calendarType,
     required this.onChanged,
     required this.onTap,
   });
@@ -38,23 +41,36 @@ class HourWidget extends StatefulWidget {
 class _HourWidgetState extends State<HourWidget> {
   late Color widgetColor;
   late Color onHoverColor;
+  int courtsLength = 0;
 
   @override
   Widget build(BuildContext context) {
+    //caso uma quadra não aceite mensalista em um dia da semana, ela deve ser desconsiderada no length de quadras
+    if (widget.calendarType == CalendarType.RecurrentMatch) {
+      courtsLength = Provider.of<DataProvider>(context, listen: false)
+          .courts
+          .where((court) => court.operationDays
+              .firstWhere(
+                  (opDay) => opDay.weekday == getSFWeekday(widget.date.weekday))
+              .allowReccurrent)
+          .length;
+    } else {
+      courtsLength =
+          Provider.of<DataProvider>(context, listen: false).courts.length;
+    }
+
     if (!widget.isOperationHour) {
       widgetColor = divider;
       onHoverColor = divider;
     } else if (widget.isExpired) {
-      if (widget.matchesLength ==
-          Provider.of<DataProvider>(context, listen: false).courts.length) {
+      if (widget.matchesLength == courtsLength) {
         widgetColor = secondaryYellow.withOpacity(0.4);
         onHoverColor = secondaryYellowDark.withOpacity(0.4);
       } else {
         widgetColor = secondaryGreen.withOpacity(0.4);
         onHoverColor = secondaryGreenDark.withOpacity(0.4);
       }
-    } else if (widget.matchesLength ==
-        Provider.of<DataProvider>(context, listen: false).courts.length) {
+    } else if (widget.matchesLength == courtsLength) {
       widgetColor = secondaryYellow;
       onHoverColor = secondaryYellowDark;
     } else {

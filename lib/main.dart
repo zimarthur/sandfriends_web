@@ -18,7 +18,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
-  //configureApp();
+  configureApp();
   runApp(const MyApp());
 }
 

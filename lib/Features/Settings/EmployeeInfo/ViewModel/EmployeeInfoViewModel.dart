@@ -16,13 +16,26 @@ import '../View/AddEmployeeWidget.dart';
 class EmployeeInfoViewModel extends ChangeNotifier {
   final employeeInfoRepo = EmployeeInfoRepoImp();
 
+  List<Employee> employees = [];
+
+  void initEmployeeScreen(BuildContext context) {
+    setEmployeesDataSource(context);
+  }
+
   EmployeeDataSource? employeesDataSource;
 
-  void setFinancesDataSource(BuildContext context) {
+  void setEmployeesDataSource(BuildContext context) {
+    employees.clear();
+    Provider.of<DataProvider>(context, listen: false)
+        .employees
+        .forEach((employee) {
+      employees.add(Employee.copyFrom(employee));
+    });
     employeesDataSource = EmployeeDataSource(
-        employees: Provider.of<DataProvider>(context, listen: false).employees,
-        tableCallback: tableCallback,
-        context: context);
+      employees: employees,
+      tableCallback: tableCallback,
+      context: context,
+    );
     notifyListeners();
   }
 
@@ -101,7 +114,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Provider.of<DataProvider>(context, listen: false)
             .setEmployeesFromResponse(context, response.responseBody!);
-        setFinancesDataSource(context);
+        setEmployeesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Membro adicionado!", null, true);
       } else if (response.responseStatus ==
@@ -131,7 +144,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Provider.of<DataProvider>(context, listen: false)
             .setEmployeesFromResponse(context, response.responseBody!);
-        setFinancesDataSource(context);
+        setEmployeesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Sua equipe foi atualizada!", null, true);
       } else if (response.responseStatus ==
@@ -162,7 +175,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Provider.of<DataProvider>(context, listen: false)
             .setEmployeesFromResponse(context, response.responseBody!);
-        setFinancesDataSource(context);
+        setEmployeesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Seu nome foi atualizado!", null, true);
       } else if (response.responseStatus ==
@@ -191,7 +204,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Provider.of<DataProvider>(context, listen: false)
             .setEmployeesFromResponse(context, response.responseBody!);
-        setFinancesDataSource(context);
+        setEmployeesDataSource(context);
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Sua equipe foi atualizada!", null, true);
       } else if (response.responseStatus ==

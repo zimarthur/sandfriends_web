@@ -49,8 +49,11 @@ class AppRecurrentMatch {
     required this.currentMonthMatches,
   });
 
-  factory AppRecurrentMatch.fromJson(Map<String, dynamic> parsedJson,
-      List<Hour> referenceHours, List<Sport> referenceSports) {
+  factory AppRecurrentMatch.fromJson(
+    Map<String, dynamic> parsedJson,
+    List<Hour> referenceHours,
+    List<Sport> referenceSports,
+  ) {
     List<AppMatch> currentMonthMatches = [];
     for (var match in parsedJson["CurrentMonthMatches"]) {
       currentMonthMatches.add(

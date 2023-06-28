@@ -282,30 +282,34 @@ class CalendarViewModel extends ChangeNotifier {
       for (var court in courts) {
         dayMatches.clear();
         jumpToHour = -1;
-        List<AppRecurrentMatch> filteredRecurrentMatches = recurrentMatches
-            .where((recMatch) =>
-                recMatch.idStoreCourt == court.idStoreCourt &&
-                recMatch.weekday == selectedWeekday)
-            .toList();
-        for (var hour in selectedDayWorkingHours) {
-          AppRecurrentMatch? recMatch;
-          if (filteredRecurrentMatches
-              .any((element) => element.startingHour == hour)) {
-            recMatch = filteredRecurrentMatches
-                .firstWhere((element) => element.startingHour == hour);
-            dayMatches.add(
-              DayMatch(
-                startingHour: hour,
-                recurrentMatch: AppRecurrentMatch.copyWith(recMatch),
-              ),
-            );
-            jumpToHour = recMatch.endingHour.hour;
-          } else if (hour.hour >= jumpToHour) {
-            dayMatches.add(
-              DayMatch(
-                startingHour: hour,
-              ),
-            );
+        if (court.operationDays
+            .firstWhere((element) => element.weekday == selectedWeekday)
+            .allowReccurrent) {
+          List<AppRecurrentMatch> filteredRecurrentMatches = recurrentMatches
+              .where((recMatch) =>
+                  recMatch.idStoreCourt == court.idStoreCourt &&
+                  recMatch.weekday == selectedWeekday)
+              .toList();
+          for (var hour in selectedDayWorkingHours) {
+            AppRecurrentMatch? recMatch;
+            if (filteredRecurrentMatches
+                .any((element) => element.startingHour == hour)) {
+              recMatch = filteredRecurrentMatches
+                  .firstWhere((element) => element.startingHour == hour);
+              dayMatches.add(
+                DayMatch(
+                  startingHour: hour,
+                  recurrentMatch: AppRecurrentMatch.copyWith(recMatch),
+                ),
+              );
+              jumpToHour = recMatch.endingHour.hour;
+            } else if (hour.hour >= jumpToHour) {
+              dayMatches.add(
+                DayMatch(
+                  startingHour: hour,
+                ),
+              );
+            }
           }
         }
         selectedDayMatches.add(
@@ -708,7 +712,7 @@ class CalendarViewModel extends ChangeNotifier {
 
   void setRecurrentCourtsAvailabilityWidget(
     BuildContext context,
-    String day,
+    DateTime day,
     Hour hour,
     List<AppRecurrentMatch> recurrentMatches,
   ) {

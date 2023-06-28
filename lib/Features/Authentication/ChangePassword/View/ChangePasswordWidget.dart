@@ -40,8 +40,11 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                r'assets/full_logo_positive_284.png',
+              Center(
+                child: Image.asset(
+                  r'assets/full_logo_positive_284.png',
+                  alignment: Alignment.center,
+                ),
               ),
               const SizedBox(
                 height: defaultPadding,

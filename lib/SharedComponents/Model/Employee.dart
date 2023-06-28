@@ -35,4 +35,17 @@ class Employee {
       isCourtOwner: parsedJson["StoreOwner"],
     );
   }
+
+  factory Employee.copyFrom(Employee refEmployee) {
+    return Employee(
+      idEmployee: refEmployee.idEmployee,
+      firstName: refEmployee.firstName,
+      lastName: refEmployee.lastName,
+      email: refEmployee.email,
+      admin: refEmployee.admin,
+      registrationDate: refEmployee.registrationDate,
+      isCourtOwner: refEmployee.isCourtOwner,
+      isLoggedUser: refEmployee.isLoggedUser,
+    );
+  }
 }

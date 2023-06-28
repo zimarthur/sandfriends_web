@@ -18,6 +18,16 @@ String? emptyCheck(String? value, String onNull) {
   }
 }
 
+String? rewardCodeValidator(String? value, String onNull) {
+  if (value == null || value.isEmpty) {
+    return onNull;
+  } else if (value.length != 6) {
+    return "O código deve ter 6 dígitos";
+  } else {
+    return null;
+  }
+}
+
 String? passwordValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "digite sua senha";

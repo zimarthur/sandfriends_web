@@ -11,4 +11,10 @@ class RewardsRepo {
   Future<NetworkResponse?> sendUserRewardCode(
     String rewardCode,
   ) async {}
+
+  Future<NetworkResponse?> userRewardSelected(
+    String accessToken,
+    String rewardCode,
+    int rewardItem,
+  ) async {}
 }

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/Model/AppNotification.dart';
 
 class HomeViewModel extends ChangeNotifier {
+  List<AppNotification> notifications = [];
+
+  void initHomeScreen(BuildContext context) {
+    notifications =
+        Provider.of<DataProvider>(context, listen: false).notifications;
+    notifyListeners();
+  }
+
   String get welcomeTitle {
     int hourNow = DateTime.now().hour;
     if (hourNow < 12) {

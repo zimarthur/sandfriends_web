@@ -192,7 +192,7 @@ class FinancesViewModel extends ChangeNotifier {
     nameCount["Mensalista"] = 0;
     nameCount["Avulso"] = 0;
     for (var match in matches) {
-      if (match.idRecurrentMatch != null) {
+      if (match.idRecurrentMatch != 0) {
         nameCount["Mensalista"] = nameCount["Mensalista"]! + match.cost;
       } else {
         nameCount["Avulso"] = nameCount["Avulso"]! + match.cost;

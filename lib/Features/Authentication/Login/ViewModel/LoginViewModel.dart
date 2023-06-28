@@ -34,6 +34,7 @@ class LoginViewModel extends ChangeNotifier {
 
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final loginFormKey = GlobalKey<FormState>();
 
   bool _keepConnected = true;
   bool get keepConnected => _keepConnected;
@@ -61,30 +62,32 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void onTapLogin(BuildContext context) {
-    pageStatus = PageStatus.LOADING;
-    notifyListeners();
+    if (loginFormKey.currentState?.validate() == true) {
+      pageStatus = PageStatus.LOADING;
+      notifyListeners();
 
-    loginRepo
-        .login(userController.text, passwordController.text)
-        .then((response) {
-      if (response.responseStatus == NetworkResponseStatus.success) {
-        Provider.of<DataProvider>(context, listen: false)
-            .setLoginResponse(response.responseBody!, keepConnected);
-        Navigator.pushNamed(context, '/home');
-      } else {
-        messageModal = SFMessageModal(
-          title: response.responseTitle!,
-          description: response.responseDescription,
-          onTap: () {
-            pageStatus = PageStatus.OK;
-            notifyListeners();
-          },
-          isHappy: response.responseStatus == NetworkResponseStatus.alert,
-        );
-        pageStatus = PageStatus.WARNING;
-        notifyListeners();
-      }
-    });
+      loginRepo
+          .login(userController.text, passwordController.text)
+          .then((response) {
+        if (response.responseStatus == NetworkResponseStatus.success) {
+          Provider.of<DataProvider>(context, listen: false)
+              .setLoginResponse(response.responseBody!, keepConnected);
+          Navigator.pushNamed(context, '/home');
+        } else {
+          messageModal = SFMessageModal(
+            title: response.responseTitle!,
+            description: response.responseDescription,
+            onTap: () {
+              pageStatus = PageStatus.OK;
+              notifyListeners();
+            },
+            isHappy: response.responseStatus == NetworkResponseStatus.alert,
+          );
+          pageStatus = PageStatus.WARNING;
+          notifyListeners();
+        }
+      });
+    }
   }
 
   void onTapForgotPassword(BuildContext context) {

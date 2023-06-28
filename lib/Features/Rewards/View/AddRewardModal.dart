@@ -66,7 +66,8 @@ class _AddRewardModalState extends State<AddRewardModal> {
                       labelText: "",
                       pourpose: TextFieldPourpose.Standard,
                       controller: addRewardController,
-                      validator: (a) => emptyCheck(a, "Digite o código")),
+                      validator: (a) =>
+                          rewardCodeValidator(a, "Digite o código")),
                   Row(
                     children: [
                       Expanded(

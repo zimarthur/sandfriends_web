@@ -275,29 +275,57 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void quickLinkBrand() {
-  //   _indexSelectedDrawerTile = -1;
-  //   _currentMenuWidget = SettingsScreen(
-  //     initForm: "Marca",
-  //   );
-  //   notifyListeners();
-  // }
+  void quickLinkBrand(BuildContext context) {
+    onTabClick(
+      DrawerItem(
+        title: "Meu perfil",
+        icon: r"assets/icon/profile.svg",
+        requiresAdmin: false,
+        widget: SettingsScreen(
+          initForm: "Marca",
+        ),
+        mainDrawer: false,
+      ),
+      context,
+    );
+  }
 
-  // void quickLinkFinanceSettings() {
-  //   _indexSelectedDrawerTile = -1;
-  //   _currentMenuWidget = SettingsScreen(
-  //     initForm: "Dados financeiros",
-  //   );
-  //   notifyListeners();
-  // }
+  void quickLinkFinanceSettings(BuildContext context) {
+    onTabClick(
+      DrawerItem(
+        title: "Meu perfil",
+        icon: r"assets/icon/profile.svg",
+        requiresAdmin: false,
+        widget: SettingsScreen(
+          initForm: "Dados financeiros",
+        ),
+        mainDrawer: false,
+      ),
+      context,
+    );
+  }
 
-  // void quickLinkWorkingHours() {
-  //   _indexSelectedDrawerTile = 4;
-  //   _currentMenuWidget = MyCourtsScreen(
-  //     quickLinkWorkingHours: true,
-  //   );
-  //   notifyListeners();
-  // }
+  void quickLinkWorkingHours(BuildContext context) {
+    onTabClick(
+      DrawerItem(
+        title: "Minhas quadras",
+        icon: r"assets/icon/court.svg",
+        requiresAdmin: false,
+        widget: MyCourtsScreen(
+          quickLinkWorkingHours: true,
+        ),
+        mainDrawer: true,
+      ),
+      context,
+    );
+  }
+
+  void quickLinkMyCourts(BuildContext context) {
+    onTabClick(
+      mainDrawer.firstWhere((element) => element.title == "Minhas quadras"),
+      context,
+    );
+  }
 
   void logout(BuildContext context) {
     Provider.of<DataProvider>(context, listen: false).clearDataProvider();

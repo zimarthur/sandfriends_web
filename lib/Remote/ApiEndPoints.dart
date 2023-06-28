@@ -45,6 +45,7 @@ class ApiEndPoints {
   //rewards
   final String searchCustomRewards = "/SearchCustomRewards";
   final String sendUserRewardCode = "/SendUserRewardCode";
+  final String userRewardSelected = "/UserRewardSelected";
 
   //finances
   final String searchCustomMatches = "/SearchCustomMatches";

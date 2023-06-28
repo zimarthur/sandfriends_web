@@ -46,7 +46,7 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
       ApiEndPoints().changePasswordUser,
       jsonEncode(
         <String, Object>{
-          "ResetPasswordToken": token,
+          "ChangePasswordToken": token,
           "NewPassword": newPassword,
         },
       ),

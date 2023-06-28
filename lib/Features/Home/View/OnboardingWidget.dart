@@ -80,9 +80,9 @@ class OnboardingWidget extends StatelessWidget {
                                   "Adicionar o logo e fotos do seu estabelecimento",
                               isChecked: viewModel.brandingSet(context),
                               onTap: () {
-                                // Provider.of<MenuProvider>(context,
-                                //         listen: false)
-                                //     .quickLinkBrand();
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .quickLinkBrand(context);
                               },
                             ),
                             OnboardingCheckItem(
@@ -90,9 +90,9 @@ class OnboardingWidget extends StatelessWidget {
                                   "Inserir uma descrição para o seu estabelecimento",
                               isChecked: viewModel.storeDescriptionSet(context),
                               onTap: () {
-                                // Provider.of<MenuProvider>(context,
-                                //         listen: false)
-                                //     .quickLinkBrand();
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .quickLinkBrand(context);
                               },
                             ),
                           ],
@@ -106,27 +106,27 @@ class OnboardingWidget extends StatelessWidget {
                               title: "Cadastrar dados bancários",
                               isChecked: false,
                               onTap: () {
-                                // Provider.of<MenuProvider>(context,
-                                //         listen: false)
-                                //     .quickLinkFinanceSettings();
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .quickLinkFinanceSettings(context);
                               },
                             ),
                             OnboardingCheckItem(
                               title: "Configurar o horário de funcionamento",
                               isChecked: viewModel.opDaysSet(context),
                               onTap: () {
-                                // Provider.of<MenuProvider>(context,
-                                //         listen: false)
-                                //     .quickLinkWorkingHours();
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .quickLinkWorkingHours(context);
                               },
                             ),
                             OnboardingCheckItem(
                               title: "Cadastrar suas quadras",
                               isChecked: viewModel.courtsSet(context),
                               onTap: () {
-                                // Provider.of<MenuProvider>(context,
-                                //         listen: false)
-                                //     .onTabClick(4, context);
+                                Provider.of<MenuProvider>(context,
+                                        listen: false)
+                                    .quickLinkMyCourts(context);
                               },
                             ),
                           ],

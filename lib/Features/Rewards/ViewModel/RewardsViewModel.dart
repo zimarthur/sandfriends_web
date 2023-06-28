@@ -12,6 +12,7 @@ import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/Model/RewardItem.dart';
 import 'package:sandfriends_web/SharedComponents/Model/SFBarChartItem.dart';
 import 'package:sandfriends_web/SharedComponents/View/DatePickerModal.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFMessageModal.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
@@ -142,13 +143,7 @@ class RewardsViewModel extends ChangeNotifier {
             RewardItem.fromJson(rewardItem),
           );
         }
-        Provider.of<MenuProvider>(context, listen: false)
-            .setModalForm(ChoseRewardModal(
-          rewardItems: possibleRewards,
-          onReturn: () =>
-              Provider.of<MenuProvider>(context, listen: false).closeModal(),
-          onTapRewardItem: (p0) {},
-        ));
+        setRewardsSelectorModal(context, rewardCode);
         notifyListeners();
       } else if (response.responseStatus ==
           NetworkResponseStatus.expiredToken) {
@@ -158,6 +153,27 @@ class RewardsViewModel extends ChangeNotifier {
             .setMessageModalFromResponse(response);
       }
     });
+  }
+
+  void setRewardsSelectorModal(BuildContext context, String rewardCode) {
+    Provider.of<MenuProvider>(context, listen: false)
+        .setModalForm(ChoseRewardModal(
+      rewardItems: possibleRewards,
+      onReturn: () =>
+          Provider.of<MenuProvider>(context, listen: false).closeModal(),
+      onTapRewardItem: (rewardItem) {
+        rewardsRepo
+            .userRewardSelected(
+                Provider.of<DataProvider>(context, listen: false)
+                    .loggedAccessToken,
+                rewardCode,
+                rewardItem.idRewardItem)
+            .then((response) {
+          Provider.of<MenuProvider>(context, listen: false)
+              .setMessageModalFromResponse(response);
+        });
+      },
+    ));
   }
 
   /////////////ADD REWARD //////////////////////////////

@@ -95,9 +95,11 @@ class ChangePasswordViewModel extends ChangeNotifier {
         .then((response) {
       messageModal = SFMessageModal(
         title: response.responseTitle!,
-        onTap: () {},
+        onTap: () {
+          pageStatus = PageStatus.OK;
+          notifyListeners();
+        },
         isHappy: response.responseStatus == NetworkResponseStatus.alert,
-        hideButton: true,
       );
       pageStatus = PageStatus.WARNING;
       notifyListeners();

@@ -18,80 +18,87 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
 
   @override
   void initState() {
-    viewModel.setFinancesDataSource(context);
+    viewModel.initEmployeeScreen(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (Provider.of<DataProvider>(context, listen: false)
-            .loggedEmployee
-            .isCourtOwner)
-          Row(
+    return ChangeNotifierProvider<EmployeeInfoViewModel>(
+      create: (BuildContext context) => viewModel,
+      child: Consumer<EmployeeInfoViewModel>(
+        builder: (context, viewModel, _) {
+          return Column(
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "Adicione membros à sua equipe e edite seus níveis de permissão.",
-                    ),
-                    Text(
-                      "CUIDADO: um funcionário com acesso administrador pode ver e alterar os dados bancários da empresa e visualizar o faturamento da quadra.",
-                      style: TextStyle(
-                        color: textDarkGrey,
-                        fontSize: 12,
+              if (Provider.of<DataProvider>(context, listen: false)
+                  .loggedEmployee
+                  .isCourtOwner)
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Adicione membros à sua equipe e edite seus níveis de permissão.",
+                          ),
+                          Text(
+                            "CUIDADO: um funcionário com acesso administrador pode ver e alterar os dados bancários da empresa e visualizar o faturamento da quadra.",
+                            style: TextStyle(
+                              color: textDarkGrey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    const SizedBox(
+                      width: defaultPadding,
+                    ),
+                    SFButton(
+                      buttonLabel: "Adic. funcionário",
+                      buttonType: ButtonType.Primary,
+                      onTap: () {
+                        viewModel.goToAddEmployee(
+                          context,
+                          viewModel,
+                        );
+                      },
+                      iconFirst: true,
+                      iconPath: r"assets/icon/plus.svg",
+                      iconSize: 14,
+                      textPadding: const EdgeInsets.symmetric(
+                        vertical: defaultPadding / 2,
+                        horizontal: defaultPadding,
+                      ),
+                    )
                   ],
                 ),
-              ),
               const SizedBox(
-                width: defaultPadding,
+                height: 2 * defaultPadding,
               ),
-              SFButton(
-                buttonLabel: "Adic. funcionário",
-                buttonType: ButtonType.Primary,
-                onTap: () {
-                  viewModel.goToAddEmployee(
-                    context,
-                    viewModel,
-                  );
-                },
-                iconFirst: true,
-                iconPath: r"assets/icon/plus.svg",
-                iconSize: 14,
-                textPadding: const EdgeInsets.symmetric(
-                  vertical: defaultPadding / 2,
-                  horizontal: defaultPadding,
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (layoutContext, layoutConstraints) {
+                    return SFTable(
+                      height: layoutConstraints.maxHeight,
+                      width: layoutConstraints.maxWidth,
+                      headers: [
+                        SFTableHeader("name", "Nome"),
+                        SFTableHeader("email", "Email"),
+                        SFTableHeader("date", "Membro desde"),
+                        SFTableHeader("admin", "Acesso"),
+                        SFTableHeader("action", ""),
+                      ],
+                      source: viewModel.employeesDataSource!,
+                    );
+                  },
                 ),
               )
             ],
-          ),
-        const SizedBox(
-          height: 2 * defaultPadding,
-        ),
-        Expanded(
-          child: LayoutBuilder(
-            builder: (layoutContext, layoutConstraints) {
-              return SFTable(
-                height: layoutConstraints.maxHeight,
-                width: layoutConstraints.maxWidth,
-                headers: [
-                  SFTableHeader("name", "Nome"),
-                  SFTableHeader("email", "Email"),
-                  SFTableHeader("date", "Membro desde"),
-                  SFTableHeader("admin", "Acesso"),
-                  SFTableHeader("action", ""),
-                ],
-                source: viewModel.employeesDataSource!,
-              );
-            },
-          ),
-        )
-      ],
+          );
+        },
+      ),
     );
   }
 }

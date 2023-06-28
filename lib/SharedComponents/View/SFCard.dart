@@ -8,7 +8,8 @@ class SFCard extends StatelessWidget {
   Widget child;
 
   SFCard(
-      {super.key, required this.height,
+      {super.key,
+      required this.height,
       required this.width,
       required this.title,
       required this.child});
@@ -53,7 +54,7 @@ class SFCard extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(defaultPadding),
+              padding: const EdgeInsets.all(defaultPadding / 2),
               child: child,
             ),
           ),

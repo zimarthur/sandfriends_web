@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class AppMatch {
   int idMatch;
-  int? idRecurrentMatch;
+  int idRecurrentMatch;
   DateTime date;
   int cost;
   DateTime creationDate;

@@ -207,6 +207,8 @@ class SettingsViewModel extends ChangeNotifier {
     XFile? pickedImage = await pickImage();
     if (pickedImage == null) return;
 
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+
     IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
 
     double aspectRatio = decodedImage!.data!.height / decodedImage.data!.width;
@@ -231,14 +233,17 @@ class SettingsViewModel extends ChangeNotifier {
       resizedImage.height,
       resizedImage.width,
     );
+    Provider.of<MenuProvider>(context, listen: false).closeModal();
     if (croppedImage == null) return;
     storeAvatar = croppedImage;
+    notifyListeners();
   }
 
   Future addStorePhoto(BuildContext context) async {
     XFile? pickedImage = await pickImage();
     if (pickedImage == null) return;
 
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
 
     IMG.Image? resizedImage = await resizeImage(
@@ -256,6 +261,7 @@ class SettingsViewModel extends ChangeNotifier {
       resizedImage!.height,
       resizedImage.width,
     );
+    Provider.of<MenuProvider>(context, listen: false).closeModal();
     if (croppedImage == null) return;
     storeEdit.photos.add(
       StorePhoto(

@@ -6,6 +6,7 @@ import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
+import '../../../SharedComponents/Model/AppNotification.dart';
 import '../../../SharedComponents/Model/AvailableSport.dart';
 import '../../../SharedComponents/Model/Employee.dart';
 import '../../../SharedComponents/Model/Hour.dart';
@@ -30,6 +31,7 @@ class DataProvider extends ChangeNotifier {
     courts.clear();
     availableHours.clear();
     availableSports.clear();
+    notifications.clear();
     matches.clear();
     rewards.clear();
     recurrentMatches.clear();
@@ -65,6 +67,8 @@ class DataProvider extends ChangeNotifier {
   List<Sport> availableSports = [];
 
   List<Hour> availableHours = [];
+
+  List<AppNotification> notifications = [];
 
   List<AppMatch> matches = [];
   late DateTime matchesStartDate;
@@ -153,6 +157,16 @@ class DataProvider extends ChangeNotifier {
 
     for (var hour in responseBody['AvailableHours']) {
       availableHours.add(Hour.fromJson(hour));
+    }
+
+    for (var notification in responseBody['Notifications']) {
+      notifications.add(
+        AppNotification.fromJson(
+          notification,
+          availableHours,
+          availableSports,
+        ),
+      );
     }
 
     store = Store.fromJson(responseBody['Store']);

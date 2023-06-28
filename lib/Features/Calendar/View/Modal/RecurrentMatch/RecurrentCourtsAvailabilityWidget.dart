@@ -12,12 +12,13 @@ import 'package:intl/intl.dart';
 import '../../../../../SharedComponents/Model/Court.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../SharedComponents/View/SFButton.dart';
+import '../../../../../Utils/SFDateTime.dart';
 import '../../../../Menu/ViewModel/MenuProvider.dart';
 
 class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
   CalendarViewModel viewModel;
   Hour hour;
-  String day;
+  DateTime day;
   List<AppRecurrentMatch> recurrentMatches;
 
   RecurrentCourtsAvailabilityWidget({
@@ -65,7 +66,7 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                 ),
                 MatchDetailsWidgetRow(
                   title: "Dia",
-                  value: day,
+                  value: getWeekdayTextFromDatetime(day),
                 ),
                 MatchDetailsWidgetRow(
                   title: "Horário",
@@ -86,6 +87,10 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                     Court court =
                         Provider.of<DataProvider>(context, listen: false)
                             .courts[index];
+                    bool allowRecurrent = court.operationDays
+                        .firstWhere((opDay) =>
+                            opDay.weekday == getSFWeekday(day.weekday))
+                        .allowReccurrent;
                     if (recurrentMatches.any((recMatch) =>
                         recMatch.idStoreCourt == court.idStoreCourt)) {
                       recurrentMatch = recurrentMatches.firstWhere(
@@ -123,11 +128,13 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(defaultBorderRadius),
-                                color: recurrentMatch != null
+                                color: recurrentMatch != null || !allowRecurrent
                                     ? secondaryYellow
                                     : secondaryGreen),
                             child: Text(
-                              recurrentMatch != null ? "Ocupado" : "Livre",
+                              recurrentMatch != null || !allowRecurrent
+                                  ? "Ocupado"
+                                  : "Livre",
                               style: TextStyle(
                                 color: textWhite,
                               ),
@@ -135,42 +142,54 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 3,
-                            child: recurrentMatch == null
-                                ? Container()
-                                : recurrentMatch.blocked
-                                    ? Text(
-                                        "Bloqueado: ${recurrentMatch.blockedReason}",
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300),
-                                      )
-                                    : Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text(
-                                            recurrentMatch.creatorName,
+                            child: !allowRecurrent
+                                ? Text(
+                                    "Não permite mensalista nesse dia",
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w300),
+                                  )
+                                : recurrentMatch == null
+                                    ? Container()
+                                    : recurrentMatch.blocked
+                                        ? Text(
+                                            "Mensalista ${recurrentMatch.blockedReason} (fora do app)",
                                             textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w300),
-                                          )),
-                                          Expanded(
-                                              child: Text(
-                                            recurrentMatch.sport!.description,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300),
-                                          )),
-                                          Expanded(
-                                              child: Text(
-                                            "Pago",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300),
-                                          ))
-                                        ],
-                                      ),
+                                          )
+                                        : Row(
+                                            children: [
+                                              Expanded(
+                                                  child: Text(
+                                                recurrentMatch.creatorName,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )),
+                                              Expanded(
+                                                  child: Text(
+                                                recurrentMatch
+                                                    .sport!.description,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )),
+                                              Expanded(
+                                                  child: Text(
+                                                "Pago",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              ))
+                                            ],
+                                          ),
                           ),
                         ],
                       ),

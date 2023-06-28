@@ -44,7 +44,27 @@ class RewardsRepoImp implements RewardsRepo {
       ApiEndPoints().sendUserRewardCode,
       jsonEncode(
         <String, Object>{
-          "RewardCode": rewardCode,
+          "RewardClaimCode": rewardCode,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> userRewardSelected(
+    String accessToken,
+    String rewardCode,
+    int rewardItem,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      _apiService.sandfriendsUrl,
+      ApiEndPoints().userRewardSelected,
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "RewardClaimCode": rewardCode,
+          "RewardItem": rewardItem,
         },
       ),
     );

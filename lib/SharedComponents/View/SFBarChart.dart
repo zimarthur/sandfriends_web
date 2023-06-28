@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'dart:math' as math;
 import '../../Utils/Constants.dart';
 import '../../Utils/SFDateTime.dart';
+import 'package:intl/intl.dart';
 
 class SFBarChart extends StatefulWidget {
   List<SFBarChartItem> barChartItems;
@@ -33,7 +34,7 @@ class _SFBarChartState extends State<SFBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    axisXLabel = (value) => value.toString();
+    //axisXLabel = (value) => value.toString();
     switch (widget.barChartVisualization) {
       case EnumPeriodVisualization.Today:
         chartData = dayData(widget.barChartItems);
@@ -41,7 +42,8 @@ class _SFBarChartState extends State<SFBarChart> {
         break;
       case EnumPeriodVisualization.CurrentMonth:
         chartData = monthData(widget.barChartItems);
-        toolTipLabel = (value) => 'Dia $value\n';
+        toolTipLabel = (value) =>
+            '$value ${monthsPortuguese[getSFMonthIndex(DateTime.now())]}\n';
         break;
       case EnumPeriodVisualization.Custom:
         if (widget.customEndDate == null ||
@@ -51,7 +53,8 @@ class _SFBarChartState extends State<SFBarChart> {
         } else if (areInTheSameMonth(
             widget.customStartDate!, widget.customEndDate!)) {
           chartData = monthData(widget.barChartItems);
-          toolTipLabel = (value) => 'Dia $value\n';
+          toolTipLabel = (value) =>
+              '$value ${monthsPortuguese[getSFMonthIndex(widget.customStartDate!)]}\n';
         } else {
           chartData = [];
           List<String> monthsAxis = [];
@@ -112,7 +115,7 @@ class _SFBarChartState extends State<SFBarChart> {
                 final Widget text = Transform.rotate(
                   angle: -math.pi / 3,
                   child: Text(
-                    axisXLabel(value),
+                    toolTipLabel(value.toInt()),
                     style: const TextStyle(
                       color: textDarkGrey,
                     ),
