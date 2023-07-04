@@ -47,7 +47,7 @@ class RenameEmployeeWidget extends StatelessWidget {
               height: defaultPadding * 2,
             ),
             SFTextField(
-              labelText: "nome",
+              labelText: "Nome",
               pourpose: TextFieldPourpose.Standard,
               controller: renameFirstNameController,
               validator: (value) => emptyCheck(value, "Digite seu nome"),
@@ -56,7 +56,7 @@ class RenameEmployeeWidget extends StatelessWidget {
               height: defaultPadding,
             ),
             SFTextField(
-              labelText: "sobrenome",
+              labelText: "Sobrenome",
               pourpose: TextFieldPourpose.Standard,
               controller: renameLastNameController,
               validator: (value) => emptyCheck(value, "Digite seu sobrenome"),

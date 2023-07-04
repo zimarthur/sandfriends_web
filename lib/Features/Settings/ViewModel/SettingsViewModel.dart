@@ -145,7 +145,9 @@ class SettingsViewModel extends ChangeNotifier {
     stateController.text = storeEdit.city.state.uf;
     descriptionController.text = storeEdit.description ?? "";
     instagramController.text = storeEdit.instagram ?? "";
-    initTabs();
+    if (tabItems.isEmpty) {
+      initTabs();
+    }
     notifyListeners();
   }
 
@@ -204,39 +206,15 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future setStoreAvatar(BuildContext context) async {
-    XFile? pickedImage = await pickImage(context);
-    if (pickedImage == null) return;
-
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    final image = await selectImage(context, 1);
 
-    IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
-
-    double aspectRatio = decodedImage!.data!.height / decodedImage.data!.width;
-    IMG.Image? resizedImage;
-    if (aspectRatio > 1.0) {
-      resizedImage = await resizeImage(decodedImage, 400, 400 ~/ aspectRatio);
-    } else {
-      resizedImage =
-          await resizeImage(decodedImage, (400 * aspectRatio).toInt(), 400);
+    if (image != null) {
+      storeAvatar = image;
+      notifyListeners();
     }
 
-    Uint8List? croppedImage = await cropImage(
-      context,
-      pickedImage,
-      'square',
-      resizedImage!.height > resizedImage.width
-          ? resizedImage.width
-          : resizedImage.height,
-      resizedImage.height > resizedImage.width
-          ? resizedImage.width
-          : resizedImage.height,
-      resizedImage.height,
-      resizedImage.width,
-    );
     Provider.of<MenuProvider>(context, listen: false).closeModal();
-    if (croppedImage == null) return;
-    storeAvatar = croppedImage;
-    notifyListeners();
   }
 
   Future addStorePhoto(BuildContext context) async {
@@ -262,44 +240,6 @@ class SettingsViewModel extends ChangeNotifier {
     }
 
     Provider.of<MenuProvider>(context, listen: false).closeModal();
-
-    // XFile? pickedImage = await pickImage(context);
-    // if (pickedImage == null) return;
-
-    // IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
-
-    // IMG.Image? resizedImage = await resizeImage(
-    //   decodedImage!,
-    //   null,
-    //   300,
-    // );
-
-    // Uint8List? croppedImage = await cropImage(
-    //   context,
-    //   pickedImage,
-    //   null,
-    //   210,
-    //   300,
-    //   resizedImage!.height,
-    //   resizedImage.width,
-    // );
-    // Provider.of<MenuProvider>(context, listen: false).closeModal();
-    // if (croppedImage == null) return;
-    // storeEdit.photos.add(
-    //   StorePhoto(
-    //     idStorePhoto: storeEdit.photos.isEmpty
-    //         ? 0
-    //         : storeEdit.photos
-    //                 .reduce((a, b) => a.idStorePhoto > b.idStorePhoto ? a : b)
-    //                 .idStorePhoto +
-    //             1,
-    //     photo: "",
-    //     isNewPhoto: true,
-    //     newPhoto: croppedImage,
-    //   ),
-    // );
-    // hasChangedPhoto = true;
-    // notifyListeners();
   }
 
   void deleteStorePhoto(int idStorePhoto) {

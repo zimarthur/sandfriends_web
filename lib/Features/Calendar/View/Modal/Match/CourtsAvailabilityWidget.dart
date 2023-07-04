@@ -143,49 +143,79 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            child: match != null
-                                ? Text(
-                                    match.matchCreatorName,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w300),
+                            flex: 3,
+                            child: (match != null && match.blocked) ||
+                                    (recurrentMatch != null &&
+                                        recurrentMatch.blocked)
+                                ? Center(
+                                    child: Text(
+                                      match != null
+                                          ? match.blockedReason
+                                          : recurrentMatch!.blockedReason,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300),
+                                    ),
                                   )
-                                : recurrentMatch != null
-                                    ? Text(
-                                        recurrentMatch.blockedReason,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300),
+                                : Row(
+                                    children: [
+                                      Expanded(
+                                        child: match != null
+                                            ? Text(
+                                                match.matchCreatorName,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )
+                                            : recurrentMatch != null
+                                                ? Text(
+                                                    recurrentMatch
+                                                        .blockedReason,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                  )
+                                                : Container(),
+                                      ),
+                                      Expanded(
+                                        child: match != null
+                                            ? Text(
+                                                match.sport != null
+                                                    ? match.sport!.description
+                                                    : "",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )
+                                            : recurrentMatch != null
+                                                ? Text(
+                                                    recurrentMatch
+                                                        .sport!.description,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                  )
+                                                : Container(),
+                                      ),
+                                      Expanded(
+                                        child: match != null ||
+                                                recurrentMatch != null
+                                            ? Text(
+                                                "Pago",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )
+                                            : Container(),
                                       )
-                                    : Container(),
+                                    ],
+                                  ),
                           ),
-                          Expanded(
-                            child: match != null
-                                ? Text(
-                                    match.sport!.description,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w300),
-                                  )
-                                : recurrentMatch != null
-                                    ? Text(
-                                        recurrentMatch.sport!.description,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300),
-                                      )
-                                    : Container(),
-                          ),
-                          Expanded(
-                            child: match != null || recurrentMatch != null
-                                ? Text(
-                                    "Pago",
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w300),
-                                  )
-                                : Container(),
-                          )
                         ],
                       ),
                     );
