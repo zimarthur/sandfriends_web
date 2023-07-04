@@ -275,6 +275,13 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void quickLinkHome(BuildContext context) {
+    onTabClick(
+      mainDrawer.firstWhere((element) => element.title == "Início"),
+      context,
+    );
+  }
+
   void quickLinkBrand(BuildContext context) {
     onTabClick(
       DrawerItem(
@@ -293,7 +300,7 @@ class MenuProvider extends ChangeNotifier {
   void quickLinkFinanceSettings(BuildContext context) {
     onTabClick(
       DrawerItem(
-        title: "Meu perfil",
+        title: "",
         icon: r"assets/icon/profile.svg",
         requiresAdmin: false,
         widget: SettingsScreen(

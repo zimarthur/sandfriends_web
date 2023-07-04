@@ -37,7 +37,7 @@ class TalkToSupportWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     Text(
-                      "Fale com a nossa equipe.",
+                      "Fale com a nossa equipe",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),

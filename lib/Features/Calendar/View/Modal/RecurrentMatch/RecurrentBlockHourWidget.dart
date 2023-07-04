@@ -84,7 +84,7 @@ class _RecurrentBlockHourWidgetState extends State<RecurrentBlockHourWidget> {
               height: defaultPadding / 4,
             ),
             const Text(
-              '- O controle de renovação não será feito pela plataforma Sandfriends\n- O faturamento das partidas agendadas por aqui não serão contabilizadas nos seus balanços\n- O horário ficará reservado até que você libere ele\n- Você pode desmarcar uma partida individual desse mensalista na aba "Partidas"',
+              '- O controle de renovação não será feito pela plataforma Sandfriends\n- O faturamento das partidas agendadas por aqui não será contabilizado na aba "Financeiro"\n- O horário ficará reservado até que você o libere',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 10,

@@ -94,7 +94,7 @@ class _MyCourtsScreenState extends State<MyCourtsScreen> {
                       child: Row(
                         children: [
                           MyCourtsTabSelector(
-                            title: "Adicionar Quadra",
+                            title: "Nova Quadra",
                             isSelected: viewModel.selectedCourtIndex == -1
                                 ? true
                                 : false,

@@ -60,7 +60,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         break;
       case EmployeeTableCallbacks.GiveAdmin:
         Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
-            "Deseja mesmo conceder admin a ${employee.firstName}?",
+            "Deseja mesmo conceder acesso de administrador a ${employee.firstName}?",
             "${employee.firstName} terá acesso a todos seus relatórios financeiros",
             () {
           changeEmployeeAdmin(context, employee, true);
@@ -71,7 +71,8 @@ class EmployeeInfoViewModel extends ChangeNotifier {
         break;
       case EmployeeTableCallbacks.RemoveAdmin:
         Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
-            "Deseja mesmo retirar admin de ${employee.firstName}?", "", () {
+            "Deseja mesmo retirar acessor de administrador de ${employee.firstName}?",
+            "", () {
           changeEmployeeAdmin(context, employee, false);
         }, () {
           Provider.of<MenuProvider>(context, listen: false).closeModal();

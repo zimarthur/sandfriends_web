@@ -36,7 +36,7 @@ class _CreateAccountOwnerWidgetMobileState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Conte-nos mais sobre você",
+                      "Gestor, conte-nos mais sobre você",
                       style: TextStyle(color: textBlack, fontSize: 24),
                     ),
                     const SizedBox(
@@ -47,7 +47,7 @@ class _CreateAccountOwnerWidgetMobileState
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.ownerFirstNameController,
                       validator: (value) =>
-                          lettersValidator(value, "digite seu nome"),
+                          lettersValidator(value, "Digite seu nome"),
                     ),
                     const SizedBox(
                       height: defaultPadding,
@@ -57,7 +57,7 @@ class _CreateAccountOwnerWidgetMobileState
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.ownerLastNameController,
                       validator: (value) =>
-                          lettersValidator(value, "digite seu sobrenome"),
+                          lettersValidator(value, "Digite seu sobrenome"),
                     ),
                     const SizedBox(
                       height: defaultPadding,
@@ -80,7 +80,7 @@ class _CreateAccountOwnerWidgetMobileState
                           )
                         : Container(),
                     SFTextField(
-                      labelText: "Email",
+                      labelText: "E-mail",
                       pourpose: TextFieldPourpose.Standard,
                       controller: widget.viewModel.emailController,
                       validator: (value) => emailValidator(value),
@@ -122,7 +122,7 @@ class _CreateAccountOwnerWidgetMobileState
                       height: defaultPadding,
                     ),
                     SFTextField(
-                      labelText: "Telefone da Quadra",
+                      labelText: "Telefone do Estabelecimento",
                       pourpose: TextFieldPourpose.Numeric,
                       controller: widget.viewModel.telephoneController,
                       validator: (value) => phoneNumberValidator(value),

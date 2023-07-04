@@ -204,7 +204,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future setStoreAvatar(BuildContext context) async {
-    XFile? pickedImage = await pickImage();
+    XFile? pickedImage = await pickImage(context);
     if (pickedImage == null) return;
 
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
@@ -240,44 +240,66 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future addStorePhoto(BuildContext context) async {
-    XFile? pickedImage = await pickImage();
-    if (pickedImage == null) return;
-
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
-    IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
+    final image = await selectImage(context, 1.43);
 
-    IMG.Image? resizedImage = await resizeImage(
-      decodedImage!,
-      null,
-      300,
-    );
+    if (image != null) {
+      storeEdit.photos.add(
+        StorePhoto(
+          idStorePhoto: storeEdit.photos.isEmpty
+              ? 0
+              : storeEdit.photos
+                      .reduce((a, b) => a.idStorePhoto > b.idStorePhoto ? a : b)
+                      .idStorePhoto +
+                  1,
+          photo: "",
+          isNewPhoto: true,
+          newPhoto: image,
+        ),
+      );
+      hasChangedPhoto = true;
+      notifyListeners();
+    }
 
-    Uint8List? croppedImage = await cropImage(
-      context,
-      pickedImage,
-      null,
-      210,
-      300,
-      resizedImage!.height,
-      resizedImage.width,
-    );
     Provider.of<MenuProvider>(context, listen: false).closeModal();
-    if (croppedImage == null) return;
-    storeEdit.photos.add(
-      StorePhoto(
-        idStorePhoto: storeEdit.photos.isEmpty
-            ? 0
-            : storeEdit.photos
-                    .reduce((a, b) => a.idStorePhoto > b.idStorePhoto ? a : b)
-                    .idStorePhoto +
-                1,
-        photo: "",
-        isNewPhoto: true,
-        newPhoto: croppedImage,
-      ),
-    );
-    hasChangedPhoto = true;
-    notifyListeners();
+
+    // XFile? pickedImage = await pickImage(context);
+    // if (pickedImage == null) return;
+
+    // IMG.Image? decodedImage = IMG.decodeImage(await pickedImage.readAsBytes());
+
+    // IMG.Image? resizedImage = await resizeImage(
+    //   decodedImage!,
+    //   null,
+    //   300,
+    // );
+
+    // Uint8List? croppedImage = await cropImage(
+    //   context,
+    //   pickedImage,
+    //   null,
+    //   210,
+    //   300,
+    //   resizedImage!.height,
+    //   resizedImage.width,
+    // );
+    // Provider.of<MenuProvider>(context, listen: false).closeModal();
+    // if (croppedImage == null) return;
+    // storeEdit.photos.add(
+    //   StorePhoto(
+    //     idStorePhoto: storeEdit.photos.isEmpty
+    //         ? 0
+    //         : storeEdit.photos
+    //                 .reduce((a, b) => a.idStorePhoto > b.idStorePhoto ? a : b)
+    //                 .idStorePhoto +
+    //             1,
+    //     photo: "",
+    //     isNewPhoto: true,
+    //     newPhoto: croppedImage,
+    //   ),
+    // );
+    // hasChangedPhoto = true;
+    // notifyListeners();
   }
 
   void deleteStorePhoto(int idStorePhoto) {

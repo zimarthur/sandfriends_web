@@ -78,9 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   height: defaultPadding,
                 ),
                 Expanded(
-                  child: Provider.of<SettingsViewModel>(context)
-                      .selectedTab
-                      .displayWidget,
+                  child: viewModel.selectedTab.displayWidget,
                 ),
               ],
             ),

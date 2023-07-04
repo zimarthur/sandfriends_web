@@ -40,7 +40,7 @@ class _CreateAccountCourtWidgetWebState
                   height: defaultPadding / 2,
                 ),
                 const Text(
-                  "Você está a poucos cliques de gerenciar suas quadras com sandfriends!",
+                  "Você está a poucos cliques de gerenciar suas quadras com Sandfriends!",
                   style: TextStyle(color: textDarkGrey, fontSize: 16),
                 ),
                 const SizedBox(
@@ -115,7 +115,7 @@ class _CreateAccountCourtWidgetWebState
                         controller: widget.viewModel.storeNameController,
                         validator: (value) => emptyCheck(
                           value,
-                          "digite o nome do estabelecimento",
+                          "Digite o nome do estabelecimento",
                         ),
                       ),
                     ),
@@ -140,12 +140,12 @@ class _CreateAccountCourtWidgetWebState
                   children: [
                     Expanded(
                       child: SFTextField(
-                        labelText: "Estado(UF)",
+                        labelText: "Estado (UF)",
                         pourpose: TextFieldPourpose.Standard,
                         controller: widget.viewModel.stateController,
                         validator: (value) => lettersValidator(
                           value,
-                          "digite o estado",
+                          "Digite o estado",
                         ),
                       ),
                     ),
@@ -160,7 +160,7 @@ class _CreateAccountCourtWidgetWebState
                         controller: widget.viewModel.cityController,
                         validator: (value) => emptyCheck(
                           value,
-                          "digite a cidade",
+                          "Digite a cidade",
                         ),
                       ),
                     ),
@@ -175,7 +175,7 @@ class _CreateAccountCourtWidgetWebState
                         controller: widget.viewModel.neighbourhoodController,
                         validator: (value) => emptyCheck(
                           value,
-                          "digite o bairro",
+                          "Digite o bairro",
                         ),
                       ),
                     ),
@@ -194,7 +194,7 @@ class _CreateAccountCourtWidgetWebState
                         controller: widget.viewModel.addressController,
                         validator: (value) => emptyCheck(
                           value,
-                          "digite a rua",
+                          "Digite a rua",
                         ),
                       ),
                     ),
@@ -209,7 +209,7 @@ class _CreateAccountCourtWidgetWebState
                         controller: widget.viewModel.addressNumberController,
                         validator: (value) => emptyCheck(
                           value,
-                          "digite o número",
+                          "Digite o número",
                         ),
                       ),
                     ),

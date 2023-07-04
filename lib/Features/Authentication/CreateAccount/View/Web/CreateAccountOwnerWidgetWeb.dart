@@ -37,7 +37,7 @@ class _CreateAccountOwnerWidgetWebState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Conte-nos mais sobre você",
+                      "Gestor, conte-nos mais sobre você",
                       style: TextStyle(color: textBlack, fontSize: 24),
                     ),
                     const SizedBox(
@@ -52,7 +52,7 @@ class _CreateAccountOwnerWidgetWebState
                             controller:
                                 widget.viewModel.ownerFirstNameController,
                             validator: (value) =>
-                                lettersValidator(value, "digite seu nome"),
+                                lettersValidator(value, "Digite seu nome"),
                           ),
                         ),
                         SizedBox(
@@ -65,7 +65,7 @@ class _CreateAccountOwnerWidgetWebState
                             controller:
                                 widget.viewModel.ownerLastNameController,
                             validator: (value) =>
-                                lettersValidator(value, "digite seu sobrenome"),
+                                lettersValidator(value, "Digite seu sobrenome"),
                           ),
                         ),
                       ],
@@ -145,7 +145,7 @@ class _CreateAccountOwnerWidgetWebState
                       children: [
                         Expanded(
                           child: SFTextField(
-                            labelText: "Telefone da Quadra",
+                            labelText: "Telefone do Estabelecimento",
                             pourpose: TextFieldPourpose.Numeric,
                             controller: widget.viewModel.telephoneController,
                             validator: (value) => phoneNumberValidator(value),

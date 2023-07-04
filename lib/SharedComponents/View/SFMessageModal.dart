@@ -60,6 +60,7 @@ class _SFMessageModalState extends State<SFMessageModal> {
           ),
           Text(
             widget.title,
+            textAlign: TextAlign.center,
             style: TextStyle(
                 color: textBlack,
                 fontSize: Responsive.isMobile(context) ? 18 : 24),
@@ -72,9 +73,10 @@ class _SFMessageModalState extends State<SFMessageModal> {
                 ),
                 Text(
                   widget.description!,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: textDarkGrey,
-                      fontSize: Responsive.isMobile(context) ? 14 : 16),
+                      fontSize: Responsive.isMobile(context) ? 12 : 14),
                 ),
               ],
             ),

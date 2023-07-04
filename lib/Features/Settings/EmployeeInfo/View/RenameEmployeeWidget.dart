@@ -50,7 +50,7 @@ class RenameEmployeeWidget extends StatelessWidget {
               labelText: "nome",
               pourpose: TextFieldPourpose.Standard,
               controller: renameFirstNameController,
-              validator: (value) => emptyCheck(value, "digite seu nome"),
+              validator: (value) => emptyCheck(value, "Digite seu nome"),
             ),
             const SizedBox(
               height: defaultPadding,
@@ -59,7 +59,7 @@ class RenameEmployeeWidget extends StatelessWidget {
               labelText: "sobrenome",
               pourpose: TextFieldPourpose.Standard,
               controller: renameLastNameController,
-              validator: (value) => emptyCheck(value, "digite seu sobrenome"),
+              validator: (value) => emptyCheck(value, "Digite seu sobrenome"),
             ),
             const SizedBox(
               height: defaultPadding * 2,

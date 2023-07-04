@@ -82,7 +82,7 @@ class _BasicInfoState extends State<BasicInfo> {
                     name: "Cidade",
                     controller: widget.viewModel.cityController,
                     hasSecondItem: true,
-                    secondName: "Estado(UF)",
+                    secondName: "Estado (UF)",
                     secondController: widget.viewModel.stateController,
                     onChanged: (newValue) =>
                         widget.viewModel.onChangedCity(newValue),

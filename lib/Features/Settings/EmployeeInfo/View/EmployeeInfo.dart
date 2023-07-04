@@ -43,7 +43,7 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
                             "Adicione membros à sua equipe e edite seus níveis de permissão.",
                           ),
                           Text(
-                            "CUIDADO: um funcionário com acesso administrador pode ver e alterar os dados bancários da empresa e visualizar o faturamento da quadra.",
+                            "Obs: um funcionário com acesso de administrador pode ver e alterar os dados bancários da empresa e também visualizar o faturamento do estabelecimento.",
                             style: TextStyle(
                               color: textDarkGrey,
                               fontSize: 12,
@@ -85,7 +85,7 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
                       width: layoutConstraints.maxWidth,
                       headers: [
                         SFTableHeader("name", "Nome"),
-                        SFTableHeader("email", "Email"),
+                        SFTableHeader("email", "E-mail"),
                         SFTableHeader("date", "Membro desde"),
                         SFTableHeader("admin", "Acesso"),
                         SFTableHeader("action", ""),

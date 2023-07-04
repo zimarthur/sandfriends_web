@@ -57,7 +57,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                 height: defaultPadding / 2,
               ),
               Text(
-                "Redefina sua senha para continuar usando sandfriends.",
+                "Redefina sua senha para continuar usando Sandfriends.",
                 style: TextStyle(color: textDarkGrey, fontSize: 16),
               ),
               const SizedBox(

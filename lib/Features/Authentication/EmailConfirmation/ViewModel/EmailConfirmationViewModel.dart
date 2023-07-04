@@ -37,9 +37,12 @@ class EmailConfirmationViewModel extends ChangeNotifier {
         messageModal = SFMessageModal(
           title: response.responseTitle!,
           description: response.responseDescription,
-          onTap: () {},
-          isHappy: false,
-          hideButton: true,
+          onTap: () {
+            pageStatus = PageStatus.OK;
+            notifyListeners();
+          },
+          isHappy: response.responseStatus == NetworkResponseStatus.alert,
+          hideButton: response.responseStatus == NetworkResponseStatus.error,
         );
         pageStatus = PageStatus.WARNING;
       }

@@ -50,7 +50,7 @@ class OnboardingWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Seja bem-vindo ao sandfriends!",
+                    "Seja bem-vindo ao Sandfriends!",
                     style: TextStyle(
                       color: textBlue,
                       fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class OnboardingWidget extends StatelessWidget {
                     ),
                   ),
                   const Text(
-                    "Preencha as informações essenciais do seu estabelecimento para começar para começar a receber agendamentos.",
+                    "Preencha as informações essenciais do seu estabelecimento para começar a receber agendamentos",
                     style: TextStyle(
                       color: textDarkGrey,
                     ),

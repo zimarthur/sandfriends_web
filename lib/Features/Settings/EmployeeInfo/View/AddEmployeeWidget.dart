@@ -61,7 +61,7 @@ class _AddEmployeeWidgetState extends State<AddEmployeeWidget> {
               height: defaultPadding * 2,
             ),
             SFTextField(
-              labelText: "digite o email do funcionário",
+              labelText: "digite o e-mail do funcionário",
               pourpose: TextFieldPourpose.Email,
               controller: addEmployeeController,
               validator: emailValidator,

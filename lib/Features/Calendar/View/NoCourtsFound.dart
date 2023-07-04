@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class NoCourtsFound extends StatelessWidget {
           child: Column(
             children: const [
               Text(
-                "Você ainda não adicionou uma quadra",
+                "Você ainda não adicionou nenhuma quadra",
                 style: TextStyle(
                   color: textDarkGrey,
                   fontSize: 18,
@@ -35,7 +34,7 @@ class NoCourtsFound extends StatelessWidget {
                 height: defaultPadding,
               ),
               Text(
-                "Clique na aba \"Minhas quadras\" para adicionar suas quadras e conseguir acompanhar o agendamentos nelas",
+                "Clique na aba \"Minhas quadras\" para finalizar o cadastro e conseguir acompanhar seus agendamentos",
                 style: TextStyle(
                   color: textLightGrey,
                   fontWeight: FontWeight.w300,

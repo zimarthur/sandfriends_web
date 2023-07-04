@@ -136,6 +136,7 @@ flutter:
     - assets/full_logo_negative_284.png
     - assets/full_logo_positive_160.png
     - assets/full_logo_positive_284.png
+    - assets/full_logo_positive_284_courts.png
     - assets/logo_64.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

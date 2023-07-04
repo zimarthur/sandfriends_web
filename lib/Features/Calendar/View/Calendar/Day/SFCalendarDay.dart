@@ -223,7 +223,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                               top: defaultPadding,
                                             ),
                                             child: Text(
-                                              "${court.description} não aceita mensalistas nos ${weekdayRecurrent[widget.viewModel.selectedWeekday]}",
+                                              "${court.description} não aceita mensalistas nesse dia da semana",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: textDarkGrey,

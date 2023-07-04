@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../../Utils/Responsive.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EmailConfirmationWidget extends StatelessWidget {
   EmailConfirmationViewModel viewModel;
@@ -54,7 +53,7 @@ class EmailConfirmationWidget extends StatelessWidget {
           ),
           Text(
             viewModel.isStoreRequest
-                ? "Em breve entraremos em contato para apresentar a plataforma e todas suas funcionalidades.\nQualquer dúvida, basta chamar nossa equipe de suporte."
+                ? "Em breve entraremos em contato com você para apresentar a plataforma e todas as suas funcionalidades.\nQualquer dúvida, basta chamar nossa equipe de suporte"
                 : "Entre no app e comece a agendar suas partidas",
             style: TextStyle(
               color: textDarkGrey,
@@ -64,22 +63,6 @@ class EmailConfirmationWidget extends StatelessWidget {
           const SizedBox(
             height: defaultPadding * 2,
           ),
-          if (!viewModel.isStoreRequest)
-            Column(
-              children: [
-                SFButton(
-                    buttonLabel: "Ir para o app",
-                    buttonType: ButtonType.Primary,
-                    onTap: () {
-                      final url =
-                          Uri.parse("https://sandfriends.com.br/redirect/");
-                      launchUrl(url);
-                    }),
-                SizedBox(
-                  height: defaultPadding * 2,
-                ),
-              ],
-            )
         ],
       ),
     );

@@ -119,7 +119,7 @@ class _CreateAccountCourtWidgetMobileState
                   controller: widget.viewModel.storeNameController,
                   validator: (value) => emptyCheck(
                     value,
-                    "digite o nome do estabelecimento",
+                    "Digite o nome do estabelecimento",
                   ),
                 ),
                 const SizedBox(
@@ -135,12 +135,12 @@ class _CreateAccountCourtWidgetMobileState
                   height: defaultPadding,
                 ),
                 SFTextField(
-                  labelText: "Estado(UF)",
+                  labelText: "Estado (UF)",
                   pourpose: TextFieldPourpose.Standard,
                   controller: widget.viewModel.stateController,
                   validator: (value) => lettersValidator(
                     value,
-                    "digite o estado",
+                    "Digite o estado",
                   ),
                 ),
                 const SizedBox(
@@ -152,7 +152,7 @@ class _CreateAccountCourtWidgetMobileState
                   controller: widget.viewModel.cityController,
                   validator: (value) => emptyCheck(
                     value,
-                    "digite a cidade",
+                    "Digite a cidade",
                   ),
                 ),
                 const SizedBox(
@@ -164,7 +164,7 @@ class _CreateAccountCourtWidgetMobileState
                   controller: widget.viewModel.neighbourhoodController,
                   validator: (value) => emptyCheck(
                     value,
-                    "digite o bairro",
+                    "Digite o bairro",
                   ),
                 ),
                 const SizedBox(
@@ -176,7 +176,7 @@ class _CreateAccountCourtWidgetMobileState
                   controller: widget.viewModel.addressController,
                   validator: (value) => emptyCheck(
                     value,
-                    "digite a rua",
+                    "Digite a rua",
                   ),
                 ),
                 const SizedBox(
@@ -188,7 +188,7 @@ class _CreateAccountCourtWidgetMobileState
                   controller: widget.viewModel.addressNumberController,
                   validator: (value) => emptyCheck(
                     value,
-                    "digite o número",
+                    "Digite o número",
                   ),
                 ),
                 const SizedBox(

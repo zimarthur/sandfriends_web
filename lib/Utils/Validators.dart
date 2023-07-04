@@ -1,12 +1,12 @@
 String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite seu e-mail";
+    return "Digite seu e-mail";
   } else if (RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(value)) {
     return null;
   } else {
-    return "e-mail inválido";
+    return "E-mail inválido";
   }
 }
 
@@ -30,11 +30,11 @@ String? rewardCodeValidator(String? value, String onNull) {
 
 String? passwordValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite sua senha";
+    return "Digite sua senha";
   } else if (RegExp(r"^.{8,}").hasMatch(value)) {
     return null;
   } else {
-    return "min. 8 caracteres";
+    return "Min. 8 caracteres";
   }
 }
 
@@ -55,11 +55,11 @@ String? max255(String? value) {
 
 String? cpfValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite seu cpf";
+    return "Digite seu cpf";
   } else {
     final cleanValue = value.replaceAll(RegExp('[^0-9]'), '');
     if (cleanValue.length != 11 || int.tryParse(cleanValue) == null) {
-      return "cpf inválido";
+      return "Cpf inválido";
     } else {
       return null;
     }
@@ -68,11 +68,11 @@ String? cpfValidator(String? value) {
 
 String? cnpjValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite seu cnpj";
+    return "Digite seu cnpj";
   } else {
     final cleanValue = value.replaceAll(RegExp('[^0-9]'), '');
     if (cleanValue.length != 14 || int.tryParse(cleanValue) == null) {
-      return "cnpj inválido";
+      return "Cnpj inválido";
     } else {
       return null;
     }
@@ -81,11 +81,11 @@ String? cnpjValidator(String? value) {
 
 String? cepValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite seu cep";
+    return "Digite seu cep";
   } else {
     final cleanValue = value.replaceAll(RegExp('[^0-9]'), '');
     if (cleanValue.length != 8 || int.tryParse(cleanValue) == null) {
-      return "cep inválido";
+      return "Cep inválido";
     } else {
       return null;
     }
@@ -94,11 +94,11 @@ String? cepValidator(String? value) {
 
 String? phoneNumberValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "digite um número";
+    return "Digite um número";
   } else {
     final cleanValue = value.replaceAll(RegExp('[^0-9]'), '');
     if (cleanValue.length != 11 || int.tryParse(cleanValue) == null) {
-      return "número inválido";
+      return "Número inválido";
     } else {
       return null;
     }
@@ -110,7 +110,7 @@ String? lettersValidator(String? value, String onNull) {
     return onNull;
   } else {
     if (RegExp(r"[^a-z ]", caseSensitive: false).allMatches(value).isNotEmpty) {
-      return "formato inválido";
+      return "Formato inválido";
     } else {
       return null;
     }

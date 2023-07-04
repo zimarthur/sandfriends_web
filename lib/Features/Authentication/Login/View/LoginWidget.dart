@@ -53,7 +53,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 children: [
                   Center(
                     child: Image.asset(
-                      r'assets/full_logo_positive_284.png',
+                      r'assets/full_logo_positive_284_courts.png',
                     ),
                   ),
                   const SizedBox(
@@ -63,12 +63,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SFTextField(
-                        labelText: "Email",
+                        labelText: "E-mail",
                         pourpose: TextFieldPourpose.Email,
                         prefixIcon: SvgPicture.asset(r"assets/icon/email.svg"),
                         controller: widget.viewModel.userController,
                         validator: (value) =>
-                            emptyCheck(value, "Digite seu email"),
+                            emptyCheck(value, "Digite seu e-mail"),
                       ),
                       const SizedBox(
                         height: defaultPadding,

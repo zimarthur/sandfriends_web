@@ -32,7 +32,7 @@ class EmployeeDataSource extends DataGridSource {
                 value: employee.registrationDate == null
                     ? Center(
                         child: Text(
-                          "Aguardando conf.",
+                          "Aguard. confirmação",
                           style: TextStyle(color: secondaryYellow),
                         ),
                       )

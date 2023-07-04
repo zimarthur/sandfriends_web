@@ -21,4 +21,11 @@ class StorePhoto {
       photo: sandfriendsRequestsUrl + parsedJson["Photo"],
     );
   }
+
+  factory StorePhoto.copyWith(StorePhoto refPhoto) {
+    return StorePhoto(
+      idStorePhoto: refPhoto.idStorePhoto,
+      photo: refPhoto.photo,
+    );
+  }
 }

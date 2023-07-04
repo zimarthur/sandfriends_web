@@ -35,6 +35,9 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                         : Provider.of<DataProvider>(context, listen: false)
                             .store!
                             .logo,
+                storeName: Provider.of<DataProvider>(context, listen: false)
+                    .store!
+                    .name,
               ),
               const SizedBox(
                 width: defaultPadding,
@@ -101,15 +104,17 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
         : Stack(
             children: [
               SFAvatar(
-                height: 50,
-                image:
-                    Provider.of<DataProvider>(context, listen: false).store ==
-                            null
-                        ? null
-                        : Provider.of<DataProvider>(context, listen: false)
-                            .store!
-                            .logo,
-              ),
+                  height: 50,
+                  image:
+                      Provider.of<DataProvider>(context, listen: false).store ==
+                              null
+                          ? null
+                          : Provider.of<DataProvider>(context, listen: false)
+                              .store!
+                              .logo,
+                  storeName: Provider.of<DataProvider>(context, listen: false)
+                      .store!
+                      .name),
               InkWell(
                 onTap: () {},
                 onHover: (value) {

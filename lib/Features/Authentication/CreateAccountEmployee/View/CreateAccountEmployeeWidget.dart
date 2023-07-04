@@ -60,7 +60,7 @@ class _CreateAccountEmployeeWidgetState
                 height: defaultPadding,
               ),
               const Text(
-                "Seja bem vindo!",
+                "Seja bem-vindo!",
                 style: TextStyle(color: textBlack, fontSize: 24),
               ),
               const SizedBox(
@@ -77,7 +77,7 @@ class _CreateAccountEmployeeWidgetState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Email:",
+                    "E-mail:",
                     style: TextStyle(
                       color: textDarkGrey,
                     ),

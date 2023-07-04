@@ -66,7 +66,7 @@ class _CourtInfoState extends State<CourtInfo> {
                           const Expanded(
                             flex: 1,
                             child: Text(
-                              "Nome da quadra",
+                              "Nome desta quadra",
                               style: TextStyle(
                                 color: textDarkGrey,
                               ),
@@ -81,6 +81,7 @@ class _CourtInfoState extends State<CourtInfo> {
                               validator: (value) {
                                 return null;
                               },
+                              hintText: "Ex: Quadra 1",
                               onChanged: (newText) =>
                                   widget.viewModel.onChangedCourtName(newText),
                             ),

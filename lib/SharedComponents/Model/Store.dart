@@ -106,7 +106,8 @@ class Store {
       city: City.copyWith(storeRef.city),
       approvalDate: storeRef.approvalDate,
     );
-    store.photos = storeRef.photos;
+    for (var photo in storeRef.photos)
+      store.photos.add(StorePhoto.copyWith(photo));
     return store;
   }
 }

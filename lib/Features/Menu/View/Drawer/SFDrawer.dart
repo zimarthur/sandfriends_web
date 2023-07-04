@@ -69,10 +69,14 @@ class _SFDrawerState extends State<SFDrawer> {
                 SizedBox(
                   height: defaultPadding,
                 ),
-                Image.asset(
-                  fullSize
-                      ? r'assets/full_logo_negative_284.png'
-                      : r'assets/logo_64.png',
+                InkWell(
+                  onTap: () => widget.viewModel.quickLinkHome(context),
+                  onHover: (a) {},
+                  child: Image.asset(
+                    fullSize
+                        ? r'assets/full_logo_negative_284.png'
+                        : r'assets/logo_64.png',
+                  ),
                 ),
                 const SFDrawerDivider(),
                 Expanded(

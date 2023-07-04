@@ -81,7 +81,7 @@ class CreateAccountViewModel extends ChangeNotifier {
   bool _termsAgree = true;
   bool get termsAgree => _termsAgree;
   set termsAgree(bool newValue) {
-    termsAgree = newValue;
+    _termsAgree = newValue;
     notifyListeners();
   }
 

@@ -13,16 +13,17 @@ class SFAvatar extends StatefulWidget {
   final bool isPlayerAvatar;
   final String? playerFirstName;
   final String? playerLastName;
+  final String? storeName;
 
-  const SFAvatar({
-    super.key,
-    required this.height,
-    required this.image,
-    this.editImage,
-    this.isPlayerAvatar = false,
-    this.playerFirstName,
-    this.playerLastName,
-  });
+  const SFAvatar(
+      {super.key,
+      required this.height,
+      required this.image,
+      this.editImage,
+      this.isPlayerAvatar = false,
+      this.playerFirstName,
+      this.playerLastName,
+      this.storeName});
 
   @override
   State<SFAvatar> createState() => _SFAvatarState();
@@ -39,51 +40,59 @@ class _SFAvatarState extends State<SFAvatar> {
         child: AspectRatio(
           aspectRatio: 1 / 1,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(widget.height * 0.45),
-            child: widget.editImage != null
-                ? Image.memory(
-                    widget.editImage!,
-                    fit: BoxFit.cover,
-                  )
-                : widget.image != null
-                    ? CachedNetworkImage(
-                        imageUrl: widget.image!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Padding(
-                          padding: EdgeInsets.all(widget.height * 0.3),
-                          child: SFLoading(
-                            size: widget.height * 0.4,
+              borderRadius: BorderRadius.circular(widget.height * 0.45),
+              child: widget.editImage != null
+                  ? Image.memory(
+                      widget.editImage!,
+                      fit: BoxFit.cover,
+                    )
+                  : widget.image != null
+                      ? CachedNetworkImage(
+                          imageUrl: widget.image!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Padding(
+                            padding: EdgeInsets.all(widget.height * 0.3),
+                            child: SFLoading(
+                              size: widget.height * 0.4,
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => Center(
-                          child: Icon(Icons.error),
-                        ),
-                      )
-                    : widget.isPlayerAvatar
-                        ? Center(
-                            child: SizedBox(
-                              height: widget.height * 0.4,
-                              width: widget.height * 0.4,
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text(
-                                  "${widget.playerFirstName![0].toUpperCase()}${widget.playerLastName![0].toUpperCase()}",
-                                  style: TextStyle(
-                                    color: secondaryPaper,
-                                    fontWeight: FontWeight.w600,
+                          errorWidget: (context, url, error) => Center(
+                            child: Icon(Icons.error),
+                          ),
+                        )
+                      : widget.isPlayerAvatar
+                          ? Center(
+                              child: SizedBox(
+                                height: widget.height * 0.4,
+                                width: widget.height * 0.4,
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Text(
+                                    "${widget.playerFirstName![0].toUpperCase()}${widget.playerLastName![0].toUpperCase()}",
+                                    style: TextStyle(
+                                      color: secondaryPaper,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        : Container(
-                            color: secondaryBack,
-                            child: SvgPicture.asset(
-                              r"assets/icon/attention.svg",
-                              height: widget.height * 0.4,
-                            ),
-                          ),
-          ),
+                            )
+                          : Center(
+                              child: SizedBox(
+                                height: widget.height * 0.4,
+                                width: widget.height * 0.4,
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Text(
+                                    widget.storeName![0].toUpperCase(),
+                                    style: TextStyle(
+                                      color: secondaryPaper,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )),
         ),
       ),
     );
