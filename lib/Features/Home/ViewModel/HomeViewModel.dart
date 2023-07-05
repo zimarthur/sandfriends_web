@@ -24,20 +24,15 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   bool needsOnboarding(BuildContext context) {
-    if (opDaysSet(context) &&
-        courtsSet(context) &&
-        brandingSet(context) &&
+    if (courtsSet(context) &&
+        logoSet(context) &&
+        photosSet(context) &&
         storeDescriptionSet(context) &&
         financeSettingsSet(context)) {
       return false;
     } else {
       return true;
     }
-  }
-
-  bool opDaysSet(BuildContext context) {
-    return Provider.of<DataProvider>(context, listen: false).storeWorkingDays ==
-        null;
   }
 
   bool courtsSet(BuildContext context) {
@@ -48,20 +43,17 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  bool brandingSet(BuildContext context) {
-    if (Provider.of<DataProvider>(context, listen: false).store!.logo != null &&
-        Provider.of<DataProvider>(context, listen: false)
-            .store!
-            .logo!
-            .isEmpty &&
-        Provider.of<DataProvider>(context, listen: false)
+  bool logoSet(BuildContext context) {
+    return Provider.of<DataProvider>(context, listen: false).store!.logo !=
+        null;
+  }
+
+  bool photosSet(BuildContext context) {
+    return Provider.of<DataProvider>(context, listen: false)
             .store!
             .photos
-            .isNotEmpty) {
-      return true;
-    } else {
-      return false;
-    }
+            .length >=
+        2;
   }
 
   bool storeDescriptionSet(BuildContext context) {
@@ -78,6 +70,13 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   bool financeSettingsSet(BuildContext context) {
-    return false;
+    return Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .bankAccount !=
+            null &&
+        Provider.of<DataProvider>(context, listen: false)
+            .store!
+            .bankAccount!
+            .isNotEmpty;
   }
 }

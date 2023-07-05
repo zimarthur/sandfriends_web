@@ -31,7 +31,7 @@ class _FinanceInfoState extends State<FinanceInfo> {
           onChanged: (newValue) => widget.viewModel.onChangedCnpj(
             newValue,
           ),
-          isAdmin: widget.viewModel.isEmployeeAdmin,
+          isAdmin: false,
         ),
       ],
     );

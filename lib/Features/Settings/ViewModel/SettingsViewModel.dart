@@ -145,6 +145,7 @@ class SettingsViewModel extends ChangeNotifier {
     stateController.text = storeEdit.city.state.uf;
     descriptionController.text = storeEdit.description ?? "";
     instagramController.text = storeEdit.instagram ?? "";
+    cnpjController.text = storeEdit.cnpj ?? "";
     if (tabItems.isEmpty) {
       initTabs();
     }
