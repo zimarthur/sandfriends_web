@@ -31,6 +31,13 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child: Text('
+            //     "testes",
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            // ),
             Container(
               color: primaryBlue.withOpacity(0.4),
               height: height,

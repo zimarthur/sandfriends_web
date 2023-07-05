@@ -115,7 +115,7 @@ class MyCourtsViewModel extends ChangeNotifier {
           ),
         );
       }
-      saveNewStoreWorkingSDays(
+      saveNewStoreWorkingDays(
         context,
         Provider.of<DataProvider>(context, listen: false).storeWorkingDays!,
       );
@@ -145,7 +145,7 @@ class MyCourtsViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
   }
 
-  void saveNewStoreWorkingSDays(
+  void saveNewStoreWorkingDays(
       BuildContext context, List<StoreWorkingDay> newStoreWorkingDays) {
     storeWorkingDays.clear();
     for (var newStoreWorkingDay in newStoreWorkingDays) {

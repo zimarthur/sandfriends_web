@@ -51,6 +51,9 @@ class OperationDay {
     if (identical(this, other)) return true;
     if (other is OperationDay == false) return false;
     OperationDay otherOpDay = other as OperationDay;
+    if (prices.length != otherOpDay.prices.length) {
+      return false;
+    }
     for (var price in prices) {
       if (price !=
           otherOpDay.prices.firstWhere(

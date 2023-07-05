@@ -29,6 +29,10 @@ class Court {
         return false;
       }
     }
+    //caso tenha adicionado um novo dia no jhorario de funcionamento, os horarios existentes podiam ser os mesmos, mas o len deles não
+    if (operationDays.length != other.operationDays.length) {
+      return false;
+    }
     for (var operationDay in operationDays) {
       if (operationDay !=
           other.operationDays

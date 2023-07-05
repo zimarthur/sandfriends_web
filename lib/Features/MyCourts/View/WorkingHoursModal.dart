@@ -133,7 +133,7 @@ class _WorkingHoursWidgetState extends State<WorkingHoursModal> {
                   buttonType: ButtonType.Primary,
                   onTap: () {
                     widget.viewModel
-                        .saveNewStoreWorkingSDays(context, storeWorkingDays);
+                        .saveNewStoreWorkingDays(context, storeWorkingDays);
                   },
                 ),
               ),
