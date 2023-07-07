@@ -33,7 +33,7 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
           children: [
             // Align(
             //   alignment: Alignment.topRight,
-            //   child: Text('
+            //   child: Text(
             //     "testes",
             //     style: TextStyle(fontSize: 20),
             //   ),

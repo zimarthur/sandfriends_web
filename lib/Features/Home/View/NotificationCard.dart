@@ -36,6 +36,7 @@ class NotificationCard extends StatelessWidget {
                         notification.message,
                         style: TextStyle(
                           color: textDarkGrey,
+                          fontSize: 12,
                         ),
                       ),
                       const SizedBox(
@@ -46,31 +47,35 @@ class NotificationCard extends StatelessWidget {
                           SvgPicture.asset(
                             r"assets/icon/calendar.svg",
                             color: textDarkGrey,
+                            height: 12,
                           ),
                           const SizedBox(
-                            width: defaultPadding / 2,
+                            width: defaultPadding / 4,
                           ),
                           Text(
                             DateFormat("dd/MM/yyyy")
                                 .format(notification.match.date),
                             style: TextStyle(
                               color: textDarkGrey,
+                              fontSize: 12,
                             ),
                           ),
                           const SizedBox(
-                            width: defaultPadding * 2,
+                            width: defaultPadding,
                           ),
                           SvgPicture.asset(
                             r"assets/icon/clock.svg",
                             color: textDarkGrey,
+                            height: 12,
                           ),
                           const SizedBox(
-                            width: defaultPadding / 2,
+                            width: defaultPadding / 4,
                           ),
                           Text(
                             "${notification.match.startingHour.hourString} - ${notification.match.endingHour.hourString}",
                             style: TextStyle(
                               color: textDarkGrey,
+                              fontSize: 12,
                             ),
                           ),
                         ],
