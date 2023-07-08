@@ -15,6 +15,7 @@ class HomeViewModel extends ChangeNotifier {
   List<AppNotification> notifications = [];
   List<Reward> rewards = [];
   List<Hour> availableHours = [];
+  List<Hour> workingHours = [];
   List<AppMatch> matches = [];
   List<Court> courts = [];
   List<CourtOccupation> courtsOccupation = [];
@@ -25,8 +26,51 @@ class HomeViewModel extends ChangeNotifier {
 
   bool storeClosedToday = false;
 
+  void initHomeScreen(BuildContext context) {
+    availableHours =
+        Provider.of<DataProvider>(context, listen: false).availableHours;
+    setWorkingHours(context);
+    displayedHour =
+        availableHours.firstWhere((hour) => DateTime.now().hour == hour.hour);
+
+    notifications =
+        Provider.of<DataProvider>(context, listen: false).notifications;
+    courts = Provider.of<DataProvider>(context, listen: false).courts;
+    matches = Provider.of<DataProvider>(context, listen: false)
+        .matches
+        .where((match) => (areInTheSameDay(match.date, DateTime.now())))
+        .toList();
+    setOccupationValues();
+    rewards = Provider.of<DataProvider>(context, listen: false).rewards;
+    notifyListeners();
+  }
+
+  void setWorkingHours(BuildContext context) {
+    if (Provider.of<DataProvider>(context, listen: false).storeWorkingDays ==
+        null) {
+      workingHours = availableHours;
+    } else {
+      final todayWorkingDay = Provider.of<DataProvider>(context, listen: false)
+          .storeWorkingDays!
+          .firstWhere(
+            (workingDay) =>
+                workingDay.weekday == getSFWeekday(DateTime.now().weekday),
+          );
+      if (todayWorkingDay.isEnabled) {
+        workingHours = availableHours
+            .where((hour) =>
+                hour.hour >= todayWorkingDay.startingHour!.hour &&
+                hour.hour < todayWorkingDay.endingHour!.hour)
+            .toList();
+      } else {
+        workingHours = availableHours;
+      }
+    }
+  }
+
   void setOccupationValues() {
     courtsOccupation.clear();
+
     for (var court in courts) {
       int hoursPlayed = matches
           .where((match) => match.idStoreCourt == court.idStoreCourt)
@@ -36,58 +80,24 @@ class HomeViewModel extends ChangeNotifier {
               (previousValue, element) =>
                   previousValue + element.matchDuration);
       print(court.description);
-      print(hoursPlayed);
+      //print(hoursPlayed);
       print(availableHours.length);
       courtsOccupation.add(
         CourtOccupation(
           court: court,
-          occupationPercentage: hoursPlayed / availableHours.length,
+          occupationPercentage: hoursPlayed / workingHours.length,
         ),
       );
     }
-    averageOccupation = courtsOccupation.fold(
-            0.0,
-            (previousValue, element) =>
-                previousValue + element.occupationPercentage) /
-        courtsOccupation.length;
-  }
-
-  void initHomeScreen(BuildContext context) {
-    if (Provider.of<DataProvider>(context, listen: false).storeWorkingDays ==
-        null) {
-      availableHours =
-          Provider.of<DataProvider>(context, listen: false).availableHours;
+    if (courts.isEmpty) {
+      averageOccupation = 0;
     } else {
-      StoreWorkingDay workingDay =
-          Provider.of<DataProvider>(context, listen: false)
-              .storeWorkingDays!
-              .firstWhere((workingDay) =>
-                  workingDay.weekday == getSFWeekday(DateTime.now().weekday));
-      if (workingDay.isEnabled == false) {
-        storeClosedToday = true;
-      } else {
-        availableHours = Provider.of<DataProvider>(context, listen: false)
-            .availableHours
-            .where((avHour) =>
-                avHour.hour >= workingDay.startingHour!.hour &&
-                avHour.hour < workingDay.endingHour!.hour)
-            .toList();
-      }
+      averageOccupation = courtsOccupation.fold(
+              0.0,
+              (previousValue, element) =>
+                  previousValue + element.occupationPercentage) /
+          courtsOccupation.length;
     }
-
-    displayedHour =
-        availableHours.firstWhere((hour) => DateTime.now().hour == hour.hour);
-
-    setOccupationValues();
-    notifications =
-        Provider.of<DataProvider>(context, listen: false).notifications;
-    courts = Provider.of<DataProvider>(context, listen: false).courts;
-    matches = Provider.of<DataProvider>(context, listen: false)
-        .matches
-        .where((match) => (areInTheSameDay(match.date, DateTime.now())))
-        .toList();
-    rewards = Provider.of<DataProvider>(context, listen: false).rewards;
-    notifyListeners();
   }
 
   void increaseHour() {

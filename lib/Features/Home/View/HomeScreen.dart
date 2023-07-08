@@ -125,42 +125,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 300,
+                                          width: 330,
                                           child: HomeMatchesWidget(
                                             viewModel: viewModel,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: defaultPadding,
-                                        ),
                                         Expanded(
-                                          child: LayoutBuilder(
-                                            builder: (layoutContext,
-                                                layoutConstraint) {
-                                              double courtOccupationWidth =
-                                                  layoutConstraint.maxWidth >
-                                                          700
-                                                      ? 700
-                                                      : layoutConstraint
-                                                          .maxWidth;
-                                              return Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(),
-                                                  ),
-                                                  SizedBox(
-                                                    width: courtOccupationWidth,
-                                                    child:
-                                                        CourtOccupationWidget(
-                                                      viewModel: viewModel,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(
+                                                defaultPadding),
+                                            child: LayoutBuilder(
+                                              builder: (layoutContext,
+                                                  layoutConstraint) {
+                                                double courtOccupationWidth =
+                                                    layoutConstraint.maxWidth >
+                                                            700
+                                                        ? 700
+                                                        : layoutConstraint
+                                                            .maxWidth;
+                                                return Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(),
                                                     ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Container(),
-                                                  ),
-                                                ],
-                                              );
-                                            },
+                                                    SizedBox(
+                                                      width:
+                                                          courtOccupationWidth,
+                                                      child:
+                                                          CourtOccupationWidget(
+                                                        viewModel: viewModel,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
                                       ],
