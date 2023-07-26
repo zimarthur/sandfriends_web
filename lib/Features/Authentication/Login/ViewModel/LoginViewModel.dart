@@ -75,10 +75,8 @@ class LoginViewModel extends ChangeNotifier {
           Navigator.pushNamed(context, '/home');
         } else {
           messageModal = SFMessageModal(
-            title:
-                "Não encontramos nenhuma quadra com este e-mail", //response.responseTitle!,
-            description:
-                "Se você é um jogador, realize o login diretamente pelo app", //response.responseDescription,
+            title: response.responseTitle!,
+            description: response.responseDescription,
             onTap: () {
               pageStatus = PageStatus.OK;
               notifyListeners();

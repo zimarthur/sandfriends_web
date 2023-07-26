@@ -19,8 +19,7 @@ class FinancesDataSource extends DataGridSource {
                   value:
                       "${match.startingHour.hourString} - ${match.endingHour.hourString}"),
               DataGridCell<String>(
-                  columnName: 'court',
-                  value: "Quadra ${match.idStoreCourt.toString()}"),
+                  columnName: 'court', value: match.court.description),
               DataGridCell<String>(
                   columnName: 'price', value: "R\$${match.cost}"),
               const DataGridCell<String>(columnName: 'player', value: "Arthur"),

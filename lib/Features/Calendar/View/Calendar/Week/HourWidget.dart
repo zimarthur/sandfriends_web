@@ -63,14 +63,14 @@ class _HourWidgetState extends State<HourWidget> {
       widgetColor = divider;
       onHoverColor = divider;
     } else if (widget.isExpired) {
-      if (widget.matchesLength == courtsLength) {
+      if (widget.matchesLength >= courtsLength) {
         widgetColor = secondaryYellow.withOpacity(0.4);
         onHoverColor = secondaryYellowDark.withOpacity(0.4);
       } else {
         widgetColor = secondaryGreen.withOpacity(0.4);
         onHoverColor = secondaryGreenDark.withOpacity(0.4);
       }
-    } else if (widget.matchesLength == courtsLength) {
+    } else if (widget.matchesLength >= courtsLength) {
       widgetColor = secondaryYellow;
       onHoverColor = secondaryYellowDark;
     } else {

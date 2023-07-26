@@ -89,10 +89,10 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                     Court court =
                         Provider.of<DataProvider>(context, listen: false)
                             .courts[index];
-                    if (matches.any(
-                        (match) => match.idStoreCourt == court.idStoreCourt)) {
+                    if (matches.any((match) =>
+                        match.court.idStoreCourt == court.idStoreCourt)) {
                       match = matches.firstWhere((match) =>
-                          match.idStoreCourt ==
+                          match.court.idStoreCourt ==
                           Provider.of<DataProvider>(context, listen: false)
                               .courts[index]
                               .idStoreCourt);

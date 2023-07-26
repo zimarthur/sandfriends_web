@@ -20,7 +20,6 @@ class Store {
   String? cnpj;
   String cep;
   String cpf;
-  String? bankAccount;
   String neighbourhood;
   int? hoursBeforeCancellation;
   City city;
@@ -43,7 +42,6 @@ class Store {
     required this.hoursBeforeCancellation,
     required this.cnpj,
     required this.cep,
-    required this.bankAccount,
     required this.cpf,
     required this.neighbourhood,
     required this.city,
@@ -65,7 +63,6 @@ class Store {
       instagram: parsedJson["Instagram"],
       cnpj: parsedJson["Cnpj"],
       cep: parsedJson["Cep"],
-      bankAccount: parsedJson["BankAccount"],
       neighbourhood: parsedJson["Neighbourhood"],
       cpf: parsedJson["Cpf"],
       hoursBeforeCancellation: parsedJson["HoursBeforeCancelation"],
@@ -100,7 +97,6 @@ class Store {
       hoursBeforeCancellation: storeRef.hoursBeforeCancellation,
       cnpj: storeRef.cnpj,
       cep: storeRef.cep,
-      bankAccount: storeRef.bankAccount,
       cpf: storeRef.cpf,
       neighbourhood: storeRef.neighbourhood,
       city: City.copyWith(storeRef.city),

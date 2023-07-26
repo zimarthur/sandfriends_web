@@ -46,6 +46,14 @@ class _BasicInfoState extends State<BasicInfo> {
                         widget.viewModel.onChangedPhoneNumber(newValue),
                     isAdmin: widget.viewModel.isEmployeeAdmin,
                   ),
+                  FormItem(
+                    name: "CNPJ",
+                    controller: widget.viewModel.cnpjController,
+                    onChanged: (newValue) => widget.viewModel.onChangedCnpj(
+                      newValue,
+                    ),
+                    isAdmin: false,
+                  ),
                 ],
               ),
               const Padding(

@@ -12,7 +12,6 @@ import 'package:image/image.dart' as IMG;
 import 'package:flutter/foundation.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:sandfriends_web/Features/Settings/FinanceInfo/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Features/Settings/Repository/SettingsRepoImp.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StorePhoto.dart';
 import 'package:sandfriends_web/Utils/Numbers.dart';
@@ -47,17 +46,7 @@ class SettingsViewModel extends ChangeNotifier {
         onTap: (newTab) => setSelectedTab(newTab),
       ),
     );
-    if (isEmployeeAdmin) {
-      tabItems.add(
-        SFTabItem(
-          name: "Dados financeiros",
-          displayWidget: FinanceInfo(
-            viewModel: this,
-          ),
-          onTap: (newTab) => setSelectedTab(newTab),
-        ),
-      );
-    }
+
     tabItems.add(
       SFTabItem(
         name: "Equipe",
@@ -164,7 +153,6 @@ class SettingsViewModel extends ChangeNotifier {
       storeRef.neighbourhood != storeEdit.neighbourhood ||
       storeRef.description != storeEdit.description ||
       storeRef.instagram != storeEdit.instagram ||
-      storeRef.bankAccount != storeEdit.bankAccount ||
       storeRef.cnpj != storeEdit.cnpj ||
       storeAvatar != null ||
       hasChangedPhoto;
@@ -303,11 +291,6 @@ class SettingsViewModel extends ChangeNotifier {
 
   void onChangedInstagram(String newValue) {
     storeEdit.instagram = newValue;
-    notifyListeners();
-  }
-
-  void onChangedBankAccount(String newValue) {
-    storeEdit.bankAccount = newValue;
     notifyListeners();
   }
 

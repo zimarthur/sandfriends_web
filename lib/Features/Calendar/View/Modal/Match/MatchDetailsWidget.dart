@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
-import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
+import 'package:sandfriends_web/SharedComponents/Model/SelectedPayment.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
@@ -24,7 +24,6 @@ class MatchDetailsWidget extends StatelessWidget {
     required this.match,
   });
   TextEditingController controller = TextEditingController();
-  PaymentType paymentStatus = PaymentType.NeedsPayment;
 
   @override
   Widget build(BuildContext context) {
@@ -142,21 +141,24 @@ class MatchDetailsWidget extends StatelessWidget {
                                 vertical: defaultPadding / 4,
                                 horizontal: defaultPadding / 2),
                             decoration: BoxDecoration(
-                              color: paymentStatus == PaymentType.Paid
-                                  ? paidBackground
-                                  : needsPaymentBackground,
+                              color: match.selectedPayment ==
+                                      SelectedPayment.PayInStore
+                                  ? needsPaymentBackground
+                                  : paidBackground,
                               borderRadius: BorderRadius.circular(
                                 defaultBorderRadius,
                               ),
                             ),
                             child: Text(
-                              paymentStatus == PaymentType.Paid
-                                  ? "Pago"
-                                  : "Pagar no local",
+                              match.selectedPayment ==
+                                      SelectedPayment.PayInStore
+                                  ? "Pagar no local"
+                                  : "Pago",
                               style: TextStyle(
-                                color: paymentStatus == PaymentType.Paid
-                                    ? paidText
-                                    : needsPaymentText,
+                                color: match.selectedPayment ==
+                                        SelectedPayment.PayInStore
+                                    ? needsPaymentText
+                                    : paidText,
                               ),
                             ),
                           ),

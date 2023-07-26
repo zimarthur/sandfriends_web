@@ -3,7 +3,6 @@ import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
-import '../../../SharedComponents/Model/PaymentType.dart';
 import '../../../SharedComponents/View/SFPaymentStatus.dart';
 
 class ResumedMatch extends StatelessWidget {
@@ -45,14 +44,14 @@ class ResumedMatch extends StatelessWidget {
                       Provider.of<DataProvider>(context, listen: false)
                           .courts
                           .firstWhere((court) =>
-                              court.idStoreCourt == match.idStoreCourt)
+                              court.idStoreCourt == match.court.idStoreCourt)
                           .description,
                       style: TextStyle(
                         color: textWhite,
                       ),
                     ),
                   ),
-                  SFPaymentStatus(paymentType: PaymentType.Paid)
+                  SFPaymentStatus(selectedPayment: match.selectedPayment)
                 ],
               ),
             ),

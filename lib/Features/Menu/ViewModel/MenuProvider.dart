@@ -297,21 +297,6 @@ class MenuProvider extends ChangeNotifier {
     );
   }
 
-  void quickLinkFinanceSettings(BuildContext context) {
-    onTabClick(
-      DrawerItem(
-        title: "",
-        icon: r"assets/icon/profile.svg",
-        requiresAdmin: false,
-        widget: SettingsScreen(
-          initForm: "Dados financeiros",
-        ),
-        mainDrawer: false,
-      ),
-      context,
-    );
-  }
-
   void quickLinkWorkingHours(BuildContext context) {
     onTabClick(
       DrawerItem(

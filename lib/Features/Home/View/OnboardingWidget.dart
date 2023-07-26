@@ -111,15 +111,6 @@ class OnboardingWidget extends StatelessWidget {
                               },
                             ),
                             OnboardingCheckItem(
-                              title: "Cadastrar dados bancários",
-                              isChecked: viewModel.financeSettingsSet(context),
-                              onTap: () {
-                                Provider.of<MenuProvider>(context,
-                                        listen: false)
-                                    .quickLinkFinanceSettings(context);
-                              },
-                            ),
-                            OnboardingCheckItem(
                               title: "Cadastrar suas quadras",
                               isChecked: viewModel.courtsSet(context),
                               onTap: () {

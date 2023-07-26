@@ -3,7 +3,6 @@ import 'package:sandfriends_web/Features/Finances/ViewModel/FinancesViewModel.da
 import 'package:sandfriends_web/Features/Settings/BrandInfo/View/BrandInfo.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/EmployeeInfo.dart';
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
-import 'package:sandfriends_web/Features/Settings/FinanceInfo/View/FinanceInfo.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import '../../../SharedComponents/View/SFButton.dart';

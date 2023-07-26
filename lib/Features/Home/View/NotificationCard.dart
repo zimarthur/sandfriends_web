@@ -23,6 +23,8 @@ class NotificationCard extends StatelessWidget {
                 SFAvatar(
                   height: 60,
                   image: notification.match.matchCreatorPhoto,
+                  playerFirstName: notification.match.matchCreatorFirstName,
+                  playerLastName: notification.match.matchCreatorLastName,
                 ),
                 const SizedBox(
                   width: defaultPadding,

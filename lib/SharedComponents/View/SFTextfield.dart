@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
@@ -49,6 +50,19 @@ class SFTextField extends StatefulWidget {
 class _SFTextFieldState extends State<SFTextField> {
   bool _passwordVisible = false;
 
+  late final _focusNode = FocusNode(
+    onKey: (FocusNode node, RawKeyEvent evt) {
+      if (evt.logicalKey.keyLabel == 'Enter') {
+        if (evt is RawKeyDownEvent) {
+          widget.controller.text += "\n";
+        }
+        return KeyEventResult.handled;
+      } else {
+        return KeyEventResult.ignored;
+      }
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -56,7 +70,9 @@ class _SFTextFieldState extends State<SFTextField> {
       validator: widget.validator,
       controller: widget.controller,
       textAlignVertical: TextAlignVertical.top,
-      textInputAction: TextInputAction.next,
+      textInputAction: widget.pourpose == TextFieldPourpose.Multiline
+          ? TextInputAction.newline
+          : TextInputAction.next,
       keyboardType: widget.pourpose == TextFieldPourpose.Email
           ? TextInputType.emailAddress
           : widget.pourpose == TextFieldPourpose.Numeric

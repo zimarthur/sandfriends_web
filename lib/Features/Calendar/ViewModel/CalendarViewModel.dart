@@ -230,7 +230,7 @@ class CalendarViewModel extends ChangeNotifier {
         jumpToHour = -1;
         List<AppMatch> filteredMatches = matches
             .where((match) =>
-                match.idStoreCourt == court.idStoreCourt &&
+                match.court.idStoreCourt == court.idStoreCourt &&
                 areInTheSameDay(match.date, selectedDay))
             .toList();
         for (var hour in selectedDayWorkingHours) {

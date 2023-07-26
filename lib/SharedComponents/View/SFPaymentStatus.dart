@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
+import 'package:sandfriends_web/SharedComponents/Model/SelectedPayment.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
 class SFPaymentStatus extends StatelessWidget {
-  PaymentType paymentType;
-  SFPaymentStatus({super.key, required this.paymentType});
+  SelectedPayment selectedPayment;
+  SFPaymentStatus({super.key, required this.selectedPayment});
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +14,20 @@ class SFPaymentStatus extends StatelessWidget {
         vertical: defaultPadding / 4,
       ),
       decoration: BoxDecoration(
-          color: paymentType == PaymentType.Paid
-              ? paidBackground
-              : needsPaymentBackground,
+          color: selectedPayment == SelectedPayment.PayInStore
+              ? needsPaymentBackground
+              : paidBackground,
           borderRadius: BorderRadius.circular(
             defaultBorderRadius,
           )),
       child: Text(
-        paymentType == PaymentType.Paid ? "Pago" : "Pag. no local",
+        selectedPayment == SelectedPayment.PayInStore
+            ? "Pag. no local"
+            : "Pago",
         style: TextStyle(
-            color:
-                paymentType == PaymentType.Paid ? paidText : needsPaymentText,
+            color: selectedPayment == SelectedPayment.PayInStore
+                ? needsPaymentText
+                : paidText,
             fontSize: 12),
       ),
     );

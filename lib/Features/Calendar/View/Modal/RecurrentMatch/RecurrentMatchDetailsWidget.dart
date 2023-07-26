@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
-import 'package:sandfriends_web/SharedComponents/Model/PaymentType.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/MatchDetailsWidgetRow.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFAvatar.dart';

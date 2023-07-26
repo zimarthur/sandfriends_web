@@ -10,6 +10,7 @@ import 'package:sandfriends_web/Utils/SFDateTime.dart';
 
 import '../../../SharedComponents/Model/Court.dart';
 import '../../../SharedComponents/Model/Hour.dart';
+import '../../../SharedComponents/Model/Store.dart';
 
 class HomeViewModel extends ChangeNotifier {
   List<AppNotification> notifications = [];
@@ -19,6 +20,7 @@ class HomeViewModel extends ChangeNotifier {
   List<AppMatch> matches = [];
   List<Court> courts = [];
   List<CourtOccupation> courtsOccupation = [];
+  late Store store;
 
   late double averageOccupation;
 
@@ -27,6 +29,7 @@ class HomeViewModel extends ChangeNotifier {
   bool storeClosedToday = false;
 
   void initHomeScreen(BuildContext context) {
+    store = Provider.of<DataProvider>(context, listen: false).store!;
     availableHours =
         Provider.of<DataProvider>(context, listen: false).availableHours;
     setWorkingHours(context);
@@ -73,15 +76,13 @@ class HomeViewModel extends ChangeNotifier {
 
     for (var court in courts) {
       int hoursPlayed = matches
-          .where((match) => match.idStoreCourt == court.idStoreCourt)
+          .where((match) => match.court.idStoreCourt == court.idStoreCourt)
           .toList()
           .fold(
               0,
               (previousValue, element) =>
                   previousValue + element.matchDuration);
-      print(court.description);
-      //print(hoursPlayed);
-      print(availableHours.length);
+
       courtsOccupation.add(
         CourtOccupation(
           court: court,
@@ -137,11 +138,11 @@ class HomeViewModel extends ChangeNotifier {
   String get welcomeTitle {
     int hourNow = DateTime.now().hour;
     if (hourNow < 12) {
-      return "Bom dia, Beach Brasil!";
+      return "Bom dia, ${store.name}!";
     } else if (hourNow < 18) {
-      return "Boa tarde, Beach Brasil!";
+      return "Boa tarde, ${store.name}!";
     } else {
-      return "Boa noite, Beach Brasil!";
+      return "Boa noite, ${store.name}!";
     }
   }
 
@@ -149,8 +150,7 @@ class HomeViewModel extends ChangeNotifier {
     if (courtsSet(context) &&
         logoSet(context) &&
         photosSet(context) &&
-        storeDescriptionSet(context) &&
-        financeSettingsSet(context)) {
+        storeDescriptionSet(context)) {
       return false;
     } else {
       return true;
@@ -189,16 +189,5 @@ class HomeViewModel extends ChangeNotifier {
     } else {
       return false;
     }
-  }
-
-  bool financeSettingsSet(BuildContext context) {
-    return Provider.of<DataProvider>(context, listen: false)
-                .store!
-                .bankAccount !=
-            null &&
-        Provider.of<DataProvider>(context, listen: false)
-            .store!
-            .bankAccount!
-            .isNotEmpty;
   }
 }

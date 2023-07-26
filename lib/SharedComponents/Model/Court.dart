@@ -60,6 +60,14 @@ class Court {
     return newCourt;
   }
 
+  factory Court.fromJsonMatch(Map<String, dynamic> parsedJson) {
+    return Court(
+      idStoreCourt: parsedJson["IdStoreCourt"],
+      description: parsedJson["Description"],
+      isIndoor: parsedJson["IsIndoor"],
+    );
+  }
+
   factory Court.copyFrom(Court refCourt) {
     final court = Court(
       description: refCourt.description,

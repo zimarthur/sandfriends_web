@@ -30,7 +30,6 @@ class SettingsRepoImp implements SettingsRepo {
           "Cnpj": store.cnpj ?? "",
           "Cep": store.cep,
           "Neighbourhood": store.neighbourhood,
-          "BankAccount": store.bankAccount ?? "",
           "Logo": changedLogo ? store.logo : "",
           "Photos": [
             for (var photo in store.photos)

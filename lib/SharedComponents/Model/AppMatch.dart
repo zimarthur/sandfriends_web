@@ -1,4 +1,8 @@
+import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
+
 import 'Hour.dart';
+import 'PaymentStatus.dart';
+import 'SelectedPayment.dart';
 import 'Sport.dart';
 import 'package:intl/intl.dart';
 
@@ -9,7 +13,7 @@ class AppMatch {
   int cost;
   DateTime creationDate;
   String creatorNotes;
-  int idStoreCourt;
+  Court court;
   Sport? sport;
   Hour startingHour;
   Hour endingHour;
@@ -18,6 +22,9 @@ class AppMatch {
   String? matchCreatorPhoto;
   bool blocked;
   String blockedReason;
+  SelectedPayment selectedPayment;
+  PaymentStatus paymentStatus;
+  DateTime paymentExpirationDate;
 
   int get matchDuration {
     return endingHour.hour - startingHour.hour;
@@ -33,7 +40,7 @@ class AppMatch {
     required this.creationDate,
     required this.creatorNotes,
     required this.idRecurrentMatch,
-    required this.idStoreCourt,
+    required this.court,
     required this.sport,
     required this.startingHour,
     required this.endingHour,
@@ -42,6 +49,9 @@ class AppMatch {
     required this.matchCreatorPhoto,
     required this.blocked,
     required this.blockedReason,
+    required this.paymentStatus,
+    required this.selectedPayment,
+    required this.paymentExpirationDate,
   });
 
   factory AppMatch.fromJson(Map<String, dynamic> parsedJson,
@@ -60,7 +70,7 @@ class AppMatch {
       startingHour: timeBegin,
       endingHour: referenceHours
           .firstWhere((hour) => hour.hour == parsedJson["TimeEnd"]),
-      idStoreCourt: parsedJson["IdStoreCourt"],
+      court: Court.fromJsonMatch(parsedJson["StoreCourt"]),
       cost: parsedJson["Cost"],
       sport: parsedJson["IdSport"] == null
           ? null
@@ -73,6 +83,10 @@ class AppMatch {
       idRecurrentMatch: parsedJson["IdRecurrentMatch"],
       blocked: parsedJson["Blocked"] ?? false,
       blockedReason: parsedJson["BlockedReason"] ?? "",
+      paymentStatus: decoderPaymentStatus(parsedJson['PaymentStatus']),
+      selectedPayment: decoderSelectedPayment(parsedJson['PaymentType']),
+      paymentExpirationDate: DateFormat('yyyy-MM-dd HH:mm:ss')
+          .parse(parsedJson['PaymentExpirationDate']),
     );
   }
 
@@ -84,7 +98,7 @@ class AppMatch {
       creationDate: refMatch.creationDate,
       creatorNotes: refMatch.creatorNotes,
       idRecurrentMatch: refMatch.idRecurrentMatch,
-      idStoreCourt: refMatch.idStoreCourt,
+      court: refMatch.court,
       sport: refMatch.sport,
       startingHour: refMatch.startingHour,
       endingHour: refMatch.endingHour,
@@ -93,6 +107,9 @@ class AppMatch {
       matchCreatorPhoto: refMatch.matchCreatorPhoto,
       blocked: refMatch.blocked,
       blockedReason: refMatch.blockedReason,
+      paymentExpirationDate: refMatch.paymentExpirationDate,
+      paymentStatus: refMatch.paymentStatus,
+      selectedPayment: refMatch.selectedPayment,
     );
   }
 }
