@@ -25,6 +25,7 @@ class NotificationCard extends StatelessWidget {
                   image: notification.match.matchCreatorPhoto,
                   playerFirstName: notification.match.matchCreatorFirstName,
                   playerLastName: notification.match.matchCreatorLastName,
+                  isPlayerAvatar: true,
                 ),
                 const SizedBox(
                   width: defaultPadding,

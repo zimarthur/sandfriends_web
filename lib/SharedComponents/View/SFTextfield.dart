@@ -16,6 +16,7 @@ class SFTextField extends StatefulWidget {
   final int? maxLines;
   final int? minLines;
   final Function(String)? onChanged;
+  final Function(String)? onSubmit;
   final bool enable;
   final String hintText;
   final bool plainTextField;
@@ -34,6 +35,7 @@ class SFTextField extends StatefulWidget {
     required this.validator,
     this.maxLines,
     this.onChanged,
+    this.onSubmit,
     this.minLines,
     this.enable = true,
     this.hintText = "",
@@ -50,29 +52,20 @@ class SFTextField extends StatefulWidget {
 class _SFTextFieldState extends State<SFTextField> {
   bool _passwordVisible = false;
 
-  late final _focusNode = FocusNode(
-    onKey: (FocusNode node, RawKeyEvent evt) {
-      if (evt.logicalKey.keyLabel == 'Enter') {
-        if (evt is RawKeyDownEvent) {
-          widget.controller.text += "\n";
-        }
-        return KeyEventResult.handled;
-      } else {
-        return KeyEventResult.ignored;
-      }
-    },
-  );
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: widget.enable,
       validator: widget.validator,
+      onFieldSubmitted: (value) =>
+          widget.onSubmit != null ? widget.onSubmit!(value) : null,
       controller: widget.controller,
       textAlignVertical: TextAlignVertical.top,
       textInputAction: widget.pourpose == TextFieldPourpose.Multiline
           ? TextInputAction.newline
-          : TextInputAction.next,
+          : widget.onSubmit != null
+              ? TextInputAction.done
+              : TextInputAction.next,
       keyboardType: widget.pourpose == TextFieldPourpose.Email
           ? TextInputType.emailAddress
           : widget.pourpose == TextFieldPourpose.Numeric

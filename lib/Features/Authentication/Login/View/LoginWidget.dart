@@ -69,6 +69,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         controller: widget.viewModel.userController,
                         validator: (value) =>
                             emptyCheck(value, "Digite seu e-mail"),
+                        onSubmit: (p0) => widget.viewModel.onTapLogin(context),
                       ),
                       const SizedBox(
                         height: defaultPadding,
@@ -84,6 +85,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         pourpose: TextFieldPourpose.Password,
                         validator: (value) =>
                             emptyCheck(value, "Digite sua senha"),
+                        onSubmit: (p0) => widget.viewModel.onTapLogin(context),
                       ),
                       const SizedBox(
                         height: defaultPadding,

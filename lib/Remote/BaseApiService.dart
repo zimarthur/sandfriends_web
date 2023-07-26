@@ -1,7 +1,7 @@
 import 'Url.dart';
 
 abstract class BaseApiService {
-  final String sandfriendsUrl = "${sandfriendsRequestsUrl}req";
+  final String sandfriendsUrl = "$sandfriendsRequestsUrl/req";
   final String cnpjUrl = "https://minhareceita.org/";
 
   Future<dynamic> getResponse(String baseUrl, String aditionalUrl);
