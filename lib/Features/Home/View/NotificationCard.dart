@@ -3,6 +3,7 @@ import 'package:sandfriends_web/SharedComponents/Model/AppNotification.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../SharedComponents/View/SFAvatar.dart';
 
 class NotificationCard extends StatelessWidget {
@@ -56,8 +57,11 @@ class NotificationCard extends StatelessWidget {
                             width: defaultPadding / 4,
                           ),
                           Text(
-                            DateFormat("dd/MM/yyyy")
-                                .format(notification.match.date),
+                            notification.match.idRecurrentMatch != 0
+                                ? weekdayRecurrent[getSFWeekday(
+                                    notification.match.date.weekday)]
+                                : DateFormat("dd/MM/yyyy")
+                                    .format(notification.match.date),
                             style: TextStyle(
                               color: textDarkGrey,
                               fontSize: 12,
