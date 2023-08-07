@@ -61,9 +61,9 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
       startingHour = widget.recurrentMatch!.startingHour.hourString;
       endingHour = widget.recurrentMatch!.endingHour.hourString;
       if (blocked) {
-        title = "Partida de ${widget.recurrentMatch!.blockedReason}";
+        title = "Mensalista de ${widget.recurrentMatch!.blockedReason}";
       } else {
-        title = "Partida de ${widget.recurrentMatch!.creatorName}";
+        title = "Mensalista de ${widget.recurrentMatch!.creatorName}";
       }
     }
     return LayoutBuilder(

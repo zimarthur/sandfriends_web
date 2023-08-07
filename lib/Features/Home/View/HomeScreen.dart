@@ -13,6 +13,7 @@ import 'package:sandfriends_web/SharedComponents/View/SFCard.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 
+import '../../Menu/ViewModel/DataProvider.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import 'NotificationCard.dart';
 
@@ -76,21 +77,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        Expanded(
-                                          child: HomeKpi(
-                                            iconPath: r"assets/icon/money.svg",
-                                            iconColor: success,
-                                            backgroundColor: success50,
-                                            title:
-                                                "Previsão de faturamento hoje",
-                                            value: viewModel.todaysProfit,
-                                            lastValue: 400,
-                                            isCurrency: true,
+                                        if (Provider.of<DataProvider>(context,
+                                                listen: false)
+                                            .isLoggedEmployeeAdmin())
+                                          Expanded(
+                                            child: HomeKpi(
+                                              iconPath:
+                                                  r"assets/icon/money.svg",
+                                              iconColor: success,
+                                              backgroundColor: success50,
+                                              title:
+                                                  "Previsão de faturamento hoje",
+                                              value: viewModel.todaysProfit,
+                                              lastValue: 400,
+                                              isCurrency: true,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: defaultPadding,
-                                        ),
+                                        if (Provider.of<DataProvider>(context,
+                                                listen: false)
+                                            .isLoggedEmployeeAdmin())
+                                          SizedBox(
+                                            width: defaultPadding,
+                                          ),
                                         Expanded(
                                           child: HomeKpi(
                                             iconPath: r"assets/icon/court.svg",

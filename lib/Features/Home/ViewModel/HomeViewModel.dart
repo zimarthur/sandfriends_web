@@ -44,7 +44,10 @@ class HomeViewModel extends ChangeNotifier {
         .where((match) => (areInTheSameDay(match.date, DateTime.now())))
         .toList();
     setOccupationValues();
-    rewards = Provider.of<DataProvider>(context, listen: false).rewards;
+    rewards = Provider.of<DataProvider>(context, listen: false)
+        .rewards
+        .where((reward) => areInTheSameDay(reward.claimedDate, DateTime.now()))
+        .toList();
     notifyListeners();
   }
 

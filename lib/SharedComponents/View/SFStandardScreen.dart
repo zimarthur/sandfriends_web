@@ -39,7 +39,11 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
             //   ),
             // ),
             Container(
-              color: primaryBlue.withOpacity(0.4),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [primaryBlue, primaryLightBlue])),
               height: height,
               width: width,
               child: Center(
