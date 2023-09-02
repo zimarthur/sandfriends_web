@@ -27,7 +27,7 @@ class Sport {
     return Sport(
       idSport: parsedJson["IdSport"],
       description: parsedJson["Description"],
-      sportPhoto: sandfriendsRequestsUrl + parsedJson["SportPhoto"],
+      sportPhoto: parsedJson["SportPhoto"],
     );
   }
 }

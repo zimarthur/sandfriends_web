@@ -25,6 +25,7 @@ class ForgotPasswordViewModel extends ChangeNotifier {
     notifyListeners();
     forgotPasswordRepo
         .forgotPassword(
+      context,
       forgotPasswordEmailController.text,
     )
         .then((response) {

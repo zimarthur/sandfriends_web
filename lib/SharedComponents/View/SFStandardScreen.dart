@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
+import 'package:provider/provider.dart';
 
 import 'SFLoading.dart';
 import 'SFMessageModal.dart';
@@ -31,13 +33,6 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Align(
-            //   alignment: Alignment.topRight,
-            //   child: Text(
-            //     "testes",
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            // ),
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -68,6 +63,28 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
                     ),
                   )
                 : Container(),
+            if (Provider.of<EnvironmentProvider>(context).currentEnvironment !=
+                Environment.Prod)
+              Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  Provider.of<EnvironmentProvider>(context)
+                              .currentEnvironment ==
+                          Environment.Dev
+                      ? "DEV"
+                      : "DEMO",
+                  style: TextStyle(
+                    fontSize: 20,
+                    backgroundColor: textWhite,
+                    color:
+                        Provider.of<EnvironmentProvider>(context, listen: false)
+                                    .currentEnvironment ==
+                                Environment.Dev
+                            ? red
+                            : primaryBlue,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

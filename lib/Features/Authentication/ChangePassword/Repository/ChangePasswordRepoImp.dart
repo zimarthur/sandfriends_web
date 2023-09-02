@@ -1,19 +1,25 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../Remote/ApiEndPoints.dart';
 import '../../../../Remote/BaseApiService.dart';
 import '../../../../Remote/NetworkApiService.dart';
 import '../../../../Remote/NetworkResponse.dart';
+import '../../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'ChangePasswordRepo.dart';
 
 class ChangePasswordRepoImp implements ChangePasswordRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> validateChangePasswordTokenUser(String token) async {
+  Future<NetworkResponse> validateChangePasswordTokenUser(
+      BuildContext context, String token) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().changePasswordValidateTokenUser,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().changePasswordValidateTokenUser,
+      ),
       jsonEncode(
         <String, Object>{
           "ChangePasswordToken": token,
@@ -25,10 +31,12 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
 
   @override
   Future<NetworkResponse> validateChangePasswordTokenEmployee(
-      String token) async {
+      BuildContext context, String token) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().changePasswordValidateTokenEmployee,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().changePasswordValidateTokenEmployee,
+      ),
       jsonEncode(
         <String, Object>{
           "ChangePasswordToken": token,
@@ -40,10 +48,12 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
 
   @override
   Future<NetworkResponse> changePasswordUser(
-      String token, String newPassword) async {
+      BuildContext context, String token, String newPassword) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().changePasswordUser,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().changePasswordUser,
+      ),
       jsonEncode(
         <String, Object>{
           "ChangePasswordToken": token,
@@ -56,10 +66,12 @@ class ChangePasswordRepoImp implements ChangePasswordRepo {
 
   @override
   Future<NetworkResponse> changePasswordEmployee(
-      String token, String newPassword) async {
+      BuildContext context, String token, String newPassword) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().changePasswordEmployee,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().changePasswordEmployee,
+      ),
       jsonEncode(
         <String, Object>{
           "ResetPasswordToken": token,

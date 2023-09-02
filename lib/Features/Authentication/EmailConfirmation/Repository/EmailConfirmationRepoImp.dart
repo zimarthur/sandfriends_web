@@ -1,18 +1,24 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../Remote/ApiEndPoints.dart';
 import '../../../../Remote/BaseApiService.dart';
 import '../../../../Remote/NetworkApiService.dart';
 import '../../../../Remote/NetworkResponse.dart';
+import '../../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'EmailConfirmationRepo.dart';
 
 class EmailConfirmationRepoImp implements EmailConfirmationRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> emailConfirmationUser(String token) async {
+  Future<NetworkResponse> emailConfirmationUser(
+      BuildContext context, String token) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().emailConfirmationUser,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().emailConfirmationUser,
+      ),
       jsonEncode(
         <String, Object>{
           "EmailConfirmationToken": token,
@@ -23,10 +29,13 @@ class EmailConfirmationRepoImp implements EmailConfirmationRepo {
   }
 
   @override
-  Future<NetworkResponse> emailConfirmationStore(String token) async {
+  Future<NetworkResponse> emailConfirmationStore(
+      BuildContext context, String token) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().emailConfirmationStore,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().emailConfirmationStore,
+      ),
       jsonEncode(
         <String, Object>{
           "EmailConfirmationToken": token,

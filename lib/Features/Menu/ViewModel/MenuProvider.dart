@@ -50,16 +50,16 @@ class MenuProvider extends ChangeNotifier {
     if (Provider.of<DataProvider>(context, listen: false).store == null) {
       pageStatus = PageStatus.LOADING;
       notifyListeners();
-      String? storedToken = getToken();
+      String? storedToken = getToken(context);
       if (storedToken != null) {
-        loginRepo.validateToken(storedToken).then((response) {
+        loginRepo.validateToken(context, storedToken).then((response) {
           if (response.responseStatus == NetworkResponseStatus.success) {
             Provider.of<DataProvider>(context, listen: false)
-                .setLoginResponse(response.responseBody!, true);
+                .setLoginResponse(context, response.responseBody!, true);
             setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
                 .isLoggedEmployeeAdmin());
             setSelectedDrawerItem(mainDrawer.first);
-            String? lastPage = getLastPage();
+            String? lastPage = getLastPage(context);
             if (lastPage != null &&
                 permissionsDrawerItems
                     .any((drawer) => drawer.title == lastPage)) {
@@ -266,7 +266,7 @@ class MenuProvider extends ChangeNotifier {
   }
 
   void onTabClick(DrawerItem drawerItem, BuildContext context) {
-    storeLastPage(drawerItem.title);
+    storeLastPage(context, drawerItem.title);
     setSelectedDrawerItem(drawerItem);
     if (drawerItem.logout) {
       logout(context);
@@ -321,6 +321,7 @@ class MenuProvider extends ChangeNotifier {
 
   void logout(BuildContext context) {
     Provider.of<DataProvider>(context, listen: false).clearDataProvider();
+    storeToken(context, "");
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/login',

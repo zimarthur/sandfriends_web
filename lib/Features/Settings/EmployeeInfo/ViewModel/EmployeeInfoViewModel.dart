@@ -108,6 +108,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     employeeInfoRepo
         .addEmployee(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       employeeEmail,
     )
@@ -138,6 +139,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     employeeInfoRepo
         .changeEmployeeAdmin(
+            context,
             Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
             employee.idEmployee,
             isAdmin)
@@ -168,6 +170,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     employeeInfoRepo
         .renameEmployee(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       firstName,
       lastName,
@@ -198,6 +201,7 @@ class EmployeeInfoViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     employeeInfoRepo
         .removeEmployee(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       employee.idEmployee,
     )

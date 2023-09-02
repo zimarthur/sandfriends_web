@@ -18,9 +18,7 @@ class Player {
       idUser: parsedJson["IdUser"],
       firstName: parsedJson["FirstName"],
       lastName: parsedJson["LastName"],
-      photo: parsedJson["Photo"] != null
-          ? sandfriendsRequestsUrl + parsedJson["Photo"]
-          : null,
+      photo: parsedJson["Photo"],
     );
   }
 }

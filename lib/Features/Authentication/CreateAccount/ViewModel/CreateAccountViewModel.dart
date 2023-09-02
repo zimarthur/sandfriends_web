@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/CreateAccount/Repository/CreateAccountRepo.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
@@ -85,11 +85,13 @@ class CreateAccountViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onTapSearchCnpj() {
+  void onTapSearchCnpj(
+    BuildContext context,
+  ) {
     if (cnpjController.text.isNotEmpty) {
       pageStatus = PageStatus.LOADING;
       notifyListeners();
-      fetchCnpj(cnpjController.text);
+      fetchCnpj(context, cnpjController.text);
     }
   }
 
@@ -102,8 +104,8 @@ class CreateAccountViewModel extends ChangeNotifier {
     }
   }
 
-  void fetchCnpj(String cnpj) {
-    createAccountRepo.getStoreFromCnpj(cnpj).then((response) {
+  void fetchCnpj(BuildContext context, String cnpj) {
+    createAccountRepo.getStoreFromCnpj(context, cnpj).then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(
           response.responseBody!,
@@ -141,6 +143,7 @@ class CreateAccountViewModel extends ChangeNotifier {
     notifyListeners();
     createAccountRepo
         .createAccount(
+      context,
       CreateAccountStore(
         cnpj: cnpjController.text.isEmpty
             ? ""
@@ -186,10 +189,11 @@ class CreateAccountViewModel extends ChangeNotifier {
   }
 
   void onTapTermosDeUso(BuildContext context) {
-    Navigator.pushNamed(context, '/terms');
+    js.context.callMethod('open', ['https://www.sandfriends.com.br/termos']);
   }
 
   void onTapPoliticaDePrivacidade(BuildContext context) {
-    Navigator.pushNamed(context, '/privacy');
+    js.context.callMethod(
+        'open', ['https://www.sandfriends.com.br/politicaprivacidade']);
   }
 }

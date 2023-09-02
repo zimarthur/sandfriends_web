@@ -13,7 +13,9 @@ class EmailConfirmationViewModel extends ChangeNotifier {
     if (isStoreRequest) {
       validateTokenStore(context);
     } else {
-      validateTokenUser();
+      validateTokenUser(
+        context,
+      );
     }
   }
 
@@ -29,8 +31,12 @@ class EmailConfirmationViewModel extends ChangeNotifier {
   String token = "";
   bool isStoreRequest = true;
 
-  void validateTokenUser() {
-    emailConfirmationRepo.emailConfirmationUser(token).then((response) {
+  void validateTokenUser(
+    BuildContext context,
+  ) {
+    emailConfirmationRepo
+        .emailConfirmationUser(context, token)
+        .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         pageStatus = PageStatus.OK;
       } else {
@@ -51,7 +57,9 @@ class EmailConfirmationViewModel extends ChangeNotifier {
   }
 
   void validateTokenStore(BuildContext context) {
-    emailConfirmationRepo.emailConfirmationStore(token).then((response) {
+    emailConfirmationRepo
+        .emailConfirmationStore(context, token)
+        .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         pageStatus = PageStatus.OK;
       } else {

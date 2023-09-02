@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:provider/provider.dart';
 import '../../Utils/Constants.dart';
+import '../ViewModel/EnvironmentProvider.dart';
 import 'SFLoading.dart';
 
 class SFAvatar extends StatefulWidget {
@@ -32,15 +33,28 @@ class SFAvatar extends StatefulWidget {
 class _SFAvatarState extends State<SFAvatar> {
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: widget.height * 0.5,
-      backgroundColor: secondaryPaper,
-      child: CircleAvatar(
-        radius: widget.height * 0.45,
+    return Container(
+      decoration: BoxDecoration(
+        color: secondaryPaper,
+        borderRadius: BorderRadius.circular(
+            widget.isPlayerAvatar ? widget.height * 0.5 : defaultBorderRadius),
+      ),
+      height: widget.height,
+      padding: EdgeInsets.all(widget.height * 0.05),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.isPlayerAvatar
+              ? widget.height * 0.45
+              : defaultBorderRadius),
+          color: primaryBlue,
+        ),
+        height: widget.height * 0.95,
         child: AspectRatio(
           aspectRatio: 1 / 1,
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(widget.height * 0.45),
+              borderRadius: BorderRadius.circular(widget.isPlayerAvatar
+                  ? widget.height * 0.45
+                  : defaultBorderRadius),
               child: widget.editImage != null
                   ? Image.memory(
                       widget.editImage!,
@@ -48,7 +62,12 @@ class _SFAvatarState extends State<SFAvatar> {
                     )
                   : widget.image != null
                       ? CachedNetworkImage(
-                          imageUrl: widget.image!,
+                          imageUrl: Provider.of<EnvironmentProvider>(context,
+                                  listen: false)
+                              .urlBuilder(
+                            widget.image!,
+                            isImage: true,
+                          ),
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Padding(
                             padding: EdgeInsets.all(widget.height * 0.3),

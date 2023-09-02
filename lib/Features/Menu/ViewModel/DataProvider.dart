@@ -136,13 +136,16 @@ class DataProvider extends ChangeNotifier {
   String loggedAccessToken = "";
   String loggedEmail = "";
 
-  void setLoginResponse(String response, bool keepConnected) {
+  void setLoginResponse(
+      BuildContext context, String response, bool keepConnected) {
     Map<String, dynamic> responseBody = json.decode(
       response,
     );
     loggedAccessToken = responseBody["AccessToken"];
     loggedEmail = responseBody["LoggedEmail"];
-    storeToken(responseBody['AccessToken']);
+    if (keepConnected) {
+      storeToken(context, responseBody['AccessToken']);
+    }
 
     for (var employee in responseBody['Store']['Employees']) {
       _employees.add(Employee.fromJson(employee));

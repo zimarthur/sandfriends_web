@@ -138,6 +138,7 @@ class CalendarViewModel extends ChangeNotifier {
       Provider.of<MenuProvider>(context, listen: false).setModalLoading();
       calendarRepo
           .updateMatchesList(
+              context,
               Provider.of<DataProvider>(context, listen: false)
                   .loggedAccessToken,
               newSelectedDay)
@@ -469,6 +470,7 @@ class CalendarViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .blockUnblockHour(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       idStoreCourt,
       date,
@@ -502,6 +504,7 @@ class CalendarViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .recurrentBlockUnblockHour(
+            context,
             Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
             idStoreCourt,
             selectedWeekday,
@@ -530,6 +533,7 @@ class CalendarViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .cancelMatch(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       idMatch,
       cancelMatchReasonController.text,
@@ -557,6 +561,7 @@ class CalendarViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .cancelRecurrentMatch(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       idRecurrentMatch,
       cancelRecurrentMatchReasonController.text,

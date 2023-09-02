@@ -76,7 +76,7 @@ class _CreateAccountCourtWidgetWebState
                                       horizontal: 2 * defaultPadding,
                                       vertical: defaultPadding),
                                   onTap: () {
-                                    widget.viewModel.onTapSearchCnpj();
+                                    widget.viewModel.onTapSearchCnpj(context);
                                   })
                             ],
                           ),

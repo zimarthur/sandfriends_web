@@ -8,26 +8,31 @@ import 'package:sandfriends_web/Features/Rewards/ViewModel/RewardsViewModel.dart
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Authentication/Login/View/LoginScreen.dart';
-import 'package:sandfriends_web/Features/Terms/PrivacyScreen.dart';
-import 'package:sandfriends_web/Features/Terms/TermsScreen.dart';
 import 'Features/Authentication/CreateAccountEmployee/View/CreateAccountEmployeeScreen.dart';
 import 'Features/Menu/View/MenuScreen.dart';
+import 'SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-void main() {
-  configureApp();
-  runApp(const MyApp());
+class App extends StatefulWidget {
+  final String flavor;
+  const App({
+    Key? key,
+    required this.flavor,
+  }) : super(key: key);
+
+  @override
+  State<App> createState() => _AppState();
 }
 
-void configureApp() {
-  setUrlStrategy(PathUrlStrategy());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _AppState extends State<App> {
+  final environmentProvider = EnvironmentProvider();
+  @override
+  void initState() {
+    environmentProvider.setEnvironment(widget.flavor);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +44,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => DataProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => environmentProvider),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -126,8 +132,6 @@ class MyApp extends StatelessWidget {
           '/forgot_password': (BuildContext context) =>
               const ForgotPasswordScreen(),
           '/home': (BuildContext context) => const MenuScreen(),
-          '/terms': (BuildContext context) => const TermsScreen(),
-          '/privacy': (BuildContext context) => const PrivacyScreen(),
         },
         initialRoute: '/login',
       ),

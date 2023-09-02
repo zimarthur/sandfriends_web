@@ -1,21 +1,25 @@
 import 'dart:convert';
-
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepo.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:intl/intl.dart';
 import '../../../Remote/ApiEndPoints.dart';
 import '../../../Remote/BaseApiService.dart';
 import '../../../Remote/NetworkApiService.dart';
+import '../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 
 class CalendarRepoImp implements CalendarRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> updateMatchesList(
+  Future<NetworkResponse> updateMatchesList(BuildContext context,
       String accessToken, DateTime newSelectedDate) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().updateMatchesList,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().updateMatchesList,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -28,13 +32,16 @@ class CalendarRepoImp implements CalendarRepo {
 
   @override
   Future<NetworkResponse> cancelMatch(
+    BuildContext context,
     String accessToken,
     int idMatch,
     String? cancelationReason,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().cancelMatch,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().cancelMatch,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -48,13 +55,16 @@ class CalendarRepoImp implements CalendarRepo {
 
   @override
   Future<NetworkResponse> cancelRecurrentMatch(
+    BuildContext context,
     String accessToken,
     int idRecurrentMatch,
     String? cancelationReason,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().cancelRecurrentMatch,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().cancelRecurrentMatch,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -68,6 +78,7 @@ class CalendarRepoImp implements CalendarRepo {
 
   @override
   Future<NetworkResponse> blockUnblockHour(
+    BuildContext context,
     String accessToken,
     int idStoreCourt,
     DateTime date,
@@ -76,8 +87,10 @@ class CalendarRepoImp implements CalendarRepo {
     String blockReson,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().blockUnblockHour,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().blockUnblockHour,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -94,6 +107,7 @@ class CalendarRepoImp implements CalendarRepo {
 
   @override
   Future<NetworkResponse> recurrentBlockUnblockHour(
+    BuildContext context,
     String accessToken,
     int idStoreCourt,
     int weekday,
@@ -103,8 +117,10 @@ class CalendarRepoImp implements CalendarRepo {
     int idSport,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().recurrentBlockUnblockHour,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().recurrentBlockUnblockHour,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,

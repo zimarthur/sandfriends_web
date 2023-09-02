@@ -18,7 +18,7 @@ class StorePhoto {
   factory StorePhoto.fromJson(Map<String, dynamic> parsedJson) {
     return StorePhoto(
       idStorePhoto: parsedJson["IdStorePhoto"],
-      photo: sandfriendsRequestsUrl + parsedJson["Photo"],
+      photo: parsedJson["Photo"],
     );
   }
 

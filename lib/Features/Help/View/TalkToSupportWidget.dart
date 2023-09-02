@@ -88,7 +88,7 @@ class TalkToSupportWidget extends StatelessWidget {
                       width: defaultPadding,
                     ),
                     const Text(
-                      "(51) 99999-9999",
+                      "(51) 99330-8831",
                       style: TextStyle(color: green),
                     )
                   ],

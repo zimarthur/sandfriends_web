@@ -46,8 +46,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
               children: [
                 InkWell(
                   onTap: () => widget.viewModel.goToLogin(context),
@@ -56,8 +55,10 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                     height: 25,
                   ),
                 ),
-                Image.asset(
-                  r'assets/full_logo_positive_284.png',
+                Center(
+                  child: Image.asset(
+                    r'assets/full_logo_positive_284.png',
+                  ),
                 ),
               ],
             ),

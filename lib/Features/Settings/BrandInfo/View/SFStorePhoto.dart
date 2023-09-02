@@ -4,8 +4,9 @@ import 'package:sandfriends_web/SharedComponents/Model/StorePhoto.dart';
 import 'package:sandfriends_web/Utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:provider/provider.dart';
 import '../../../../SharedComponents/View/SFLoading.dart';
+import '../../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 
 class StorePhotoCard extends StatefulWidget {
   StorePhoto storePhoto;
@@ -47,7 +48,12 @@ class _StorePhotoCardState extends State<StorePhotoCard> {
                         height: imageHeight,
                       )
                     : CachedNetworkImage(
-                        imageUrl: widget.storePhoto.photo,
+                        imageUrl: Provider.of<EnvironmentProvider>(context,
+                                listen: false)
+                            .urlBuilder(
+                          widget.storePhoto.photo,
+                          isImage: true,
+                        ),
                         width: imageWidth,
                         height: imageHeight,
                         placeholder: (context, url) => Center(

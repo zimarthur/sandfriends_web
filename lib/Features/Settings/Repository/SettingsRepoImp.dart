@@ -1,20 +1,27 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../../../Remote/ApiEndPoints.dart';
 import '../../../Remote/BaseApiService.dart';
 import '../../../Remote/NetworkApiService.dart';
 import '../../../Remote/NetworkResponse.dart';
 import '../../../SharedComponents/Model/Store.dart';
+import '../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'SettingsRepo.dart';
+import 'package:provider/provider.dart';
 
 class SettingsRepoImp implements SettingsRepo {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<NetworkResponse> updateStoreInfo(Store store, bool changedLogo) async {
+  Future<NetworkResponse> updateStoreInfo(
+      BuildContext context, Store store, bool changedLogo) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().updateStoreInfo,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().updateStoreInfo,
+      ),
       jsonEncode(
         <String, Object>{
           "IdStore": store.idStore,

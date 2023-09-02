@@ -130,7 +130,7 @@ class _SFDrawerUserWidgetState extends State<SFDrawerUserWidget> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(defaultBorderRadius),
                       color: isOnHover
                           ? textDarkGrey.withOpacity(0.8)
                           : Colors.transparent,

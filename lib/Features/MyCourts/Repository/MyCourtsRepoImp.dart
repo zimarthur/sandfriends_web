@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../../../../Remote/ApiEndPoints.dart';
 import '../../../../Remote/BaseApiService.dart';
 import '../../../../Remote/NetworkApiService.dart';
 import 'package:sandfriends_web/Features/Authentication/Login/Repository/LoginRepo.dart';
-
+import 'package:provider/provider.dart';
 import '../../../../Remote/NetworkResponse.dart';
 import '../../../SharedComponents/Model/Court.dart';
+import '../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'MyCourtsRepo.dart';
 
 class MyCourtsRepoImp implements MyCourtsRepo {
@@ -14,12 +17,15 @@ class MyCourtsRepoImp implements MyCourtsRepo {
 
   @override
   Future<NetworkResponse> addCourt(
+    BuildContext context,
     String accessToken,
     Court newCourt,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().addCourt,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().addCourt,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -53,10 +59,12 @@ class MyCourtsRepoImp implements MyCourtsRepo {
 
   @override
   Future<NetworkResponse> removeCourt(
-      String accessToken, int idStoreCourt) async {
+      BuildContext context, String accessToken, int idStoreCourt) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().removeCourt,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().removeCourt,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
@@ -69,12 +77,15 @@ class MyCourtsRepoImp implements MyCourtsRepo {
 
   @override
   Future<NetworkResponse> saveCourtChanges(
+    BuildContext context,
     String accessToken,
     List<Court> courts,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
-      _apiService.sandfriendsUrl,
-      ApiEndPoints().saveCourtChanges,
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().saveCourtChanges,
+      ),
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,

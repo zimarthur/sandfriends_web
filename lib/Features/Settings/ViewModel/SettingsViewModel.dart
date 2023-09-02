@@ -164,7 +164,7 @@ class SettingsViewModel extends ChangeNotifier {
     }
 
     settingsRepo
-        .updateStoreInfo(storeEdit, storeAvatar != null)
+        .updateStoreInfo(context, storeEdit, storeAvatar != null)
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(

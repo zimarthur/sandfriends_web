@@ -31,7 +31,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   void initState() {
-    viewModel.init(widget.token, widget.isStoreRequest);
+    viewModel.init(context, widget.token, widget.isStoreRequest);
     super.initState();
   }
 

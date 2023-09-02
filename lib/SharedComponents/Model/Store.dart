@@ -56,9 +56,7 @@ class Store {
       addressNumber: parsedJson["AddressNumber"],
       phoneNumber: parsedJson["PhoneNumber1"],
       ownerPhoneNumber: parsedJson["PhoneNumber2"],
-      logo: parsedJson["Logo"] != null
-          ? sandfriendsRequestsUrl + parsedJson["Logo"]
-          : null,
+      logo: parsedJson["Logo"],
       description: parsedJson["Description"],
       instagram: parsedJson["Instagram"],
       cnpj: parsedJson["Cnpj"],

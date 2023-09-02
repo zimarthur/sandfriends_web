@@ -128,10 +128,6 @@ flutter:
     - assets/people/email_confirmation_user.svg
 
 
-    - assets/fakeJson/login.json
-
-    
-    - assets/Arthur.jpg
     - assets/full_logo_negative_160.png
     - assets/full_logo_negative_284.png
     - assets/full_logo_positive_160.png

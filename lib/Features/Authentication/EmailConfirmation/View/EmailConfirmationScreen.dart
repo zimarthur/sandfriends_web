@@ -49,7 +49,11 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           builder: (context, viewModel, _) {
             return SafeArea(
               child: Container(
-                color: primaryBlue.withOpacity(0.4),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [primaryBlue, primaryLightBlue])),
                 height: height,
                 width: width,
                 child: Center(

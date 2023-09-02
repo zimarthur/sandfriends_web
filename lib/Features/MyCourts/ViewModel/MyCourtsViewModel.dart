@@ -557,6 +557,7 @@ class MyCourtsViewModel extends ChangeNotifier {
       Provider.of<MenuProvider>(context, listen: false).setModalLoading();
       myCourtsRepo
           .addCourt(
+        context,
         Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
         currentCourt,
       )
@@ -593,6 +594,7 @@ class MyCourtsViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     myCourtsRepo
         .removeCourt(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       courts[selectedCourtIndex].idStoreCourt!,
     )
@@ -648,6 +650,7 @@ class MyCourtsViewModel extends ChangeNotifier {
     }
     myCourtsRepo
         .saveCourtChanges(
+      context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       changedCourts,
     )

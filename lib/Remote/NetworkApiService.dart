@@ -1,20 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sandfriends_web/SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'BaseApiService.dart';
 import 'NetworkResponse.dart';
+import 'package:provider/provider.dart';
 
 class NetworkApiService extends BaseApiService {
   @override
   Future<NetworkResponse> getResponse(
-    String baseUrl,
-    String aditionalUrl,
+    BuildContext context,
+    String url,
   ) async {
     try {
-      final response = await http.get(Uri.parse(baseUrl + aditionalUrl));
-      print(response);
+      final response = await http.get(Uri.parse(url));
+      if (Provider.of<EnvironmentProvider>(context, listen: false).isDev()) {
+        print(response);
+      }
       return returnResponse(
+        context,
         response,
       );
     } on SocketException {
@@ -28,16 +34,19 @@ class NetworkApiService extends BaseApiService {
 
   @override
   Future<NetworkResponse> postResponse(
-    String baseUrl,
-    String aditionalUrl,
+    BuildContext context,
+    String url,
     String body,
   ) async {
-    print(baseUrl + aditionalUrl);
-    print(body);
+    if (Provider.of<EnvironmentProvider>(context, listen: false).isDev()) {
+      print(url);
+      print(body);
+    }
+
     try {
       final response = await http
           .post(
-            Uri.parse(baseUrl + aditionalUrl),
+            Uri.parse(url),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -48,7 +57,7 @@ class NetworkApiService extends BaseApiService {
               seconds: 10,
             ),
           );
-      return returnResponse(response);
+      return returnResponse(context, response);
     } on SocketException {
       return NetworkResponse(
         responseStatus: NetworkResponseStatus.error,
@@ -64,10 +73,13 @@ class NetworkApiService extends BaseApiService {
     }
   }
 
-  NetworkResponse returnResponse(http.Response response) {
+  NetworkResponse returnResponse(BuildContext context, http.Response response) {
     String statusCode = response.statusCode.toString();
-    print(statusCode);
-    print(response.body);
+    if (Provider.of<EnvironmentProvider>(context, listen: false).isDev()) {
+      print(statusCode);
+      print(response.body);
+    }
+
     if (statusCode.startsWith("2")) {
       if (statusCode == "200") {
         return NetworkResponse(

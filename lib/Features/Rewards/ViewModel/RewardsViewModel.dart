@@ -102,6 +102,7 @@ class RewardsViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     rewardsRepo
         .searchCustomRewards(
+            context,
             Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
             customStartDate!,
             customEndDate)
@@ -132,7 +133,7 @@ class RewardsViewModel extends ChangeNotifier {
 
   void sendUserRewardCode(BuildContext context, String rewardCode) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
-    rewardsRepo.sendUserRewardCode(rewardCode).then((response) {
+    rewardsRepo.sendUserRewardCode(context, rewardCode).then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(
           response.responseBody!,
@@ -164,6 +165,7 @@ class RewardsViewModel extends ChangeNotifier {
       onTapRewardItem: (rewardItem) {
         rewardsRepo
             .userRewardSelected(
+                context,
                 Provider.of<DataProvider>(context, listen: false)
                     .loggedAccessToken,
                 rewardCode,

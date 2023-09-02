@@ -6,10 +6,12 @@ import '../../../../Utils/PageStatus.dart';
 import '../Repository/ChangePasswordRepoImp.dart';
 
 class ChangePasswordViewModel extends ChangeNotifier {
-  void init(String tokenArg, bool isStoreRequestArg) {
+  void init(BuildContext context, String tokenArg, bool isStoreRequestArg) {
     token = tokenArg;
     isStoreRequest = isStoreRequestArg;
-    validateChangePassword();
+    validateChangePassword(
+      context,
+    );
   }
 
   final changePasswordRepo = ChangePasswordRepoImp();
@@ -28,11 +30,13 @@ class ChangePasswordViewModel extends ChangeNotifier {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
-  void validateChangePassword() {
+  void validateChangePassword(
+    BuildContext context,
+  ) {
     if (isStoreRequest) {
-      validateChangePasswordTokenEmployee();
+      validateChangePasswordTokenEmployee(context);
     } else {
-      validateChangePasswordTokenUser();
+      validateChangePasswordTokenUser(context);
     }
   }
 
@@ -40,21 +44,25 @@ class ChangePasswordViewModel extends ChangeNotifier {
     if (isStoreRequest) {
       changePasswordEmployee(context);
     } else {
-      changePasswordUser();
+      changePasswordUser(context);
     }
   }
 
-  void validateChangePasswordTokenUser() {
+  void validateChangePasswordTokenUser(
+    BuildContext context,
+  ) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
-    changePasswordRepo.validateChangePasswordTokenUser(token).then((response) {
+    changePasswordRepo
+        .validateChangePasswordTokenUser(context, token)
+        .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         pageStatus = PageStatus.OK;
         notifyListeners();
       } else {
         messageModal = SFMessageModal(
           title: response.responseTitle!,
-          onTap: () => validateChangePasswordTokenUser(),
+          onTap: () => validateChangePasswordTokenUser(context),
           isHappy: false,
           buttonText: "Tentar novamente",
         );
@@ -64,11 +72,13 @@ class ChangePasswordViewModel extends ChangeNotifier {
     });
   }
 
-  void validateChangePasswordTokenEmployee() {
+  void validateChangePasswordTokenEmployee(
+    BuildContext context,
+  ) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     changePasswordRepo
-        .validateChangePasswordTokenEmployee(token)
+        .validateChangePasswordTokenEmployee(context, token)
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         pageStatus = PageStatus.OK;
@@ -87,11 +97,13 @@ class ChangePasswordViewModel extends ChangeNotifier {
     });
   }
 
-  void changePasswordUser() {
+  void changePasswordUser(
+    BuildContext context,
+  ) {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     changePasswordRepo
-        .changePasswordUser(token, newPasswordController.text)
+        .changePasswordUser(context, token, newPasswordController.text)
         .then((response) {
       messageModal = SFMessageModal(
         title: response.responseTitle!,
@@ -110,7 +122,7 @@ class ChangePasswordViewModel extends ChangeNotifier {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     changePasswordRepo
-        .changePasswordEmployee(token, newPasswordController.text)
+        .changePasswordEmployee(context, token, newPasswordController.text)
         .then((response) {
       messageModal = SFMessageModal(
         title: response.responseTitle!,

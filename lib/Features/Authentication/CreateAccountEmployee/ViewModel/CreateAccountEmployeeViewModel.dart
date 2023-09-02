@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/Repository/CreateAccountEmployeeRepoImp.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
@@ -40,7 +40,7 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
     _createAccountEmployeeRepo
-        .validateNewEmployeeToken(addEmployeeToken)
+        .validateNewEmployeeToken(context, addEmployeeToken)
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         Map<String, dynamic> responseBody = json.decode(
@@ -70,6 +70,7 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
     notifyListeners();
     _createAccountEmployeeRepo
         .createAccountEmployee(
+      context,
       addEmployeeToken,
       createAccountEmployeeFirstNameController.text,
       createAccountEmployeeLastNameController.text,
@@ -102,10 +103,11 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
   }
 
   void onTapTermosDeUso(BuildContext context) {
-    Navigator.pushNamed(context, '/terms');
+    js.context.callMethod('open', ['https://www.sandfriends.com.br/termos']);
   }
 
   void onTapPoliticaDePrivacidade(BuildContext context) {
-    Navigator.pushNamed(context, '/privacy');
+    js.context.callMethod(
+        'open', ['https://www.sandfriends.com.br/politicaprivacidade']);
   }
 }

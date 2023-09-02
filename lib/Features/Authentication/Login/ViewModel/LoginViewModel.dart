@@ -44,12 +44,12 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void validateToken(BuildContext context) {
-    String? storedToken = getToken();
-    if (storedToken != null) {
-      loginRepo.validateToken(storedToken).then((response) {
+    String? storedToken = getToken(context);
+    if (storedToken != null && storedToken.isNotEmpty) {
+      loginRepo.validateToken(context, storedToken).then((response) {
         if (response.responseStatus == NetworkResponseStatus.success) {
           Provider.of<DataProvider>(context, listen: false)
-              .setLoginResponse(response.responseBody!, keepConnected);
+              .setLoginResponse(context, response.responseBody!, keepConnected);
           Navigator.pushNamed(context, '/home');
         } else {
           pageStatus = PageStatus.OK;
@@ -67,11 +67,11 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
 
       loginRepo
-          .login(userController.text, passwordController.text)
+          .login(context, userController.text, passwordController.text)
           .then((response) {
         if (response.responseStatus == NetworkResponseStatus.success) {
           Provider.of<DataProvider>(context, listen: false)
-              .setLoginResponse(response.responseBody!, keepConnected);
+              .setLoginResponse(context, response.responseBody!, keepConnected);
           Navigator.pushNamed(context, '/home');
         } else {
           messageModal = SFMessageModal(

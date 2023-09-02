@@ -61,6 +61,7 @@ class FinancesViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     financesRepo
         .searchCustomMatches(
+            context,
             Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
             customStartDate!,
             customEndDate)

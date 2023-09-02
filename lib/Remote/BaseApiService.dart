@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
+
 import 'Url.dart';
 
 abstract class BaseApiService {
-  final String sandfriendsUrl = "$sandfriendsRequestsUrl/req";
-  final String cnpjUrl = "https://minhareceita.org/";
-
-  Future<dynamic> getResponse(String baseUrl, String aditionalUrl);
+  Future<dynamic> getResponse(
+    BuildContext context,
+    String url,
+  );
   Future<dynamic> postResponse(
-      String baseUrl, String aditionalUrl, String body);
+    BuildContext context,
+    String url,
+    String body,
+  );
 }
