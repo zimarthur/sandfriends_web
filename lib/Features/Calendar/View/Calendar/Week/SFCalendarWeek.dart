@@ -47,6 +47,18 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
     double tableColumnSpacing = tableWidth * 0.01;
     double tableColumnWidth = tableWidth * 0.105 < 70 ? 70 : tableWidth * 0.105;
     double tableHeaderHeight = tableLineHeight * 1.5;
+    widget.viewModel.selectedWeekMatches.forEach((a) {
+      if (a.date.day == 7) {
+        print(a.dayMatches.length);
+        a.dayMatches.forEach((element) {
+          print(element.matches);
+          element.matches?.forEach((elementb) {
+            print(elementb.matchCreatorFirstName);
+            print(elementb.startingHour.hourString);
+          });
+        });
+      }
+    });
     return SizedBox(
       width: tableWidth,
       height: tableHeight,
@@ -180,10 +192,9 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                 startingHour: hour.startingHour,
                                                 calendarType: widget
                                                     .viewModel.calendarType,
-                                                matchesLength:
-                                                    hour.matches!.length +
-                                                        hour.recurrentMatches!
-                                                            .length,
+                                                matchesLength: hour
+                                                    .matchesLengthConsideringRecurrent(),
+                                                //essa ultima parte do calculo é para um mensalista em um mês que a partida ainda,
                                                 date: day.date,
                                                 height: tableLineHeight,
                                                 width: tableColumnWidth,

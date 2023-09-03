@@ -35,7 +35,7 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return Container(
       height: height * 0.9,
-      width: 500,
+      width: width * 0.5 < 500 ? 500 : width * 0.5,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,

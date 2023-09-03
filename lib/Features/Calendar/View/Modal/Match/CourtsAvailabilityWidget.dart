@@ -5,6 +5,7 @@ import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.da
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
+import 'package:sandfriends_web/SharedComponents/Model/SelectedPayment.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDivider.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
     return Container(
       height: height * 0.9,
-      width: 500,
+      width: width * 0.5 < 500 ? 500 : width * 0.5,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,
@@ -170,8 +171,14 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                                               )
                                             : recurrentMatch != null
                                                 ? Text(
-                                                    recurrentMatch
-                                                        .blockedReason,
+                                                    recurrentMatch.blockedReason
+                                                            .isEmpty
+                                                        ? recurrentMatch
+                                                            .currentMonthMatches
+                                                            .first
+                                                            .matchCreatorName
+                                                        : recurrentMatch
+                                                            .blockedReason,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontWeight:
@@ -202,16 +209,37 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                                                 : Container(),
                                       ),
                                       Expanded(
-                                        child: match != null ||
-                                                recurrentMatch != null
+                                        child: match != null
                                             ? Text(
-                                                "Pago",
+                                                match.selectedPayment ==
+                                                        SelectedPayment
+                                                            .PayInStore
+                                                    ? "Pagar no local"
+                                                    : "Pago",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.w300),
                                               )
-                                            : Container(),
+                                            : recurrentMatch != null
+                                                ? Text(
+                                                    recurrentMatch.currentMonthMatches
+                                                                    .first.date ==
+                                                                day &&
+                                                            recurrentMatch
+                                                                    .currentMonthMatches
+                                                                    .first
+                                                                    .selectedPayment ==
+                                                                SelectedPayment
+                                                                    .PayInStore
+                                                        ? "Pagar no local"
+                                                        : "Pago",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                  )
+                                                : Container(),
                                       )
                                     ],
                                   ),

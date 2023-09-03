@@ -76,6 +76,7 @@ class _SFAvatarState extends State<SFAvatar> {
                             ),
                           ),
                           errorWidget: (context, url, error) {
+                            print("ERRO ${error}");
                             return widget.isPlayerAvatar
                                 ? Center(
                                     child: SizedBox(

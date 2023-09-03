@@ -20,6 +20,23 @@ class DayMatch {
     this.operationHour = false,
   });
 
+  int matchesLengthConsideringRecurrent() {
+    int total = 0;
+    if (matches != null) {
+      total += matches!.length;
+    }
+    if (recurrentMatches != null) {
+      for (var recMatch in recurrentMatches!) {
+        if (matches?.any((match) =>
+                match.idRecurrentMatch == recMatch.idRecurrentMatch) ==
+            false) {
+          total += 1;
+        }
+      }
+    }
+    return total;
+  }
+
   factory DayMatch.copyWith(DayMatch refDayMatch) {
     return DayMatch(
       startingHour: refDayMatch.startingHour,
