@@ -88,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               backgroundColor: success50,
                                               title:
                                                   "Previsão de faturamento hoje",
-                                              value: viewModel.todaysProfit,
+                                              value: viewModel.todaysProfit
+                                                  .toInt(),
                                               lastValue: 400,
                                               isCurrency: true,
                                             ),

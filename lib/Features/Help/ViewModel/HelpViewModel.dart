@@ -7,17 +7,11 @@ import '../View/TalkToSupportWidget.dart';
 class HelpViewModel extends ChangeNotifier {
   List<Faq> faqItems = [
     Faq(
-        question: "Como agendar uma partida?",
-        answer:
-            "Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, "),
-    Faq(
-        question: "Preciso cancelar uma partida, o que eu faço?",
-        answer:
-            "Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, "),
-    Faq(
-        question: "Configurar o preço de mensalista",
-        answer:
-            "Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, Assim, Assado, "),
+        question:
+            "Tenho um jogador que ainda não baixou o app, posso registrar seus horários mesmo assim?",
+        answer: "-"),
+    Faq(question: "Preciso cancelar uma partida, o que eu faço?", answer: "-"),
+    Faq(question: "Configurar o preço de mensalista", answer: "-"),
   ];
 
   void talkSupport(BuildContext context) {

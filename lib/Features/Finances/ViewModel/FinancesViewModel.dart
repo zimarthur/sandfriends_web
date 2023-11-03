@@ -112,13 +112,22 @@ class FinancesViewModel extends ChangeNotifier {
     return filteredMatches;
   }
 
-  int get revenue {
+  bool _showNetCost = false;
+  bool get showNetCost => _showNetCost;
+  void setShowNetCost(bool newValue) {
+    _showNetCost = newValue;
+    setFinancesDataSource();
+    notifyListeners();
+  }
+
+  double get revenue {
     return matches.isEmpty
         ? 0
         : matches
             .where((match) => match.date.isBefore(DateTime.now()))
             .toList()
-            .fold(0, (sum, item) => sum + item.cost);
+            .fold(0,
+                (sum, item) => sum + (showNetCost ? item.netCost : item.cost));
   }
 
   String get revenueTitle {
@@ -134,8 +143,9 @@ class FinancesViewModel extends ChangeNotifier {
     return "Faturamento $titleDate";
   }
 
-  int get expectedRevenue {
-    return matches.fold(0, (sum, item) => sum + item.cost);
+  double get expectedRevenue {
+    return matches.fold(
+        0, (sum, item) => sum + (showNetCost ? item.netCost : item.cost));
   }
 
   String get expectedRevenueTitle {
@@ -170,7 +180,7 @@ class FinancesViewModel extends ChangeNotifier {
         .map(
           (match) => SFBarChartItem(
             date: match.date,
-            amount: match.cost,
+            amount: (showNetCost ? match.netCost.toInt() : match.cost.toInt()),
           ),
         )
         .toList();
@@ -182,7 +192,8 @@ class FinancesViewModel extends ChangeNotifier {
   FinancesDataSource? financesDataSource;
 
   void setFinancesDataSource() {
-    financesDataSource = FinancesDataSource(matches: matches);
+    financesDataSource =
+        FinancesDataSource(matches: matches, showNetValue: showNetCost);
   }
   ///////////////////////////////////////////////////////
 
@@ -194,9 +205,11 @@ class FinancesViewModel extends ChangeNotifier {
     nameCount["Avulso"] = 0;
     for (var match in matches) {
       if (match.idRecurrentMatch != 0) {
-        nameCount["Mensalista"] = nameCount["Mensalista"]! + match.cost;
+        nameCount["Mensalista"] = nameCount["Mensalista"]! +
+            (showNetCost ? match.netCost.toInt() : match.cost.toInt());
       } else {
-        nameCount["Avulso"] = nameCount["Avulso"]! + match.cost;
+        nameCount["Avulso"] = nameCount["Avulso"]! +
+            (showNetCost ? match.netCost.toInt() : match.cost.toInt());
       }
     }
     nameCount.forEach((key, value) {

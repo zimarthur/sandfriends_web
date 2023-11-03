@@ -116,7 +116,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get todaysProfit =>
+  double get todaysProfit =>
       matches.fold(0, (previousValue, element) => previousValue + element.cost);
 
   List<AppMatch> get matchesOnDisplayesHour {

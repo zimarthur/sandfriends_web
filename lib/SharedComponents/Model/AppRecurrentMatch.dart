@@ -25,7 +25,7 @@ class AppRecurrentMatch {
     return endingHour.hour - startingHour.hour;
   }
 
-  int get currentMonthPrice => currentMonthMatches.fold(
+  double get currentMonthPrice => currentMonthMatches.fold(
       0, (previousValue, element) => previousValue + element.cost);
 
   String get creatorName => "$creatorFirstName $creatorLastName";

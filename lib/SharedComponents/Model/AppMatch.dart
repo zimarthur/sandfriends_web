@@ -10,7 +10,7 @@ class AppMatch {
   int idMatch;
   int idRecurrentMatch;
   DateTime date;
-  int cost;
+  double cost;
   DateTime creationDate;
   String creatorNotes;
   Court court;
@@ -25,6 +25,7 @@ class AppMatch {
   SelectedPayment selectedPayment;
   PaymentStatus paymentStatus;
   DateTime paymentExpirationDate;
+  double netCost;
 
   int get matchDuration {
     return endingHour.hour - startingHour.hour;
@@ -52,6 +53,7 @@ class AppMatch {
     required this.paymentStatus,
     required this.selectedPayment,
     required this.paymentExpirationDate,
+    required this.netCost,
   });
 
   factory AppMatch.fromJson(Map<String, dynamic> parsedJson,
@@ -87,6 +89,7 @@ class AppMatch {
       selectedPayment: decoderSelectedPayment(parsedJson['PaymentType']),
       paymentExpirationDate: DateFormat('yyyy-MM-dd HH:mm:ss')
           .parse(parsedJson['PaymentExpirationDate']),
+      netCost: double.parse(parsedJson["CostFinal"]),
     );
   }
 
@@ -110,6 +113,7 @@ class AppMatch {
       paymentExpirationDate: refMatch.paymentExpirationDate,
       paymentStatus: refMatch.paymentStatus,
       selectedPayment: refMatch.selectedPayment,
+      netCost: refMatch.netCost,
     );
   }
 }

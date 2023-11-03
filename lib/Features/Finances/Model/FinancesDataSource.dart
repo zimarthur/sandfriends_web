@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
 
 class FinancesDataSource extends DataGridSource {
-  FinancesDataSource({required List<AppMatch> matches}) {
+  FinancesDataSource(
+      {required List<AppMatch> matches, required bool showNetValue}) {
     _finances = matches
         .map<DataGridRow>(
           (match) => DataGridRow(
@@ -21,7 +22,9 @@ class FinancesDataSource extends DataGridSource {
               DataGridCell<String>(
                   columnName: 'court', value: match.court.description),
               DataGridCell<String>(
-                  columnName: 'price', value: "R\$${match.cost}"),
+                  columnName: 'price',
+                  value:
+                      "R\$${showNetValue ? match.netCost.toStringAsFixed(2).replaceAll(".", ",") : match.cost.toStringAsFixed(2).replaceAll(".", ",")}"),
               const DataGridCell<String>(columnName: 'player', value: "Arthur"),
               DataGridCell<String>(
                 columnName: 'sport',

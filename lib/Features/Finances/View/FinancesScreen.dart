@@ -52,11 +52,32 @@ class _FinanceScreenState extends State<FinanceScreen> {
               SizedBox(
                 height: height * 0.01,
               ),
-              SFPeriodToggle(
-                currentPeriodVisualization: viewModel.periodVisualization,
-                onChanged: (newPeriod) =>
-                    viewModel.setPeriodVisualization(context, newPeriod),
-                customText: viewModel.customDateTitle,
+              Row(
+                children: [
+                  SFPeriodToggle(
+                    currentPeriodVisualization: viewModel.periodVisualization,
+                    onChanged: (newPeriod) =>
+                        viewModel.setPeriodVisualization(context, newPeriod),
+                    customText: viewModel.customDateTitle,
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Checkbox(
+                      activeColor: primaryBlue,
+                      value: viewModel.showNetCost,
+                      onChanged: (value) =>
+                          viewModel.setShowNetCost(value ?? false)),
+                  const SizedBox(
+                    width: defaultPadding / 2,
+                  ),
+                  const Text(
+                    "Mostrar valor líquido",
+                    style: TextStyle(
+                      color: textDarkGrey,
+                    ),
+                  )
+                ],
               ),
               SizedBox(
                 height: height * 0.02,
@@ -79,7 +100,8 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                 children: [
                                   FinanceKpi(
                                     title: viewModel.revenueTitle,
-                                    value: "R\$ ${viewModel.revenue},00",
+                                    value:
+                                        "R\$ ${viewModel.revenue.toStringAsFixed(2).replaceAll(".", ",")}",
                                     iconPath: r"assets/icon/money.svg",
                                     iconColor: success,
                                     iconColorBackground: success50,
@@ -90,7 +112,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                   FinanceKpi(
                                     title: viewModel.expectedRevenueTitle,
                                     value:
-                                        "R\$ ${viewModel.expectedRevenue},00",
+                                        "R\$ ${viewModel.expectedRevenue.toStringAsFixed(2).replaceAll(".", ",")}",
                                     iconPath: r"assets/icon/forecast.svg",
                                     iconColor: forecast,
                                     iconColorBackground: forecast50,
