@@ -47,7 +47,7 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
           !isHourPast(widget.match!.date, widget.match!.startingHour);
       startingHour = widget.match!.startingHour.hourString;
       endingHour = widget.match!.endingHour.hourString;
-      if (blocked) {
+      if (blocked && widget.match!.matchCreatorFirstName.isEmpty) {
         title = "Horário Bloqueado";
         subtitle = widget.match!.blockedReason;
       } else {

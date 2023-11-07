@@ -1,24 +1,98 @@
+import 'package:sandfriends_web/SharedComponents/Model/Gender.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
+
 import '../../Remote/Url.dart';
+import 'Rank.dart';
 
 class Player {
-  int idUser;
+  int? id;
   String firstName;
   String lastName;
+  bool isStorePlayer;
   String? photo;
+  String? phoneNumber;
+  Gender? gender;
+  Sport? sport;
+  Rank? rank;
 
+  String get fullName => "$firstName $lastName";
   Player({
-    required this.idUser,
+    this.id,
     required this.firstName,
     required this.lastName,
-    required this.photo,
+    required this.isStorePlayer,
+    this.phoneNumber,
+    this.photo,
+    this.gender,
+    this.sport,
+    this.rank,
   });
 
-  factory Player.fromJson(Map<String, dynamic> parsedJson) {
+  factory Player.fromUserJson(
+    Map<String, dynamic> parsedJson,
+    List<Sport> availableSports,
+    List<Gender> availableGenders,
+    List<Rank> availableRanks,
+  ) {
     return Player(
-      idUser: parsedJson["IdUser"],
+      id: parsedJson["IdUser"],
       firstName: parsedJson["FirstName"],
       lastName: parsedJson["LastName"],
-      photo: parsedJson["Photo"],
+      phoneNumber: parsedJson["PhoneNumber"],
+      gender: availableGenders.firstWhere(
+        (gender) => gender.idGender == parsedJson["IdGenderCategory"],
+      ),
+      isStorePlayer: false,
+      sport: availableSports.firstWhere(
+        (sport) => sport.idSport == parsedJson["IdSport"],
+      ),
+      rank: availableRanks.firstWhere(
+        (rank) => rank.idRankCategory == parsedJson["IdRankCategory"],
+      ),
+    );
+  }
+  factory Player.fromStorePlayerJson(
+    Map<String, dynamic> parsedJson,
+    List<Sport> availableSports,
+    List<Gender> availableGenders,
+    List<Rank> availableRanks,
+  ) {
+    return Player(
+      id: parsedJson["IdStorePlayer"],
+      firstName: parsedJson["FirstName"],
+      lastName: parsedJson["LastName"],
+      phoneNumber: parsedJson["PhoneNumber"],
+      gender: availableGenders.firstWhere(
+        (gender) => gender.idGender == parsedJson["IdGenderCategory"],
+      ),
+      isStorePlayer: true,
+      sport: availableSports.firstWhere(
+        (sport) => sport.idSport == parsedJson["IdSport"],
+      ),
+      rank: availableRanks.firstWhere(
+        (rank) => rank.idRankCategory == parsedJson["IdRankCategory"],
+      ),
+    );
+  }
+  factory Player.fromUserMinJson(Map<String, dynamic> parsedJson) {
+    return Player(
+        id: parsedJson["IdUser"],
+        firstName: parsedJson["FirstName"],
+        lastName: parsedJson["LastName"],
+        isStorePlayer: false,
+        photo: parsedJson["Photo"]);
+  }
+
+  factory Player.copyFrom(Player refPlayer) {
+    return Player(
+      id: refPlayer.id,
+      firstName: refPlayer.firstName,
+      lastName: refPlayer.lastName,
+      phoneNumber: refPlayer.phoneNumber,
+      gender: refPlayer.gender,
+      isStorePlayer: refPlayer.isStorePlayer,
+      sport: refPlayer.sport,
+      rank: refPlayer.rank,
     );
   }
 }

@@ -1,7 +1,7 @@
-import 'package:sandfriends_web/SharedComponents/Model/RewardItem.dart';
+import 'package:intl/intl.dart';
 
 import 'Player.dart';
-import 'package:intl/intl.dart';
+import 'RewardItem.dart';
 
 class Reward {
   int idRewardUser;
@@ -21,7 +21,7 @@ class Reward {
   factory Reward.fromJson(Map<String, dynamic> parsedJson) {
     return Reward(
       idRewardUser: parsedJson["IdRewardUser"],
-      player: Player.fromJson(
+      player: Player.fromUserMinJson(
         parsedJson["User"],
       ),
       claimedDate: DateFormat("dd/MM/yyyy hh:mm").parse(

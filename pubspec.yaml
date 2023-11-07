@@ -105,7 +105,9 @@ flutter:
     - assets/icon/double_arrow_left.svg
     - assets/icon/double_arrow_right.svg
     - assets/icon/x.svg
-    - assets/icon/profile.svg
+    - assets/icon/user.svg
+    - assets/icon/user_plus.svg
+    - assets/icon/user_group.svg
     - assets/icon/logout.svg
     - assets/icon/whatsapp.svg
     - assets/icon/clock.svg
@@ -120,6 +122,8 @@ flutter:
     - assets/icon/attention.svg
     - assets/icon/block.svg
     - assets/icon/check_circle.svg
+    - assets/icon/phone_hand.svg
+    - assets/icon/delete.svg
 
     - assets/people/calendar.svg
     - assets/people/clock.svg

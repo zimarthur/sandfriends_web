@@ -8,7 +8,6 @@ import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
 import 'package:sandfriends_web/Features/Rewards/Model/RewardDataSource.dart';
 import 'package:sandfriends_web/Features/Rewards/View/AddRewardModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
-import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/Model/RewardItem.dart';
 import 'package:sandfriends_web/SharedComponents/Model/SFBarChartItem.dart';
 import 'package:sandfriends_web/SharedComponents/View/DatePickerModal.dart';

@@ -49,4 +49,9 @@ class ApiEndPoints {
 
   //finances
   final String searchCustomMatches = "/SearchCustomMatches";
+
+  //players
+  final String addStorePlayer = "/AddStorePlayer";
+  final String editStorePlayer = "/EditStorePlayer";
+  final String deleteStorePlayer = "/DeleteStorePlayer";
 }

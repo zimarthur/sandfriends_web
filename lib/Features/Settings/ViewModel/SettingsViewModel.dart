@@ -78,21 +78,32 @@ class SettingsViewModel extends ChangeNotifier {
   bool hasChangedPhoto = false;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController telephoneController =
-      MaskedTextController(mask: '(00) 00000-0000');
-  TextEditingController cnpjController =
-      MaskedTextController(mask: '00.000.000/0000-00');
-  TextEditingController cpfController =
-      MaskedTextController(mask: '000.000.000-00');
+  TextEditingController telephoneController = MaskedTextController(
+    mask: '(00) 00000-0000',
+    cursorBehavior: CursorBehaviour.end,
+  );
+  TextEditingController cnpjController = MaskedTextController(
+    mask: '00.000.000/0000-00',
+    cursorBehavior: CursorBehaviour.end,
+  );
+  TextEditingController cpfController = MaskedTextController(
+    mask: '000.000.000-00',
+    cursorBehavior: CursorBehaviour.end,
+  );
   TextEditingController stateController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  TextEditingController cepController = MaskedTextController(mask: '00000-000');
+  TextEditingController cepController = MaskedTextController(
+    mask: '00000-000',
+    cursorBehavior: CursorBehaviour.end,
+  );
   TextEditingController neighbourhoodController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController addressNumberController = TextEditingController();
   TextEditingController ownerNameController = TextEditingController();
-  TextEditingController telephoneOwnerController =
-      MaskedTextController(mask: '(00) 00000-0000');
+  TextEditingController telephoneOwnerController = MaskedTextController(
+    mask: '(00) 00000-0000',
+    cursorBehavior: CursorBehaviour.end,
+  );
   TextEditingController descriptionController = TextEditingController();
   TextEditingController instagramController = TextEditingController();
   TextEditingController bankAccountController = TextEditingController();

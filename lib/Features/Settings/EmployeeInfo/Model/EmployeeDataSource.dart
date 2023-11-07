@@ -203,7 +203,7 @@ Widget admin() {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       SvgPicture.asset(
-        r"assets/icon/profile.svg",
+        r"assets/icon/user.svg",
         color: primaryBlue,
       ),
       const SizedBox(

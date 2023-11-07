@@ -5,10 +5,13 @@ import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:intl/intl.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Rank.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
 import '../../../SharedComponents/Model/AppNotification.dart';
 import '../../../SharedComponents/Model/AvailableSport.dart';
 import '../../../SharedComponents/Model/Employee.dart';
+import '../../../SharedComponents/Model/Gender.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/Model/HourPrice.dart';
 import '../../../SharedComponents/Model/Sport.dart';
@@ -68,6 +71,10 @@ class DataProvider extends ChangeNotifier {
 
   List<Hour> availableHours = [];
 
+  List<Gender> availableGenders = [];
+
+  List<Rank> availableRanks = [];
+
   List<AppNotification> notifications = [];
 
   List<AppMatch> matches = [];
@@ -77,6 +84,8 @@ class DataProvider extends ChangeNotifier {
   List<AppRecurrentMatch> recurrentMatches = [];
 
   List<Reward> rewards = [];
+
+  List<Player> storePlayers = [];
 
   final List<Employee> _employees = [];
   List<Employee> get employees {
@@ -162,6 +171,14 @@ class DataProvider extends ChangeNotifier {
       availableHours.add(Hour.fromJson(hour));
     }
 
+    for (var gender in responseBody['Genders']) {
+      availableGenders.add(Gender.fromJson(gender));
+    }
+
+    for (var rank in responseBody['Ranks']) {
+      availableRanks.add(Rank.fromJson(rank));
+    }
+
     for (var notification in responseBody['Notifications']) {
       notifications.add(
         AppNotification.fromJson(
@@ -171,6 +188,8 @@ class DataProvider extends ChangeNotifier {
         ),
       );
     }
+
+    setPlayersResponse(responseBody);
 
     store = Store.fromJson(responseBody['Store']);
 
@@ -186,6 +205,27 @@ class DataProvider extends ChangeNotifier {
         DateFormat("dd/MM/yyyy").parse(responseBody['MatchesEndDate']);
 
     notifyListeners();
+  }
+
+  void setPlayersResponse(Map<String, dynamic> responseBody) {
+    storePlayers.clear();
+    for (var storePlayer in responseBody['StorePlayers']) {
+      storePlayers.add(Player.fromStorePlayerJson(
+        storePlayer,
+        availableSports,
+        availableGenders,
+        availableRanks,
+      ));
+    }
+
+    for (var matchMember in responseBody['MatchMembers']) {
+      storePlayers.add(Player.fromUserJson(
+        matchMember,
+        availableSports,
+        availableGenders,
+        availableRanks,
+      ));
+    }
   }
 
   void setCourts(Map<String, dynamic> responseBody) {

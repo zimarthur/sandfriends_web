@@ -4,6 +4,7 @@ import 'package:sandfriends_web/Features/Calendar/View/CalendarScreen.dart';
 import 'package:sandfriends_web/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/MyCourts/View/MyCourtsScreen.dart';
+import 'package:sandfriends_web/Features/Players/View/PlayersScreen.dart';
 import 'package:sandfriends_web/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Features/Menu/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Features/Finances/View/FinancesScreen.dart';
@@ -210,8 +211,15 @@ class MenuProvider extends ChangeNotifier {
       mainDrawer: true,
     ),
     DrawerItem(
+      title: "Jogadores",
+      icon: r"assets/icon/user_group.svg",
+      requiresAdmin: false,
+      widget: PlayersScreen(),
+      mainDrawer: true,
+    ),
+    DrawerItem(
       title: "Meu perfil",
-      icon: r"assets/icon/profile.svg",
+      icon: r"assets/icon/user.svg",
       requiresAdmin: false,
       widget: SettingsScreen(),
       mainDrawer: false,
@@ -286,7 +294,7 @@ class MenuProvider extends ChangeNotifier {
     onTabClick(
       DrawerItem(
         title: "Meu perfil",
-        icon: r"assets/icon/profile.svg",
+        icon: r"assets/icon/user.svg",
         requiresAdmin: false,
         widget: SettingsScreen(
           initForm: "Marca",

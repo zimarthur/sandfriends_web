@@ -47,14 +47,21 @@ class CreateAccountViewModel extends ChangeNotifier {
   }
 
   final courtFormKey = GlobalKey<FormState>();
-  TextEditingController cnpjController =
-      MaskedTextController(mask: '00.000.000/0000-00');
-  TextEditingController cpfController =
-      MaskedTextController(mask: '000.000.000-00');
+  TextEditingController cnpjController = MaskedTextController(
+    mask: '00.000.000/0000-00',
+    cursorBehavior: CursorBehaviour.end,
+  );
+  TextEditingController cpfController = MaskedTextController(
+    mask: '000.000.000-00',
+    cursorBehavior: CursorBehaviour.end,
+  );
   TextEditingController storeNameController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  TextEditingController cepController = MaskedTextController(mask: '00000-000');
+  TextEditingController cepController = MaskedTextController(
+    mask: '00000-000',
+    cursorBehavior: CursorBehaviour.end,
+  );
   TextEditingController neighbourhoodController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController addressNumberController = TextEditingController();
@@ -66,10 +73,14 @@ class CreateAccountViewModel extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController telephoneController =
-      MaskedTextController(mask: '(00) 00000-0000');
-  TextEditingController telephoneOwnerController =
-      MaskedTextController(mask: '(00) 00000-0000');
+  TextEditingController telephoneController = MaskedTextController(
+    mask: '(00) 00000-0000',
+    cursorBehavior: CursorBehaviour.end,
+  );
+  TextEditingController telephoneOwnerController = MaskedTextController(
+    mask: '(00) 00000-0000',
+    cursorBehavior: CursorBehaviour.end,
+  );
 
   bool _isAbove18 = true;
   bool get isAbove18 => _isAbove18;
