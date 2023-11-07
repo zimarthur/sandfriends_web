@@ -25,7 +25,8 @@ class FinancesDataSource extends DataGridSource {
                   columnName: 'price',
                   value:
                       "R\$${showNetValue ? match.netCost.toStringAsFixed(2).replaceAll(".", ",") : match.cost.toStringAsFixed(2).replaceAll(".", ",")}"),
-              const DataGridCell<String>(columnName: 'player', value: "Arthur"),
+              DataGridCell<String>(
+                  columnName: 'player', value: match.matchCreatorName),
               DataGridCell<String>(
                 columnName: 'sport',
                 value: match.sport!.description,
