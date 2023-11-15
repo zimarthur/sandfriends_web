@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFStandardScreen.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
-import 'dart:html';
 import '../../../../SharedComponents/View/SFLoading.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../../Utils/PageStatus.dart';
@@ -42,7 +41,10 @@ class _CreateAccountEmployeeScreenState
         builder: (context, viewModel, _) {
           return SFStandardScreen(
             pageStatus: viewModel.pageStatus,
-            child: CreateAccountEmployeeWidget(
+            childWeb: CreateAccountEmployeeWidget(
+              viewModel: viewModel,
+            ),
+            childMobile: CreateAccountEmployeeWidget(
               viewModel: viewModel,
             ),
             messageModalWidget: viewModel.messageModal,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Settings/BasicInfo/View/BasicInfo.dart';

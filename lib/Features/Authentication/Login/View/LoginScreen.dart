@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sandfriends_web/Features/Authentication/Login/View/LoginWidget.dart';
+import 'package:sandfriends_web/Features/Authentication/Login/View/LoginWidgetMobile.dart';
+import 'package:sandfriends_web/Features/Authentication/Login/View/LoginWidgetWeb.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
             return SFStandardScreen(
               pageStatus: viewModel.pageStatus,
               messageModalWidget: viewModel.messageModal,
-              child: LoginWidget(
+              childWeb: LoginWidgetWeb(
+                viewModel: viewModel,
+              ),
+              childMobile: LoginWidgetMobile(
                 viewModel: viewModel,
               ),
             );

@@ -66,7 +66,9 @@ dev_dependencies:
   shared_preferences: ^2.1.0
   localstorage: ^4.0.1+2
   cached_network_image: ^3.2.3
-  url_launcher: ^6.1.11
+  url_launcher: ^6.2.1
+  flutter_secure_storage: ^9.0.0
+  palette_generator: ^0.3.3+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -112,6 +114,7 @@ flutter:
     - assets/icon/whatsapp.svg
     - assets/icon/clock.svg
     - assets/icon/chevron_up.svg
+    - assets/icon/chevron_down.svg
     - assets/icon/chevron_left.svg
     - assets/icon/chevron_right.svg
     - assets/icon/edit.svg
@@ -124,6 +127,12 @@ flutter:
     - assets/icon/check_circle.svg
     - assets/icon/phone_hand.svg
     - assets/icon/delete.svg
+    - assets/icon/menu_burger.svg
+    - assets/icon/notification_on.svg
+    - assets/icon/notification_off.svg
+    - assets/icon/already_paid.svg
+    - assets/icon/needs_payment.svg
+    - assets/icon/settings.svg
 
     - assets/people/calendar.svg
     - assets/people/clock.svg
@@ -137,6 +146,7 @@ flutter:
     - assets/full_logo_positive_160.png
     - assets/full_logo_positive_284.png
     - assets/full_logo_positive_284_courts.png
+    - assets/full_logo_negative_284_courts.png
     - assets/logo_64.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

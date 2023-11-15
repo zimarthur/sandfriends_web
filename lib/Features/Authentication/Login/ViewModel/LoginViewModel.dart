@@ -18,14 +18,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localstorage/localstorage.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
-import 'dart:html';
 
-import '../../../../Utils/LocalStorage.dart';
+import '../../../../Utils/LocalStorageWeb.dart'
+    if (dart.library.io) '../../../../Utils/LocalStorageMobile.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final loginRepo = LoginRepoImp();
 
-  PageStatus pageStatus = PageStatus.OK;
+  PageStatus pageStatus = PageStatus.LOADING;
   SFMessageModal messageModal = SFMessageModal(
     title: "",
     onTap: () {},
@@ -43,8 +43,8 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateToken(BuildContext context) {
-    String? storedToken = getToken(context);
+  void validateToken(BuildContext context) async {
+    String? storedToken = await getToken(context);
     if (storedToken != null && storedToken.isNotEmpty) {
       loginRepo.validateToken(context, storedToken).then((response) {
         if (response.responseStatus == NetworkResponseStatus.success) {

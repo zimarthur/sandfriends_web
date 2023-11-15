@@ -30,13 +30,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           return SFStandardScreen(
             pageStatus: viewModel.pageStatus,
             messageModalWidget: viewModel.messageModal,
-            child: Responsive.isMobile(context)
-                ? CreateAccountWidgetMobile(
-                    viewModel: viewModel,
-                  )
-                : CreateAccountWidgetWeb(
-                    viewModel: viewModel,
-                  ),
+            childWeb: CreateAccountWidgetWeb(
+              viewModel: viewModel,
+            ),
+            childMobile: CreateAccountWidgetMobile(
+              viewModel: viewModel,
+            ),
           );
         },
       ),

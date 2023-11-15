@@ -6,9 +6,6 @@ import 'package:sandfriends_web/Features/Calendar/Model/PeriodType.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/CourtsAvailabilityWidget.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/BlockHourWidget.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Modal/Match/MatchDetailsWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
@@ -24,11 +21,14 @@ import 'package:intl/intl.dart';
 
 import '../Model/CalendarDailyCourtMatch.dart';
 import '../Model/DayMatch.dart';
-import '../View/Modal/Match/MatchCancelWidget.dart';
-import '../View/Modal/RecurrentMatch/RecurrentBlockHourWidget.dart';
-import '../View/Modal/RecurrentMatch/RecurrentCourtsAvailabilityWidget.dart';
-import '../View/Modal/RecurrentMatch/RecurrentMatchCancelWidget.dart';
-import '../View/Modal/RecurrentMatch/RecurrentMatchDetailsWidget.dart';
+import '../View/Web/Modal/Match/BlockHourWidget.dart';
+import '../View/Web/Modal/Match/CourtsAvailabilityWidget.dart';
+import '../View/Web/Modal/Match/MatchCancelWidget.dart';
+import '../View/Web/Modal/Match/MatchDetailsWidget.dart';
+import '../View/Web/Modal/RecurrentMatch/RecurrentBlockHourWidget.dart';
+import '../View/Web/Modal/RecurrentMatch/RecurrentCourtsAvailabilityWidget.dart';
+import '../View/Web/Modal/RecurrentMatch/RecurrentMatchCancelWidget.dart';
+import '../View/Web/Modal/RecurrentMatch/RecurrentMatchDetailsWidget.dart';
 
 class CalendarViewModel extends ChangeNotifier {
   final calendarRepo = CalendarRepoImp();

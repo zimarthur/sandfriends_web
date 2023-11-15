@@ -1,9 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sandfriends_web/Features/Authentication/ChangePassword/View/ChangePasswordScreen.dart';
 import 'package:sandfriends_web/Features/Authentication/CreateAccount/View/CreateAccountScreen.dart';
 import 'package:sandfriends_web/Features/Authentication/EmailConfirmation/View/EmailConfirmationScreen.dart';
 import 'package:sandfriends_web/Features/Authentication/ForgotPassword/View/ForgotPasswordScreen.dart';
+import 'package:sandfriends_web/Features/Notifications/View/NotificationsScreen.dart';
 import 'package:sandfriends_web/Features/Rewards/ViewModel/RewardsViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
@@ -14,6 +16,7 @@ import 'SharedComponents/ViewModel/EnvironmentProvider.dart';
 import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class App extends StatefulWidget {
   final String flavor;
@@ -36,6 +39,11 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    if (!kIsWeb) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -132,10 +140,10 @@ class _AppState extends State<App> {
           '/forgot_password': (BuildContext context) =>
               const ForgotPasswordScreen(),
           '/home': (BuildContext context) => const MenuScreen(),
+          '/notifications': (BuildContext context) => NotificationsScreen(),
         },
         initialRoute: '/login',
       ),
     );
   }
-
 }

@@ -29,7 +29,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             return SFStandardScreen(
               pageStatus: viewModel.pageStatus,
               messageModalWidget: viewModel.messageModal,
-              child: ForgotPasswordWidget(
+              childWeb: ForgotPasswordWidget(
+                viewModel: viewModel,
+              ),
+              childMobile: ForgotPasswordWidget(
                 viewModel: viewModel,
               ),
             );

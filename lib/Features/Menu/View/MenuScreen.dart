@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Menu/View/Mobile/MenuWidgetMobile.dart';
+import 'package:sandfriends_web/Features/Menu/View/Mobile/Header.dart';
+import 'package:sandfriends_web/Features/Menu/View/Web/MenuWidgetWeb.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Features/Menu/View/Drawer/SFDrawer.dart';
+import 'package:sandfriends_web/Features/Menu/View/Mobile/DrawerMobile/SFDrawer.dart';
 import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../SharedComponents/View/SFStandardScreen.dart';
@@ -27,62 +30,26 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: SFDrawer(
-        viewModel: viewModel,
-      ),
-      onDrawerChanged: (isOpened) {
-        Provider.of<MenuProvider>(context, listen: false).isDrawerOpened =
-            isOpened;
-      },
-      key: viewModel.scaffoldKey,
-      body: ChangeNotifierProvider<MenuProvider>(
-        create: (BuildContext context) => viewModel,
-        child: Consumer<MenuProvider>(
-          builder: (context, viewModel, _) {
-            return SFStandardScreen(
-              pageStatus: viewModel.pageStatus,
-              messageModalWidget: viewModel.messageModal,
-              modalFormWidget: viewModel.modalFormWidget,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SFDrawer(
-                    viewModel: viewModel,
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      color: secondaryBack,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Responsive.isMobile(context)
-                              ? IconButton(
-                                  icon: const Icon(
-                                    Icons.menu,
-                                    color: textDarkGrey,
-                                  ),
-                                  onPressed: viewModel.controlMenu,
-                                )
-                              : Container(),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 2 * defaultPadding,
-                                  vertical: defaultPadding),
-                              child: viewModel.selectedDrawerItem.widget,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    return ChangeNotifierProvider<MenuProvider>(
+      create: (BuildContext context) => viewModel,
+      child: Consumer<MenuProvider>(
+        builder: (context, viewModel, _) {
+          return SFStandardScreen(
+            drawer: SFDrawer(
+              viewModel: viewModel,
+            ),
+            // onDrawerChanged: (isOpened) {
+            //   Provider.of<MenuProvider>(context, listen: false).isDrawerOpened =
+            //       isOpened;
+            // },
+            scaffoldKey: viewModel.scaffoldKey,
+            pageStatus: viewModel.pageStatus,
+            messageModalWidget: viewModel.messageModal,
+            modalFormWidget: viewModel.modalFormWidget,
+            childWeb: MenuWidgetWeb(viewModel: viewModel),
+            childMobile: MenuWidgetMobile(viewModel: viewModel),
+          );
+        },
       ),
     );
   }

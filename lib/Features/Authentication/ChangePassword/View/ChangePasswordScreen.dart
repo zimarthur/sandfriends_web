@@ -44,7 +44,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           return SFStandardScreen(
             pageStatus: viewModel.pageStatus,
             messageModalWidget: viewModel.messageModal,
-            child: ChangePasswordWidget(
+            childWeb: ChangePasswordWidget(
+              viewModel: viewModel,
+            ),
+            childMobile: ChangePasswordWidget(
               viewModel: viewModel,
             ),
           );

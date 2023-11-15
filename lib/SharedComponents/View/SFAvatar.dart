@@ -16,15 +16,16 @@ class SFAvatar extends StatefulWidget {
   final String? playerLastName;
   final String? storeName;
 
-  const SFAvatar(
-      {super.key,
-      required this.height,
-      required this.image,
-      this.editImage,
-      this.isPlayerAvatar = false,
-      this.playerFirstName,
-      this.playerLastName,
-      this.storeName});
+  const SFAvatar({
+    super.key,
+    required this.height,
+    required this.image,
+    this.editImage,
+    this.isPlayerAvatar = false,
+    this.playerFirstName,
+    this.playerLastName,
+    this.storeName,
+  });
 
   @override
   State<SFAvatar> createState() => _SFAvatarState();

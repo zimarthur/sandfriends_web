@@ -30,6 +30,16 @@
                 "--target",
                 "lib/main_demo.dart"
             ]
-        }
+        },
+        {
+            "name": "Launch Dev Mobile",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev_mobile.dart",
+            "args": [
+                "--target",
+                "lib/main_dev_mobile.dart"
+            ]
+        },
     ]
 }

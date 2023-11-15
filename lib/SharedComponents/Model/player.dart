@@ -39,9 +39,11 @@ class Player {
       firstName: parsedJson["FirstName"],
       lastName: parsedJson["LastName"],
       phoneNumber: parsedJson["PhoneNumber"],
-      gender: availableGenders.firstWhere(
-        (gender) => gender.idGender == parsedJson["IdGenderCategory"],
-      ),
+      gender: parsedJson["IdGenderCategory"] != null
+          ? availableGenders.firstWhere(
+              (gender) => gender.idGender == parsedJson["IdGenderCategory"],
+            )
+          : parsedJson["IdGenderCategory"],
       isStorePlayer: false,
       sport: availableSports.firstWhere(
         (sport) => sport.idSport == parsedJson["IdSport"],

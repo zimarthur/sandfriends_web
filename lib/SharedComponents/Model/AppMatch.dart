@@ -34,6 +34,9 @@ class AppMatch {
   String get matchCreatorName =>
       "${matchCreatorFirstName} ${matchCreatorLastName}";
 
+  String get matchHourDescription =>
+      "${startingHour.hourString} - ${endingHour.hourString}";
+
   AppMatch({
     required this.idMatch,
     required this.date,
@@ -73,7 +76,7 @@ class AppMatch {
       endingHour: referenceHours
           .firstWhere((hour) => hour.hour == parsedJson["TimeEnd"]),
       court: Court.fromJsonMatch(parsedJson["StoreCourt"]),
-      cost: parsedJson["Cost"],
+      cost: double.parse(parsedJson["Cost"].toString()),
       sport: parsedJson["IdSport"] == null
           ? null
           : referenceSports

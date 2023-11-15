@@ -6,7 +6,6 @@ import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/RenameEmploy
 import 'package:sandfriends_web/Features/Menu/ViewModel/MenuProvider.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import '../../../../SharedComponents/Model/Employee.dart';
-import '../../../../Utils/LocalStorage.dart';
 import '../../../Menu/ViewModel/DataProvider.dart';
 import '../Model/EmployeeDataSource.dart';
 import '../Model/EmployeeTableCallbacks.dart';

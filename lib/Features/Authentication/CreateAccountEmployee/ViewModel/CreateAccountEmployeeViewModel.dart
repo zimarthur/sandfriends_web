@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:js' as js;
+import 'package:sandfriends_web/Utils/LinkOpenerWeb.dart'
+    if (dart.library.io) 'package:sandfriends_web/Utils/LinkOpenerMobile.dart';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/CreateAccountEmployee/Repository/CreateAccountEmployeeRepoImp.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
@@ -103,11 +104,10 @@ class CreateAccountEmployeeViewModel extends ChangeNotifier {
   }
 
   void onTapTermosDeUso(BuildContext context) {
-    js.context.callMethod('open', ['https://www.sandfriends.com.br/termos']);
+    openLink(context, 'https://www.sandfriends.com.br/termos');
   }
 
   void onTapPoliticaDePrivacidade(BuildContext context) {
-    js.context.callMethod(
-        'open', ['https://www.sandfriends.com.br/politicaprivacidade']);
+    openLink(context, 'https://www.sandfriends.com.br/politicaprivacidade');
   }
 }

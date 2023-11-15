@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Responsive extends StatelessWidget {
   final Widget mobile;
@@ -16,7 +17,7 @@ class Responsive extends StatelessWidget {
 
   // This isMobile, isTablet, isDesktop helep us later
   static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 850;
+      MediaQuery.of(context).size.width < 850 || !kIsWeb;
 
   // static bool isTablet(BuildContext context) =>
   //     MediaQuery.of(context).size.width < 1100 &&

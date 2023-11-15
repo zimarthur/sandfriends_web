@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
-import '../../Features/Calendar/View/Match/DatePicker.dart';
+import '../../Features/Calendar/View/Web/Match/DatePicker.dart';
 import '../../Utils/Constants.dart';
 
 class DatePickerModal extends StatefulWidget {

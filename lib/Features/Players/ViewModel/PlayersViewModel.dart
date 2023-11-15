@@ -6,11 +6,11 @@ import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Players/Model/PlayersDataSource.dart';
 import 'package:sandfriends_web/Features/Players/Model/PlayersTableCallback.dart';
 import 'package:sandfriends_web/Features/Players/Repository/PlayersRepoImp.dart';
-import 'package:sandfriends_web/Features/Players/View/StorePlayerWidget.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 
 import '../../../Remote/NetworkResponse.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
+import '../View/Web/StorePlayerWidget.dart';
 
 class PlayersViewModel extends ChangeNotifier {
   final playersRepo = PlayersRepoImp();

@@ -3,21 +3,27 @@ import 'package:sandfriends_web/SharedComponents/ViewModel/EnvironmentProvider.d
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:sandfriends_web/Utils/PageStatus.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'SFLoading.dart';
 import 'SFMessageModal.dart';
 
 class SFStandardScreen extends StatefulWidget {
   PageStatus pageStatus;
-  Widget child;
+  Widget childWeb;
+  Widget childMobile;
   Widget? modalFormWidget;
   SFMessageModal? messageModalWidget;
+  Widget? drawer;
+  Key? scaffoldKey;
 
   SFStandardScreen({
     required this.pageStatus,
-    required this.child,
+    required this.childWeb,
+    required this.childMobile,
     this.modalFormWidget,
     this.messageModalWidget,
+    this.drawer,
+    this.scaffoldKey,
   });
 
   @override
@@ -30,6 +36,9 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: primaryBlue,
+      endDrawer: widget.drawer,
+      key: widget.scaffoldKey,
       body: SafeArea(
         child: Stack(
           children: [
@@ -42,7 +51,9 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
               height: height,
               width: width,
               child: Center(
-                child: widget.child,
+                child: Responsive.isMobile(context)
+                    ? widget.childMobile
+                    : widget.childWeb,
               ),
             ),
             widget.pageStatus != PageStatus.OK
@@ -71,7 +82,7 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
                   Provider.of<EnvironmentProvider>(context)
                               .currentEnvironment ==
                           Environment.Dev
-                      ? "DEV"
+                      ? ""
                       : "DEMO",
                   style: TextStyle(
                     fontSize: 20,

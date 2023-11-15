@@ -18,7 +18,8 @@ import '../../../SharedComponents/Model/Sport.dart';
 import '../../../SharedComponents/Model/Store.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
 import '../../../SharedComponents/Model/StoreWorkingHours.dart';
-import '../../../Utils/LocalStorage.dart';
+import '../../../Utils/LocalStorageWeb.dart'
+    if (dart.library.io) '../../../Utils/LocalStorageMobile.dart';
 
 class DataProvider extends ChangeNotifier {
   Store? _store;

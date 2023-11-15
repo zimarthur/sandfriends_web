@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/MyCourts/Repository/MyCourtsRepoImp.dart';
-import 'package:sandfriends_web/Features/MyCourts/View/PriceListWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AvailableSport.dart';
@@ -16,7 +15,8 @@ import '../../../SharedComponents/Model/Court.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/Model/PriceRule.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
-import '../View/WorkingHoursModal.dart';
+import '../View/Web/PriceListWidget.dart';
+import '../View/Web/WorkingHoursModal.dart';
 
 class MyCourtsViewModel extends ChangeNotifier {
   final myCourtsRepo = MyCourtsRepoImp();
