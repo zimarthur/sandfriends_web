@@ -88,6 +88,7 @@ class _CourtOccupationWidgetState extends State<CourtOccupationWidget> {
                   ),
                   ListView.builder(
                     itemCount: widget.viewModel.courtsOccupation.length,
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Container(

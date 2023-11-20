@@ -56,4 +56,46 @@ class SettingsRepoImp implements SettingsRepo {
     );
     return response;
   }
+
+  @override
+  Future<NetworkResponse> allowNotifications(
+    BuildContext context,
+    String accessToken,
+    bool allowNotifications,
+    String notificationsToken,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().allowNotifications,
+      ),
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "AllowNotifications": allowNotifications,
+          "NotificationsToken": notificationsToken,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> deleteAccount(
+    BuildContext context,
+    String accessToken,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().deleteAccountEmployee,
+      ),
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+        },
+      ),
+    );
+    return response;
+  }
 }

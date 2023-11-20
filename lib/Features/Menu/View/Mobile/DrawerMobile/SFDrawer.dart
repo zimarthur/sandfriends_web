@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../../SharedComponents/View/SFAvatar.dart';
+import '../../../ViewModel/DataProvider.dart';
 import '../../../ViewModel/MenuProvider.dart';
 import '../../Web/DrawerWeb/SFDrawerListTile.dart';
+import 'package:provider/provider.dart';
 
 class SFDrawer extends StatefulWidget {
   MenuProvider viewModel;
@@ -49,18 +52,29 @@ class _SFDrawerState extends State<SFDrawer> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 90,
-                              child: Image.asset(
-                                r"assets/logo_64.png",
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
+                            SFAvatar(
+                                height: 100,
+                                image: Provider.of<DataProvider>(context,
+                                                listen: false)
+                                            .store ==
+                                        null
+                                    ? null
+                                    : Provider.of<DataProvider>(context,
+                                            listen: false)
+                                        .store!
+                                        .logo,
+                                storeName: Provider.of<DataProvider>(context,
+                                        listen: false)
+                                    .store!
+                                    .name),
                             SizedBox(
                               height: defaultPadding / 4,
                             ),
                             Text(
-                              "BW Sports",
+                              Provider.of<DataProvider>(context, listen: false)
+                                      .store
+                                      ?.name ??
+                                  "",
                               style: TextStyle(
                                 color: textBlue,
                                 fontWeight: FontWeight.bold,
@@ -68,16 +82,22 @@ class _SFDrawerState extends State<SFDrawer> {
                               ),
                             ),
                             Text(
-                              "Arthur Zim",
+                              Provider.of<DataProvider>(context, listen: false)
+                                  .loggedEmployee
+                                  .fullName,
                               style: TextStyle(
                                 color: textDarkGrey,
                               ),
                             )
                           ],
                         )),
-                        SvgPicture.asset(
-                          r"assets/icon/settings.svg",
-                          height: 25,
+                        InkWell(
+                          onTap: () =>
+                              widget.viewModel.quickLinkSettings(context),
+                          child: SvgPicture.asset(
+                            r"assets/icon/settings.svg",
+                            height: 25,
+                          ),
                         )
                       ],
                     ),
@@ -96,26 +116,32 @@ class _SFDrawerState extends State<SFDrawer> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: widget.viewModel.mainDrawer.length,
+                        itemCount: widget.viewModel.mobileDrawerItems.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
                               widget.viewModel.onTabClick(
-                                  widget.viewModel.mainDrawer[index], context);
+                                  widget.viewModel.mobileDrawerItems[index],
+                                  context);
                             },
                             onHover: (value) {
                               widget.viewModel.setHoveredDrawerTitle(value
-                                  ? widget.viewModel.mainDrawer[index].title
+                                  ? widget
+                                      .viewModel.mobileDrawerItems[index].title
                                   : "");
                             },
                             child: SFDrawerListTile(
-                              title: widget.viewModel.mainDrawer[index].title,
-                              svgSrc: widget.viewModel.mainDrawer[index].icon,
-                              isSelected: widget.viewModel.mainDrawer[index] ==
-                                  widget.viewModel.selectedDrawerItem,
+                              title: widget
+                                  .viewModel.mobileDrawerItems[index].title,
+                              svgSrc: widget
+                                  .viewModel.mobileDrawerItems[index].icon,
+                              isSelected:
+                                  widget.viewModel.mobileDrawerItems[index] ==
+                                      widget.viewModel.selectedDrawerItem,
                               fullSize: true,
                               isHovered: widget.viewModel.hoveredDrawerTitle ==
-                                  widget.viewModel.mainDrawer[index].title,
+                                  widget
+                                      .viewModel.mobileDrawerItems[index].title,
                             ),
                           );
                         },

@@ -18,9 +18,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localstorage/localstorage.dart';
 import '../../../../SharedComponents/View/SFMessageModal.dart';
-
+import 'package:tuple/tuple.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../../../Utils/LocalStorageWeb.dart'
     if (dart.library.io) '../../../../Utils/LocalStorageMobile.dart';
+import '../../../../Utils/Responsive.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final loginRepo = LoginRepoImp();
@@ -43,6 +46,33 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Tuple2<bool, String?>? notificationsConfig;
+
+  Future<void> configureNotifications() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print("ARTHUR token is : $fcmToken");
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    bool? authorization =
+        settings.authorizationStatus == AuthorizationStatus.authorized
+            ? true
+            : settings.authorizationStatus == AuthorizationStatus.denied
+                ? false
+                : null;
+    notificationsConfig = authorization != null
+        ? Tuple2<bool, String?>(authorization, fcmToken)
+        : null;
+  }
+
   void validateToken(BuildContext context) async {
     String? storedToken = await getToken(context);
     if (storedToken != null && storedToken.isNotEmpty) {
@@ -54,11 +84,18 @@ class LoginViewModel extends ChangeNotifier {
         } else {
           pageStatus = PageStatus.OK;
           notifyListeners();
+          if (!kIsWeb) {
+            configureNotifications().then((notificationCOnfigs) {});
+          }
         }
       });
+    } else {
+      pageStatus = PageStatus.OK;
+      notifyListeners();
+      if (!kIsWeb) {
+        configureNotifications().then((notificationCOnfigs) {});
+      }
     }
-    pageStatus = PageStatus.OK;
-    notifyListeners();
   }
 
   void onTapLogin(BuildContext context) {
@@ -67,7 +104,12 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
 
       loginRepo
-          .login(context, userController.text, passwordController.text)
+          .login(
+        context,
+        userController.text,
+        passwordController.text,
+        notificationsConfig,
+      )
           .then((response) {
         if (response.responseStatus == NetworkResponseStatus.success) {
           Provider.of<DataProvider>(context, listen: false)

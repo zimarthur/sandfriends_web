@@ -25,6 +25,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     notifications =
         Provider.of<DataProvider>(context, listen: false).notifications;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DataProvider>(context, listen: false).hasUnseenNotifications =
+          false;
+    });
     super.initState();
   }
 

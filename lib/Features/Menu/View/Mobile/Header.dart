@@ -100,7 +100,11 @@ class _MobileHeaderState extends State<MobileHeader> {
                                 "/notifications",
                               ),
                               child: SvgPicture.asset(
-                                r"assets/icon/notification_on.svg",
+                                Provider.of<DataProvider>(
+                                  context,
+                                ).hasUnseenNotifications
+                                    ? r"assets/icon/notification_on.svg"
+                                    : r"assets/icon/notification_off.svg",
                                 height: buttonSize,
                               ),
                             ),

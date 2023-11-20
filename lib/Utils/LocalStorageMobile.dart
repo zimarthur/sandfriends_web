@@ -23,3 +23,22 @@ void storeLastPage(BuildContext context, String pageName) {}
 String? getLastPage(BuildContext context) {
   return null;
 }
+
+Future storeLastNotificationId(
+    BuildContext context, int lastNotificationId) async {
+  const storage = FlutterSecureStorage();
+  await storage.write(
+    key:
+        "sfLastNotificationId${Provider.of<EnvironmentProvider>(context, listen: false).envStorageKey()}",
+    value: lastNotificationId.toString(),
+  );
+}
+
+Future<int?> getLastNotificationId(BuildContext context) async {
+  const storage = FlutterSecureStorage();
+  String? lastNotificationId = await storage.read(
+    key:
+        "sfLastNotificationId${Provider.of<EnvironmentProvider>(context, listen: false).envStorageKey()}",
+  );
+  return lastNotificationId != null ? int.parse(lastNotificationId) : null;
+}

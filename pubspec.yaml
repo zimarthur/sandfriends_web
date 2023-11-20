@@ -69,6 +69,13 @@ dev_dependencies:
   url_launcher: ^6.2.1
   flutter_secure_storage: ^9.0.0
   palette_generator: ^0.3.3+3
+  flutter_launcher_icons: ^0.13.1
+  firebase_core: ^2.15.1
+  firebase_analytics: ^10.4.5
+  firebase_crashlytics: ^3.3.5
+  firebase_messaging: ^14.7.2
+  flutter_local_notifications: ^16.1.0
+  tuple: ^2.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -127,6 +134,7 @@ flutter:
     - assets/icon/check_circle.svg
     - assets/icon/phone_hand.svg
     - assets/icon/delete.svg
+    - assets/icon/delete_filter.svg
     - assets/icon/menu_burger.svg
     - assets/icon/notification_on.svg
     - assets/icon/notification_off.svg
@@ -140,6 +148,10 @@ flutter:
     - assets/people/email_confirmation_store.svg
     - assets/people/email_confirmation_user.svg
 
+
+    - assets/app_icon/prod.png
+    - assets/app_icon/demo.png
+    - assets/app_icon/dev.png
 
     - assets/full_logo_negative_160.png
     - assets/full_logo_negative_284.png

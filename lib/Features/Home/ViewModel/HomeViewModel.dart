@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Home/Model/CourtOccupation.dart';
+import 'package:sandfriends_web/Features/Home/Model/FilterCourt.dart';
+import 'package:sandfriends_web/Features/Home/Model/HourMatch.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppNotification.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Reward.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../../SharedComponents/Model/Court.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import '../../../SharedComponents/Model/Store.dart';
+import '../../Menu/ViewModel/MenuProvider.dart';
 
 class HomeViewModel extends ChangeNotifier {
   List<AppNotification> notifications = [];
@@ -28,7 +32,44 @@ class HomeViewModel extends ChangeNotifier {
 
   bool storeClosedToday = false;
 
-  void initHomeScreen(BuildContext context) {
+  bool filterNow = false;
+  List<FilterCourt> filterCourts = [];
+
+  bool get hasAnyFilter {
+    return filterNow ||
+        filterCourts.any((filterCourt) => filterCourt.isFiltered);
+  }
+
+  void onTapFilterNow() {
+    filterNow = !filterNow;
+    notifyListeners();
+  }
+
+  void onTapFilterCourt(FilterCourt courtFilter) {
+    filterCourts
+        .firstWhere((filterCourt) =>
+            filterCourt.court.idStoreCourt == courtFilter.court.idStoreCourt)
+        .isFiltered = !courtFilter.isFiltered;
+    notifyListeners();
+  }
+
+  void clearFilter() {
+    filterNow = false;
+    filterCourts.clear();
+    for (var court in courts) {
+      filterCourts.add(
+        FilterCourt(
+          court: court,
+          isFiltered: false,
+        ),
+      );
+    }
+    notifyListeners();
+  }
+
+  void setViewModel(
+    BuildContext context,
+  ) {
     store = Provider.of<DataProvider>(context, listen: false).store!;
     availableHours =
         Provider.of<DataProvider>(context, listen: false).availableHours;
@@ -49,6 +90,28 @@ class HomeViewModel extends ChangeNotifier {
         .where((reward) => areInTheSameDay(reward.claimedDate, DateTime.now()))
         .toList();
     notifyListeners();
+  }
+
+  void initHomeScreen(BuildContext context) {
+    setViewModel(context);
+    for (var court in courts) {
+      filterCourts.add(
+        FilterCourt(
+          court: court,
+          isFiltered: false,
+        ),
+      );
+    }
+    if (workingHours.any((hour) => hour.hour == DateTime.now().hour)) {
+      filterNow = true;
+    }
+    notifyListeners();
+  }
+
+  void updateViewModel(BuildContext context) async {
+    await Provider.of<MenuProvider>(context, listen: false)
+        .updateDataProvider(context);
+    setViewModel(context);
   }
 
   void setWorkingHours(BuildContext context) {
@@ -128,6 +191,39 @@ class HomeViewModel extends ChangeNotifier {
                 match.endingHour.hour > displayedHour.hour))
         .toList();
     return filteredMatches;
+  }
+
+  List<HourMatch> get hourMatches {
+    List<HourMatch> hourMatchesList = [];
+    List<int> filteredIdStoreCourts = filterCourts
+        .where((filteredCourt) => filteredCourt.isFiltered)
+        .map((filteredCourt) => filteredCourt.court.idStoreCourt!)
+        .toList();
+    List<AppMatch> filteredMatches = filteredIdStoreCourts.isEmpty
+        ? matches
+        : matches
+            .where(
+              (match) => filteredIdStoreCourts.contains(
+                match.court.idStoreCourt,
+              ),
+            )
+            .toList();
+
+    for (var hour in workingHours) {
+      if (filterNow == false || (filterNow && hour.hour == DateTime.now().hour))
+        hourMatchesList.add(
+          HourMatch(
+            hour: hour,
+            matches: filteredMatches
+                .where((match) =>
+                    (match.startingHour.hour == hour.hour) ||
+                    (match.startingHour.hour < hour.hour &&
+                        match.endingHour.hour > hour.hour))
+                .toList(),
+          ),
+        );
+    }
+    return hourMatchesList;
   }
 
   bool get isLowestHour =>

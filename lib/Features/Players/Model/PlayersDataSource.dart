@@ -28,15 +28,15 @@ class PlayersDataSource extends DataGridSource {
               ),
               DataGridCell<String>(
                 columnName: 'gender',
-                value: player.gender!.genderName,
+                value: player.gender == null ? "" : player.gender!.genderName,
               ),
               DataGridCell<String>(
                 columnName: 'sport',
-                value: player.sport!.description,
+                value: player.sport == null ? "" : player.sport!.description,
               ),
               DataGridCell<String>(
                 columnName: 'rank',
-                value: player.rank!.rankName,
+                value: player.rank == null ? "" : player.rank!.rankName,
               ),
               DataGridCell<Widget>(
                 columnName: 'in_app',

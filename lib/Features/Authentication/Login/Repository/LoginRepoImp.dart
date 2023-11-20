@@ -9,6 +9,8 @@ import 'package:sandfriends_web/Features/Authentication/Login/Repository/LoginRe
 import 'package:provider/provider.dart';
 import '../../../../Remote/NetworkResponse.dart';
 import '../../../../SharedComponents/ViewModel/EnvironmentProvider.dart';
+import 'package:tuple/tuple.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class LoginRepoImp implements LoginRepo {
   final BaseApiService _apiService = NetworkApiService();
@@ -17,6 +19,7 @@ class LoginRepoImp implements LoginRepo {
     BuildContext context,
     String email,
     String password,
+    Tuple2<bool?, String?>? notificationsConfig,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
@@ -27,6 +30,14 @@ class LoginRepoImp implements LoginRepo {
         <String, Object>{
           "Email": email,
           "Password": password,
+          'UpdateNotifications': notificationsConfig != null,
+          'AllowNotifications': notificationsConfig != null
+              ? notificationsConfig.item1 ?? false
+              : false,
+          'NotificationsToken': notificationsConfig != null
+              ? notificationsConfig.item2 ?? ""
+              : "",
+          'IsRequestFromApp': !kIsWeb,
         },
       ),
     );
@@ -44,6 +55,7 @@ class LoginRepoImp implements LoginRepo {
       jsonEncode(
         <String, Object>{
           "AccessToken": accessToken,
+          'IsRequestFromApp': !kIsWeb,
         },
       ),
     );

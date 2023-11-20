@@ -35,7 +35,7 @@ class _SFDrawerState extends State<SFDrawer> {
           ),
         ),
       ),
-      width: !fullSize ? 250 : 82,
+      width: fullSize ? 250 : 82,
       height: height,
       padding: const EdgeInsets.all(defaultPadding),
       child: Column(

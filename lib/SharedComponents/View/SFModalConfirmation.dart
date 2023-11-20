@@ -7,12 +7,15 @@ class SFModalConfirmation extends StatefulWidget {
   String description;
   VoidCallback onContinue;
   VoidCallback onReturn;
+  bool? isConfirmationPositive;
 
-  SFModalConfirmation({super.key, 
+  SFModalConfirmation({
+    super.key,
     required this.title,
     required this.description,
     required this.onContinue,
     required this.onReturn,
+    this.isConfirmationPositive,
   });
 
   @override
@@ -67,7 +70,11 @@ class _SFModalConfirmationState extends State<SFModalConfirmation> {
               Expanded(
                 child: SFButton(
                   buttonLabel: "Sim",
-                  buttonType: ButtonType.Secondary,
+                  buttonType: widget.isConfirmationPositive == null
+                      ? ButtonType.Secondary
+                      : widget.isConfirmationPositive!
+                          ? ButtonType.Primary
+                          : ButtonType.Delete,
                   onTap: widget.onContinue,
                 ),
               ),

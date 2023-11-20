@@ -9,6 +9,7 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:provider/provider.dart';
 import 'package:image/image.dart' as IMG;
 import 'package:flutter/foundation.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:sandfriends_web/Features/Settings/Repository/SettingsRepoImp.dart';
@@ -307,5 +308,90 @@ class SettingsViewModel extends ChangeNotifier {
   void onChangedCnpj(String newValue) {
     storeEdit.cnpj = getRawNumber(newValue);
     notifyListeners();
+  }
+
+  void updateAllowNotifications(BuildContext context, bool allow) async {
+    String token = "";
+    if (allow) {
+      token = await FirebaseMessaging.instance.getToken() ?? "";
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+      NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+      if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+        allow = false;
+      }
+    }
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    settingsRepo
+        .allowNotifications(
+      context,
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      allow,
+      token,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        Provider.of<DataProvider>(context, listen: false)
+            .setAllowNotificationsSetttings(responseBody["AllowNotifications"]);
+
+        Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(
+          response,
+        );
+      }
+    });
+  }
+
+  void deleteAccount(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalConfirmation(
+      "Deseja mesmo deletar sua conta?",
+      "Você não conseguirá mais fazer acesso a plataforma se deletar sua conta.",
+      isConfirmationPositive: false,
+      () {
+        Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+        settingsRepo
+            .deleteAccount(
+          context,
+          Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+        )
+            .then((response) {
+          if (response.responseStatus == NetworkResponseStatus.success) {
+            Provider.of<MenuProvider>(context, listen: false).setModalForm(
+              SFMessageModal(
+                title: "Sua conta foi deletada",
+                onTap: () => Provider.of<MenuProvider>(context, listen: false)
+                    .logout(context),
+                isHappy: false,
+              ),
+            );
+          } else if (response.responseStatus ==
+              NetworkResponseStatus.expiredToken) {
+            Provider.of<MenuProvider>(context, listen: false).logout(context);
+          } else {
+            Provider.of<MenuProvider>(context, listen: false)
+                .setMessageModalFromResponse(
+              response,
+            );
+          }
+        });
+      },
+      () => Provider.of<MenuProvider>(context, listen: false).closeModal(),
+    );
   }
 }

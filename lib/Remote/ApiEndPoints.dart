@@ -27,6 +27,8 @@ class ApiEndPoints {
   final String changeEmployeeAdmin = "/SetEmployeeAdmin";
   final String renameEmployee = "/RenameEmployee";
   final String removeEmployee = "/RemoveEmployee";
+  final String allowNotifications = "/AllowNotificationsEmployee";
+  final String deleteAccountEmployee = "/DeleteAccountEmployee";
 
   final String createAccountEmployee = "/AddEmployeeInformation";
 

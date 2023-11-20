@@ -5,12 +5,13 @@ import 'package:sandfriends_web/Features/Settings/EmployeeInfo/View/EmployeeInfo
 import 'package:sandfriends_web/Features/Settings/EmployeeInfo/ViewModel/EmployeeInfoViewModel.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
-import '../../../SharedComponents/View/SFButton.dart';
-import '../../../SharedComponents/View/SFHeader.dart';
-import '../../../SharedComponents/View/SFTabs.dart';
-import '../../Menu/ViewModel/MenuProvider.dart';
-import '../BasicInfo/View/BasicInfo.dart';
-import '../ViewModel/SettingsViewModel.dart';
+import '../../../../SharedComponents/View/SFButton.dart';
+import '../../../../SharedComponents/View/SFHeader.dart';
+import '../../../../SharedComponents/View/SFTabs.dart';
+import '../../../Menu/ViewModel/MenuProvider.dart';
+import '../../ViewModel/SettingsViewModel.dart';
+import '../../BasicInfo/View/BasicInfo.dart';
+import '../../ViewModel/SettingsViewModel.dart';
 
 class SettingsScreen extends StatefulWidget {
   String? initForm;

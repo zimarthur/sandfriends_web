@@ -5,11 +5,13 @@ import 'Hour.dart';
 import 'Sport.dart';
 
 class AppNotification {
+  int IdNotification;
   String message;
   AppMatch match;
   DateTime eventTime;
 
   AppNotification({
+    required this.IdNotification,
     required this.message,
     required this.match,
     required this.eventTime,
@@ -21,6 +23,7 @@ class AppNotification {
     List<Sport> referenceSports,
   ) {
     return AppNotification(
+      IdNotification: parsedJson["IdNotificationStore"],
       message: parsedJson["Message"],
       eventTime: DateFormat("dd/MM/yyyy HH:mm").parse(
         parsedJson["EventDatetime"],

@@ -9,4 +9,16 @@ class SettingsRepo {
     Store store,
     bool changedLogo,
   ) async {}
+
+  Future<NetworkResponse?> allowNotifications(
+    BuildContext context,
+    String accessToken,
+    bool allowNotifications,
+    String notificationsToken,
+  ) async {}
+
+  Future<NetworkResponse?> deleteAccount(
+    BuildContext context,
+    String accessToken,
+  ) async {}
 }

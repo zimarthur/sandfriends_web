@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/Login/Repository/LoginRepoImp.dart';
 import 'package:sandfriends_web/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
-import 'package:sandfriends_web/Features/Settings/View/SettingsScreen.dart';
 import 'package:sandfriends_web/Features/Menu/Model/DrawerItem.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFMessageModal.dart';
@@ -25,6 +24,8 @@ import '../../Players/View/Web/PlayersScreen.dart'
     if (dart.library.io) '../../Players/View/Mobile/PlayersScreen.dart';
 import '../../Rewards/View/Web/RewardsScreen.dart'
     if (dart.library.io) '../../Rewards/View/Mobile/RewardsScreen.dart';
+import '../../Settings/View/Web/SettingsScreen.dart'
+    if (dart.library.io) '../../Settings/View/Mobile/SettingsScreen.dart';
 
 class MenuProvider extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -36,6 +37,10 @@ class MenuProvider extends ChangeNotifier {
     // if (!_scaffoldKey.currentState!.isDrawerOpen) {
     _scaffoldKey.currentState!.openDrawer();
     //}
+  }
+
+  void initHomeScreen(BuildContext context) {
+    validateAuthentication(context);
   }
 
   bool _isEmployeeAdmin = false;
@@ -94,6 +99,25 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateDataProvider(BuildContext context) async {
+    String? storedToken = await getToken(context);
+    if (storedToken != null) {
+      pageStatus = PageStatus.LOADING;
+      notifyListeners();
+      NetworkResponse response =
+          await loginRepo.validateToken(context, storedToken);
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setLoginResponse(context, response.responseBody!, true);
+        setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
+            .isLoggedEmployeeAdmin());
+        setSelectedDrawerItem(mainDrawer.first);
+      }
+      pageStatus = PageStatus.OK;
+      notifyListeners();
+    }
+  }
+
   void setModalLoading() {
     pageStatus = PageStatus.LOADING;
     notifyListeners();
@@ -132,12 +156,14 @@ class MenuProvider extends ChangeNotifier {
   }
 
   void setModalConfirmation(String title, String description,
-      VoidCallback onContinue, VoidCallback onReturn) {
+      VoidCallback onContinue, VoidCallback onReturn,
+      {bool? isConfirmationPositive}) {
     modalFormWidget = SFModalConfirmation(
       title: title,
       description: description,
       onContinue: onContinue,
       onReturn: onReturn,
+      isConfirmationPositive: isConfirmationPositive,
     );
     pageStatus = PageStatus.FORM;
     notifyListeners();
@@ -262,6 +288,9 @@ class MenuProvider extends ChangeNotifier {
     return permissionsDrawerItems.where((drawer) => drawer.mainDrawer).toList();
   }
 
+  List<DrawerItem> get mobileDrawerItems =>
+      mainDrawer.where((element) => element.title == "Início").toList();
+
   List<DrawerItem> get secondaryDrawer {
     return permissionsDrawerItems
         .where((drawer) => !drawer.mainDrawer)
@@ -295,6 +324,13 @@ class MenuProvider extends ChangeNotifier {
   void quickLinkHome(BuildContext context) {
     onTabClick(
       mainDrawer.firstWhere((element) => element.title == "Início"),
+      context,
+    );
+  }
+
+  void quickLinkSettings(BuildContext context) {
+    onTabClick(
+      _drawerItems.firstWhere((element) => element.title == "Meu perfil"),
       context,
     );
   }

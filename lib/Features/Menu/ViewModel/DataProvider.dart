@@ -148,6 +148,7 @@ class DataProvider extends ChangeNotifier {
 
   void setLoginResponse(
       BuildContext context, String response, bool keepConnected) {
+    clearDataProvider();
     Map<String, dynamic> responseBody = json.decode(
       response,
     );
@@ -189,6 +190,8 @@ class DataProvider extends ChangeNotifier {
         ),
       );
     }
+
+    setLastNotificationId(context);
 
     setPlayersResponse(responseBody);
 
@@ -297,5 +300,32 @@ class DataProvider extends ChangeNotifier {
         Reward.fromJson(reward),
       );
     }
+  }
+
+  bool _hasUnseenNotifications = false;
+  bool get hasUnseenNotifications => _hasUnseenNotifications;
+  set hasUnseenNotifications(bool value) {
+    _hasUnseenNotifications = value;
+    notifyListeners();
+  }
+
+  void setLastNotificationId(BuildContext context) async {
+    int newLastNotificationId = notifications
+        .reduce((a, b) => a.IdNotification > b.IdNotification ? a : b)
+        .IdNotification;
+    int? lastNotificationId = await getLastNotificationId(context);
+    if (lastNotificationId != null) {
+      if (lastNotificationId < newLastNotificationId) {
+        hasUnseenNotifications = true;
+      }
+    }
+    storeLastNotificationId(context, newLastNotificationId);
+  }
+
+  void setAllowNotificationsSetttings(bool allowNotifications) {
+    employees
+        .firstWhere((employee) => employee.isLoggedUser)
+        .allowNotifications = allowNotifications;
+    notifyListeners();
   }
 }

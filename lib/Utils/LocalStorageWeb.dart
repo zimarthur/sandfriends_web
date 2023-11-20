@@ -24,3 +24,16 @@ String? getLastPage(BuildContext context) {
   return window.localStorage[
       "sfLastPageName${Provider.of<EnvironmentProvider>(context, listen: false).envStorageKey()}"];
 }
+
+Future storeLastNotificationId(
+    BuildContext context, int lastNotificationId) async {
+  window.localStorage[
+          "sfLastNotificationId${Provider.of<EnvironmentProvider>(context, listen: false).envStorageKey()}"] =
+      lastNotificationId.toString();
+}
+
+Future<int?> getLastNotificationId(BuildContext context) async {
+  String? lastNotificationId = window.localStorage[
+      "sfLastNotificationId${Provider.of<EnvironmentProvider>(context, listen: false).envStorageKey()}"];
+  return lastNotificationId != null ? int.parse(lastNotificationId) : null;
+}

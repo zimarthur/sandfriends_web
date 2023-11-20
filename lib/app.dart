@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,10 @@ import 'Utils/Constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'local_notifications.dart';
 
 class App extends StatefulWidget {
   final String flavor;
@@ -34,7 +40,29 @@ class _AppState extends State<App> {
   @override
   void initState() {
     environmentProvider.setEnvironment(widget.flavor);
+    if (!kIsWeb) {
+      setupFirebaseMessaging();
+      NotificationService().initNotification(_handleMessage);
+    }
     super.initState();
+  }
+
+  void _handleMessage(Map<String, dynamic> data) {}
+
+  Future<void> setupFirebaseMessaging() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        NotificationService().showLocalNotification(
+            title: message.notification!.title,
+            body: message.notification!.body,
+            payLoad: json.encode(message.data));
+      }
+    });
+    if (initialMessage != null) {
+      _handleMessage(initialMessage.data);
+    }
   }
 
   @override
@@ -58,6 +86,7 @@ class _AppState extends State<App> {
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
           Locale('pt', 'BR'),

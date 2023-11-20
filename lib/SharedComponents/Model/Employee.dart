@@ -9,6 +9,9 @@ class Employee {
   DateTime? registrationDate;
   bool isLoggedUser;
   bool isCourtOwner;
+  bool allowNotifications;
+
+  String get fullName => "$firstName $lastName";
 
   Employee({
     required this.idEmployee,
@@ -19,6 +22,7 @@ class Employee {
     required this.registrationDate,
     this.isLoggedUser = false,
     required this.isCourtOwner,
+    required this.allowNotifications,
   });
 
   factory Employee.fromJson(Map<String, dynamic> parsedJson) {
@@ -33,6 +37,7 @@ class Employee {
           : DateFormat("dd/MM/yyyy").parse(parsedJson["EmailConfirmationDate"]),
       isLoggedUser: false,
       isCourtOwner: parsedJson["StoreOwner"],
+      allowNotifications: parsedJson["AllowNotifications"],
     );
   }
 
@@ -46,6 +51,7 @@ class Employee {
       registrationDate: refEmployee.registrationDate,
       isCourtOwner: refEmployee.isCourtOwner,
       isLoggedUser: refEmployee.isLoggedUser,
+      allowNotifications: refEmployee.allowNotifications,
     );
   }
 }

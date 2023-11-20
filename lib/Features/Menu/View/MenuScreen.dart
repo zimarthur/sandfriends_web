@@ -4,13 +4,14 @@ import 'package:sandfriends_web/Features/Menu/View/Mobile/Header.dart';
 import 'package:sandfriends_web/Features/Menu/View/Web/MenuWidgetWeb.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Features/Menu/View/Mobile/DrawerMobile/SFDrawer.dart';
 import '../../../SharedComponents/View/SFLoading.dart';
 import '../../../SharedComponents/View/SFMessageModal.dart';
 import '../../../SharedComponents/View/SFStandardScreen.dart';
 import '../../../Utils/PageStatus.dart';
 import '../ViewModel/MenuProvider.dart';
 import '../../../Utils/Responsive.dart';
+import 'Web/DrawerWeb/SFDrawer.dart'
+    if (dart.library.io) 'Mobile/DrawerMobile/SFDrawer.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -24,7 +25,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   void initState() {
-    viewModel.validateAuthentication(context);
+    viewModel.initHomeScreen(context);
     super.initState();
   }
 
@@ -35,13 +36,11 @@ class _MenuScreenState extends State<MenuScreen> {
       child: Consumer<MenuProvider>(
         builder: (context, viewModel, _) {
           return SFStandardScreen(
-            drawer: SFDrawer(
-              viewModel: viewModel,
-            ),
-            // onDrawerChanged: (isOpened) {
-            //   Provider.of<MenuProvider>(context, listen: false).isDrawerOpened =
-            //       isOpened;
-            // },
+            drawer: Responsive.isMobile(context)
+                ? SFDrawer(
+                    viewModel: viewModel,
+                  )
+                : null,
             scaffoldKey: viewModel.scaffoldKey,
             pageStatus: viewModel.pageStatus,
             messageModalWidget: viewModel.messageModal,
