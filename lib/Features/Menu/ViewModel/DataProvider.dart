@@ -310,9 +310,11 @@ class DataProvider extends ChangeNotifier {
   }
 
   void setLastNotificationId(BuildContext context) async {
-    int newLastNotificationId = notifications
-        .reduce((a, b) => a.IdNotification > b.IdNotification ? a : b)
-        .IdNotification;
+    int newLastNotificationId = notifications.isEmpty
+        ? 0
+        : notifications
+            .reduce((a, b) => a.IdNotification > b.IdNotification ? a : b)
+            .IdNotification;
     int? lastNotificationId = await getLastNotificationId(context);
     if (lastNotificationId != null) {
       if (lastNotificationId < newLastNotificationId) {

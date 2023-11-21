@@ -31,7 +31,8 @@ class _MobileHeaderState extends State<MobileHeader> {
   }
 
   Future<void> _updatePaletteGenerator() async {
-    if (Provider.of<DataProvider>(context, listen: false).store != null) {
+    if (Provider.of<DataProvider>(context, listen: false).store != null &&
+        Provider.of<DataProvider>(context, listen: false).store!.logo != null) {
       paletteGenerator = await PaletteGenerator.fromImageProvider(
         Image.network(
           Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(

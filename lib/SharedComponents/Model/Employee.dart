@@ -37,7 +37,7 @@ class Employee {
           : DateFormat("dd/MM/yyyy").parse(parsedJson["EmailConfirmationDate"]),
       isLoggedUser: false,
       isCourtOwner: parsedJson["StoreOwner"],
-      allowNotifications: parsedJson["AllowNotifications"],
+      allowNotifications: parsedJson["AllowNotifications"] ?? false,
     );
   }
 
