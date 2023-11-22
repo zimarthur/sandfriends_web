@@ -59,11 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyByK42SdTckZPN4C6Pl0aqljbGWCAuy5wU',
-    appId: '1:496096595246:ios:76948b490e30c73ddf7ebf',
+    appId: '1:496096595246:ios:161e757fb0a23858df7ebf',
     messagingSenderId: '496096595246',
     projectId: 'sandfriends-demo-1e87f',
     storageBucket: 'sandfriends-demo-1e87f.appspot.com',
-    iosClientId: '496096595246-qeuclkgc0t3og75euhko0sm3blbelb23.apps.googleusercontent.com',
-    iosBundleId: 'com.sandfriends.app.demo',
+    iosClientId:
+        '496096595246-67eqmoohovmo6krsibquothv2epo9jmd.apps.googleusercontent.com',
+    iosBundleId: 'com.sandfriends.quadras.demo',
   );
 }
