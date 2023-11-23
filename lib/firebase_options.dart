@@ -17,11 +17,17 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -46,32 +52,14 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBqB0l8u_ToZjzmXnlRD_bm7xyvGG6yhxw',
-    appId: '1:329100803665:web:b0e6d8558c2dc6c3af4270',
-    messagingSenderId: '329100803665',
-    projectId: 'sandfriends-prod',
-    authDomain: 'sandfriends-prod.firebaseapp.com',
-    storageBucket: 'sandfriends-prod.appspot.com',
-    measurementId: 'G-ELPPBT8PFZ',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyACNkmqOyYaCZKYyDuZRDpYp1weZrI3aqI',
-    appId: '1:329100803665:android:8ead35e5e7c0d150af4270',
-    messagingSenderId: '329100803665',
-    projectId: 'sandfriends-prod',
-    storageBucket: 'sandfriends-prod.appspot.com',
-  );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDT0kQqFx2InNi3bVKsmN0NhkbqyXhFK-Q',
     appId: '1:329100803665:ios:b69b15dd31bd91beaf4270',
     messagingSenderId: '329100803665',
     projectId: 'sandfriends-prod',
     storageBucket: 'sandfriends-prod.appspot.com',
-    iosClientId:
-        '329100803665-bqlce4fk9ggfaunifvgkhflg9nkuv822.apps.googleusercontent.com',
+    androidClientId: '329100803665-0l7lmmcdfoqkg0h9vjffqmsk79p4b531.apps.googleusercontent.com',
+    iosClientId: '329100803665-bqlce4fk9ggfaunifvgkhflg9nkuv822.apps.googleusercontent.com',
     iosBundleId: 'com.sandfriends.quadras.prod',
   );
 }
