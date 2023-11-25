@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Menu/View/Mobile/MenuWidgetMobile.dart';
-import 'package:sandfriends_web/Features/Menu/View/Mobile/Header.dart';
+import 'package:sandfriends_web/Features/Home/View/Mobile/HomeHeader.dart';
 import 'package:sandfriends_web/Features/Menu/View/Web/MenuWidgetWeb.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';

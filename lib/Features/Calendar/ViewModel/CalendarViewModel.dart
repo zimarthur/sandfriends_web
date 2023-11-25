@@ -40,13 +40,15 @@ class CalendarViewModel extends ChangeNotifier {
   List<AppRecurrentMatch> recurrentMatches = [];
   late DateTime matchesStartDate;
   late DateTime matchesEndDate;
+  bool isMobile = false;
 
   TextEditingController blockHourReasonController = TextEditingController();
   TextEditingController cancelMatchReasonController = TextEditingController();
   TextEditingController cancelRecurrentMatchReasonController =
       TextEditingController();
 
-  void initCalendarViewModel(BuildContext context) {
+  void initCalendarViewModel(BuildContext context, bool initIsMobile) {
+    isMobile = initIsMobile;
     initTabs();
     Provider.of<MenuProvider>(context, listen: false).isDrawerExpanded = false;
     courts = Provider.of<DataProvider>(context, listen: false).courts;
@@ -73,6 +75,7 @@ class CalendarViewModel extends ChangeNotifier {
         Provider.of<DataProvider>(context, listen: false).matchesStartDate;
     matchesEndDate =
         Provider.of<DataProvider>(context, listen: false).matchesEndDate;
+    notifyListeners();
   }
 
   PeriodType _periodType = PeriodType.Daily;
@@ -181,11 +184,18 @@ class CalendarViewModel extends ChangeNotifier {
   }
 
   List<DateTime> get selectedWeek {
-    DateTime dayStart = _selectedDay
-        .subtract(Duration(days: getSFWeekday(_selectedDay.weekday)));
-    DateTime dayEnd = _selectedDay
-        .add(Duration(days: 6 - getSFWeekday(_selectedDay.weekday)));
     List<DateTime> days = [];
+    DateTime dayStart;
+    DateTime dayEnd;
+    if (isMobile) {
+      dayStart = _selectedDay.subtract(Duration(days: 3));
+      dayEnd = _selectedDay.add(Duration(days: 3));
+    } else {
+      dayStart = _selectedDay
+          .subtract(Duration(days: getSFWeekday(_selectedDay.weekday)));
+      dayEnd = _selectedDay
+          .add(Duration(days: 6 - getSFWeekday(_selectedDay.weekday)));
+    }
     for (int i = 0; i <= dayEnd.difference(dayStart).inDays; i++) {
       days.add(dayStart.add(Duration(days: i)));
     }
@@ -193,6 +203,9 @@ class CalendarViewModel extends ChangeNotifier {
   }
 
   List<Hour> workingHoursFromDay(int weekDay) {
+    if (storeWorkingDays.isEmpty) {
+      return [];
+    }
     StoreWorkingDay storeWorkingDay = storeWorkingDays
         .firstWhere((storeWorkingDay) => storeWorkingDay.weekday == weekDay);
     if (!storeWorkingDay.isEnabled) {

@@ -142,6 +142,7 @@ class _SFDrawerState extends State<SFDrawer> {
                               isHovered: widget.viewModel.hoveredDrawerTitle ==
                                   widget
                                       .viewModel.mobileDrawerItems[index].title,
+                              isNew: widget.viewModel.mainDrawer[index].isNew,
                             ),
                           );
                         },

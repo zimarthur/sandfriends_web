@@ -75,8 +75,9 @@ class HomeViewModel extends ChangeNotifier {
         Provider.of<DataProvider>(context, listen: false).availableHours;
     setWorkingHours(context);
 
-    displayedHour =
-        availableHours.firstWhere((hour) => DateTime.now().hour == hour.hour);
+    displayedHour = availableHours.firstWhere((hour) =>
+        DateTime.now().hour == hour.hour ||
+        (DateTime.now().hour == 0 && hour.hour == 24));
     notifications =
         Provider.of<DataProvider>(context, listen: false).notifications;
     courts = Provider.of<DataProvider>(context, listen: false).courts;

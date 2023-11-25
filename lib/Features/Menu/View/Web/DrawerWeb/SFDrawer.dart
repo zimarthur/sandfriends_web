@@ -91,6 +91,7 @@ class _SFDrawerState extends State<SFDrawer> {
                     fullSize: fullSize,
                     isHovered: widget.viewModel.hoveredDrawerTitle ==
                         widget.viewModel.mainDrawer[index].title,
+                    isNew: widget.viewModel.mainDrawer[index].isNew,
                   ),
                 );
               },

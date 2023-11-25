@@ -10,10 +10,11 @@ class SFDrawerListTile extends StatefulWidget {
     required this.isSelected,
     required this.isHovered,
     required this.fullSize,
+    required this.isNew,
   }) : super(key: key);
 
   final String title, svgSrc;
-  bool isSelected, fullSize, isHovered;
+  bool isSelected, fullSize, isHovered, isNew;
 
   @override
   State<SFDrawerListTile> createState() => _SFDrawerListTileState();
@@ -51,7 +52,24 @@ class _SFDrawerListTileState extends State<SFDrawerListTile> {
                       color: Colors.white,
                     ),
                   ),
-                )
+                ),
+                if (widget.isNew)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: defaultPadding / 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: textWhite,
+                      borderRadius: BorderRadius.circular(
+                        defaultBorderRadius,
+                      ),
+                    ),
+                    child: Text(
+                      "Novo!",
+                      style: TextStyle(
+                          color: textBlue, fontWeight: FontWeight.bold),
+                    ),
+                  )
               ],
             )
           : SvgPicture.asset(

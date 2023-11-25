@@ -214,6 +214,7 @@ class MenuProvider extends ChangeNotifier {
       requiresAdmin: false,
       widget: HomeScreen(),
       mainDrawer: true,
+      availableMobile: true,
     ),
     DrawerItem(
       title: "Calendário",
@@ -221,6 +222,8 @@ class MenuProvider extends ChangeNotifier {
       requiresAdmin: false,
       widget: CalendarScreen(),
       mainDrawer: true,
+      availableMobile: true,
+      isNew: true,
     ),
     DrawerItem(
       title: "Recompensas",
@@ -289,7 +292,7 @@ class MenuProvider extends ChangeNotifier {
   }
 
   List<DrawerItem> get mobileDrawerItems =>
-      mainDrawer.where((element) => element.title == "Início").toList();
+      mainDrawer.where((element) => element.availableMobile == true).toList();
 
   List<DrawerItem> get secondaryDrawer {
     return permissionsDrawerItems
