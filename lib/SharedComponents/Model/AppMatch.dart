@@ -37,6 +37,10 @@ class AppMatch {
   String get matchHourDescription =>
       "${startingHour.hourString} - ${endingHour.hourString}";
 
+  bool get isFromRecurrentMatch => idRecurrentMatch != 0;
+
+  bool get payInStore => selectedPayment == SelectedPayment.PayInStore;
+
   AppMatch({
     required this.idMatch,
     required this.date,

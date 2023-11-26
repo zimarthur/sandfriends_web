@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarType.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/HourInformation.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/PeriodType.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
@@ -46,6 +47,9 @@ class CalendarViewModel extends ChangeNotifier {
   TextEditingController cancelMatchReasonController = TextEditingController();
   TextEditingController cancelRecurrentMatchReasonController =
       TextEditingController();
+
+  final verticalController = ScrollController();
+  final horizontalController = ScrollController();
 
   void initCalendarViewModel(BuildContext context, bool initIsMobile) {
     isMobile = initIsMobile;
@@ -136,6 +140,7 @@ class CalendarViewModel extends ChangeNotifier {
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
   void setSelectedDay(BuildContext context, DateTime newSelectedDay) {
+    setShowHourInfo(value: false);
     if (newSelectedDay.isAfter(matchesEndDate) ||
         newSelectedDay.isBefore(matchesStartDate)) {
       Provider.of<MenuProvider>(context, listen: false).setModalLoading();
@@ -250,9 +255,13 @@ class CalendarViewModel extends ChangeNotifier {
         for (var hour in selectedDayWorkingHours) {
           AppMatch? match;
           AppRecurrentMatch? recMatch;
-          if (filteredMatches.any((element) => element.startingHour == hour)) {
-            match = filteredMatches
+          bool hasMatch =
+              filteredMatches.any((element) => element.startingHour == hour);
+          if (hasMatch) {
+            match = match = filteredMatches
                 .firstWhere((element) => element.startingHour == hour);
+          }
+          if (match != null && !match.isFromRecurrentMatch) {
             dayMatches.add(
               DayMatch(
                 startingHour: hour,
@@ -471,6 +480,31 @@ class CalendarViewModel extends ChangeNotifier {
     }
 
     return selectedWeekMatches;
+  }
+
+  bool _showHourInfoMobile = false;
+  bool get showHourInfoMobile => _showHourInfoMobile;
+  void setShowHourInfo({bool? value}) {
+    if (value != null) {
+      _showHourInfoMobile = value;
+    } else {
+      _showHourInfoMobile = !_showHourInfoMobile;
+    }
+    if (!_showHourInfoMobile && hourInformation != null) {
+      hourInformation!.selectedRow = 0;
+      hourInformation!.selectedColumn = 0;
+    }
+    notifyListeners();
+  }
+
+  HourInformation? hourInformation;
+
+  void onTapHour(HourInformation newHourInformation) {
+    hourInformation = newHourInformation;
+    notifyListeners();
+    if (!showHourInfoMobile) {
+      setShowHourInfo();
+    }
   }
 
   void blockUnblockHour(

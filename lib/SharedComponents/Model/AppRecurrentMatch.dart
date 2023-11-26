@@ -28,7 +28,14 @@ class AppRecurrentMatch {
   double get currentMonthPrice => currentMonthMatches.fold(
       0, (previousValue, element) => previousValue + element.cost);
 
+  double get matchCost => currentMonthPrice / currentMonthPrice;
+
   String get creatorName => "$creatorFirstName $creatorLastName";
+
+  String get matchHourDescription =>
+      "${startingHour.hourString} - ${endingHour.hourString}";
+
+  bool get payInStore => currentMonthMatches.first.payInStore;
 
   AppRecurrentMatch({
     required this.idRecurrentMatch,

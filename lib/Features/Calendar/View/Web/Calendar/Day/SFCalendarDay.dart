@@ -33,7 +33,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
   int hoveredHour = -1;
   int hoveredCourt = -1;
 
-  double hourHeight = 80;
+  double hourHeight = 85;
   @override
   void initState() {
     super.initState();

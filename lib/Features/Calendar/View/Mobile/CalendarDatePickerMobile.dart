@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:provider/provider.dart';
-import 'package:sandfriends_web/Utils/String.dart';
+import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../../Utils/SFDateTime.dart';
 import '../../../Menu/View/Mobile/SFStandardHeader.dart';

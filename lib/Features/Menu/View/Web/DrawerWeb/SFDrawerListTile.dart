@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 
 class SFDrawerListTile extends StatefulWidget {
   SFDrawerListTile({
@@ -53,7 +54,7 @@ class _SFDrawerListTileState extends State<SFDrawerListTile> {
                     ),
                   ),
                 ),
-                if (widget.isNew)
+                if (widget.isNew && Responsive.isMobile(context))
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: defaultPadding / 2,
