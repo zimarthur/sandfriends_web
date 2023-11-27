@@ -310,6 +310,8 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                 dayMatch
                                                                     .startingHour,
                                                                 false,
+                                                                1,
+                                                                "",
                                                               ),
                                                             )
                                                       : dayMatch.recurrentMatch ==

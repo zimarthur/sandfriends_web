@@ -9,8 +9,10 @@ class SFDropdown extends StatefulWidget {
   bool isEnabled;
   Color textColor;
   bool enableBorder;
+  Alignment? align;
 
-  SFDropdown({super.key, 
+  SFDropdown({
+    super.key,
     required this.labelText,
     required this.items,
     required this.validator,
@@ -18,6 +20,7 @@ class SFDropdown extends StatefulWidget {
     this.isEnabled = true,
     this.textColor = textBlack,
     this.enableBorder = false,
+    this.align,
   });
 
   @override
@@ -30,6 +33,7 @@ class _SFDropdownState extends State<SFDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: widget.align,
       padding: EdgeInsets.symmetric(
           horizontal: widget.enableBorder ? defaultPadding / 2 : 0),
       decoration: widget.enableBorder

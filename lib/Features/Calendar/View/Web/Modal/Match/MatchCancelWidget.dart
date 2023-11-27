@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import '../../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../../../SharedComponents/View/SFTextfield.dart';
 import '../../../../../Menu/ViewModel/MenuProvider.dart';
@@ -24,8 +25,9 @@ class MatchCancelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = Provider.of<MenuProvider>(context).getScreenWidth(context);
     double height = Provider.of<MenuProvider>(context).getScreenHeight(context);
+    double mobileWidth = MediaQuery.of(context).size.width;
     return Container(
-      width: 500,
+      width: Responsive.isMobile(context) ? mobileWidth * 0.95 : 500,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,

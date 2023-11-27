@@ -86,6 +86,10 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
             HourInformationWidget(
               slideAnimation: _slideAnimation,
               viewModel: widget.viewModel,
+              court: widget.viewModel.hourInformation!.court,
+              timeBegin: widget.viewModel.hourInformation!.timeBegin,
+              timeEnd: widget.viewModel.hourInformation!.timeEnd,
+              onClose: () => disposeHourInfo(),
             ),
         ],
       ),
@@ -127,7 +131,15 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
             (dayMatch) => dayMatch.startingHour.hour <= displayHour.hour);
     bool hasEvent =
         displayDayMatch.match != null || displayDayMatch.recurrentMatch != null;
+
     if (hasEvent) {
+      Color widgetColor = displayDayMatch.match != null
+          ? displayDayMatch.match!.blocked
+              ? secondaryYellowDark
+              : primaryBlue
+          : displayDayMatch.recurrentMatch!.blocked
+              ? secondaryYellowDark
+              : primaryLightBlue;
       return InkWell(
         onTap: () {
           _slideAnimationController.forward();
@@ -136,8 +148,8 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
               match: displayDayMatch.match != null,
               recurrentMatch: displayDayMatch.recurrentMatch != null,
               creatorName: displayDayMatch.match != null
-                  ? "Partida de ${displayDayMatch.match!.matchCreatorName}"
-                  : "Mensalista de ${displayDayMatch.recurrentMatch!.creatorName}",
+                  ? "Partida de ${displayDayMatch.match!.blocked ? displayDayMatch.match!.blockedReason : displayDayMatch.match!.matchCreatorName}"
+                  : "Mensalista de ${displayDayMatch.recurrentMatch!.blocked ? displayDayMatch.recurrentMatch!.blockedReason : displayDayMatch.recurrentMatch!.creatorName}",
               timeBegin: displayDayMatch.match != null
                   ? displayDayMatch.match!.startingHour
                   : displayDayMatch.recurrentMatch!.startingHour,
@@ -155,6 +167,9 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                   : displayDayMatch.recurrentMatch!.payInStore,
               selectedColumn: vicinity.column,
               selectedRow: vicinity.row,
+              refMatch: displayDayMatch.match,
+              refRecurrentMatch: displayDayMatch.recurrentMatch,
+              court: widget.viewModel.courts[realColumnIndex],
             ),
           );
         },
@@ -169,18 +184,14 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
             borderRadius: BorderRadius.circular(
               defaultBorderRadius,
             ),
-            color: displayDayMatch.match != null
-                ? primaryBlue.withAlpha(64)
-                : primaryLightBlue.withAlpha(64),
+            color: widgetColor.withAlpha(64),
           ),
           child: Row(
             children: [
               Container(
                 width: 5,
                 decoration: BoxDecoration(
-                  color: displayDayMatch.match != null
-                      ? primaryBlue
-                      : primaryLightBlue,
+                  color: widgetColor,
                   borderRadius: BorderRadius.circular(
                     defaultBorderRadius,
                   ),
@@ -195,12 +206,14 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                   children: [
                     Text(
                       displayDayMatch.match != null
-                          ? displayDayMatch.match!.matchCreatorName
-                          : displayDayMatch.recurrentMatch!.creatorName,
+                          ? displayDayMatch.match!.blocked
+                              ? displayDayMatch.match!.blockedReason
+                              : displayDayMatch.match!.matchCreatorName
+                          : displayDayMatch.recurrentMatch!.blocked
+                              ? displayDayMatch.recurrentMatch!.blockedReason
+                              : displayDayMatch.recurrentMatch!.creatorName,
                       style: TextStyle(
-                        color: displayDayMatch.match != null
-                            ? primaryBlue
-                            : primaryLightBlue,
+                        color: widgetColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -226,16 +239,16 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
           _slideAnimationController.forward();
           widget.viewModel.onTapHour(
             HourInformation(
-                creatorName: "Horário disponível",
-                timeBegin:
-                    widget.viewModel.selectedDayWorkingHours[realRowIndex],
-                timeEnd: widget.viewModel.availableHours.firstWhere((hour) =>
-                    hour.hour >
-                    widget
-                        .viewModel.selectedDayWorkingHours[realRowIndex].hour),
-                selectedColumn: vicinity.column,
-                selectedRow: vicinity.row,
-                freeHour: true),
+              creatorName: "Horário disponível",
+              timeBegin: widget.viewModel.selectedDayWorkingHours[realRowIndex],
+              timeEnd: widget.viewModel.availableHours.firstWhere((hour) =>
+                  hour.hour >
+                  widget.viewModel.selectedDayWorkingHours[realRowIndex].hour),
+              selectedColumn: vicinity.column,
+              selectedRow: vicinity.row,
+              freeHour: true,
+              court: widget.viewModel.courts[realColumnIndex],
+            ),
           );
         },
         child: widget.viewModel.hourInformation != null

@@ -7,6 +7,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/PeriodType.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
@@ -43,7 +44,6 @@ class CalendarViewModel extends ChangeNotifier {
   late DateTime matchesEndDate;
   bool isMobile = false;
 
-  TextEditingController blockHourReasonController = TextEditingController();
   TextEditingController cancelMatchReasonController = TextEditingController();
   TextEditingController cancelRecurrentMatchReasonController =
       TextEditingController();
@@ -499,7 +499,20 @@ class CalendarViewModel extends ChangeNotifier {
 
   HourInformation? hourInformation;
 
+  bool _isHourInformationExpanded = false;
+  bool get isHourInformationExpanded => _isHourInformationExpanded;
+  void setIsHourInformationExpanded({bool? value}) {
+    if (value != null) {
+      _isHourInformationExpanded = value;
+    } else {
+      _isHourInformationExpanded = !_isHourInformationExpanded;
+    }
+    notifyListeners();
+  }
+
   void onTapHour(HourInformation newHourInformation) {
+    setIsHourInformationExpanded(value: false);
+
     hourInformation = newHourInformation;
     notifyListeners();
     if (!showHourInfoMobile) {
@@ -507,13 +520,8 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  void blockUnblockHour(
-    BuildContext context,
-    int idStoreCourt,
-    DateTime date,
-    Hour hour,
-    bool block,
-  ) {
+  void blockUnblockHour(BuildContext context, int idStoreCourt, DateTime date,
+      Hour hour, bool block, int idSport, String name) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .blockUnblockHour(
@@ -523,12 +531,13 @@ class CalendarViewModel extends ChangeNotifier {
       date,
       hour.hour,
       block,
-      blockHourReasonController.text,
+      name,
+      idSport,
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setMatchesFromResponse(context, response.responseBody!);
-        blockHourReasonController.text = "";
+
         Provider.of<MenuProvider>(context, listen: false).closeModal();
       } else if (response.responseStatus ==
           NetworkResponseStatus.expiredToken) {
@@ -588,8 +597,8 @@ class CalendarViewModel extends ChangeNotifier {
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setMatchesFromResponse(context, response.responseBody!);
-
         cancelMatchReasonController.text = "";
+        setShowHourInfo(value: false);
         Provider.of<MenuProvider>(context, listen: false).closeModal();
       } else if (response.responseStatus ==
           NetworkResponseStatus.expiredToken) {
@@ -651,6 +660,7 @@ class CalendarViewModel extends ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
   }
 
   void setRecurrentMatchesFromResponse(
@@ -682,15 +692,18 @@ class CalendarViewModel extends ChangeNotifier {
         court: court,
         day: selectedDay,
         hour: hour,
-        onBlock: () => blockUnblockHour(
+        sports:
+            Provider.of<DataProvider>(context, listen: false).availableSports,
+        onBlock: (name, idSport) => blockUnblockHour(
           context,
           court.idStoreCourt!,
           selectedDay,
           hour,
           true,
+          idSport,
+          name,
         ),
         onReturn: () => returnMainView(context),
-        controller: blockHourReasonController,
       ),
     );
   }
@@ -713,6 +726,33 @@ class CalendarViewModel extends ChangeNotifier {
           idSport,
         ),
         onReturn: () => returnMainView(context),
+      ),
+    );
+  }
+
+  void setAddMatchWidget(
+    BuildContext context,
+    Court court,
+    Hour timeBegin,
+    Hour timeEnd,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      AddMatchModal(
+        onReturn: () => returnMainView(context),
+        onSelected: (blockMatch) {
+          blockUnblockHour(
+            context,
+            blockMatch.idStoreCourt,
+            selectedDay,
+            blockMatch.timeBegin,
+            true,
+            blockMatch.idSport,
+            blockMatch.name,
+          );
+        },
+        court: court,
+        timeBegin: timeBegin,
+        timeEnd: timeEnd,
       ),
     );
   }

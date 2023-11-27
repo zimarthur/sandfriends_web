@@ -31,6 +31,7 @@ class CalendarRepo {
     int hour,
     bool block,
     String blockReson,
+    int idSport,
   ) async {}
 
   Future<NetworkResponse?> recurrentBlockUnblockHour(
