@@ -77,22 +77,20 @@ class CalendarRepoImp implements CalendarRepo {
   }
 
   @override
-  Future<NetworkResponse> blockUnblockHour(
+  Future<NetworkResponse> blockHour(
     BuildContext context,
     String accessToken,
     int idStoreCourt,
     DateTime date,
     int hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,
-    int idMatch,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
       Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
-        ApiEndPoints().blockUnblockHour,
+        ApiEndPoints().blockHour,
       ),
       jsonEncode(
         <String, Object>{
@@ -100,11 +98,9 @@ class CalendarRepoImp implements CalendarRepo {
           "IdStoreCourt": idStoreCourt,
           "Date": DateFormat("dd/MM/yyyy").format(date),
           "IdHour": hour,
-          "Blocked": block,
           "IdStorePlayer": idPlayer,
           "IdSport": idSport,
           "BlockedReason": obs,
-          "IdMatch": idMatch,
         },
       ),
     );
@@ -112,13 +108,37 @@ class CalendarRepoImp implements CalendarRepo {
   }
 
   @override
-  Future<NetworkResponse> recurrentBlockUnblockHour(
+  Future<NetworkResponse> unblockHour(
+    BuildContext context,
+    String accessToken,
+    int idStoreCourt,
+    DateTime date,
+    int hour,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().unblockHour,
+      ),
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdStoreCourt": idStoreCourt,
+          "Date": DateFormat("dd/MM/yyyy").format(date),
+          "IdHour": hour,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> recurrentBlockHour(
     BuildContext context,
     String accessToken,
     int idStoreCourt,
     int weekday,
     int hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,
@@ -126,7 +146,7 @@ class CalendarRepoImp implements CalendarRepo {
     NetworkResponse response = await _apiService.postResponse(
       context,
       Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
-        ApiEndPoints().recurrentBlockUnblockHour,
+        ApiEndPoints().recurrentBlockHour,
       ),
       jsonEncode(
         <String, Object>{
@@ -134,10 +154,30 @@ class CalendarRepoImp implements CalendarRepo {
           "IdStoreCourt": idStoreCourt,
           "Weekday": weekday,
           "IdHour": hour,
-          "Blocked": block,
           "IdStorePlayer": idPlayer,
           "IdSport": idSport,
           "BlockedReason": obs,
+        },
+      ),
+    );
+    return response;
+  }
+
+  @override
+  Future<NetworkResponse> recurrentUnblockHour(
+    BuildContext context,
+    String accessToken,
+    int idRecurrentMatch,
+  ) async {
+    NetworkResponse response = await _apiService.postResponse(
+      context,
+      Provider.of<EnvironmentProvider>(context, listen: false).urlBuilder(
+        ApiEndPoints().recurrentUnblockHour,
+      ),
+      jsonEncode(
+        <String, Object>{
+          "AccessToken": accessToken,
+          "IdRecurrentMatch": idRecurrentMatch,
         },
       ),
     );

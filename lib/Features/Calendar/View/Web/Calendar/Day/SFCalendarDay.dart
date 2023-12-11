@@ -302,7 +302,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                               onUnblockHour:
                                                                   () => {
                                                                 widget.viewModel
-                                                                    .blockUnblockHour(
+                                                                    .unblockHour(
                                                                   context,
                                                                   court
                                                                       .idStoreCourt!,
@@ -311,25 +311,6 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                       .selectedDay,
                                                                   dayMatch
                                                                       .startingHour,
-                                                                  false,
-                                                                  1,
-                                                                  dayMatch.match ==
-                                                                          null
-                                                                      ? dayMatch
-                                                                          .match!
-                                                                          .sport!
-                                                                          .idSport
-                                                                      : dayMatch
-                                                                          .recurrentMatch!
-                                                                          .sport!
-                                                                          .idSport,
-                                                                  "",
-                                                                  dayMatch.match ==
-                                                                          null
-                                                                      ? 0
-                                                                      : dayMatch
-                                                                          .match!
-                                                                          .idMatch,
                                                                 )
                                                               },
                                                               selectedDate: widget
@@ -368,16 +349,11 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                               onUnblockHour:
                                                                   () => widget
                                                                       .viewModel
-                                                                      .recurrentBlockUnblockHour(
+                                                                      .recurrentUnblockHour(
                                                                 context,
-                                                                court
-                                                                    .idStoreCourt!,
                                                                 dayMatch
-                                                                    .startingHour,
-                                                                false,
-                                                                -1,
-                                                                -1,
-                                                                "",
+                                                                    .recurrentMatch!
+                                                                    .idRecurrentMatch,
                                                               ),
                                                               selectedDate: widget
                                                                   .viewModel

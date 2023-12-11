@@ -23,26 +23,31 @@ class CalendarRepo {
     String? cancelationReason,
   ) async {}
 
-  Future<NetworkResponse?> blockUnblockHour(
+  Future<NetworkResponse?> blockHour(
     BuildContext context,
     String accessToken,
     int idStoreCourt,
     DateTime date,
     int hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,
-    int idMatch,
   ) async {}
 
-  Future<NetworkResponse?> recurrentBlockUnblockHour(
+  Future<NetworkResponse?> unblockHour(
+    BuildContext context,
+    String accessToken,
+    int idStoreCourt,
+    DateTime date,
+    int hour,
+  ) async {}
+
+  Future<NetworkResponse?> recurrentBlockHour(
     BuildContext context,
     String accessToken,
     int idStoreCourt,
     int weekday,
     int hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,

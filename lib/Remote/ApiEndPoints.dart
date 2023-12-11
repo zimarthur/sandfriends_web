@@ -39,8 +39,10 @@ class ApiEndPoints {
 
   //calendar
   final String updateMatchesList = "/UpdateMatchesList";
-  final String blockUnblockHour = "/BlockUnblockHour";
-  final String recurrentBlockUnblockHour = "/RecurrentBlockUnblockHour";
+  final String blockHour = "/BlockHour";
+  final String unblockHour = "/UnblockHour";
+  final String recurrentBlockHour = "/RecurrentBlockHour";
+  final String recurrentUnblockHour = "/RecurrentUnblockHour";
   final String cancelMatch = "/CancelMatchEmployee";
   final String cancelRecurrentMatch = "/CancelRecurrentMatchEmployee";
 

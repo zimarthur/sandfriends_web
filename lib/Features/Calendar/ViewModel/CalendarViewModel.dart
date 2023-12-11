@@ -632,16 +632,11 @@ class CalendarViewModel extends ChangeNotifier {
   void onTapCancelMatchHourInformation(BuildContext context) {
     if (hourInformation!.match) {
       if (hourInformation!.refMatch!.blocked) {
-        blockUnblockHour(
+        unblockHour(
           context,
           hourInformation!.refMatch!.court.idStoreCourt!,
           hourInformation!.refMatch!.date,
           hourInformation!.refMatch!.startingHour,
-          false,
-          hourInformation!.refMatch!.sport!.idSport,
-          -1,
-          "",
-          hourInformation!.refMatch!.idMatch,
         );
       } else {
         setMatchCancelWidget(context, hourInformation!.refMatch!);
@@ -649,30 +644,27 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  void blockUnblockHour(
+  void blockHour(
     BuildContext context,
     int idStoreCourt,
     DateTime date,
     Hour hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,
-    int idMatch,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
-        .blockUnblockHour(
-            context,
-            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-            idStoreCourt,
-            date,
-            hour.hour,
-            block,
-            idPlayer,
-            idSport,
-            obs,
-            idMatch)
+        .blockHour(
+      context,
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      idStoreCourt,
+      date,
+      hour.hour,
+      idPlayer,
+      idSport,
+      obs,
+    )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setMatchesFromResponse(context, response.responseBody!);
@@ -689,27 +681,78 @@ class CalendarViewModel extends ChangeNotifier {
     });
   }
 
-  void recurrentBlockUnblockHour(
+  void unblockHour(
+    BuildContext context,
+    int idStoreCourt,
+    DateTime date,
+    Hour hour,
+  ) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    calendarRepo
+        .unblockHour(
+      context,
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      idStoreCourt,
+      date,
+      hour.hour,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        setMatchesFromResponse(context, response.responseBody!);
+
+        Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+      setShowHourInfo(value: false);
+    });
+  }
+
+  void recurrentBlockHour(
     BuildContext context,
     int idStoreCourt,
     Hour hour,
-    bool block,
     int idPlayer,
     int idSport,
     String obs,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
-        .recurrentBlockUnblockHour(
+        .recurrentBlockHour(
       context,
       Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
       idStoreCourt,
       selectedWeekday,
       hour.hour,
-      block,
       idPlayer,
       idSport,
       obs,
+    )
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        setRecurrentMatchesFromResponse(context, response.responseBody!);
+        Provider.of<MenuProvider>(context, listen: false).closeModal();
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
+  }
+
+  void recurrentUnblockHour(BuildContext context, int idRecurrentMatch) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    calendarRepo
+        .recurrentUnblockHour(
+      context,
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      idRecurrentMatch,
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
@@ -839,16 +882,14 @@ class CalendarViewModel extends ChangeNotifier {
         hour: hour,
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
-        onBlock: (player, idSport, obs) => blockUnblockHour(
+        onBlock: (player, idSport, obs) => blockHour(
           context,
           court.idStoreCourt!,
           selectedDay,
           hour,
-          true,
           player.id!,
           idSport,
           obs,
-          idMatch ?? 0,
         ),
         onAddNewPlayer: () => onAddNewPlayer(
           context,
@@ -870,8 +911,8 @@ class CalendarViewModel extends ChangeNotifier {
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
         hour: hour,
-        onBlock: (player, idSport, obs) => recurrentBlockUnblockHour(
-            context, court.idStoreCourt!, hour, true, player.id!, idSport, obs),
+        onBlock: (player, idSport, obs) => recurrentBlockHour(
+            context, court.idStoreCourt!, hour, player.id!, idSport, obs),
         onAddNewPlayer: () => onAddNewPlayer(
           context,
           court,
@@ -944,16 +985,14 @@ class CalendarViewModel extends ChangeNotifier {
         AddMatchModal(
           onReturn: () => returnMainView(context),
           onSelected: (blockMatch) {
-            blockUnblockHour(
+            blockHour(
               context,
               blockMatch.idStoreCourt,
               selectedDay,
               blockMatch.timeBegin,
-              true,
+              1, //ARRUMARR
               blockMatch.idSport,
-              -1, //ARRUMAAAAR
-              blockMatch.name,
-              0, //ARRUMAAAAR
+              "", //ARRUMARR
             );
           },
           court: court,

@@ -59,8 +59,9 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
       }
     } else {
       blocked = widget.recurrentMatch!.blocked;
-      canBlockUnblock =
-          !isHourPast(widget.selectedDate, widget.recurrentMatch!.startingHour);
+      canBlockUnblock = !isHourPast(
+              widget.selectedDate, widget.recurrentMatch!.startingHour) ||
+          widget.calendarType == CalendarType.RecurrentMatch;
       subtitle = widget.recurrentMatch!.sport!.description;
       startingHour = widget.recurrentMatch!.startingHour.hourString;
       endingHour = widget.recurrentMatch!.endingHour.hourString;
