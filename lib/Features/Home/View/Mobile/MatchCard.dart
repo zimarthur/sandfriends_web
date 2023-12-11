@@ -16,6 +16,9 @@ class MatchCard extends StatelessWidget {
   double avatarHeight = 70.0;
   @override
   Widget build(BuildContext context) {
+    String firstName =
+        match.blocked ? match.blockedReason : match.matchCreatorFirstName;
+    String lastName = match.blocked ? " " : match.matchCreatorLastName;
     return Container(
       decoration: BoxDecoration(
         color: textWhite,
@@ -61,7 +64,7 @@ class MatchCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          "Partida de ${match.matchCreatorFirstName}",
+                          "${match.isFromRecurrentMatch ? "Mensalista" : "Partida"} de $firstName",
                           style: TextStyle(
                             color: textWhite,
                           ),
@@ -130,8 +133,8 @@ class MatchCard extends StatelessWidget {
             child: SFAvatar(
               height: avatarHeight,
               image: match.matchCreatorPhoto,
-              playerFirstName: match.matchCreatorFirstName,
-              playerLastName: match.matchCreatorLastName,
+              playerFirstName: firstName,
+              playerLastName: lastName,
               isPlayerAvatar: true,
             ),
           ),

@@ -26,7 +26,7 @@ class PlayersViewModel extends ChangeNotifier {
   List<String> genderFilters = [];
   List<String> sportsFilters = [];
 
-  List<Player> _players = [];
+  final List<Player> _players = [];
   List<Player> get players {
     List<Player> sortedPlayers = [];
     sortedPlayers = _players;

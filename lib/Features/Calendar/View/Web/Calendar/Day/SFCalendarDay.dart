@@ -48,7 +48,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
     double tableHeight = widget.height * 0.95;
     double tableWidth = widget.width;
     double tableLineHeight =
-        tableHeight * 0.036 < 25 ? 25 : tableHeight * 0.036;
+        tableHeight * 0.036 < 30 ? 30 : tableHeight * 0.036;
     double tableColumnWidth = tableWidth * 0.105 < 70 ? 70 : tableWidth * 0.105;
     double tableHeaderHeight = tableLineHeight * 1.5;
     double tableDayWidth = (tableWidth - tableColumnWidth) * 0.95;
@@ -281,6 +281,7 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                 court,
                                                                 dayMatch
                                                                     .startingHour,
+                                                                null,
                                                               ),
                                                             )
                                                           : MatchHourWidget(
@@ -299,20 +300,41 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                       dayMatch
                                                                           .match!),
                                                               onUnblockHour:
-                                                                  () => widget
-                                                                      .viewModel
-                                                                      .blockUnblockHour(
-                                                                context,
-                                                                court
-                                                                    .idStoreCourt!,
+                                                                  () => {
                                                                 widget.viewModel
-                                                                    .selectedDay,
-                                                                dayMatch
-                                                                    .startingHour,
-                                                                false,
-                                                                1,
-                                                                "",
-                                                              ),
+                                                                    .blockUnblockHour(
+                                                                  context,
+                                                                  court
+                                                                      .idStoreCourt!,
+                                                                  widget
+                                                                      .viewModel
+                                                                      .selectedDay,
+                                                                  dayMatch
+                                                                      .startingHour,
+                                                                  false,
+                                                                  1,
+                                                                  dayMatch.match ==
+                                                                          null
+                                                                      ? dayMatch
+                                                                          .match!
+                                                                          .sport!
+                                                                          .idSport
+                                                                      : dayMatch
+                                                                          .recurrentMatch!
+                                                                          .sport!
+                                                                          .idSport,
+                                                                  "",
+                                                                  dayMatch.match ==
+                                                                          null
+                                                                      ? 0
+                                                                      : dayMatch
+                                                                          .match!
+                                                                          .idMatch,
+                                                                )
+                                                              },
+                                                              selectedDate: widget
+                                                                  .viewModel
+                                                                  .selectedDay,
                                                             )
                                                       : dayMatch.recurrentMatch ==
                                                               null
@@ -353,9 +375,13 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                 dayMatch
                                                                     .startingHour,
                                                                 false,
-                                                                "",
                                                                 -1,
+                                                                -1,
+                                                                "",
                                                               ),
+                                                              selectedDate: widget
+                                                                  .viewModel
+                                                                  .selectedDay,
                                                             ),
                                                 ),
                                             ],

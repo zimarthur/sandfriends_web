@@ -67,8 +67,12 @@ class MenuProvider extends ChangeNotifier {
       if (storedToken != null) {
         loginRepo.validateToken(context, storedToken).then((response) {
           if (response.responseStatus == NetworkResponseStatus.success) {
-            Provider.of<DataProvider>(context, listen: false)
-                .setLoginResponse(context, response.responseBody!, true);
+            try {
+              Provider.of<DataProvider>(context, listen: false)
+                  .setLoginResponse(context, response.responseBody!, true);
+            } catch (e) {
+              print(e);
+            }
             setIsEmployeeAdmin(Provider.of<DataProvider>(context, listen: false)
                 .isLoggedEmployeeAdmin());
             setSelectedDrawerItem(mainDrawer.first);
@@ -128,13 +132,15 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setMessageModal(String title, String? description, bool isHappy) {
+  void setMessageModal(String title, String? description, bool isHappy,
+      {VoidCallback? onTap}) {
     messageModal = SFMessageModal(
       title: title,
       description: description,
-      onTap: () {
-        closeModal();
-      },
+      onTap: onTap ??
+          () {
+            closeModal();
+          },
       isHappy: isHappy,
     );
     pageStatus = PageStatus.WARNING;

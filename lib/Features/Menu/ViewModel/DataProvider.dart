@@ -36,7 +36,7 @@ class DataProvider extends ChangeNotifier {
     availableHours.clear();
     availableSports.clear();
     notifications.clear();
-    matches.clear();
+    allMatches.clear();
     rewards.clear();
     recurrentMatches.clear();
   }
@@ -78,7 +78,9 @@ class DataProvider extends ChangeNotifier {
 
   List<AppNotification> notifications = [];
 
-  List<AppMatch> matches = [];
+  List<AppMatch> allMatches = [];
+  List<AppMatch> get matches =>
+      allMatches.where((match) => match.canceled == false).toList();
   late DateTime matchesStartDate;
   late DateTime matchesEndDate;
 
@@ -268,9 +270,9 @@ class DataProvider extends ChangeNotifier {
   }
 
   void setMatches(Map<String, dynamic> responseBody) {
-    matches.clear();
+    allMatches.clear();
     for (var match in responseBody['Matches']) {
-      matches.add(
+      allMatches.add(
         AppMatch.fromJson(
           match,
           availableHours,

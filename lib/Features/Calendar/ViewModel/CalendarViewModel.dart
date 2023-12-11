@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/BlockHourWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/Features/Players/View/Web/StorePlayerWidget.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
@@ -20,20 +22,21 @@ import '../../../SharedComponents/Model/TabItem.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import '../../../SharedComponents/Model/Hour.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
+import '../../Players/Repository/PlayersRepoImp.dart';
 import '../Model/CalendarDailyCourtMatch.dart';
 import '../Model/DayMatch.dart';
-import '../View/Web/Modal/Match/BlockHourWidget.dart';
 import '../View/Web/Modal/Match/CourtsAvailabilityWidget.dart';
 import '../View/Web/Modal/Match/MatchCancelWidget.dart';
 import '../View/Web/Modal/Match/MatchDetailsWidget.dart';
-import '../View/Web/Modal/RecurrentMatch/RecurrentBlockHourWidget.dart';
 import '../View/Web/Modal/RecurrentMatch/RecurrentCourtsAvailabilityWidget.dart';
 import '../View/Web/Modal/RecurrentMatch/RecurrentMatchCancelWidget.dart';
 import '../View/Web/Modal/RecurrentMatch/RecurrentMatchDetailsWidget.dart';
 
 class CalendarViewModel extends ChangeNotifier {
   final calendarRepo = CalendarRepoImp();
+  final playersRepo = PlayersRepoImp();
 
   List<Court> courts = [];
   List<StoreWorkingDay> storeWorkingDays = [];
@@ -68,9 +71,10 @@ class CalendarViewModel extends ChangeNotifier {
     availableHours =
         Provider.of<DataProvider>(context, listen: false).availableHours;
     matches = Provider.of<DataProvider>(context, listen: false)
-        .matches
+        .allMatches
         .map((match) => AppMatch.copyWith(match))
         .toList();
+
     recurrentMatches = Provider.of<DataProvider>(context, listen: false)
         .recurrentMatches
         .map((recMatch) => AppRecurrentMatch.copyWith(recMatch))
@@ -135,6 +139,28 @@ class CalendarViewModel extends ChangeNotifier {
   void setSelectedWeekday(int newValue) {
     _selectedWeekday = newValue;
     notifyListeners();
+  }
+
+  void increaseOneDay(BuildContext context) {
+    setSelectedDay(
+      context,
+      selectedDay.add(
+        Duration(
+          days: 1,
+        ),
+      ),
+    );
+  }
+
+  void decreaseOneDay(BuildContext context) {
+    setSelectedDay(
+      context,
+      selectedDay.subtract(
+        Duration(
+          days: 1,
+        ),
+      ),
+    );
   }
 
   DateTime _selectedDay = DateTime.now();
@@ -239,6 +265,61 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
+  List<CalendarDailyCourtMatch> get selectedDayMatchesMobile {
+    List<CalendarDailyCourtMatch> selectedDayMatches = [];
+    List<DayMatch> dayMatches = [];
+    for (var court in courts) {
+      dayMatches.clear();
+      List<AppMatch> filteredMatches = matches
+          .where((match) =>
+              match.court.idStoreCourt == court.idStoreCourt &&
+              areInTheSameDay(match.date, selectedDay))
+          .toList();
+      for (var hour in selectedDayWorkingHours) {
+        AppMatch? match;
+        AppRecurrentMatch? recMatch;
+        bool hasMatch = filteredMatches.any((element) =>
+            element.startingHour == hour ||
+            (element.startingHour.hour < hour.hour &&
+                element.endingHour.hour > hour.hour));
+        if (hasMatch) {
+          match = match = filteredMatches.firstWhere((element) =>
+              element.startingHour == hour ||
+              (element.startingHour.hour < hour.hour &&
+                  element.endingHour.hour > hour.hour));
+        }
+        DayMatch dayMatch = DayMatch(startingHour: hour);
+
+        if (match != null) {
+          dayMatch.match = AppMatch.copyWith(match);
+        }
+        if (recurrentMatches.any((recMatch) =>
+            recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
+            recMatch.startingHour == hour &&
+            recMatch.idStoreCourt == court.idStoreCourt)) {
+          {
+            recMatch = recurrentMatches.firstWhere((recMatch) =>
+                recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
+                recMatch.startingHour == hour &&
+                recMatch.idStoreCourt == court.idStoreCourt);
+            dayMatch.recurrentMatch = AppRecurrentMatch.copyWith(recMatch);
+          }
+        }
+        dayMatches.add(dayMatch);
+      }
+
+      selectedDayMatches.add(
+        CalendarDailyCourtMatch(
+          court: court,
+          dayMatches: dayMatches
+              .map((dayMatch) => DayMatch.copyWith(dayMatch))
+              .toList(),
+        ),
+      );
+    }
+    return selectedDayMatches;
+  }
+
   List<CalendarDailyCourtMatch> get selectedDayMatches {
     List<CalendarDailyCourtMatch> selectedDayMatches = [];
     List<DayMatch> dayMatches = [];
@@ -255,19 +336,18 @@ class CalendarViewModel extends ChangeNotifier {
         for (var hour in selectedDayWorkingHours) {
           AppMatch? match;
           AppRecurrentMatch? recMatch;
+          List<AppMatch> concurrentMatches = [];
           bool hasMatch =
               filteredMatches.any((element) => element.startingHour == hour);
           if (hasMatch) {
-            match = match = filteredMatches
-                .firstWhere((element) => element.startingHour == hour);
+            concurrentMatches = filteredMatches
+                .where((element) => element.startingHour == hour)
+                .toList();
           }
-          if (match != null && !match.isFromRecurrentMatch) {
-            dayMatches.add(
-              DayMatch(
-                startingHour: hour,
-                match: AppMatch.copyWith(match),
-              ),
-            );
+          if (concurrentMatches.any((match) =>
+              !match.isFromRecurrentMatch && match.canceled == false)) {
+            match = AppMatch.copyWith(concurrentMatches.firstWhere((match) =>
+                !match.isFromRecurrentMatch && match.canceled == false));
             jumpToHour = match.endingHour.hour;
           } else if (recurrentMatches.any((recMatch) =>
               recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
@@ -277,19 +357,48 @@ class CalendarViewModel extends ChangeNotifier {
                 recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
                 recMatch.idStoreCourt == court.idStoreCourt);
+            if (selectedDay.isAfter(recMatch.creationDate)) {
+              bool hasToCheckForCanceledMatches = recMatch.blocked ||
+                  (!recMatch.blocked &&
+                      selectedDay.isBefore(recMatch.validUntil!));
+              if (hasToCheckForCanceledMatches) {
+                if (concurrentMatches.any((match) =>
+                    match.idRecurrentMatch == recMatch!.idRecurrentMatch)) {
+                  if (concurrentMatches
+                      .firstWhere((match) =>
+                          match.idRecurrentMatch == recMatch!.idRecurrentMatch)
+                      .canceled) {
+                    recMatch = null;
+                  } else {
+                    recMatch = AppRecurrentMatch.copyWith(recMatch);
+                    jumpToHour = recMatch.endingHour.hour;
+                  }
+                }
+              } else {
+                recMatch = AppRecurrentMatch.copyWith(recMatch);
+                jumpToHour = recMatch.endingHour.hour;
+              }
+            } else {
+              recMatch = null;
+            }
+            match = null;
+          }
+          if (match != null || recMatch != null) {
             dayMatches.add(
               DayMatch(
                 startingHour: hour,
-                recurrentMatch: AppRecurrentMatch.copyWith(recMatch),
+                recurrentMatch: recMatch,
+                match: match,
               ),
             );
-            jumpToHour = recMatch.endingHour.hour;
-          } else if (hour.hour >= jumpToHour) {
-            dayMatches.add(
-              DayMatch(
-                startingHour: hour,
-              ),
-            );
+          } else {
+            if (hour.hour >= jumpToHour) {
+              dayMatches.add(
+                DayMatch(
+                  startingHour: hour,
+                ),
+              );
+            }
           }
         }
         selectedDayMatches.add(
@@ -520,20 +629,50 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  void blockUnblockHour(BuildContext context, int idStoreCourt, DateTime date,
-      Hour hour, bool block, int idSport, String name) {
+  void onTapCancelMatchHourInformation(BuildContext context) {
+    if (hourInformation!.match) {
+      if (hourInformation!.refMatch!.blocked) {
+        blockUnblockHour(
+          context,
+          hourInformation!.refMatch!.court.idStoreCourt!,
+          hourInformation!.refMatch!.date,
+          hourInformation!.refMatch!.startingHour,
+          false,
+          hourInformation!.refMatch!.sport!.idSport,
+          -1,
+          "",
+          hourInformation!.refMatch!.idMatch,
+        );
+      } else {
+        setMatchCancelWidget(context, hourInformation!.refMatch!);
+      }
+    }
+  }
+
+  void blockUnblockHour(
+    BuildContext context,
+    int idStoreCourt,
+    DateTime date,
+    Hour hour,
+    bool block,
+    int idPlayer,
+    int idSport,
+    String obs,
+    int idMatch,
+  ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .blockUnblockHour(
-      context,
-      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-      idStoreCourt,
-      date,
-      hour.hour,
-      block,
-      name,
-      idSport,
-    )
+            context,
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            idStoreCourt,
+            date,
+            hour.hour,
+            block,
+            idPlayer,
+            idSport,
+            obs,
+            idMatch)
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setMatchesFromResponse(context, response.responseBody!);
@@ -546,6 +685,7 @@ class CalendarViewModel extends ChangeNotifier {
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModalFromResponse(response);
       }
+      setShowHourInfo(value: false);
     });
   }
 
@@ -554,20 +694,23 @@ class CalendarViewModel extends ChangeNotifier {
     int idStoreCourt,
     Hour hour,
     bool block,
-    String name,
+    int idPlayer,
     int idSport,
+    String obs,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
         .recurrentBlockUnblockHour(
-            context,
-            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-            idStoreCourt,
-            selectedWeekday,
-            hour.hour,
-            block,
-            name,
-            idSport)
+      context,
+      Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+      idStoreCourt,
+      selectedWeekday,
+      hour.hour,
+      block,
+      idPlayer,
+      idSport,
+      obs,
+    )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
         setRecurrentMatchesFromResponse(context, response.responseBody!);
@@ -686,22 +829,31 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
-  void setBlockHourWidget(BuildContext context, Court court, Hour hour) {
+  void setBlockHourWidget(
+      BuildContext context, Court court, Hour hour, int? idMatch) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       BlockHourWidget(
+        isRecurrent: false,
         court: court,
         day: selectedDay,
         hour: hour,
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
-        onBlock: (name, idSport) => blockUnblockHour(
+        onBlock: (player, idSport, obs) => blockUnblockHour(
           context,
           court.idStoreCourt!,
           selectedDay,
           hour,
           true,
+          player.id!,
           idSport,
-          name,
+          obs,
+          idMatch ?? 0,
+        ),
+        onAddNewPlayer: () => onAddNewPlayer(
+          context,
+          court,
+          hour,
         ),
         onReturn: () => returnMainView(context),
       ),
@@ -711,21 +863,72 @@ class CalendarViewModel extends ChangeNotifier {
   void setRecurrentBlockHourWidget(
       BuildContext context, Court court, Hour hour) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      RecurrentBlockHourWidget(
+      BlockHourWidget(
+        isRecurrent: true,
         court: court,
         day: selectedDay,
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
         hour: hour,
-        onBlock: (name, idSport) => recurrentBlockUnblockHour(
+        onBlock: (player, idSport, obs) => recurrentBlockUnblockHour(
+            context, court.idStoreCourt!, hour, true, player.id!, idSport, obs),
+        onAddNewPlayer: () => onAddNewPlayer(
           context,
-          court.idStoreCourt!,
+          court,
           hour,
-          true,
-          name,
-          idSport,
         ),
         onReturn: () => returnMainView(context),
+      ),
+    );
+  }
+
+  void onAddNewPlayer(BuildContext context, Court court, Hour hour) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      StorePlayerWidget(
+        editPlayer: null,
+        onReturn: () => setRecurrentBlockHourWidget(context, court, hour),
+        onSavePlayer: (a) {},
+        onCreatePlayer: (player) {
+          Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+          playersRepo
+              .addPlayer(
+            context,
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            player,
+          )
+              .then((response) {
+            if (response.responseStatus == NetworkResponseStatus.success) {
+              Map<String, dynamic> responseBody = json.decode(
+                response.responseBody!,
+              );
+
+              Provider.of<DataProvider>(context, listen: false)
+                  .setPlayersResponse(responseBody);
+
+              Provider.of<MenuProvider>(context, listen: false).setMessageModal(
+                "Jogador(a) adicionado(a)!",
+                null,
+                true,
+                onTap: () => setRecurrentBlockHourWidget(
+                  context,
+                  court,
+                  hour,
+                ),
+              );
+            } else if (response.responseStatus ==
+                NetworkResponseStatus.expiredToken) {
+              Provider.of<MenuProvider>(context, listen: false).logout(context);
+            } else {
+              Provider.of<MenuProvider>(context, listen: false)
+                  .setMessageModalFromResponse(response);
+            }
+          });
+        },
+        sports:
+            Provider.of<DataProvider>(context, listen: false).availableSports,
+        ranks: Provider.of<DataProvider>(context, listen: false).availableRanks,
+        genders:
+            Provider.of<DataProvider>(context, listen: false).availableGenders,
       ),
     );
   }
@@ -736,25 +939,29 @@ class CalendarViewModel extends ChangeNotifier {
     Hour timeBegin,
     Hour timeEnd,
   ) {
-    Provider.of<MenuProvider>(context, listen: false).setModalForm(
-      AddMatchModal(
-        onReturn: () => returnMainView(context),
-        onSelected: (blockMatch) {
-          blockUnblockHour(
-            context,
-            blockMatch.idStoreCourt,
-            selectedDay,
-            blockMatch.timeBegin,
-            true,
-            blockMatch.idSport,
-            blockMatch.name,
-          );
-        },
-        court: court,
-        timeBegin: timeBegin,
-        timeEnd: timeEnd,
-      ),
-    );
+    if (!isHourPast(selectedDay, timeBegin)) {
+      Provider.of<MenuProvider>(context, listen: false).setModalForm(
+        AddMatchModal(
+          onReturn: () => returnMainView(context),
+          onSelected: (blockMatch) {
+            blockUnblockHour(
+              context,
+              blockMatch.idStoreCourt,
+              selectedDay,
+              blockMatch.timeBegin,
+              true,
+              blockMatch.idSport,
+              -1, //ARRUMAAAAR
+              blockMatch.name,
+              0, //ARRUMAAAAR
+            );
+          },
+          court: court,
+          timeBegin: timeBegin,
+          timeEnd: timeEnd,
+        ),
+      );
+    }
   }
 
   void setMatchDetailsWidget(BuildContext context, AppMatch match) {
@@ -805,15 +1012,13 @@ class CalendarViewModel extends ChangeNotifier {
   void setRecurrentCourtsAvailabilityWidget(
     BuildContext context,
     DateTime day,
-    Hour hour,
-    List<AppRecurrentMatch> recurrentMatches,
+    DayMatch dayMatch,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       RecurrentCourtsAvailabilityWidget(
         viewModel: this,
         day: day,
-        hour: hour,
-        recurrentMatches: recurrentMatches,
+        dayMatch: dayMatch,
       ),
     );
   }

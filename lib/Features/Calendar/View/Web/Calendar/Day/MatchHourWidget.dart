@@ -15,6 +15,7 @@ class MatchHourWidget extends StatefulWidget {
   AppMatch? match;
   AppRecurrentMatch? recurrentMatch;
   CalendarType calendarType;
+  DateTime selectedDate;
 
   MatchHourWidget({
     required this.onTapMatch,
@@ -22,6 +23,7 @@ class MatchHourWidget extends StatefulWidget {
     required this.match,
     required this.recurrentMatch,
     required this.calendarType,
+    required this.selectedDate,
   });
 
   @override
@@ -38,33 +40,32 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
   late String startingHour;
   late String endingHour;
   late bool canBlockUnblock;
+  String observation = "";
 
   @override
   Widget build(BuildContext context) {
     if (widget.match != null) {
-      blocked = widget.match!.blocked;
       canBlockUnblock =
           !isHourPast(widget.match!.date, widget.match!.startingHour);
+      blocked = widget.match!.blocked;
       startingHour = widget.match!.startingHour.hourString;
       endingHour = widget.match!.endingHour.hourString;
-      if (blocked && widget.match!.matchCreatorFirstName.isEmpty) {
-        title = "Horário Bloqueado";
-        subtitle = widget.match!.blockedReason;
+      title = "Partida de ${widget.match!.matchCreatorName}";
+      subtitle = widget.match!.sport!.description;
+      if (blocked) {
+        observation = widget.match!.blockedReason;
       } else {
-        title = "Partida de ${widget.match!.matchCreatorName}";
-        subtitle = widget.match!.sport!.description;
+        observation = widget.match!.creatorNotes;
       }
     } else {
       blocked = widget.recurrentMatch!.blocked;
-      canBlockUnblock = (widget.calendarType == CalendarType.RecurrentMatch);
+      canBlockUnblock =
+          !isHourPast(widget.selectedDate, widget.recurrentMatch!.startingHour);
       subtitle = widget.recurrentMatch!.sport!.description;
       startingHour = widget.recurrentMatch!.startingHour.hourString;
       endingHour = widget.recurrentMatch!.endingHour.hourString;
-      if (blocked) {
-        title = "Mensalista de ${widget.recurrentMatch!.blockedReason}";
-      } else {
-        title = "Mensalista de ${widget.recurrentMatch!.creatorName}";
-      }
+      observation = blocked ? widget.recurrentMatch!.blockedReason : "";
+      title = "Mensalista de ${widget.recurrentMatch!.creatorName}";
     }
     return LayoutBuilder(
       builder: (layourContext, layoutConstraints) {
@@ -111,14 +112,33 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color:
-                              blocked ? secondaryYellowDark : primaryDarkBlue,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                              color: blocked
+                                  ? secondaryYellowDark
+                                  : primaryDarkBlue,
+                            ),
+                          ),
+                          SizedBox(
+                            width: defaultPadding / 2,
+                          ),
+                          if (observation.isNotEmpty)
+                            Tooltip(
+                              message: observation,
+                              child: SvgPicture.asset(
+                                r"assets/icon/info.svg",
+                                height: 20,
+                                color: blocked
+                                    ? secondaryYellowDark
+                                    : primaryDarkBlue,
+                              ),
+                            ),
+                        ],
                       ),
                       Text(
                         "$startingHour - $endingHour",

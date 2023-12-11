@@ -23,7 +23,7 @@ class DayMatch {
   int matchesLengthConsideringRecurrent() {
     int total = 0;
     if (matches != null) {
-      total += matches!.length;
+      total += matches!.where((match) => match.canceled == false).length;
     }
     if (recurrentMatches != null) {
       for (var recMatch in recurrentMatches!) {

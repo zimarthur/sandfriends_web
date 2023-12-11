@@ -30,8 +30,10 @@ class CalendarRepo {
     DateTime date,
     int hour,
     bool block,
-    String blockReson,
+    int idPlayer,
     int idSport,
+    String obs,
+    int idMatch,
   ) async {}
 
   Future<NetworkResponse?> recurrentBlockUnblockHour(
@@ -41,7 +43,8 @@ class CalendarRepo {
     int weekday,
     int hour,
     bool block,
-    String blockReason,
+    int idPlayer,
     int idSport,
+    String obs,
   ) async {}
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
+import 'package:sandfriends_web/Features/Calendar/Model/DayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppMatch.dart';
@@ -14,19 +15,18 @@ import '../../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../../../Utils/SFDateTime.dart';
 import '../../../../../Menu/ViewModel/MenuProvider.dart';
 import '../Match/MatchDetailsWidgetRow.dart';
+import 'package:collection/collection.dart';
 
 class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
   CalendarViewModel viewModel;
-  Hour hour;
   DateTime day;
-  List<AppRecurrentMatch> recurrentMatches;
+  DayMatch dayMatch;
 
   RecurrentCourtsAvailabilityWidget({
     super.key,
     required this.viewModel,
-    required this.hour,
     required this.day,
-    required this.recurrentMatches,
+    required this.dayMatch,
   });
 
   @override
@@ -71,7 +71,7 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                 MatchDetailsWidgetRow(
                   title: "Horário",
                   value:
-                      "${hour.hourString} - ${Provider.of<DataProvider>(context, listen: false).availableHours.firstWhere((hr) => hr.hour > hour.hour).hourString}",
+                      "${dayMatch.startingHour.hourString} - ${Provider.of<DataProvider>(context, listen: false).availableHours.firstWhere((hr) => hr.hour > dayMatch.startingHour.hour).hourString}",
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: defaultPadding),
@@ -91,9 +91,9 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                         .firstWhere((opDay) =>
                             opDay.weekday == getSFWeekday(day.weekday))
                         .allowReccurrent;
-                    if (recurrentMatches.any((recMatch) =>
+                    if (dayMatch.recurrentMatches!.any((recMatch) =>
                         recMatch.idStoreCourt == court.idStoreCourt)) {
-                      recurrentMatch = recurrentMatches.firstWhere(
+                      recurrentMatch = dayMatch.recurrentMatches!.firstWhere(
                         (recMatch) =>
                             recMatch.idStoreCourt ==
                             Provider.of<DataProvider>(context, listen: false)
@@ -152,44 +152,36 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                                   )
                                 : recurrentMatch == null
                                     ? Container()
-                                    : recurrentMatch.blocked
-                                        ? Text(
-                                            "Mensalista ${recurrentMatch.blockedReason} (fora do app)",
-                                            textAlign: TextAlign.center,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300),
-                                          )
-                                        : Row(
-                                            children: [
-                                              Expanded(
-                                                  child: Text(
-                                                recurrentMatch.creatorName,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )),
-                                              Expanded(
-                                                  child: Text(
-                                                recurrentMatch
-                                                    .sport!.description,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )),
-                                              Expanded(
-                                                  child: Text(
-                                                "Pago",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              ))
-                                            ],
+                                    : Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              recurrentMatch.creatorName,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            ),
                                           ),
+                                          Expanded(
+                                            child: Text(
+                                              recurrentMatch.sport!.description,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              recurrentMatch.blocked
+                                                  ? "Bloqueado pela quadra"
+                                                  : "Válido até ${DateFormat('dd/MM').format(recurrentMatch.validUntil!)}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                           ),
                         ],
                       ),

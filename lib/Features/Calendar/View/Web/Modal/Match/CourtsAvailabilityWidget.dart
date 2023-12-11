@@ -14,6 +14,7 @@ import '../../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../../Menu/ViewModel/MenuProvider.dart';
 import 'MatchDetailsWidgetRow.dart';
+import 'package:collection/collection.dart';
 
 class CourtsAvailabilityWidget extends StatelessWidget {
   CalendarViewModel viewModel;
@@ -85,26 +86,14 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                       .courts
                       .length,
                   itemBuilder: (context, index) {
-                    AppMatch? match;
-                    AppRecurrentMatch? recurrentMatch;
                     Court court =
                         Provider.of<DataProvider>(context, listen: false)
                             .courts[index];
-                    if (matches.any((match) =>
-                        match.court.idStoreCourt == court.idStoreCourt)) {
-                      match = matches.firstWhere((match) =>
-                          match.court.idStoreCourt ==
-                          Provider.of<DataProvider>(context, listen: false)
-                              .courts[index]
-                              .idStoreCourt);
-                    } else if (recurrentMatches.any((recMatch) =>
-                        recMatch.idStoreCourt == court.idStoreCourt)) {
-                      recurrentMatch = recurrentMatches.firstWhere((recMatch) =>
-                          recMatch.idStoreCourt ==
-                          Provider.of<DataProvider>(context, listen: false)
-                              .courts[index]
-                              .idStoreCourt);
-                    }
+                    AppMatch? match = matches.firstWhereOrNull((match) =>
+                        match.court.idStoreCourt == court.idStoreCourt);
+                    AppRecurrentMatch? recurrentMatch =
+                        recurrentMatches.firstWhereOrNull((recMatch) =>
+                            recMatch.idStoreCourt == court.idStoreCourt);
 
                     return Padding(
                       padding: EdgeInsets.only(
@@ -145,104 +134,80 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 3,
-                            child: (match != null && match.blocked) ||
-                                    (recurrentMatch != null &&
-                                        recurrentMatch.blocked)
-                                ? Center(
-                                    child: Text(
-                                      match != null
-                                          ? match.blockedReason
-                                          : recurrentMatch!.blockedReason,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  )
-                                : Row(
-                                    children: [
-                                      Expanded(
-                                        child: match != null
-                                            ? Text(
-                                                match.matchCreatorName,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )
-                                            : recurrentMatch != null
-                                                ? Text(
-                                                    recurrentMatch.blockedReason
-                                                            .isEmpty
-                                                        ? recurrentMatch
-                                                            .currentMonthMatches
-                                                            .first
-                                                            .matchCreatorName
-                                                        : recurrentMatch
-                                                            .blockedReason,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  )
-                                                : Container(),
-                                      ),
-                                      Expanded(
-                                        child: match != null
-                                            ? Text(
-                                                match.sport != null
-                                                    ? match.sport!.description
-                                                    : "",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )
-                                            : recurrentMatch != null
-                                                ? Text(
-                                                    recurrentMatch
-                                                        .sport!.description,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  )
-                                                : Container(),
-                                      ),
-                                      Expanded(
-                                        child: match != null
-                                            ? Text(
-                                                match.selectedPayment ==
-                                                        SelectedPayment
-                                                            .PayInStore
-                                                    ? "Pagar no local"
-                                                    : "Pago",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )
-                                            : recurrentMatch != null
-                                                ? Text(
-                                                    recurrentMatch.currentMonthMatches
-                                                                    .first.date ==
-                                                                day &&
-                                                            recurrentMatch
-                                                                    .currentMonthMatches
-                                                                    .first
-                                                                    .selectedPayment ==
-                                                                SelectedPayment
-                                                                    .PayInStore
-                                                        ? "Pagar no local"
-                                                        : "Pago",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  )
-                                                : Container(),
-                                      )
-                                    ],
-                                  ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: match != null
+                                      ? Text(
+                                          match.matchCreatorName,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300),
+                                        )
+                                      : recurrentMatch != null
+                                          ? Text(
+                                              recurrentMatch.creatorName,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            )
+                                          : Container(),
+                                ),
+                                Expanded(
+                                  child: match != null
+                                      ? Text(
+                                          match.sport != null
+                                              ? match.sport!.description
+                                              : "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300),
+                                        )
+                                      : recurrentMatch != null
+                                          ? Text(
+                                              recurrentMatch.sport!.description,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            )
+                                          : Container(),
+                                ),
+                                Expanded(
+                                  child: match != null
+                                      ? Text(
+                                          match.blocked
+                                              ? "Bloqueado pela quadra"
+                                              : match.selectedPayment ==
+                                                      SelectedPayment.PayInStore
+                                                  ? "Pagar no local"
+                                                  : "Pago",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300),
+                                        )
+                                      : recurrentMatch != null
+                                          ? Text(
+                                              recurrentMatch.blocked
+                                                  ? "Bloqueado pela quadra"
+                                                  : recurrentMatch.nextRecurrentMatches
+                                                                  .first.date ==
+                                                              day &&
+                                                          recurrentMatch
+                                                                  .nextRecurrentMatches
+                                                                  .first
+                                                                  .selectedPayment ==
+                                                              SelectedPayment
+                                                                  .PayInStore
+                                                      ? "Pagar no local"
+                                                      : "Pago",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300),
+                                            )
+                                          : Container(),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),

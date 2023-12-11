@@ -7,6 +7,7 @@ class AppRecurrentMatch {
   int idRecurrentMatch;
   DateTime creationDate;
   DateTime lastPaymentDate;
+  DateTime? validUntil;
   int weekday;
   Hour startingHour;
   Hour endingHour;
@@ -19,28 +20,29 @@ class AppRecurrentMatch {
   bool canceled;
   bool blocked;
   String blockedReason;
-  List<AppMatch> currentMonthMatches;
+  List<AppMatch> nextRecurrentMatches;
 
   int get recurrentMatchDuration {
     return endingHour.hour - startingHour.hour;
   }
 
-  double get currentMonthPrice => currentMonthMatches.fold(
+  double get currentMonthPrice => nextRecurrentMatches.fold(
       0, (previousValue, element) => previousValue + element.cost);
 
-  double get matchCost => currentMonthPrice / currentMonthPrice;
+  double get matchCost => currentMonthPrice / nextRecurrentMatches.length;
 
   String get creatorName => "$creatorFirstName $creatorLastName";
 
   String get matchHourDescription =>
       "${startingHour.hourString} - ${endingHour.hourString}";
 
-  bool get payInStore => currentMonthMatches.first.payInStore;
+  bool get payInStore => nextRecurrentMatches.first.payInStore;
 
   AppRecurrentMatch({
     required this.idRecurrentMatch,
     required this.creationDate,
     required this.lastPaymentDate,
+    required this.validUntil,
     required this.weekday,
     required this.startingHour,
     required this.endingHour,
@@ -53,7 +55,7 @@ class AppRecurrentMatch {
     required this.canceled,
     required this.blocked,
     required this.blockedReason,
-    required this.currentMonthMatches,
+    required this.nextRecurrentMatches,
   });
 
   factory AppRecurrentMatch.fromJson(
@@ -61,9 +63,9 @@ class AppRecurrentMatch {
     List<Hour> referenceHours,
     List<Sport> referenceSports,
   ) {
-    List<AppMatch> currentMonthMatches = [];
-    for (var match in parsedJson["CurrentMonthMatches"]) {
-      currentMonthMatches.add(
+    List<AppMatch> nextRecurrentMatches = [];
+    for (var match in parsedJson["NextRecurrentMatches"]) {
+      nextRecurrentMatches.add(
         AppMatch.fromJson(
           match,
           referenceHours,
@@ -79,6 +81,11 @@ class AppRecurrentMatch {
       lastPaymentDate: DateFormat("dd/MM/yyyy").parse(
         parsedJson["LastPaymentDate"],
       ),
+      validUntil: parsedJson["ValidUntil"] != null
+          ? DateFormat("dd/MM/yyyy").parse(
+              parsedJson["ValidUntil"],
+            )
+          : null,
       weekday: parsedJson["Weekday"],
       startingHour: referenceHours
           .firstWhere((hour) => hour.hour == parsedJson["TimeBegin"]),
@@ -96,7 +103,7 @@ class AppRecurrentMatch {
       canceled: parsedJson["Canceled"] ?? false,
       blocked: parsedJson["Blocked"] ?? false,
       blockedReason: parsedJson["BlockedReason"] ?? "",
-      currentMonthMatches: currentMonthMatches,
+      nextRecurrentMatches: nextRecurrentMatches,
     );
   }
 
@@ -105,6 +112,7 @@ class AppRecurrentMatch {
       idRecurrentMatch: refMatch.idRecurrentMatch,
       creationDate: refMatch.creationDate,
       lastPaymentDate: refMatch.lastPaymentDate,
+      validUntil: refMatch.validUntil,
       weekday: refMatch.weekday,
       startingHour: refMatch.startingHour,
       endingHour: refMatch.endingHour,
@@ -117,7 +125,7 @@ class AppRecurrentMatch {
       canceled: refMatch.canceled,
       blocked: refMatch.blocked,
       blockedReason: refMatch.blockedReason,
-      currentMonthMatches: refMatch.currentMonthMatches
+      nextRecurrentMatches: refMatch.nextRecurrentMatches
           .map((match) => AppMatch.copyWith(match))
           .toList(),
     );

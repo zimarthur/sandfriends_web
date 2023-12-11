@@ -211,7 +211,8 @@ class HomeViewModel extends ChangeNotifier {
             .toList();
 
     for (var hour in workingHours) {
-      if (filterNow == false || (filterNow && hour.hour == DateTime.now().hour))
+      if (filterNow == false ||
+          (filterNow && hour.hour == DateTime.now().hour)) {
         hourMatchesList.add(
           HourMatch(
             hour: hour,
@@ -223,6 +224,7 @@ class HomeViewModel extends ChangeNotifier {
                 .toList(),
           ),
         );
+      }
     }
     return hourMatchesList;
   }

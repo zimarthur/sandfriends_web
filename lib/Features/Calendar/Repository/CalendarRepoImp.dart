@@ -84,8 +84,10 @@ class CalendarRepoImp implements CalendarRepo {
     DateTime date,
     int hour,
     bool block,
-    String blockReason,
+    int idPlayer,
     int idSport,
+    String obs,
+    int idMatch,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
@@ -99,8 +101,10 @@ class CalendarRepoImp implements CalendarRepo {
           "Date": DateFormat("dd/MM/yyyy").format(date),
           "IdHour": hour,
           "Blocked": block,
-          "BlockedReason": blockReason,
+          "IdStorePlayer": idPlayer,
           "IdSport": idSport,
+          "BlockedReason": obs,
+          "IdMatch": idMatch,
         },
       ),
     );
@@ -115,8 +119,9 @@ class CalendarRepoImp implements CalendarRepo {
     int weekday,
     int hour,
     bool block,
-    String blockReason,
+    int idPlayer,
     int idSport,
+    String obs,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
@@ -130,8 +135,9 @@ class CalendarRepoImp implements CalendarRepo {
           "Weekday": weekday,
           "IdHour": hour,
           "Blocked": block,
-          "BlockedReason": blockReason,
+          "IdStorePlayer": idPlayer,
           "IdSport": idSport,
+          "BlockedReason": obs,
         },
       ),
     );

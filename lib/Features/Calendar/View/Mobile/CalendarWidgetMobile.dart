@@ -126,7 +126,7 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
     }
     Hour displayHour = widget.viewModel.selectedDayWorkingHours[realRowIndex];
     DayMatch displayDayMatch = widget
-        .viewModel.selectedDayMatches[realColumnIndex].dayMatches
+        .viewModel.selectedDayMatchesMobile[realColumnIndex].dayMatches
         .lastWhere(
             (dayMatch) => dayMatch.startingHour.hour <= displayHour.hour);
     bool hasEvent =
@@ -136,7 +136,9 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
       Color widgetColor = displayDayMatch.match != null
           ? displayDayMatch.match!.blocked
               ? secondaryYellowDark
-              : primaryBlue
+              : !displayDayMatch.match!.isFromRecurrentMatch
+                  ? primaryBlue
+                  : primaryLightBlue
           : displayDayMatch.recurrentMatch!.blocked
               ? secondaryYellowDark
               : primaryLightBlue;
@@ -147,9 +149,10 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
             HourInformation(
               match: displayDayMatch.match != null,
               recurrentMatch: displayDayMatch.recurrentMatch != null,
-              creatorName: displayDayMatch.match != null
+              creatorName: displayDayMatch.match != null &&
+                      !displayDayMatch.match!.isFromRecurrentMatch
                   ? "Partida de ${displayDayMatch.match!.blocked ? displayDayMatch.match!.blockedReason : displayDayMatch.match!.matchCreatorName}"
-                  : "Mensalista de ${displayDayMatch.recurrentMatch!.blocked ? displayDayMatch.recurrentMatch!.blockedReason : displayDayMatch.recurrentMatch!.creatorName}",
+                  : "Mensalista de ${displayDayMatch.match != null ? displayDayMatch.match!.matchCreatorName : displayDayMatch.recurrentMatch!.blocked ? displayDayMatch.recurrentMatch!.blockedReason : displayDayMatch.recurrentMatch!.creatorName}",
               timeBegin: displayDayMatch.match != null
                   ? displayDayMatch.match!.startingHour
                   : displayDayMatch.recurrentMatch!.startingHour,
@@ -212,6 +215,8 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                           : displayDayMatch.recurrentMatch!.blocked
                               ? displayDayMatch.recurrentMatch!.blockedReason
                               : displayDayMatch.recurrentMatch!.creatorName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: widgetColor,
                         fontWeight: FontWeight.bold,
@@ -256,24 +261,35 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                         vicinity.column &&
                     widget.viewModel.hourInformation!.selectedRow ==
                         vicinity.row
-                ? Container(
-                    margin: EdgeInsets.all(
-                      defaultPadding / 4,
+                ? InkWell(
+                    onTap: () => widget.viewModel.setAddMatchWidget(
+                      context,
+                      widget.viewModel.courts[realColumnIndex],
+                      widget.viewModel.selectedDayWorkingHours[realRowIndex],
+                      widget.viewModel.availableHours.firstWhere((hour) =>
+                          hour.hour >
+                          widget.viewModel.selectedDayWorkingHours[realRowIndex]
+                              .hour),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        defaultBorderRadius,
+                    child: Container(
+                      margin: EdgeInsets.all(
+                        defaultPadding / 4,
                       ),
-                      border: Border.all(color: paidText, width: 2),
-                      color: paidBackground,
-                    ),
-                    child: Center(
-                      child: Text(
-                        "+",
-                        style: TextStyle(
-                          color: paidText,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          defaultBorderRadius,
+                        ),
+                        border: Border.all(color: paidText, width: 2),
+                        color: paidBackground,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "+",
+                          style: TextStyle(
+                            color: paidText,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                     ),
@@ -293,7 +309,7 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
       case 0:
         return TableSpan(
           foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(80),
+          extent: const FixedTableSpanExtent(50),
         );
       default:
         return TableSpan(

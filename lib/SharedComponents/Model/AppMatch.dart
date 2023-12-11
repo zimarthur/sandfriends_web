@@ -21,6 +21,7 @@ class AppMatch {
   String matchCreatorLastName;
   String? matchCreatorPhoto;
   bool blocked;
+  bool canceled;
   String blockedReason;
   SelectedPayment selectedPayment;
   PaymentStatus paymentStatus;
@@ -31,8 +32,7 @@ class AppMatch {
     return endingHour.hour - startingHour.hour;
   }
 
-  String get matchCreatorName =>
-      "${matchCreatorFirstName} ${matchCreatorLastName}";
+  String get matchCreatorName => "$matchCreatorFirstName $matchCreatorLastName";
 
   String get matchHourDescription =>
       "${startingHour.hourString} - ${endingHour.hourString}";
@@ -55,6 +55,7 @@ class AppMatch {
     required this.matchCreatorFirstName,
     required this.matchCreatorLastName,
     required this.matchCreatorPhoto,
+    required this.canceled,
     required this.blocked,
     required this.blockedReason,
     required this.paymentStatus,
@@ -68,6 +69,7 @@ class AppMatch {
     Hour timeBegin = referenceHours.firstWhere(
       (hour) => hour.hour == parsedJson['TimeBegin'],
     );
+
     return AppMatch(
       idMatch: parsedJson["IdMatch"],
       creationDate: DateFormat("dd/MM/yyyy").parse(
@@ -85,11 +87,12 @@ class AppMatch {
           ? null
           : referenceSports
               .firstWhere((sport) => sport.idSport == parsedJson["IdSport"]),
-      creatorNotes: parsedJson["CreatorNotes"],
-      matchCreatorFirstName: parsedJson["MatchCreatorFirstName"],
-      matchCreatorLastName: parsedJson["MatchCreatorLastName"],
+      creatorNotes: parsedJson["CreatorNotes"] ?? "",
+      matchCreatorFirstName: parsedJson["MatchCreatorFirstName"] ?? "",
+      matchCreatorLastName: parsedJson["MatchCreatorLastName"] ?? "",
       matchCreatorPhoto: parsedJson["MatchCreatorPhoto"],
       idRecurrentMatch: parsedJson["IdRecurrentMatch"],
+      canceled: parsedJson["Canceled"],
       blocked: parsedJson["Blocked"] ?? false,
       blockedReason: parsedJson["BlockedReason"] ?? "",
       paymentStatus: decoderPaymentStatus(parsedJson['PaymentStatus']),
@@ -115,6 +118,7 @@ class AppMatch {
       matchCreatorFirstName: refMatch.matchCreatorFirstName,
       matchCreatorLastName: refMatch.matchCreatorLastName,
       matchCreatorPhoto: refMatch.matchCreatorPhoto,
+      canceled: refMatch.canceled,
       blocked: refMatch.blocked,
       blockedReason: refMatch.blockedReason,
       paymentExpirationDate: refMatch.paymentExpirationDate,

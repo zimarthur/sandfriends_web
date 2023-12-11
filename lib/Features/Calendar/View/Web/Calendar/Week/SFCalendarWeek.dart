@@ -43,7 +43,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
     double tableHeight = widget.height * 0.95;
     double tableWidth = widget.width;
     double tableLineHeight =
-        tableHeight * 0.036 < 25 ? 25 : tableHeight * 0.036;
+        tableHeight * 0.036 < 30 ? 30 : tableHeight * 0.036;
     double tableColumnSpacing = tableWidth * 0.01;
     double tableColumnWidth = tableWidth * 0.105 < 70 ? 70 : tableWidth * 0.105;
     double tableHeaderHeight = tableLineHeight * 1.5;
@@ -240,8 +240,7 @@ class _SFCalendarWeekState extends State<SFCalendarWeek> {
                                                     .setRecurrentCourtsAvailabilityWidget(
                                                   context,
                                                   day.date,
-                                                  hour.startingHour,
-                                                  hour.recurrentMatches ?? [],
+                                                  hour,
                                                 ),
                                               ),
                                       ),

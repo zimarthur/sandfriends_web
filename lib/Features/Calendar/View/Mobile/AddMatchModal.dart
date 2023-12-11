@@ -4,6 +4,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/BlockMatch.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
+import 'package:sandfriends_web/Utils/Validators.dart';
 import '../../../../SharedComponents/Model/Court.dart';
 import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../SharedComponents/Model/Sport.dart';
@@ -34,6 +35,7 @@ class AddMatchModal extends StatefulWidget {
 class _AddMatchModalState extends State<AddMatchModal> {
   CalendarType selectedMatchType = CalendarType.Match;
   bool hasSelectedMatchType = false;
+  final addMatchKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   List<Sport> sports = [];
@@ -255,6 +257,8 @@ class AddMatchType extends StatefulWidget {
 }
 
 class _AddMatchTypeState extends State<AddMatchType> {
+  final addMatchKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -324,10 +328,13 @@ class _AddMatchTypeState extends State<AddMatchType> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
-                                    color: widget.selectedMatchType ==
-                                            CalendarType.Match
-                                        ? primaryBlue
-                                        : primaryLightBlue,
+                                    color: widget.matchType ==
+                                            widget.selectedMatchType
+                                        ? widget.selectedMatchType ==
+                                                CalendarType.Match
+                                            ? primaryBlue
+                                            : primaryLightBlue
+                                        : textDarkGrey,
                                   ),
                                 ),
                               ),
@@ -348,47 +355,51 @@ class _AddMatchTypeState extends State<AddMatchType> {
                           padding: const EdgeInsets.only(
                             top: defaultPadding,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                children: [
-                                  Text("Nome:"),
-                                  SizedBox(
-                                    width: defaultPadding / 2,
-                                  ),
-                                  Expanded(
-                                    child: SFTextField(
-                                        labelText: "",
-                                        pourpose: TextFieldPourpose.Standard,
-                                        controller: widget.nameController,
-                                        validator: (a) {}),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Esporte:"),
-                                  SizedBox(
-                                    width: defaultPadding / 2,
-                                  ),
-                                  Expanded(
-                                      child: SFDropdown(
-                                    align: Alignment.centerRight,
-                                    labelText: widget.selectedSport,
-                                    items: widget.sports
-                                        .map((e) => e.description)
-                                        .toList(),
-                                    validator: (value) {},
-                                    onChanged: (p0) {
-                                      setState(() {
-                                        widget.selectedSport = p0!;
-                                      });
-                                    },
-                                  )),
-                                ],
-                              ),
-                            ],
+                          child: Form(
+                            key: addMatchKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text("Nome:"),
+                                    SizedBox(
+                                      width: defaultPadding / 2,
+                                    ),
+                                    Expanded(
+                                      child: SFTextField(
+                                          labelText: "",
+                                          pourpose: TextFieldPourpose.Standard,
+                                          controller: widget.nameController,
+                                          validator: (a) =>
+                                              emptyCheck(a, "Digite o nome")),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Esporte:"),
+                                    SizedBox(
+                                      width: defaultPadding / 2,
+                                    ),
+                                    Expanded(
+                                        child: SFDropdown(
+                                      align: Alignment.centerRight,
+                                      labelText: widget.selectedSport,
+                                      items: widget.sports
+                                          .map((e) => e.description)
+                                          .toList(),
+                                      validator: (value) {},
+                                      onChanged: (p0) {
+                                        setState(() {
+                                          widget.selectedSport = p0!;
+                                        });
+                                      },
+                                    )),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

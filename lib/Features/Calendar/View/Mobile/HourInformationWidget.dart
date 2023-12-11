@@ -43,7 +43,9 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
         : hourInformation.match
             ? hourInformation.refMatch!.blocked
                 ? secondaryYellowDark
-                : primaryBlue
+                : !hourInformation.refMatch!.isFromRecurrentMatch
+                    ? primaryBlue
+                    : primaryLightBlue
             : hourInformation.refRecurrentMatch!.blocked
                 ? secondaryYellowDark
                 : primaryLightBlue;
@@ -263,54 +265,93 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                             padding: const EdgeInsets.only(top: defaultPadding),
                             child: Row(
                               children: [
-                                if (widget.viewModel.hourInformation!.match ||
-                                    widget.viewModel.hourInformation!
-                                        .recurrentMatch)
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: defaultPadding / 4,
-                                      ),
-                                      child: SFButton(
-                                          iconFirst: true,
-                                          iconPath: r"assets/icon/delete.svg",
-                                          buttonLabel: "Cancelar partida",
-                                          buttonType: ButtonType.Delete,
-                                          onTap: () {
-                                            if (widget.viewModel
-                                                .hourInformation!.match) {
-                                              widget.viewModel
-                                                  .setMatchCancelWidget(
-                                                      context,
-                                                      widget
-                                                          .viewModel
-                                                          .hourInformation!
-                                                          .refMatch!);
-                                            }
-                                          }),
-                                    ),
-                                  ),
-                                if (widget.viewModel.hourInformation!.freeHour)
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: defaultPadding / 4,
-                                      ),
-                                      child: SFButton(
-                                        iconFirst: true,
-                                        iconPath: r"assets/icon/plus.svg",
-                                        buttonLabel: "Adicionar partida",
-                                        buttonType: ButtonType.Primary,
-                                        onTap: () =>
-                                            widget.viewModel.setAddMatchWidget(
-                                          context,
-                                          widget.court,
-                                          widget.timeBegin,
-                                          widget.timeEnd,
+                                widget.viewModel.hourInformation!.freeHour
+                                    ? Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: defaultPadding / 4,
+                                          ),
+                                          child: SFButton(
+                                            iconFirst: true,
+                                            iconPath: r"assets/icon/plus.svg",
+                                            buttonLabel: "Adicionar partida",
+                                            buttonType: ButtonType.Primary,
+                                            onTap: () => widget.viewModel
+                                                .setAddMatchWidget(
+                                              context,
+                                              widget.court,
+                                              widget.timeBegin,
+                                              widget.timeEnd,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
+                                      )
+                                    : widget.viewModel.hourInformation!.match
+                                        ? !widget.viewModel.hourInformation!
+                                                .refMatch!.isFromRecurrentMatch
+                                            ? Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        defaultPadding / 4,
+                                                  ),
+                                                  child: SFButton(
+                                                    iconFirst: true,
+                                                    iconPath:
+                                                        r"assets/icon/delete.svg",
+                                                    buttonLabel:
+                                                        "Cancelar partida",
+                                                    buttonType:
+                                                        ButtonType.Delete,
+                                                    onTap: () => widget
+                                                        .viewModel
+                                                        .onTapCancelMatchHourInformation(
+                                                      context,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        defaultPadding / 4,
+                                                  ),
+                                                  child: SFButton(
+                                                    iconFirst: true,
+                                                    iconPath:
+                                                        r"assets/icon/delete.svg",
+                                                    buttonLabel:
+                                                        "Cancelar partida/mensalista",
+                                                    buttonType:
+                                                        ButtonType.Delete,
+                                                    onTap: () => widget
+                                                        .viewModel
+                                                        .onTapCancelMatchHourInformation(
+                                                      context,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                        : Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: defaultPadding / 4,
+                                              ),
+                                              child: SFButton(
+                                                iconFirst: true,
+                                                iconPath:
+                                                    r"assets/icon/delete.svg",
+                                                buttonLabel:
+                                                    "Cancelar mensalista",
+                                                buttonType: ButtonType.Delete,
+                                                onTap: () => widget.viewModel
+                                                    .onTapCancelMatchHourInformation(
+                                                  context,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                               ],
                             ),
                           ),

@@ -128,7 +128,7 @@ class RecurrentMatchDetailsWidget extends StatelessWidget {
                   MatchDetailsWidgetRow(
                     title: "Preço",
                     value:
-                        "R\$${recurrentMatch.currentMonthPrice},00 (${recurrentMatch.currentMonthMatches.length})",
+                        "R\$${recurrentMatch.currentMonthPrice},00 (${recurrentMatch.nextRecurrentMatches.length})",
                   ),
                 ],
               ),
