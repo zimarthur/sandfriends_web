@@ -278,22 +278,28 @@ class CalendarViewModel extends ChangeNotifier {
       for (var hour in selectedDayWorkingHours) {
         AppMatch? match;
         AppRecurrentMatch? recMatch;
+        List<AppMatch> concurrentMatches = [];
         bool hasMatch = filteredMatches.any((element) =>
             element.startingHour == hour ||
             (element.startingHour.hour < hour.hour &&
                 element.endingHour.hour > hour.hour));
         if (hasMatch) {
-          match = match = filteredMatches.firstWhere((element) =>
-              element.startingHour == hour ||
-              (element.startingHour.hour < hour.hour &&
-                  element.endingHour.hour > hour.hour));
+          concurrentMatches = filteredMatches
+              .where((element) =>
+                  element.startingHour == hour ||
+                  (element.startingHour.hour < hour.hour &&
+                      element.endingHour.hour > hour.hour))
+              .toList();
         }
+
         DayMatch dayMatch = DayMatch(startingHour: hour);
 
-        if (match != null) {
-          dayMatch.match = AppMatch.copyWith(match);
-        }
-        if (recurrentMatches.any((recMatch) =>
+        if (concurrentMatches.any((match) =>
+            !match.isFromRecurrentMatch && match.canceled == false)) {
+          dayMatch.match = AppMatch.copyWith(concurrentMatches.firstWhere(
+              (match) =>
+                  !match.isFromRecurrentMatch && match.canceled == false));
+        } else if (recurrentMatches.any((recMatch) =>
             recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
             recMatch.startingHour == hour &&
             recMatch.idStoreCourt == court.idStoreCourt)) {
@@ -302,7 +308,37 @@ class CalendarViewModel extends ChangeNotifier {
                 recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
                 recMatch.idStoreCourt == court.idStoreCourt);
-            dayMatch.recurrentMatch = AppRecurrentMatch.copyWith(recMatch);
+            if (selectedDay.isAfter(recMatch.creationDate)) {
+              bool hasToCheckForCanceledMatches = recMatch.blocked ||
+                  (!recMatch.blocked &&
+                      selectedDay.isBefore(recMatch.validUntil!));
+              if (hasToCheckForCanceledMatches) {
+                if (concurrentMatches.any((match) =>
+                    match.idRecurrentMatch == recMatch!.idRecurrentMatch)) {
+                  if (concurrentMatches
+                      .firstWhere((match) =>
+                          match.idRecurrentMatch == recMatch!.idRecurrentMatch)
+                      .canceled) {
+                    recMatch = null;
+                  } else {
+                    dayMatch.recurrentMatch =
+                        AppRecurrentMatch.copyWith(recMatch);
+                  }
+                }
+              } else {
+                dayMatch.recurrentMatch = AppRecurrentMatch.copyWith(recMatch);
+              }
+            } else {
+              dayMatch.recurrentMatch = null;
+            }
+            if (dayMatch.recurrentMatch != null) {
+              if (concurrentMatches.any((match) =>
+                  match.idRecurrentMatch == recMatch!.idRecurrentMatch)) {
+                dayMatch.match = AppMatch.copyWith(concurrentMatches.firstWhere(
+                    (match) =>
+                        match.idRecurrentMatch == recMatch!.idRecurrentMatch));
+              }
+            }
           }
         }
         dayMatches.add(dayMatch);
@@ -381,7 +417,14 @@ class CalendarViewModel extends ChangeNotifier {
             } else {
               recMatch = null;
             }
-            match = null;
+            if (recMatch != null) {
+              if (concurrentMatches.any((match) =>
+                  match.idRecurrentMatch == recMatch!.idRecurrentMatch)) {
+                match = AppMatch.copyWith(concurrentMatches.firstWhere(
+                    (match) =>
+                        match.idRecurrentMatch == recMatch!.idRecurrentMatch));
+              }
+            }
           }
           if (match != null || recMatch != null) {
             dayMatches.add(

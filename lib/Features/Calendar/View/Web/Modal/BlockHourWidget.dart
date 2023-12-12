@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
+import 'package:sandfriends_web/SharedComponents/View/SelectPlayer.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../SharedComponents/Model/Court.dart';
@@ -221,45 +222,12 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                                         )),
                                   ],
                                 )
-                              : InkWell(
-                                  onTap: () => setState(() {
-                                    onPlayerSelection = true;
-                                  }),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: primaryBlue,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        defaultBorderRadius,
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: defaultPadding / 2,
-                                      horizontal: defaultPadding,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          r"assets/icon/user.svg",
-                                          color: textBlue,
-                                        ),
-                                        SizedBox(
-                                          width: defaultPadding / 2,
-                                        ),
-                                        Text(
-                                          selectedPlayer == null
-                                              ? "Selecionar o jogador"
-                                              : selectedPlayer!.fullName,
-                                          style: TextStyle(
-                                            color: textBlue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              : SelectPlayer(
+                                  player: selectedPlayer,
+                                  onTap: () => setState(
+                                    () {
+                                      onPlayerSelection = true;
+                                    },
                                   ),
                                 ),
                         ),

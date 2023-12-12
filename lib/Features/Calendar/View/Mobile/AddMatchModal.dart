@@ -4,6 +4,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/BlockMatch.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
+import 'package:sandfriends_web/SharedComponents/View/SelectPlayer.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
 import '../../../../SharedComponents/Model/Court.dart';
 import '../../../../SharedComponents/Model/Hour.dart';
@@ -37,7 +38,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
   bool hasSelectedMatchType = false;
   final addMatchKey = GlobalKey<FormState>();
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController obsController = TextEditingController();
   List<Sport> sports = [];
   late String selectedSport;
 
@@ -137,7 +138,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
                         : collapsedHeight,
                     isExpanded: hasSelectedMatchType &&
                         selectedMatchType == CalendarType.Match,
-                    nameController: nameController,
+                    obsController: obsController,
                     sports: sports,
                     selectedSport: selectedSport,
                   ),
@@ -161,7 +162,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
                         : collapsedHeight,
                     isExpanded: hasSelectedMatchType &&
                         selectedMatchType == CalendarType.RecurrentMatch,
-                    nameController: nameController,
+                    obsController: obsController,
                     sports: sports,
                     selectedSport: selectedSport,
                   ),
@@ -208,7 +209,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
                                   CalendarType.RecurrentMatch,
                               idStoreCourt: widget.court.idStoreCourt!,
                               timeBegin: widget.timeBegin,
-                              name: nameController.text,
+                              name: obsController.text,
                               idSport: sports
                                   .firstWhere((sport) =>
                                       sport.description == selectedSport)
@@ -235,7 +236,7 @@ class AddMatchType extends StatefulWidget {
   VoidCallback onTap;
   double height;
   bool isExpanded;
-  TextEditingController nameController;
+  TextEditingController obsController;
   List<Sport> sports;
   String selectedSport;
 
@@ -247,7 +248,7 @@ class AddMatchType extends StatefulWidget {
       required this.onTap,
       required this.height,
       required this.isExpanded,
-      required this.nameController,
+      required this.obsController,
       required this.sports,
       required this.selectedSport,
       super.key});
@@ -357,48 +358,73 @@ class _AddMatchTypeState extends State<AddMatchType> {
                           ),
                           child: Form(
                             key: addMatchKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Nome:"),
-                                    SizedBox(
-                                      width: defaultPadding / 2,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: defaultPadding / 2),
+                                    child: Row(
+                                      children: [
+                                        Text("Jogador:"),
+                                        SizedBox(
+                                          width: defaultPadding / 2,
+                                        ),
+                                        Expanded(
+                                          child: SelectPlayer(
+                                              player: null, onTap: () {}),
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: SFTextField(
-                                          labelText: "",
-                                          pourpose: TextFieldPourpose.Standard,
-                                          controller: widget.nameController,
-                                          validator: (a) =>
-                                              emptyCheck(a, "Digite o nome")),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: defaultPadding / 2),
+                                    child: Row(
+                                      children: [
+                                        Text("Esporte:"),
+                                        SizedBox(
+                                          width: defaultPadding / 2,
+                                        ),
+                                        Expanded(
+                                            child: SFDropdown(
+                                          align: Alignment.centerRight,
+                                          labelText: widget.selectedSport,
+                                          items: widget.sports
+                                              .map((e) => e.description)
+                                              .toList(),
+                                          validator: (value) {},
+                                          onChanged: (p0) {
+                                            setState(() {
+                                              widget.selectedSport = p0!;
+                                            });
+                                          },
+                                        )),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Esporte:"),
-                                    SizedBox(
-                                      width: defaultPadding / 2,
-                                    ),
-                                    Expanded(
-                                        child: SFDropdown(
-                                      align: Alignment.centerRight,
-                                      labelText: widget.selectedSport,
-                                      items: widget.sports
-                                          .map((e) => e.description)
-                                          .toList(),
-                                      validator: (value) {},
-                                      onChanged: (p0) {
-                                        setState(() {
-                                          widget.selectedSport = p0!;
-                                        });
-                                      },
-                                    )),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Observação:",
+                                        style: TextStyle(
+                                          color: textDarkGrey,
+                                        ),
+                                      ),
+                                      SFTextField(
+                                        labelText: "",
+                                        pourpose: TextFieldPourpose.Multiline,
+                                        minLines: 3,
+                                        maxLines: 3,
+                                        controller: widget.obsController,
+                                        validator: (a) {},
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

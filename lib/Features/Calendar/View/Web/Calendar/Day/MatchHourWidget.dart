@@ -50,7 +50,8 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
       blocked = widget.match!.blocked;
       startingHour = widget.match!.startingHour.hourString;
       endingHour = widget.match!.endingHour.hourString;
-      title = "Partida de ${widget.match!.matchCreatorName}";
+      title =
+          "${widget.match!.isFromRecurrentMatch ? "Mensalista" : "Partida"} de ${widget.match!.matchCreatorName}";
       subtitle = widget.match!.sport!.description;
       if (blocked) {
         observation = widget.match!.blockedReason;

@@ -151,8 +151,8 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
               recurrentMatch: displayDayMatch.recurrentMatch != null,
               creatorName: displayDayMatch.match != null &&
                       !displayDayMatch.match!.isFromRecurrentMatch
-                  ? "Partida de ${displayDayMatch.match!.blocked ? displayDayMatch.match!.blockedReason : displayDayMatch.match!.matchCreatorName}"
-                  : "Mensalista de ${displayDayMatch.match != null ? displayDayMatch.match!.matchCreatorName : displayDayMatch.recurrentMatch!.blocked ? displayDayMatch.recurrentMatch!.blockedReason : displayDayMatch.recurrentMatch!.creatorName}",
+                  ? "Partida de ${displayDayMatch.match!.matchCreatorName}"
+                  : "Mensalista de ${displayDayMatch.match != null ? displayDayMatch.match!.matchCreatorName : displayDayMatch.recurrentMatch!.creatorName}",
               timeBegin: displayDayMatch.match != null
                   ? displayDayMatch.match!.startingHour
                   : displayDayMatch.recurrentMatch!.startingHour,
@@ -209,12 +209,8 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                   children: [
                     Text(
                       displayDayMatch.match != null
-                          ? displayDayMatch.match!.blocked
-                              ? displayDayMatch.match!.blockedReason
-                              : displayDayMatch.match!.matchCreatorName
-                          : displayDayMatch.recurrentMatch!.blocked
-                              ? displayDayMatch.recurrentMatch!.blockedReason
-                              : displayDayMatch.recurrentMatch!.creatorName,
+                          ? displayDayMatch.match!.matchCreatorName
+                          : displayDayMatch.recurrentMatch!.creatorName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
