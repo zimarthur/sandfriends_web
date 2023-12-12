@@ -3,6 +3,7 @@ import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.da
 import 'package:sandfriends_web/SharedComponents/Model/Gender.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Rank.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
 
 import '../../../../../SharedComponents/Model/Court.dart';
@@ -81,8 +82,9 @@ class _StorePlayerWidgetState extends State<StorePlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: 500,
+      width: Responsive.isMobile(context) ? width * 0.95 : 500,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,

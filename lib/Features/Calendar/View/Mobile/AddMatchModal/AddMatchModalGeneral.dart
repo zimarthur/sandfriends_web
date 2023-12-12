@@ -172,18 +172,19 @@ class _AddMatchModalGeneralState extends State<AddMatchModalGeneral> {
                     onTap: () {
                       if (!widget.hasSelectedMatchType) {
                         widget.setHasSelectedMatchType(true);
-                      } else {
+                      } else if (widget.selectedPlayer != null) {
                         widget.onSelected(
                           BlockMatch(
                             isRecurrent: widget.selectedMatchType ==
                                 CalendarType.RecurrentMatch,
                             idStoreCourt: widget.court.idStoreCourt!,
                             timeBegin: widget.timeBegin,
-                            name: widget.obsController.text,
+                            observation: widget.obsController.text,
                             idSport: widget.sports
                                 .firstWhere((sport) =>
                                     sport.description == widget.selectedSport)
                                 .idSport,
+                            player: widget.selectedPlayer!,
                           ),
                         );
                       }

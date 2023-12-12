@@ -24,6 +24,8 @@ class AddMatchModal extends StatefulWidget {
   Hour timeBegin;
   Hour timeEnd;
   Court court;
+  Function(CalendarType) onAddNewPlayer;
+  CalendarType? initCalendarType;
 
   AddMatchModal({
     required this.onReturn,
@@ -31,6 +33,8 @@ class AddMatchModal extends StatefulWidget {
     required this.timeBegin,
     required this.timeEnd,
     required this.court,
+    required this.onAddNewPlayer,
+    this.initCalendarType,
     super.key,
   });
 
@@ -50,6 +54,11 @@ class _AddMatchModalState extends State<AddMatchModal> {
 
   @override
   void initState() {
+    if (widget.initCalendarType != null) {
+      selectedMatchType = widget.initCalendarType!;
+      hasSelectedMatchType = true;
+      currentPage = AddMatchModalPage.SelectPlayer;
+    }
     sports = Provider.of<DataProvider>(context, listen: false).availableSports;
     selectedSport = sports.first.description;
     super.initState();
@@ -153,7 +162,8 @@ class _AddMatchModalState extends State<AddMatchModal> {
                       Expanded(
                           child: PlayersSelection(
                         selectedPlayer: selectedPlayer,
-                        onAddNewPlayer: () {},
+                        onAddNewPlayer: () =>
+                            widget.onAddNewPlayer(selectedMatchType),
                         onPlayerSelected: (player) {
                           setState(() {
                             selectedPlayer = player;

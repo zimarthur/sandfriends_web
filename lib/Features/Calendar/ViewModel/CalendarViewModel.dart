@@ -16,6 +16,7 @@ import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
 import '../../../SharedComponents/Model/AppMatch.dart';
 import '../../../SharedComponents/Model/TabItem.dart';
@@ -937,8 +938,14 @@ class CalendarViewModel extends ChangeNotifier {
           idSport,
           obs,
         ),
-        onAddNewPlayer: () =>
-            onAddNewPlayer(context, court, hour, CalendarType.Match),
+        onAddNewPlayer: () => genericAddNewPlayer(
+          context,
+          () => setBlockHourWidget(
+            context,
+            court,
+            hour,
+          ),
+        ),
         onReturn: () => returnMainView(context),
       ),
     );
@@ -956,21 +963,24 @@ class CalendarViewModel extends ChangeNotifier {
         hour: hour,
         onBlock: (player, idSport, obs) => recurrentBlockHour(
             context, court.idStoreCourt!, hour, player.id!, idSport, obs),
-        onAddNewPlayer: () =>
-            onAddNewPlayer(context, court, hour, CalendarType.RecurrentMatch),
+        onAddNewPlayer: () => genericAddNewPlayer(
+          context,
+          () => setRecurrentBlockHourWidget(
+            context,
+            court,
+            hour,
+          ),
+        ),
         onReturn: () => returnMainView(context),
       ),
     );
   }
 
-  void onAddNewPlayer(
-      BuildContext context, Court court, Hour hour, CalendarType calendarType) {
+  void genericAddNewPlayer(BuildContext context, VoidCallback callbackParent) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       StorePlayerWidget(
         editPlayer: null,
-        onReturn: () => calendarType == CalendarType.Match
-            ? setBlockHourWidget(context, court, hour)
-            : setRecurrentBlockHourWidget(context, court, hour),
+        onReturn: () => callbackParent(),
         onSavePlayer: (a) {},
         onCreatePlayer: (player) {
           Provider.of<MenuProvider>(context, listen: false).setModalLoading();
@@ -993,9 +1003,7 @@ class CalendarViewModel extends ChangeNotifier {
                 "Jogador(a) adicionado(a)!",
                 null,
                 true,
-                onTap: () => calendarType == CalendarType.Match
-                    ? setBlockHourWidget(context, court, hour)
-                    : setRecurrentBlockHourWidget(context, court, hour),
+                onTap: () => callbackParent(),
               );
             } else if (response.responseStatus ==
                 NetworkResponseStatus.expiredToken) {
@@ -1019,26 +1027,37 @@ class CalendarViewModel extends ChangeNotifier {
     BuildContext context,
     Court court,
     Hour timeBegin,
-    Hour timeEnd,
-  ) {
+    Hour timeEnd, {
+    CalendarType? calendarType,
+  }) {
     if (!isHourPast(selectedDay, timeBegin)) {
       Provider.of<MenuProvider>(context, listen: false).setModalForm(
         AddMatchModal(
           onReturn: () => returnMainView(context),
           onSelected: (blockMatch) {
             blockHour(
-              context,
-              blockMatch.idStoreCourt,
-              selectedDay,
-              blockMatch.timeBegin,
-              1, //ARRUMARR
-              blockMatch.idSport,
-              "", //ARRUMARR
-            );
+                context,
+                blockMatch.idStoreCourt,
+                selectedDay,
+                blockMatch.timeBegin,
+                blockMatch.player.id!,
+                blockMatch.idSport,
+                blockMatch.observation);
           },
+          onAddNewPlayer: (calendarType) => genericAddNewPlayer(
+            context,
+            () => setAddMatchWidget(
+              context,
+              court,
+              timeBegin,
+              timeEnd,
+              calendarType: calendarType,
+            ),
+          ),
           court: court,
           timeBegin: timeBegin,
           timeEnd: timeEnd,
+          initCalendarType: calendarType,
         ),
       );
     }
