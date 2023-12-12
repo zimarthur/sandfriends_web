@@ -7,7 +7,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/PeriodType.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal/AddMatchModal.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/BlockHourWidget.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Players/View/Web/StorePlayerWidget.dart';
@@ -916,7 +916,10 @@ class CalendarViewModel extends ChangeNotifier {
   }
 
   void setBlockHourWidget(
-      BuildContext context, Court court, Hour hour, int? idMatch) {
+    BuildContext context,
+    Court court,
+    Hour hour,
+  ) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       BlockHourWidget(
         isRecurrent: false,
@@ -934,11 +937,8 @@ class CalendarViewModel extends ChangeNotifier {
           idSport,
           obs,
         ),
-        onAddNewPlayer: () => onAddNewPlayer(
-          context,
-          court,
-          hour,
-        ),
+        onAddNewPlayer: () =>
+            onAddNewPlayer(context, court, hour, CalendarType.Match),
         onReturn: () => returnMainView(context),
       ),
     );
@@ -956,21 +956,21 @@ class CalendarViewModel extends ChangeNotifier {
         hour: hour,
         onBlock: (player, idSport, obs) => recurrentBlockHour(
             context, court.idStoreCourt!, hour, player.id!, idSport, obs),
-        onAddNewPlayer: () => onAddNewPlayer(
-          context,
-          court,
-          hour,
-        ),
+        onAddNewPlayer: () =>
+            onAddNewPlayer(context, court, hour, CalendarType.RecurrentMatch),
         onReturn: () => returnMainView(context),
       ),
     );
   }
 
-  void onAddNewPlayer(BuildContext context, Court court, Hour hour) {
+  void onAddNewPlayer(
+      BuildContext context, Court court, Hour hour, CalendarType calendarType) {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       StorePlayerWidget(
         editPlayer: null,
-        onReturn: () => setRecurrentBlockHourWidget(context, court, hour),
+        onReturn: () => calendarType == CalendarType.Match
+            ? setBlockHourWidget(context, court, hour)
+            : setRecurrentBlockHourWidget(context, court, hour),
         onSavePlayer: (a) {},
         onCreatePlayer: (player) {
           Provider.of<MenuProvider>(context, listen: false).setModalLoading();
@@ -993,11 +993,9 @@ class CalendarViewModel extends ChangeNotifier {
                 "Jogador(a) adicionado(a)!",
                 null,
                 true,
-                onTap: () => setRecurrentBlockHourWidget(
-                  context,
-                  court,
-                  hour,
-                ),
+                onTap: () => calendarType == CalendarType.Match
+                    ? setBlockHourWidget(context, court, hour)
+                    : setRecurrentBlockHourWidget(context, court, hour),
               );
             } else if (response.responseStatus ==
                 NetworkResponseStatus.expiredToken) {

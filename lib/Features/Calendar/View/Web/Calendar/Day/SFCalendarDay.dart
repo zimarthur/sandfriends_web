@@ -281,7 +281,6 @@ class _SFCalendarDayState extends State<SFCalendarDay> {
                                                                 court,
                                                                 dayMatch
                                                                     .startingHour,
-                                                                null,
                                                               ),
                                                             )
                                                           : MatchHourWidget(

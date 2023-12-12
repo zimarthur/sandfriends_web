@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/View/PlayersSelection.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 import 'package:sandfriends_web/SharedComponents/View/SelectPlayer.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
@@ -51,31 +52,11 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
   ScrollController scrollController = ScrollController();
   bool onPlayerSelection = false;
   Player? selectedPlayer;
-  String filteredText = "";
-  List<Player> players = [];
-  List<Player> get filteredPlayers => players
-      .where(
-        (player) => player.fullName.toLowerCase().contains(
-              playerController.text.toLowerCase(),
-            ),
-      )
-      .toList();
+
   @override
   void initState() {
     selectedSport = widget.sports.first.description;
-    players = Provider.of<DataProvider>(context, listen: false).storePlayers;
-    playerController.addListener(() {
-      setState(() {
-        filteredText = playerController.text;
-      });
-    });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    playerController.removeListener(() {});
-    super.dispose();
   }
 
   void onPlayerSelected(Player player) {
@@ -239,134 +220,17 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                   ),
                   if (onPlayerSelection)
                     Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(defaultPadding / 2),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: textLightGrey,
-                                ),
-                                color: secondaryBack,
-                                borderRadius: BorderRadius.circular(
-                                  defaultBorderRadius,
-                                ),
-                              ),
-                              child: players.isEmpty
-                                  ? Center(
-                                      child: Text(
-                                        "Nenhum jogador encontrado",
-                                        style: TextStyle(
-                                          color: textDarkGrey,
-                                        ),
-                                      ),
-                                    )
-                                  : ListView.builder(
-                                      itemCount: filteredPlayers.length,
-                                      itemBuilder: (context, index) {
-                                        bool isPlayerSelected =
-                                            filteredPlayers[index] ==
-                                                selectedPlayer;
-                                        return InkWell(
-                                          onTap: () => onPlayerSelected(
-                                              filteredPlayers[index]),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: defaultPadding / 4,
-                                              horizontal: defaultPadding / 2,
-                                            ),
-                                            margin: EdgeInsets.only(
-                                              bottom: defaultPadding / 4,
-                                              top: defaultPadding / 4,
-                                              right: 10, //scrollbar
-                                            ),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: isPlayerSelected
-                                                      ? primaryBlue
-                                                      : divider,
-                                                  width:
-                                                      isPlayerSelected ? 2 : 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  defaultBorderRadius,
-                                                ),
-                                                color: secondaryPaper),
-                                            child: Row(
-                                              children: [
-                                                Radio(
-                                                  activeColor: primaryBlue,
-                                                  value: filteredPlayers[index],
-                                                  groupValue: selectedPlayer,
-                                                  onChanged: (player) =>
-                                                      onPlayerSelected(
-                                                          filteredPlayers[
-                                                              index]),
-                                                ),
-                                                SizedBox(
-                                                  width: defaultPadding,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    filteredPlayers[index]
-                                                        .fullName,
-                                                    style: TextStyle(
-                                                      color: isPlayerSelected
-                                                          ? textBlue
-                                                          : textDarkGrey,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  filteredPlayers[index]
-                                                      .sport!
-                                                      .description,
-                                                  style: TextStyle(
-                                                    color: isPlayerSelected
-                                                        ? textBlue
-                                                        : textDarkGrey,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                            ),
-                          ),
-                          SizedBox(
-                            height: defaultPadding / 4,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Não encontrou o jogador? ",
-                                style: TextStyle(
-                                  color: textDarkGrey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              InkWell(
-                                  onTap: () => widget.onAddNewPlayer(),
-                                  child: Text(
-                                    "Cadastre aqui! ",
-                                    style: TextStyle(
-                                      color: textBlue,
-                                      fontSize: 12,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  )),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: defaultPadding,
-                          ),
-                        ],
-                      ),
-                    )
+                        child: PlayersSelection(
+                      selectedPlayer: selectedPlayer,
+                      onAddNewPlayer: () => widget.onAddNewPlayer(),
+                      playerController: playerController,
+                      onPlayerSelected: (player) {
+                        setState(() {
+                          selectedPlayer = player;
+                        });
+                      },
+                      showSport: true,
+                    ))
                   else
                     Expanded(
                       child: Column(

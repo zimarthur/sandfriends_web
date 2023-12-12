@@ -80,12 +80,12 @@ android {
             storeFile keystoreProperties['storeFileDemo'] ? file(keystoreProperties['storeFileDemo']) : null
             storePassword keystoreProperties['storePasswordDemo']
         }
-        debug {
-            keyAlias keystoreProperties['keyAliasProd']
-            keyPassword keystoreProperties['keyPasswordProd']
-            storeFile keystoreProperties['storeFileProd'] ? file(keystoreProperties['storeFileProd']) : null
-            storePassword keystoreProperties['storePasswordProd']
-        }
+        // debug {
+        //     keyAlias keystoreProperties['keyAliasProd']
+        //     keyPassword keystoreProperties['keyPasswordProd']
+        //     storeFile keystoreProperties['storeFileProd'] ? file(keystoreProperties['storeFileProd']) : null
+        //     storePassword keystoreProperties['storePasswordProd']
+        // }
     }
 
     flavorDimensions "default"
@@ -102,7 +102,7 @@ android {
             resValue "string", "app_name", "Sandfriends Quadras dev"
             applicationIdSuffix ".dev"
             manifestPlaceholders.envUrl = "dev"
-            signingConfig signingConfigs.releaseDev
+            //signingConfig signingConfigs.releaseDev
         }
         demo {
             dimension "default"
