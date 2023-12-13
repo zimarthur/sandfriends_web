@@ -16,14 +16,14 @@ import 'Match/DatePicker.dart';
 import 'NoCourtsFound.dart';
 import 'RecurrentMatch/RecurrentMatchFilter.dart';
 
-class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+class CalendarScreenWeb extends StatefulWidget {
+  const CalendarScreenWeb({super.key});
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  State<CalendarScreenWeb> createState() => _CalendarScreenWebState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _CalendarScreenWebState extends State<CalendarScreenWeb> {
   final CalendarViewModel viewModel = CalendarViewModel();
 
   @override

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class DrawerItem {
   String title;
   String icon;
-  Widget widget;
+  Widget widgetWeb;
+  Widget widgetMobile;
   bool mainDrawer;
   bool requiresAdmin;
   Color? color;
@@ -16,7 +17,8 @@ class DrawerItem {
     required this.icon,
     required this.requiresAdmin,
     required this.mainDrawer,
-    required this.widget,
+    required this.widgetWeb,
+    required this.widgetMobile,
     this.color,
     this.logout = false,
     this.availableMobile = false,

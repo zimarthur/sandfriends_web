@@ -18,14 +18,14 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'FinanceKpi.dart';
 
-class FinancesScreen extends StatefulWidget {
-  const FinancesScreen({super.key});
+class FinancesScreenWeb extends StatefulWidget {
+  const FinancesScreenWeb({super.key});
 
   @override
-  State<FinancesScreen> createState() => _FinancesScreenState();
+  State<FinancesScreenWeb> createState() => _FinancesScreenWebState();
 }
 
-class _FinancesScreenState extends State<FinancesScreen> {
+class _FinancesScreenWebState extends State<FinancesScreenWeb> {
   final FinancesViewModel viewModel = FinancesViewModel();
 
   @override

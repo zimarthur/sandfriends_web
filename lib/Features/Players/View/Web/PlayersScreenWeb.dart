@@ -18,14 +18,14 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../ViewModel/PlayersViewModel.dart';
 
-class PlayersScreen extends StatefulWidget {
-  const PlayersScreen({super.key});
+class PlayersScreenWeb extends StatefulWidget {
+  const PlayersScreenWeb({super.key});
 
   @override
-  State<PlayersScreen> createState() => _PlayersScreenState();
+  State<PlayersScreenWeb> createState() => _PlayersScreenWebState();
 }
 
-class _PlayersScreenState extends State<PlayersScreen> {
+class _PlayersScreenWebState extends State<PlayersScreenWeb> {
   final PlayersViewModel viewModel = PlayersViewModel();
 
   @override

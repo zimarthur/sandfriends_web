@@ -12,14 +12,14 @@ import 'MatchCard.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreenMobile extends StatefulWidget {
+  const HomeScreenMobile({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenMobile> createState() => _HomeScreenMobileState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenMobileState extends State<HomeScreenMobile> {
   final HomeViewModel viewModel = HomeViewModel();
   final pageController = ScrollController();
   final listController = ScrollController();

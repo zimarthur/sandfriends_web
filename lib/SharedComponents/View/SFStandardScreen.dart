@@ -33,6 +33,8 @@ class SFStandardScreen extends StatefulWidget {
 class _SFStandardScreenState extends State<SFStandardScreen> {
   @override
   Widget build(BuildContext context) {
+    print("Responsive.isMobile(context) " +
+        Responsive.isMobile(context).toString());
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -82,7 +84,7 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
                   Provider.of<EnvironmentProvider>(context)
                               .currentEnvironment ==
                           Environment.Dev
-                      ? ""
+                      ? "DEV"
                       : "DEMO",
                   style: TextStyle(
                     fontSize: 20,

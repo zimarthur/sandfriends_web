@@ -13,18 +13,18 @@ import '../../ViewModel/SettingsViewModel.dart';
 import '../../BasicInfo/View/BasicInfo.dart';
 import '../../ViewModel/SettingsViewModel.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreenWeb extends StatefulWidget {
   String? initForm;
-  SettingsScreen({
+  SettingsScreenWeb({
     super.key,
     this.initForm,
   });
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<SettingsScreenWeb> createState() => _SettingsScreenWebState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenWebState extends State<SettingsScreenWeb> {
   final viewModel = SettingsViewModel();
 
   @override

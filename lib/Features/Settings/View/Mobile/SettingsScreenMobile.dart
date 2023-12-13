@@ -7,18 +7,18 @@ import 'package:sandfriends_web/Utils/Constants.dart';
 
 import '../../../Menu/ViewModel/MenuProvider.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreenMobile extends StatefulWidget {
   String? initForm;
-  SettingsScreen({
+  SettingsScreenMobile({
     super.key,
     this.initForm,
   });
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<SettingsScreenMobile> createState() => _SettingsScreenMobileState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenMobileState extends State<SettingsScreenMobile> {
   final SettingsViewModel viewModel = SettingsViewModel();
 
   @override

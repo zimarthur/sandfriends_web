@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 
 import '../../../../Utils/Constants.dart';
 import '../../ViewModel/MenuProvider.dart';
@@ -15,6 +16,6 @@ class MenuWidgetMobile extends StatefulWidget {
 class _MenuWidgetMobileState extends State<MenuWidgetMobile> {
   @override
   Widget build(BuildContext context) {
-    return widget.viewModel.selectedDrawerItem.widget;
+    return widget.viewModel.selectedDrawerItem.widgetMobile;
   }
 }

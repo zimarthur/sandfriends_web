@@ -12,20 +12,22 @@ import 'package:provider/provider.dart';
 import '../../../Utils/LocalStorageWeb.dart'
     if (dart.library.io) '../../../Utils/LocalStorageMobile.dart';
 import '../../../Utils/PageStatus.dart';
-import '../../Home/View/Web/HomeScreen.dart'
-    if (dart.library.io) '../../Home/View/Mobile/HomeScreen.dart';
-import '../../MyCourts/View/Web/MyCourtsScreen.dart'
-    if (dart.library.io) '../../MyCourts/View/Mobile/MyCourtsScreen.dart';
-import '../../Finances/View/Web/FinancesScreen.dart'
-    if (dart.library.io) '../../Finances/View/Mobile/FinancesScreen.dart';
-import '../../Calendar/View/Web/CalendarScreen.dart'
-    if (dart.library.io) '../../Calendar/View/Mobile/CalendarScreen.dart';
-import '../../Players/View/Web/PlayersScreen.dart'
-    if (dart.library.io) '../../Players/View/Mobile/PlayersScreen.dart';
-import '../../Rewards/View/Web/RewardsScreen.dart'
-    if (dart.library.io) '../../Rewards/View/Mobile/RewardsScreen.dart';
-import '../../Settings/View/Web/SettingsScreen.dart'
-    if (dart.library.io) '../../Settings/View/Mobile/SettingsScreen.dart';
+import 'package:collection/collection.dart';
+
+import '../../Home/View/Web/HomeScreenWeb.dart';
+import '../../Home/View/Mobile/HomeScreenMobile.dart';
+import '../../MyCourts/View/Web/MyCourtsScreenWeb.dart';
+import '../../MyCourts/View/Mobile/MyCourtsScreenMobile.dart';
+import '../../Finances/View/Web/FinancesScreenWeb.dart';
+import '../../Finances/View/Mobile/FinancesScreenMobile.dart';
+import '../../Calendar/View/Web/CalendarScreenWeb.dart';
+import '../../Calendar/View/Mobile/CalendarScreenMobile.dart';
+import '../../Players/View/Web/PlayersScreenWeb.dart';
+import '../../Players/View/Mobile/PlayersScreenMobile.dart';
+import '../../Rewards/View/Web/RewardsScreenWeb.dart';
+import '../../Rewards/View/Mobile/RewardsScreen.dart';
+import '../../Settings/View/Web/SettingsScreenWeb.dart';
+import '../../Settings/View/Mobile/SettingsScreenMobile.dart';
 
 class MenuProvider extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -218,7 +220,8 @@ class MenuProvider extends ChangeNotifier {
       title: "Início",
       icon: r"assets/icon/home.svg",
       requiresAdmin: false,
-      widget: HomeScreen(),
+      widgetWeb: const HomeScreenWeb(),
+      widgetMobile: const HomeScreenMobile(),
       mainDrawer: true,
       availableMobile: true,
     ),
@@ -226,7 +229,8 @@ class MenuProvider extends ChangeNotifier {
       title: "Calendário",
       icon: r"assets/icon/calendar.svg",
       requiresAdmin: false,
-      widget: CalendarScreen(),
+      widgetWeb: const CalendarScreenWeb(),
+      widgetMobile: const CalendarScreenMobile(),
       mainDrawer: true,
       availableMobile: true,
       isNew: true,
@@ -235,49 +239,56 @@ class MenuProvider extends ChangeNotifier {
       title: "Recompensas",
       icon: r"assets/icon/star.svg",
       requiresAdmin: false,
-      widget: RewardsScreen(),
+      widgetWeb: RewardsScreenWeb(),
+      widgetMobile: RewardsScreenMobile(),
       mainDrawer: true,
     ),
     DrawerItem(
       title: "Financeiro",
       icon: r"assets/icon/finance.svg",
       requiresAdmin: true,
-      widget: FinancesScreen(),
+      widgetWeb: FinancesScreenWeb(),
+      widgetMobile: FinancesScreenMobile(),
       mainDrawer: true,
     ),
     DrawerItem(
       title: "Minhas quadras",
       icon: r"assets/icon/court.svg",
       requiresAdmin: false,
-      widget: MyCourtsScreen(),
+      widgetWeb: MyCourtsScreenWeb(),
+      widgetMobile: MyCourtsScreenMobile(),
       mainDrawer: true,
     ),
     DrawerItem(
       title: "Jogadores",
       icon: r"assets/icon/user_group.svg",
       requiresAdmin: false,
-      widget: PlayersScreen(),
+      widgetWeb: PlayersScreenWeb(),
+      widgetMobile: PlayersScreenMobile(),
       mainDrawer: true,
     ),
     DrawerItem(
       title: "Meu perfil",
       icon: r"assets/icon/user.svg",
       requiresAdmin: false,
-      widget: SettingsScreen(),
+      widgetWeb: SettingsScreenWeb(),
+      widgetMobile: SettingsScreenMobile(),
       mainDrawer: false,
     ),
     DrawerItem(
       title: "Ajuda",
       icon: r"assets/icon/help.svg",
       requiresAdmin: false,
-      widget: HelpScreen(),
+      widgetWeb: HelpScreen(),
+      widgetMobile: Container(),
       mainDrawer: false,
     ),
     DrawerItem(
       title: "Sair",
       icon: r"assets/icon/logout.svg",
       requiresAdmin: false,
-      widget: Container(),
+      widgetWeb: Container(),
+      widgetMobile: Container(),
       mainDrawer: false,
       color: Colors.red,
       logout: true,
@@ -307,11 +318,13 @@ class MenuProvider extends ChangeNotifier {
   }
 
   DrawerItem _selectedDrawerItem = DrawerItem(
-      title: "title",
-      icon: "",
-      requiresAdmin: false,
-      mainDrawer: false,
-      widget: Container());
+    title: "title",
+    icon: "",
+    requiresAdmin: false,
+    mainDrawer: false,
+    widgetMobile: Container(),
+    widgetWeb: Container(),
+  );
   DrawerItem get selectedDrawerItem => _selectedDrawerItem;
   void setSelectedDrawerItem(DrawerItem drawer) {
     _selectedDrawerItem = drawer;
@@ -345,33 +358,25 @@ class MenuProvider extends ChangeNotifier {
   }
 
   void quickLinkBrand(BuildContext context) {
-    onTabClick(
-      DrawerItem(
-        title: "Meu perfil",
-        icon: r"assets/icon/user.svg",
-        requiresAdmin: false,
-        widget: SettingsScreen(
-          initForm: "Marca",
-        ),
-        mainDrawer: false,
-      ),
-      context,
-    );
+    DrawerItem? drawer = permissionsDrawerItems
+        .firstWhereOrNull((tab) => tab.title == "Meu Perfil");
+    if (drawer != null) {
+      onTabClick(
+        drawer,
+        context,
+      );
+    }
   }
 
   void quickLinkWorkingHours(BuildContext context) {
-    onTabClick(
-      DrawerItem(
-        title: "Minhas quadras",
-        icon: r"assets/icon/court.svg",
-        requiresAdmin: false,
-        widget: MyCourtsScreen(
-          quickLinkWorkingHours: true,
-        ),
-        mainDrawer: true,
-      ),
-      context,
-    );
+    DrawerItem? drawer = permissionsDrawerItems
+        .firstWhereOrNull((tab) => tab.title == "Minhas quadras");
+    if (drawer != null) {
+      onTabClick(
+        drawer,
+        context,
+      );
+    }
   }
 
   void quickLinkMyCourts(BuildContext context) {

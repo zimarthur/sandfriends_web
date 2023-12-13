@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../../Utils/Responsive.dart';
 import '../../ViewModel/MenuProvider.dart';
-import 'DrawerWeb/SFDrawer.dart';
+import 'DrawerWeb/SFDrawerWeb.dart';
 
 class MenuWidgetWeb extends StatefulWidget {
   MenuProvider viewModel;
@@ -19,7 +19,7 @@ class _MenuWidgetWebState extends State<MenuWidgetWeb> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SFDrawer(
+        SFDrawerWeb(
           viewModel: widget.viewModel,
         ),
         Expanded(
@@ -34,7 +34,7 @@ class _MenuWidgetWebState extends State<MenuWidgetWeb> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 2 * defaultPadding,
                         vertical: defaultPadding),
-                    child: widget.viewModel.selectedDrawerItem.widget,
+                    child: widget.viewModel.selectedDrawerItem.widgetWeb,
                   ),
                 )
               ],

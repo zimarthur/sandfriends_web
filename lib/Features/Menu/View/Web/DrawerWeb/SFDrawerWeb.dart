@@ -9,17 +9,17 @@ import '../../../../../Utils/Responsive.dart';
 import '../../../ViewModel/MenuProvider.dart';
 import 'SFDrawerDivider.dart';
 
-class SFDrawer extends StatefulWidget {
+class SFDrawerWeb extends StatefulWidget {
   MenuProvider viewModel;
-  SFDrawer({
+  SFDrawerWeb({
     required this.viewModel,
   });
 
   @override
-  State<SFDrawer> createState() => _SFDrawerState();
+  State<SFDrawerWeb> createState() => _SFDrawerWebState();
 }
 
-class _SFDrawerState extends State<SFDrawer> {
+class _SFDrawerWebState extends State<SFDrawerWeb> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

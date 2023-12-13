@@ -7,17 +7,17 @@ import '../../../ViewModel/MenuProvider.dart';
 import '../../Web/DrawerWeb/SFDrawerListTile.dart';
 import 'package:provider/provider.dart';
 
-class SFDrawer extends StatefulWidget {
+class SFDrawerMobile extends StatefulWidget {
   MenuProvider viewModel;
-  SFDrawer({
+  SFDrawerMobile({
     required this.viewModel,
   });
 
   @override
-  State<SFDrawer> createState() => _SFDrawerState();
+  State<SFDrawerMobile> createState() => _SFDrawerMobileState();
 }
 
-class _SFDrawerState extends State<SFDrawer> {
+class _SFDrawerMobileState extends State<SFDrawerMobile> {
   @override
   Widget build(BuildContext context) {
     return Drawer(

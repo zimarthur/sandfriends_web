@@ -15,14 +15,14 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../ViewModel/RewardsViewModel.dart';
 
-class RewardsScreen extends StatefulWidget {
-  const RewardsScreen({super.key});
+class RewardsScreenWeb extends StatefulWidget {
+  const RewardsScreenWeb({super.key});
 
   @override
-  State<RewardsScreen> createState() => _RewardsScreenState();
+  State<RewardsScreenWeb> createState() => _RewardsScreenWebState();
 }
 
-class _RewardsScreenState extends State<RewardsScreen> {
+class _RewardsScreenWebState extends State<RewardsScreenWeb> {
   final RewardsViewModel viewModel = RewardsViewModel();
 
   @override

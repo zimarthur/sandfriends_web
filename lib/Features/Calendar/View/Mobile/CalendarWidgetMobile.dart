@@ -10,6 +10,9 @@ import '../../../../Utils/Constants.dart';
 import '../../ViewModel/CalendarViewModel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+const double minCellWidth = 150;
+const double hoursColumnWidth = 50;
+
 class CalendarWidgetMobile extends StatefulWidget {
   CalendarViewModel viewModel;
   CalendarWidgetMobile({required this.viewModel, super.key});
@@ -67,20 +70,25 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
           Expanded(
             child: Padding(
                 padding: const EdgeInsets.only(left: defaultPadding),
-                child: TableView.builder(
-                  rowCount: widget.viewModel.selectedDayWorkingHours.length + 1,
-                  columnCount: widget.viewModel.courts.length + 1,
-                  columnBuilder: _buildColumnSpan,
-                  rowBuilder: _buildRowSpan,
-                  cellBuilder: _buildCell,
-                  pinnedRowCount: 1,
-                  pinnedColumnCount: 1,
-                  verticalDetails: ScrollableDetails.vertical(
-                    controller: widget.viewModel.verticalController,
-                  ),
-                  horizontalDetails: ScrollableDetails.horizontal(
-                      controller: widget.viewModel.horizontalController),
-                )),
+                child:
+                    LayoutBuilder(builder: (layoutContext, layoutConstraints) {
+                  return TableView.builder(
+                    rowCount:
+                        widget.viewModel.selectedDayWorkingHours.length + 1,
+                    columnCount: widget.viewModel.courts.length + 1,
+                    columnBuilder: (index) =>
+                        _buildColumnSpan(index, layoutConstraints.maxWidth),
+                    rowBuilder: _buildRowSpan,
+                    cellBuilder: _buildCell,
+                    pinnedRowCount: 1,
+                    pinnedColumnCount: 1,
+                    verticalDetails: ScrollableDetails.vertical(
+                      controller: widget.viewModel.verticalController,
+                    ),
+                    horizontalDetails: ScrollableDetails.horizontal(
+                        controller: widget.viewModel.horizontalController),
+                  );
+                })),
           ),
           if (widget.viewModel.showHourInfoMobile)
             HourInformationWidget(
@@ -296,7 +304,7 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
     }
   }
 
-  TableSpan _buildColumnSpan(int index) {
+  TableSpan _buildColumnSpan(int index, double maxWidth) {
     const TableSpanDecoration decoration = TableSpanDecoration(
       border: TableSpanBorder(),
     );
@@ -305,12 +313,22 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
       case 0:
         return TableSpan(
           foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(50),
+          extent: const FixedTableSpanExtent(hoursColumnWidth),
         );
       default:
+        print("maxWidth ${maxWidth}");
+        print("hoursColumnWidth ${hoursColumnWidth}");
+        print(
+            "final ${((maxWidth - hoursColumnWidth) / widget.viewModel.courts.length)}");
+        double columnWidth = (((maxWidth - hoursColumnWidth) /
+                    widget.viewModel.courts.length) <
+                minCellWidth)
+            ? minCellWidth
+            : ((maxWidth - hoursColumnWidth) / widget.viewModel.courts.length);
+
         return TableSpan(
           foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(150),
+          extent: FixedTableSpanExtent(columnWidth),
           onEnter: (_) => print('Entered column $index'),
         );
     }

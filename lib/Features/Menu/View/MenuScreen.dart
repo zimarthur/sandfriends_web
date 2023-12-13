@@ -10,8 +10,8 @@ import '../../../SharedComponents/View/SFStandardScreen.dart';
 import '../../../Utils/PageStatus.dart';
 import '../ViewModel/MenuProvider.dart';
 import '../../../Utils/Responsive.dart';
-import 'Web/DrawerWeb/SFDrawer.dart'
-    if (dart.library.io) 'Mobile/DrawerMobile/SFDrawer.dart';
+import 'Web/DrawerWeb/SFDrawerWeb.dart';
+import 'Mobile/DrawerMobile/SFDrawerMobile.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -37,7 +37,7 @@ class _MenuScreenState extends State<MenuScreen> {
         builder: (context, viewModel, _) {
           return SFStandardScreen(
             drawer: Responsive.isMobile(context)
-                ? SFDrawer(
+                ? SFDrawerMobile(
                     viewModel: viewModel,
                   )
                 : null,

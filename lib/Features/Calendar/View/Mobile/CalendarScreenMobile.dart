@@ -13,14 +13,14 @@ import '../../ViewModel/CalendarViewModel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
-class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+class CalendarScreenMobile extends StatefulWidget {
+  const CalendarScreenMobile({super.key});
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  State<CalendarScreenMobile> createState() => _CalendarScreenMobileState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _CalendarScreenMobileState extends State<CalendarScreenMobile> {
   final CalendarViewModel viewModel = CalendarViewModel();
 
   @override

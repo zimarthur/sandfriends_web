@@ -14,15 +14,15 @@ import 'CourtInfo.dart';
 import 'MyCourtsTabSelector.dart';
 import 'NoHoursFound.dart';
 
-class MyCourtsScreen extends StatefulWidget {
+class MyCourtsScreenWeb extends StatefulWidget {
   bool? quickLinkWorkingHours;
-  MyCourtsScreen({super.key, this.quickLinkWorkingHours = false});
+  MyCourtsScreenWeb({super.key, this.quickLinkWorkingHours = false});
 
   @override
-  State<MyCourtsScreen> createState() => _MyCourtsScreenState();
+  State<MyCourtsScreenWeb> createState() => _MyCourtsScreenWebState();
 }
 
-class _MyCourtsScreenState extends State<MyCourtsScreen> {
+class _MyCourtsScreenWebState extends State<MyCourtsScreenWeb> {
   final MyCourtsViewModel viewModel = MyCourtsViewModel();
 
   @override

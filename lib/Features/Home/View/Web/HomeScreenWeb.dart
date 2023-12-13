@@ -15,14 +15,14 @@ import 'NotificationCard.dart';
 import 'NotificationWidget.dart';
 import 'OnboardingWidget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreenWeb extends StatefulWidget {
+  const HomeScreenWeb({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenWeb> createState() => _HomeScreenWebState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenWebState extends State<HomeScreenWeb> {
   final HomeViewModel viewModel = HomeViewModel();
 
   @override
