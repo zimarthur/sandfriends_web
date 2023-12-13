@@ -25,7 +25,7 @@ import '../../Calendar/View/Mobile/CalendarScreenMobile.dart';
 import '../../Players/View/Web/PlayersScreenWeb.dart';
 import '../../Players/View/Mobile/PlayersScreenMobile.dart';
 import '../../Rewards/View/Web/RewardsScreenWeb.dart';
-import '../../Rewards/View/Mobile/RewardsScreen.dart';
+import '../../Rewards/View/Mobile/RewardsScreenMobile.dart';
 import '../../Settings/View/Web/SettingsScreenWeb.dart';
 import '../../Settings/View/Mobile/SettingsScreenMobile.dart';
 
@@ -242,6 +242,7 @@ class MenuProvider extends ChangeNotifier {
       widgetWeb: RewardsScreenWeb(),
       widgetMobile: RewardsScreenMobile(),
       mainDrawer: true,
+      availableMobile: true,
     ),
     DrawerItem(
       title: "Financeiro",

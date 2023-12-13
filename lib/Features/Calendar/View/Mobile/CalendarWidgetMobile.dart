@@ -7,6 +7,7 @@ import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 import 'package:provider/provider.dart';
 import '../../../../SharedComponents/Model/Hour.dart';
 import '../../../../Utils/Constants.dart';
+import '../../../../Utils/SFDateTime.dart';
 import '../../ViewModel/CalendarViewModel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -266,15 +267,23 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                     widget.viewModel.hourInformation!.selectedRow ==
                         vicinity.row
                 ? InkWell(
-                    onTap: () => widget.viewModel.setAddMatchWidget(
-                      context,
-                      widget.viewModel.courts[realColumnIndex],
-                      widget.viewModel.selectedDayWorkingHours[realRowIndex],
-                      widget.viewModel.availableHours.firstWhere((hour) =>
-                          hour.hour >
-                          widget.viewModel.selectedDayWorkingHours[realRowIndex]
-                              .hour),
-                    ),
+                    onTap: () {
+                      if (!isHourPast(
+                        widget.viewModel.selectedDay,
+                        widget.viewModel.selectedDayWorkingHours[realRowIndex],
+                      )) {
+                        widget.viewModel.setAddMatchWidget(
+                          context,
+                          widget.viewModel.courts[realColumnIndex],
+                          widget
+                              .viewModel.selectedDayWorkingHours[realRowIndex],
+                          widget.viewModel.availableHours.firstWhere((hour) =>
+                              hour.hour >
+                              widget.viewModel
+                                  .selectedDayWorkingHours[realRowIndex].hour),
+                        );
+                      }
+                    },
                     child: Container(
                       margin: EdgeInsets.all(
                         defaultPadding / 4,
@@ -288,7 +297,13 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                       ),
                       child: Center(
                         child: Text(
-                          "+",
+                          isHourPast(
+                            widget.viewModel.selectedDay,
+                            widget.viewModel
+                                .selectedDayWorkingHours[realRowIndex],
+                          )
+                              ? ""
+                              : "+",
                           style: TextStyle(
                             color: paidText,
                             fontWeight: FontWeight.bold,
