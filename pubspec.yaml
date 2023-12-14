@@ -144,6 +144,10 @@ flutter:
     - assets/icon/settings.svg
     - assets/icon/calendar_add.svg
     - assets/icon/info.svg
+    - assets/icon/search.svg
+    - assets/icon/sport_1.svg
+    - assets/icon/sport_2.svg
+    - assets/icon/sport_3.svg
 
     - assets/people/calendar.svg
     - assets/people/clock.svg

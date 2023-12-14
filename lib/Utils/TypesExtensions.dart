@@ -5,7 +5,7 @@ extension StringExtension on String {
 }
 
 extension DoubleExtension on double {
-  String formatPrice() {
-    return "R\$${this.toStringAsFixed(2).replaceAll(".", ",")}";
+  String formatPrice({bool showRS = true}) {
+    return "${showRS ? "R\$" : ""}${this.toStringAsFixed(2).replaceAll(".", ",")}";
   }
 }

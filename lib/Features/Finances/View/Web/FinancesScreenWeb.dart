@@ -131,6 +131,7 @@ class _FinancesScreenWebState extends State<FinancesScreenWeb> {
                                         child: SFPieChart(
                                           pieChartItems:
                                               viewModel.pieChartItems,
+                                          showLabels: true,
                                         ),
                                       );
                                     }),

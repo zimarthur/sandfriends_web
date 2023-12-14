@@ -252,6 +252,8 @@ class MenuProvider extends ChangeNotifier {
       widgetWeb: FinancesScreenWeb(),
       widgetMobile: FinancesScreenMobile(),
       mainDrawer: true,
+      availableMobile: true,
+      isNew: true,
     ),
     DrawerItem(
       title: "Minhas quadras",
