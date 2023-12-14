@@ -23,9 +23,6 @@ class SFStandardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-      ),
       color: isPrimaryBlue ? primaryBlue : secondaryBack,
       child: widget != null
           ? Row(
@@ -33,10 +30,13 @@ class SFStandardHeader extends StatelessWidget {
                 Expanded(child: widget!),
                 InkWell(
                   onTap: () => Scaffold.of(context).openEndDrawer(),
-                  child: SvgPicture.asset(
-                    r"assets/icon/menu_burger.svg",
-                    color: isPrimaryBlue ? textWhite : textBlue,
-                    height: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: SvgPicture.asset(
+                      r"assets/icon/menu_burger.svg",
+                      color: isPrimaryBlue ? textWhite : textBlue,
+                      height: 20,
+                    ),
                   ),
                 ),
               ],
@@ -57,10 +57,13 @@ class SFStandardHeader extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () => Scaffold.of(context).openEndDrawer(),
-                    child: SvgPicture.asset(
-                      r"assets/icon/menu_burger.svg",
-                      color: textWhite,
-                      height: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: SvgPicture.asset(
+                        r"assets/icon/menu_burger.svg",
+                        color: textWhite,
+                        height: 20,
+                      ),
                     ),
                   ),
                 ],

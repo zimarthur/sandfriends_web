@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
 
 import '../../ViewModel/RewardsViewModel.dart';
@@ -25,9 +26,10 @@ class _AddRewardModalState extends State<AddRewardModal> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Container(
       height: 300,
-      width: 500,
+      width: Responsive.isMobile(context) ? width * 0.9 : 500,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,

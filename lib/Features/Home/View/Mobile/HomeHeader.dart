@@ -62,7 +62,7 @@ class _HomeHeaderState extends State<HomeHeader> {
             widget: Row(
               children: [
                 SizedBox(
-                  width: defaultPadding,
+                  width: 2 * defaultPadding,
                 ),
                 Expanded(
                   child: Column(
@@ -90,17 +90,20 @@ class _HomeHeaderState extends State<HomeHeader> {
                     context,
                     "/notifications",
                   ),
-                  child: SvgPicture.asset(
-                    Provider.of<DataProvider>(
-                      context,
-                    ).hasUnseenNotifications
-                        ? r"assets/icon/notification_on.svg"
-                        : r"assets/icon/notification_off.svg",
-                    height: buttonSize,
+                  child: Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: SvgPicture.asset(
+                      Provider.of<DataProvider>(
+                        context,
+                      ).hasUnseenNotifications
+                          ? r"assets/icon/notification_on.svg"
+                          : r"assets/icon/notification_off.svg",
+                      height: buttonSize,
+                    ),
                   ),
                 ),
                 SizedBox(
-                  width: 2 * defaultPadding,
+                  width: defaultPadding,
                 ),
               ],
             ),

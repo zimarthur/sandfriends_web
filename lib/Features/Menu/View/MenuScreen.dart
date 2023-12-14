@@ -35,18 +35,24 @@ class _MenuScreenState extends State<MenuScreen> {
       create: (BuildContext context) => viewModel,
       child: Consumer<MenuProvider>(
         builder: (context, viewModel, _) {
-          return SFStandardScreen(
-            drawer: Responsive.isMobile(context)
-                ? SFDrawerMobile(
-                    viewModel: viewModel,
-                  )
-                : null,
-            scaffoldKey: viewModel.scaffoldKey,
-            pageStatus: viewModel.pageStatus,
-            messageModalWidget: viewModel.messageModal,
-            modalFormWidget: viewModel.modalFormWidget,
-            childWeb: MenuWidgetWeb(viewModel: viewModel),
-            childMobile: MenuWidgetMobile(viewModel: viewModel),
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (pop) {
+              viewModel.quickLinkHome(context);
+            },
+            child: SFStandardScreen(
+              drawer: Responsive.isMobile(context)
+                  ? SFDrawerMobile(
+                      viewModel: viewModel,
+                    )
+                  : null,
+              scaffoldKey: viewModel.scaffoldKey,
+              pageStatus: viewModel.pageStatus,
+              messageModalWidget: viewModel.messageModal,
+              modalFormWidget: viewModel.modalFormWidget,
+              childWeb: MenuWidgetWeb(viewModel: viewModel),
+              childMobile: MenuWidgetMobile(viewModel: viewModel),
+            ),
           );
         },
       ),

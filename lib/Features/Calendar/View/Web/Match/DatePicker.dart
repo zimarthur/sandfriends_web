@@ -29,6 +29,7 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     return CalendarDatePicker2(
       config: CalendarDatePicker2Config(
+        firstDayOfWeek: 1,
         weekdayLabels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
         firstDate: Provider.of<DataProvider>(context, listen: false)
             .store!
@@ -52,8 +53,7 @@ class _DatePickerState extends State<DatePicker> {
       onValueChanged: (values) {
         if (widget.multiDate) {
           widget.onMultiDateSelected!(values);
-        }
-        if (values.first != null) {
+        } else if (values.first != null) {
           widget.onDateSelected!(values.first!);
         }
         setState(() {});

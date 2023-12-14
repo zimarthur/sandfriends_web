@@ -54,6 +54,20 @@ class RewardsViewModel extends ChangeNotifier {
     );
   }
 
+  String get rewardsPeriodTitle {
+    String titleDate;
+    if (periodVisualization == EnumPeriodVisualization.Today) {
+      titleDate = "hoje";
+    } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
+      titleDate = "no mês";
+    } else {
+      titleDate = customEndDate != null
+          ? "entre ${DateFormat('dd/MM').format(customStartDate!)} e ${DateFormat('dd/MM').format(customEndDate!)}"
+          : "no dia ${DateFormat('dd/MM').format(customStartDate!)}";
+    }
+    return "Recompensas recolhidas\n$titleDate:";
+  }
+
   int get rewardsCounter => rewards.length;
 
   List<Reward> _rewards = [];
@@ -64,17 +78,41 @@ class RewardsViewModel extends ChangeNotifier {
     if (periodVisualization == EnumPeriodVisualization.Today) {
       filteredRewards = _rewards
           .where(
-              (element) => areInTheSameDay(element.claimedDate, DateTime.now()))
+            (reward) =>
+                areInTheSameDay(reward.claimedDate, DateTime.now()) &&
+                reward.player.fullName.toLowerCase().contains(
+                      playerFilter,
+                    ),
+          )
           .toList();
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
       filteredRewards = _rewards
-          .where((element) => isInCurrentMonth(element.claimedDate))
+          .where(
+            (reward) =>
+                isInCurrentMonth(reward.claimedDate) &&
+                reward.player.fullName.toLowerCase().contains(
+                      playerFilter,
+                    ),
+          )
           .toList();
     } else {
-      filteredRewards = customRewards;
+      filteredRewards = customRewards
+          .where(
+            (reward) => reward.player.fullName.toLowerCase().contains(
+                  playerFilter,
+                ),
+          )
+          .toList();
     }
+
     filteredRewards.sort((a, b) => b.claimedDate.compareTo(a.claimedDate));
     return filteredRewards;
+  }
+
+  String playerFilter = "";
+  void updatePlayerFilter(String text) {
+    playerFilter = text;
+    notifyListeners();
   }
 
   DateTime? customStartDate;

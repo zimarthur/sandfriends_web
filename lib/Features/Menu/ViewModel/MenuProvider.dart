@@ -243,6 +243,7 @@ class MenuProvider extends ChangeNotifier {
       widgetMobile: RewardsScreenMobile(),
       mainDrawer: true,
       availableMobile: true,
+      isNew: true,
     ),
     DrawerItem(
       title: "Financeiro",

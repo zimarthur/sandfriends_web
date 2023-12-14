@@ -13,7 +13,8 @@ class CalendarHeader extends StatelessWidget {
     CalendarViewModel viewModel = Provider.of<CalendarViewModel>(context);
     return SFStandardHeader(
       title: "Calendário",
-      leftWidget: Align(
+      leftWidget: Container(
+        padding: EdgeInsets.only(left: defaultPadding),
         alignment: Alignment.centerLeft,
         child: Text(
           "${monthsPortuguese[getSFMonthIndex(viewModel.selectedDay)]}/${viewModel.selectedDay.year.toString().substring(2)}",

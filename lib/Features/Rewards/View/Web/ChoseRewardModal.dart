@@ -3,6 +3,7 @@ import 'package:sandfriends_web/SharedComponents/Model/RewardItem.dart';
 
 import '../../../../SharedComponents/View/SFButton.dart';
 import '../../../../Utils/Constants.dart';
+import '../../../../Utils/Responsive.dart';
 
 class ChoseRewardModal extends StatefulWidget {
   List<RewardItem> rewardItems;
@@ -22,9 +23,11 @@ class _ChoseRewardModalState extends State<ChoseRewardModal> {
   @override
   int? selectedRewardIndex;
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Container(
       height: 300,
-      width: 500,
+      width: Responsive.isMobile(context) ? width * 0.9 : 500,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryPaper,

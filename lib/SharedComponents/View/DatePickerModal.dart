@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
 import '../../Features/Calendar/View/Web/Match/DatePicker.dart';
 import '../../Utils/Constants.dart';
 
@@ -27,8 +28,10 @@ class _DatePickerModalState extends State<DatePickerModal> {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: const EdgeInsets.all(2 * defaultPadding),
-      width: 400,
+      padding: EdgeInsets.all(Responsive.isMobile(context)
+          ? defaultPadding / 2
+          : 2 * defaultPadding),
+      width: Responsive.isMobile(context) ? width * 0.9 : 400,
       decoration: BoxDecoration(
         color: secondaryPaper,
         borderRadius: BorderRadius.circular(defaultBorderRadius),
