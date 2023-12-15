@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Finances/View/Mobile/FinanceItem.dart';
+import 'package:sandfriends_web/Features/Finances/View/Mobile/FinancePercentages.dart';
+import 'package:sandfriends_web/Features/Finances/View/Mobile/FinanceResume.dart';
 import 'package:sandfriends_web/Features/Finances/ViewModel/FinancesViewModel.dart';
 import 'package:sandfriends_web/Features/Rewards/View/Mobile/PlayerCalendarFilter.dart';
 import 'package:sandfriends_web/SharedComponents/Model/EnumPeriodVisualization.dart';
@@ -19,7 +21,6 @@ class FinancesScreenMobile extends StatefulWidget {
 
 class FinancesScreenMobileState extends State<FinancesScreenMobile> {
   final FinancesViewModel viewModel = FinancesViewModel();
-  final playerController = TextEditingController();
   bool isExpanded = false;
 
   @override
@@ -77,106 +78,18 @@ class FinancesScreenMobileState extends State<FinancesScreenMobile> {
                 Expanded(
                   child: Column(
                     children: [
-                      GestureDetector(
-                        onVerticalDragUpdate: (drag) {
-                          if (drag.delta.dy < -5.0) {
-                            collapse();
-                          } else if (drag.delta.dy > 5.0) {
-                            expand();
-                          }
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          width: double.infinity,
-                          height: isExpanded ? 170 : 120,
-                          decoration: BoxDecoration(
-                            color: primaryBlue,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(
-                                defaultBorderRadius,
-                              ),
-                              bottomRight: Radius.circular(
-                                defaultBorderRadius,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AnimatedSize(
-                                        duration: Duration(milliseconds: 200),
-                                        child: isExpanded
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: defaultPadding),
-                                                child: PlayerCalendarFilter(
-                                                  playerController:
-                                                      playerController,
-                                                  onSelectedPeriod:
-                                                      (newPeriod) => viewModel
-                                                          .setPeriodVisualization(
-                                                              context,
-                                                              newPeriod),
-                                                  selectedPeriod: viewModel
-                                                      .periodVisualization,
-                                                ),
-                                              )
-                                            : Container()),
-                                    Flexible(
-                                      child: Text(
-                                        viewModel.revenueTitle,
-                                        style: TextStyle(
-                                          color: textWhite,
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "R\$",
-                                            style: TextStyle(
-                                              color: textLightGrey,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 32,
-                                            ),
-                                          ),
-                                          Text(
-                                            viewModel.revenue
-                                                .formatPrice(showRS: false),
-                                            style: TextStyle(
-                                              color: textWhite,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 32,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                              Container(
-                                width: 50,
-                                height: 4,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: defaultPadding / 2),
-                                decoration: BoxDecoration(
-                                    color: secondaryPaper,
-                                    borderRadius:
-                                        BorderRadius.circular(defaultPadding)),
-                              ),
-                            ],
-                          ),
+                      FinanceResume(
+                        collapse: () => collapse(),
+                        expand: () => expand(),
+                        isExpanded: isExpanded,
+                        onUpdatePlayerFilter: (newPlayer) =>
+                            viewModel.updatePlayerFilter(newPlayer),
+                        onUpdatePeriodVisualization: (newPeriod) => viewModel
+                            .setPeriodVisualization(context, newPeriod),
+                        periodVisualization: viewModel.periodVisualization,
+                        revenueTitle: viewModel.revenueTitle,
+                        revenuePrice: viewModel.revenue.formatPrice(
+                          showRS: false,
                         ),
                       ),
                       Expanded(
@@ -184,233 +97,119 @@ class FinancesScreenMobileState extends State<FinancesScreenMobile> {
                           padding: EdgeInsets.symmetric(
                             horizontal: defaultPadding,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: defaultPadding,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: secondaryPaper,
-                                  borderRadius: BorderRadius.circular(
-                                    defaultBorderRadius,
+                          child: LayoutBuilder(
+                              builder: (layoutContext, layoutConstraints) {
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: defaultPadding,
                                   ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding,
-                                    vertical: defaultPadding / 2),
-                                height: 70,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          viewModel.expectedRevenueTitle,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: secondaryPaper,
+                                      borderRadius: BorderRadius.circular(
+                                        defaultBorderRadius,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultPadding,
+                                        vertical: defaultPadding / 2),
+                                    height: 70,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              viewModel.expectedRevenueTitle,
+                                              style: TextStyle(
+                                                color: textDarkGrey,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: defaultPadding / 2,
+                                        ),
+                                        Text(
+                                          "R\$",
                                           style: TextStyle(
-                                            color: textDarkGrey,
+                                            color: textLightGrey,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: defaultPadding / 2,
-                                    ),
-                                    Text(
-                                      "R\$",
-                                      style: TextStyle(
-                                        color: textLightGrey,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Text(
-                                      viewModel.expectedRevenue
-                                          .formatPrice(showRS: false),
-                                      style: TextStyle(
-                                        color: textBlue,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: defaultPadding,
-                              ),
-                              Container(
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: secondaryPaper,
-                                  borderRadius: BorderRadius.circular(
-                                    defaultBorderRadius,
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding,
-                                    vertical: defaultPadding / 2),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Modalidade",
-                                            style: TextStyle(
-                                              color: textDarkGrey,
-                                            ),
+                                        Text(
+                                          viewModel.expectedRevenue
+                                              .formatPrice(showRS: false),
+                                          style: TextStyle(
+                                            color: textBlue,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
                                           ),
-                                          SizedBox(
-                                            height: defaultPadding / 2,
-                                          ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                height: defaultBorderRadius,
-                                                width: defaultBorderRadius,
-                                                decoration: BoxDecoration(
-                                                  color: primaryBlue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                    4,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: defaultPadding / 2,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Mensalista (58%)",
-                                                    style: TextStyle(
-                                                      color: textDarkGrey,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "R\$230,00",
-                                                    style: TextStyle(
-                                                      color: textLightGrey,
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: defaultPadding / 4,
-                                          ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                height: defaultBorderRadius,
-                                                width: defaultBorderRadius,
-                                                decoration: BoxDecoration(
-                                                  color: secondaryLightBlue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                    4,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: defaultPadding / 2,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Avulso (42%)",
-                                                    style: TextStyle(
-                                                      color: textDarkGrey,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "R\$190,00",
-                                                    style: TextStyle(
-                                                      color: textLightGrey,
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    LayoutBuilder(builder:
-                                        (layoutContext, layoutConstraints) {
-                                      return SizedBox(
-                                        height: layoutConstraints.maxHeight,
-                                        width: layoutConstraints.maxHeight,
-                                        child: SFPieChart(
-                                          pieChartItems:
-                                              viewModel.pieChartItems,
-                                          showLabels: false,
                                         ),
-                                      );
-                                    }),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: defaultPadding,
-                              ),
-                              Text(
-                                "Partidas",
-                                style: TextStyle(
-                                  color: textDarkGrey,
-                                ),
-                              ),
-                              SizedBox(
-                                height: defaultPadding / 2,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: secondaryPaper,
-                                    borderRadius: BorderRadius.circular(
-                                      defaultBorderRadius,
+                                      ],
                                     ),
                                   ),
-                                  child: viewModel.matches.isEmpty
-                                      ? Center(
-                                          child: Text(
-                                            "Sem partidas",
-                                            style: TextStyle(
-                                              color: textDarkGrey,
+                                  SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  FinancePercentages(
+                                    matchValue: viewModel.revenueFromMatch,
+                                    matchPercentage:
+                                        viewModel.revenueFromMatchPercentage,
+                                    recurrentMatchValue:
+                                        viewModel.revenueFromRecurrentMatch,
+                                    recurrentMatchPercentage: viewModel
+                                        .revenueFromRecurrentMatchPercentage,
+                                    pieChartItems: viewModel.pieChartItems,
+                                  ),
+                                  SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  Text(
+                                    "Partidas",
+                                    style: TextStyle(
+                                      color: textDarkGrey,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: defaultPadding / 2,
+                                  ),
+                                  Container(
+                                    height: layoutConstraints.maxHeight * 0.5,
+                                    decoration: BoxDecoration(
+                                      color: secondaryPaper,
+                                      borderRadius: BorderRadius.circular(
+                                        defaultBorderRadius,
+                                      ),
+                                    ),
+                                    child: viewModel.matches.isEmpty
+                                        ? Center(
+                                            child: Text(
+                                              "Sem partidas",
+                                              style: TextStyle(
+                                                color: textDarkGrey,
+                                              ),
                                             ),
+                                          )
+                                        : ListView.builder(
+                                            itemCount: viewModel.matches.length,
+                                            itemBuilder: (context, index) {
+                                              return FinanceItem(
+                                                  match:
+                                                      viewModel.matches[index]);
+                                            },
                                           ),
-                                        )
-                                      : ListView.builder(
-                                          itemCount: viewModel.matches.length,
-                                          itemBuilder: (context, index) {
-                                            return FinanceItem(
-                                                match:
-                                                    viewModel.matches[index]);
-                                          },
-                                        ),
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            );
+                          }),
                         ),
                       ),
                     ],

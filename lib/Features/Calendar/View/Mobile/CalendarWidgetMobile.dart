@@ -331,10 +331,6 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
           extent: const FixedTableSpanExtent(hoursColumnWidth),
         );
       default:
-        print("maxWidth ${maxWidth}");
-        print("hoursColumnWidth ${hoursColumnWidth}");
-        print(
-            "final ${((maxWidth - hoursColumnWidth) / widget.viewModel.courts.length)}");
         double columnWidth = (((maxWidth - hoursColumnWidth) /
                     widget.viewModel.courts.length) <
                 minCellWidth)

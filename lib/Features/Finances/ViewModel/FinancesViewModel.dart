@@ -100,16 +100,41 @@ class FinancesViewModel extends ChangeNotifier {
     List<AppMatch> filteredMatches = [];
     if (periodVisualization == EnumPeriodVisualization.Today) {
       filteredMatches = _matches
-          .where((element) => areInTheSameDay(element.date, DateTime.now()))
+          .where(
+            (match) =>
+                areInTheSameDay(match.date, DateTime.now()) &&
+                match.matchCreatorName.toLowerCase().contains(
+                      playerFilter,
+                    ),
+          )
           .toList();
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
-      filteredMatches =
-          _matches.where((element) => isInCurrentMonth(element.date)).toList();
+      filteredMatches = _matches
+          .where(
+            (match) =>
+                isInCurrentMonth(match.date) &&
+                match.matchCreatorName.toLowerCase().contains(
+                      playerFilter,
+                    ),
+          )
+          .toList();
     } else {
-      filteredMatches = customMatches;
+      filteredMatches = customMatches
+          .where(
+            (match) => match.matchCreatorName.toLowerCase().contains(
+                  playerFilter,
+                ),
+          )
+          .toList();
     }
     filteredMatches.sort((a, b) => a.date.compareTo(b.date));
     return filteredMatches;
+  }
+
+  String playerFilter = "";
+  void updatePlayerFilter(String text) {
+    playerFilter = text;
+    notifyListeners();
   }
 
   bool _showNetCost = false;
@@ -133,7 +158,7 @@ class FinancesViewModel extends ChangeNotifier {
   String get revenueTitle {
     String titleDate;
     if (periodVisualization == EnumPeriodVisualization.Today) {
-      titleDate = DateFormat('dd/MM').format(DateTime.now());
+      titleDate = "no hoje";
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
       titleDate =
           "${monthsPortuguese[getSFMonthIndex(DateTime.now())]}/${DateTime.now().year}";
@@ -151,9 +176,9 @@ class FinancesViewModel extends ChangeNotifier {
   String get expectedRevenueTitle {
     String titleDate;
     if (periodVisualization == EnumPeriodVisualization.Today) {
-      titleDate = "de hoje";
+      titleDate = "final de dia";
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
-      titleDate = "do mês";
+      titleDate = "final do mês";
     } else {
       titleDate = customEndDate != null
           ? "até ${DateFormat('dd/MM').format(customEndDate!)}"
@@ -188,6 +213,32 @@ class FinancesViewModel extends ChangeNotifier {
     return a;
   }
 
+  double get revenueFromMatch {
+    return matches.where((match) => !match.isFromRecurrentMatch).toList().fold(
+        0,
+        (previousValue, element) =>
+            previousValue + (showNetCost ? element.netCost : element.cost));
+  }
+
+  double get revenueFromRecurrentMatch {
+    return matches.where((match) => match.isFromRecurrentMatch).toList().fold(
+        0,
+        (previousValue, element) =>
+            previousValue + (showNetCost ? element.netCost : element.cost));
+  }
+
+  int get revenueFromMatchPercentage {
+    return expectedRevenue == 0
+        ? 0
+        : (revenueFromMatch * 100) ~/ expectedRevenue;
+  }
+
+  int get revenueFromRecurrentMatchPercentage {
+    return expectedRevenue == 0
+        ? 0
+        : (revenueFromRecurrentMatch * 100) ~/ expectedRevenue;
+  }
+
   //////// TABLE ////////////////////////////////////////
   FinancesDataSource? financesDataSource;
 
@@ -201,21 +252,19 @@ class FinancesViewModel extends ChangeNotifier {
   List<PieChartItem> get pieChartItems {
     List<PieChartItem> items = [];
     Map<String, int> nameCount = <String, int>{};
-    nameCount["Mensalista"] = 0;
-    nameCount["Avulso"] = 0;
-    for (var match in matches) {
-      if (match.idRecurrentMatch != 0) {
-        nameCount["Mensalista"] = nameCount["Mensalista"]! +
-            (showNetCost ? match.netCost.toInt() : match.cost.toInt());
-      } else {
-        nameCount["Avulso"] = nameCount["Avulso"]! +
-            (showNetCost ? match.netCost.toInt() : match.cost.toInt());
-      }
-    }
+    nameCount["Mensalista"] = revenueFromRecurrentMatch.toInt();
+    nameCount["Avulso"] = revenueFromMatch.toInt();
+
     nameCount.forEach((key, value) {
       if (value > 0) {
         items.add(
-            PieChartItem(name: key, value: value.toDouble(), prefix: "R\$"));
+          PieChartItem(
+            name: key,
+            value: value.toDouble(),
+            prefix: "R\$",
+            color: key == "Mensalista" ? primaryLightBlue : primaryBlue,
+          ),
+        );
       }
     });
     if (hoveredItem >= 0) {

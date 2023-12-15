@@ -318,11 +318,8 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                                         defaultPadding / 4,
                                                   ),
                                                   child: SFButton(
-                                                    iconFirst: true,
-                                                    iconPath:
-                                                        r"assets/icon/delete.svg",
                                                     buttonLabel:
-                                                        "Cancelar partida/mensalista",
+                                                        "Opções de cancelamento",
                                                     buttonType:
                                                         ButtonType.Delete,
                                                     onTap: () => widget
@@ -333,25 +330,49 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                                   ),
                                                 ),
                                               )
-                                        : Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: defaultPadding / 4,
-                                              ),
-                                              child: SFButton(
-                                                iconFirst: true,
-                                                iconPath:
-                                                    r"assets/icon/delete.svg",
-                                                buttonLabel:
-                                                    "Cancelar mensalista",
-                                                buttonType: ButtonType.Delete,
-                                                onTap: () => widget.viewModel
-                                                    .onTapCancelMatchHourInformation(
-                                                  context,
+                                        : widget.viewModel.hourInformation!
+                                                .refRecurrentMatch!.blocked
+                                            ? Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        defaultPadding / 4,
+                                                  ),
+                                                  child: SFButton(
+                                                    buttonLabel:
+                                                        "Opções de cancelamento",
+                                                    buttonType:
+                                                        ButtonType.Delete,
+                                                    onTap: () => widget
+                                                        .viewModel
+                                                        .onTapCancelMatchHourInformation(
+                                                      context,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        defaultPadding / 4,
+                                                  ),
+                                                  child: SFButton(
+                                                    iconFirst: true,
+                                                    iconPath:
+                                                        r"assets/icon/delete.svg",
+                                                    buttonLabel:
+                                                        "Cancelar mensalista",
+                                                    buttonType:
+                                                        ButtonType.Delete,
+                                                    onTap: () => widget
+                                                        .viewModel
+                                                        .onTapCancelMatchHourInformation(
+                                                      context,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
                               ],
                             ),
                           ),

@@ -36,7 +36,7 @@ class AppRecurrentMatch {
   String get matchHourDescription =>
       "${startingHour.hourString} - ${endingHour.hourString}";
 
-  bool get payInStore => nextRecurrentMatches.first.payInStore;
+  bool get payInStore => blocked ? true : nextRecurrentMatches.first.payInStore;
 
   AppRecurrentMatch({
     required this.idRecurrentMatch,

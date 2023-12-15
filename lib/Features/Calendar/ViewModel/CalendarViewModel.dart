@@ -135,7 +135,7 @@ class CalendarViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _selectedWeekday = 0;
+  int _selectedWeekday = getSFWeekday(DateTime.now().weekday);
   int get selectedWeekday => _selectedWeekday;
   void setSelectedWeekday(int newValue) {
     _selectedWeekday = newValue;
@@ -167,6 +167,7 @@ class CalendarViewModel extends ChangeNotifier {
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
   void setSelectedDay(BuildContext context, DateTime newSelectedDay) {
+    setSelectedWeekday(getSFWeekday(newSelectedDay.weekday));
     setShowHourInfo(value: false);
     if (newSelectedDay.isAfter(matchesEndDate) ||
         newSelectedDay.isBefore(matchesStartDate)) {
@@ -325,6 +326,9 @@ class CalendarViewModel extends ChangeNotifier {
                     dayMatch.recurrentMatch =
                         AppRecurrentMatch.copyWith(recMatch);
                   }
+                } else {
+                  dayMatch.recurrentMatch =
+                      AppRecurrentMatch.copyWith(recMatch);
                 }
               } else {
                 dayMatch.recurrentMatch = AppRecurrentMatch.copyWith(recMatch);
@@ -1035,14 +1039,26 @@ class CalendarViewModel extends ChangeNotifier {
         AddMatchModal(
           onReturn: () => returnMainView(context),
           onSelected: (blockMatch) {
-            blockHour(
+            if (blockMatch.isRecurrent) {
+              recurrentBlockHour(
+                context,
+                blockMatch.idStoreCourt,
+                blockMatch.timeBegin,
+                blockMatch.player.id!,
+                blockMatch.idSport,
+                blockMatch.observation,
+              );
+            } else {
+              blockHour(
                 context,
                 blockMatch.idStoreCourt,
                 selectedDay,
                 blockMatch.timeBegin,
                 blockMatch.player.id!,
                 blockMatch.idSport,
-                blockMatch.observation);
+                blockMatch.observation,
+              );
+            }
           },
           onAddNewPlayer: (calendarType) => genericAddNewPlayer(
             context,

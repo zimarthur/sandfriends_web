@@ -224,11 +224,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                       selectedPlayer: selectedPlayer,
                       onAddNewPlayer: () => widget.onAddNewPlayer(),
                       playerController: playerController,
-                      onPlayerSelected: (player) {
-                        setState(() {
-                          selectedPlayer = player;
-                        });
-                      },
+                      onPlayerSelected: (player) => onPlayerSelected(player),
                       showSport: true,
                     ))
                   else

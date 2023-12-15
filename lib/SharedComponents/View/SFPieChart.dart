@@ -27,15 +27,18 @@ class _SFPieChartState extends State<SFPieChart> {
   Widget build(BuildContext context) {
     double chartValuesSum =
         widget.pieChartItems.fold(0, (sum, item) => sum + item.value);
-    for (int i = 0; i < widget.pieChartItems.length; i++) {
-      if (i < sfColors.length) {
-        widget.pieChartItems[i].color = sfColors[i];
-      } else {
-        widget.pieChartItems[i].color =
-            Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                .withOpacity(1.0);
+    if (widget.pieChartItems.any((element) => element.color == null)) {
+      for (int i = 0; i < widget.pieChartItems.length; i++) {
+        if (i < sfColors.length) {
+          widget.pieChartItems[i].color = sfColors[i];
+        } else {
+          widget.pieChartItems[i].color =
+              Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                  .withOpacity(1.0);
+        }
       }
     }
+
     return widget.pieChartItems.isEmpty
         ? Container()
         : LayoutBuilder(
@@ -173,5 +176,6 @@ class PieChartItem {
   Color? color;
   String? prefix;
 
-  PieChartItem({required this.name, required this.value, this.prefix});
+  PieChartItem(
+      {required this.name, required this.value, this.prefix, this.color});
 }
