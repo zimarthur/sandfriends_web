@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Coupon.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:intl/intl.dart';
@@ -87,6 +88,8 @@ class DataProvider extends ChangeNotifier {
   List<AppRecurrentMatch> recurrentMatches = [];
 
   List<Reward> rewards = [];
+
+  List<Coupon> coupons = [];
 
   List<Player> storePlayers = [];
 
@@ -204,6 +207,7 @@ class DataProvider extends ChangeNotifier {
     setMatches(responseBody);
     setRecurrentMatches(responseBody);
     setRewards(responseBody);
+    setCoupons(responseBody);
 
     matchesStartDate =
         DateFormat("dd/MM/yyyy").parse(responseBody['MatchesStartDate']);
@@ -300,6 +304,18 @@ class DataProvider extends ChangeNotifier {
     for (var reward in responseBody['Rewards']) {
       rewards.add(
         Reward.fromJson(reward),
+      );
+    }
+  }
+
+  void setCoupons(Map<String, dynamic> responseBody) {
+    coupons.clear();
+    for (var coupon in responseBody['Coupons']) {
+      coupons.add(
+        Coupon.fromJson(
+          coupon,
+          availableHours,
+        ),
       );
     }
   }

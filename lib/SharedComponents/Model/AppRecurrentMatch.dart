@@ -1,4 +1,5 @@
 import 'AppMatch.dart';
+import 'Court.dart';
 import 'Hour.dart';
 import 'Sport.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +12,7 @@ class AppRecurrentMatch {
   int weekday;
   Hour startingHour;
   Hour endingHour;
-  int idStoreCourt;
+  Court court;
   String creatorFirstName;
   String creatorLastName;
   String? creatorPhoto;
@@ -46,7 +47,7 @@ class AppRecurrentMatch {
     required this.weekday,
     required this.startingHour,
     required this.endingHour,
-    required this.idStoreCourt,
+    required this.court,
     required this.creatorFirstName,
     required this.creatorLastName,
     required this.creatorPhoto,
@@ -91,7 +92,7 @@ class AppRecurrentMatch {
           .firstWhere((hour) => hour.hour == parsedJson["TimeBegin"]),
       endingHour: referenceHours
           .firstWhere((hour) => hour.hour == parsedJson["TimeEnd"]),
-      idStoreCourt: parsedJson["IdStoreCourt"],
+      court: Court.fromJsonMatch(parsedJson["StoreCourt"]),
       sport: parsedJson["IdSport"] == null
           ? null
           : referenceSports
@@ -116,7 +117,7 @@ class AppRecurrentMatch {
       weekday: refMatch.weekday,
       startingHour: refMatch.startingHour,
       endingHour: refMatch.endingHour,
-      idStoreCourt: refMatch.idStoreCourt,
+      court: refMatch.court,
       sport: refMatch.sport,
       creatorFirstName: refMatch.creatorFirstName,
       creatorLastName: refMatch.creatorLastName,

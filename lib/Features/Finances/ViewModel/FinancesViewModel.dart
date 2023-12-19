@@ -158,7 +158,7 @@ class FinancesViewModel extends ChangeNotifier {
   String get revenueTitle {
     String titleDate;
     if (periodVisualization == EnumPeriodVisualization.Today) {
-      titleDate = "no hoje";
+      titleDate = "hoje";
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
       titleDate =
           "${monthsPortuguese[getSFMonthIndex(DateTime.now())]}/${DateTime.now().year}";
@@ -176,7 +176,7 @@ class FinancesViewModel extends ChangeNotifier {
   String get expectedRevenueTitle {
     String titleDate;
     if (periodVisualization == EnumPeriodVisualization.Today) {
-      titleDate = "final de dia";
+      titleDate = "final do dia";
     } else if (periodVisualization == EnumPeriodVisualization.CurrentMonth) {
       titleDate = "final do mês";
     } else {

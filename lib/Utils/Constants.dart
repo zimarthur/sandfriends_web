@@ -25,13 +25,13 @@ const disabled = Color.fromRGBO(230, 235, 239, 1);
 const error = Color.fromRGBO(248, 113, 113, 1);
 const success = Color.fromRGBO(3, 152, 85, 1);
 const success50 = Color.fromRGBO(236, 253, 243, 1);
-const forecast = Color.fromRGBO(68, 76, 231, 1);
-const forecast50 = Color.fromRGBO(238, 244, 255, 1);
 
-const paidBackground = Color.fromRGBO(236, 253, 243, 1);
-const paidText = Color.fromRGBO(2, 122, 72, 1);
-const needsPaymentBackground = Color.fromRGBO(255, 250, 235, 1);
-const needsPaymentText = Color.fromRGBO(181, 71, 8, 1);
+const blueBg = Color.fromRGBO(68, 76, 231, 1);
+const blueText = Color.fromRGBO(238, 244, 255, 1);
+const greenBg = Color.fromRGBO(236, 253, 243, 1);
+const greenText = Color.fromRGBO(2, 122, 72, 1);
+const redBg = Color.fromRGBO(255, 250, 235, 1);
+const redText = Color.fromRGBO(181, 71, 8, 1);
 
 const red = Colors.red;
 const green = Color.fromRGBO(37, 211, 102, 1);

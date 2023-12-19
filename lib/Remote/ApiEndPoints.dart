@@ -58,4 +58,7 @@ class ApiEndPoints {
   final String addStorePlayer = "/AddStorePlayer";
   final String editStorePlayer = "/EditStorePlayer";
   final String deleteStorePlayer = "/DeleteStorePlayer";
+
+  //coupons
+  final String enableDisableCoupon = "/EnableDisableCoupon";
 }

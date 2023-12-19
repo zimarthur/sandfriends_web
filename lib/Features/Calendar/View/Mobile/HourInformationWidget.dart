@@ -62,6 +62,13 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
             widget.onClose();
           }
         },
+        onVerticalDragUpdate: (drag) {
+          if (drag.delta.dy < -5.0) {
+            widget.viewModel.setIsHourInformationExpanded(value: true);
+          } else if (drag.delta.dy > 5) {
+            widget.viewModel.setIsHourInformationExpanded(value: false);
+          }
+        },
         child: AnimatedContainer(
           duration: animationDuration,
           margin: EdgeInsets.all(defaultPadding / 2),
@@ -208,8 +215,8 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                         ),
                                         color: widget.viewModel.hourInformation!
                                                 .payInStore!
-                                            ? needsPaymentBackground
-                                            : paidBackground),
+                                            ? redBg
+                                            : greenBg),
                                     child: Row(
                                       children: [
                                         SvgPicture.asset(
@@ -232,8 +239,8 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                                       .viewModel
                                                       .hourInformation!
                                                       .payInStore!
-                                                  ? needsPaymentText
-                                                  : paidText,
+                                                  ? redText
+                                                  : greenText,
                                               fontSize: 12),
                                         ),
                                       ],
@@ -324,7 +331,7 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                                         ButtonType.Delete,
                                                     onTap: () => widget
                                                         .viewModel
-                                                        .onTapCancelMatchHourInformation(
+                                                        .onTapCancelOptions(
                                                       context,
                                                     ),
                                                   ),
@@ -345,7 +352,7 @@ class _HourInformationWidgetState extends State<HourInformationWidget> {
                                                         ButtonType.Delete,
                                                     onTap: () => widget
                                                         .viewModel
-                                                        .onTapCancelMatchHourInformation(
+                                                        .onTapCancelOptions(
                                                       context,
                                                     ),
                                                   ),

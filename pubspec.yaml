@@ -148,6 +148,7 @@ flutter:
     - assets/icon/sport_1.svg
     - assets/icon/sport_2.svg
     - assets/icon/sport_3.svg
+    - assets/icon/discount.svg
 
     - assets/people/calendar.svg
     - assets/people/clock.svg

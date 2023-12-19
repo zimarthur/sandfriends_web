@@ -103,8 +103,8 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                                           value: viewModel.matches.length
                                               .toString(),
                                           iconPath: r"assets/icon/court.svg",
-                                          primaryColor: forecast,
-                                          secondaryColor: forecast50,
+                                          primaryColor: blueText,
+                                          secondaryColor: blueBg,
                                         ),
                                       ),
                                     ],

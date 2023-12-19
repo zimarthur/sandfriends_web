@@ -9,6 +9,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.d
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal/AddMatchModal.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/BlockHourWidget.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/CancelOptionsModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Players/View/Web/StorePlayerWidget.dart';
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
@@ -304,12 +305,12 @@ class CalendarViewModel extends ChangeNotifier {
         } else if (recurrentMatches.any((recMatch) =>
             recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
             recMatch.startingHour == hour &&
-            recMatch.idStoreCourt == court.idStoreCourt)) {
+            recMatch.court.idStoreCourt == court.idStoreCourt)) {
           {
             recMatch = recurrentMatches.firstWhere((recMatch) =>
                 recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
-                recMatch.idStoreCourt == court.idStoreCourt);
+                recMatch.court.idStoreCourt == court.idStoreCourt);
             if (selectedDay.isAfter(recMatch.creationDate)) {
               bool hasToCheckForCanceledMatches = recMatch.blocked ||
                   (!recMatch.blocked &&
@@ -393,11 +394,11 @@ class CalendarViewModel extends ChangeNotifier {
           } else if (recurrentMatches.any((recMatch) =>
               recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
               recMatch.startingHour == hour &&
-              recMatch.idStoreCourt == court.idStoreCourt)) {
+              recMatch.court.idStoreCourt == court.idStoreCourt)) {
             recMatch = recurrentMatches.firstWhere((recMatch) =>
                 recMatch.weekday == getSFWeekday(selectedDay.weekday) &&
                 recMatch.startingHour == hour &&
-                recMatch.idStoreCourt == court.idStoreCourt);
+                recMatch.court.idStoreCourt == court.idStoreCourt);
             if (selectedDay.isAfter(recMatch.creationDate)) {
               bool hasToCheckForCanceledMatches = recMatch.blocked ||
                   (!recMatch.blocked &&
@@ -467,7 +468,7 @@ class CalendarViewModel extends ChangeNotifier {
             .allowReccurrent) {
           List<AppRecurrentMatch> filteredRecurrentMatches = recurrentMatches
               .where((recMatch) =>
-                  recMatch.idStoreCourt == court.idStoreCourt &&
+                  recMatch.court.idStoreCourt == court.idStoreCourt &&
                   recMatch.weekday == selectedWeekday)
               .toList();
           for (var hour in selectedDayWorkingHours) {
@@ -677,6 +678,39 @@ class CalendarViewModel extends ChangeNotifier {
     }
   }
 
+  void onTapCancelOptions(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      CancelOptionsModal(
+        onReturn: () => returnMainView(context),
+        selectedDay: selectedDay,
+        recurrentMatch: hourInformation!.refRecurrentMatch!,
+        onCancel: (calendarType) {
+          if (calendarType == CalendarType.Match) {
+            if (hourInformation!.refRecurrentMatch!.blocked) {
+              unblockHour(
+                  context,
+                  hourInformation!.refRecurrentMatch!.court.idStoreCourt!,
+                  selectedDay,
+                  hourInformation!.refRecurrentMatch!.startingHour);
+            } else {
+              if (hourInformation!.refMatch != null) {
+                cancelMatch(context, hourInformation!.refMatch!.idMatch);
+              }
+            }
+          } else {
+            if (hourInformation!.refRecurrentMatch!.blocked) {
+              recurrentUnblockHour(context,
+                  hourInformation!.refRecurrentMatch!.idRecurrentMatch);
+            } else {
+              cancelRecurrentMatch(context,
+                  hourInformation!.refRecurrentMatch!.idRecurrentMatch);
+            }
+          }
+        },
+      ),
+    );
+  }
+
   void onTapCancelMatchHourInformation(BuildContext context) {
     if (hourInformation!.match) {
       if (hourInformation!.refMatch!.blocked) {
@@ -715,6 +749,7 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setMatchesFromResponse(context, response.responseBody!);
 
         Provider.of<MenuProvider>(context, listen: false).closeModal();
@@ -746,6 +781,7 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setMatchesFromResponse(context, response.responseBody!);
 
         Provider.of<MenuProvider>(context, listen: false).closeModal();
@@ -782,8 +818,10 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setRecurrentMatchesFromResponse(context, response.responseBody!);
         Provider.of<MenuProvider>(context, listen: false).closeModal();
+        notifyListeners();
       } else if (response.responseStatus ==
           NetworkResponseStatus.expiredToken) {
         Provider.of<MenuProvider>(context, listen: false).logout(context);
@@ -804,6 +842,7 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setRecurrentMatchesFromResponse(context, response.responseBody!);
         Provider.of<MenuProvider>(context, listen: false).closeModal();
       } else if (response.responseStatus ==
@@ -830,6 +869,7 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setMatchesFromResponse(context, response.responseBody!);
         cancelMatchReasonController.text = "";
         setShowHourInfo(value: false);
@@ -858,6 +898,7 @@ class CalendarViewModel extends ChangeNotifier {
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
+        setShowHourInfo(value: false);
         setRecurrentMatchesFromResponse(context, response.responseBody!);
 
         cancelRecurrentMatchReasonController.text = "";

@@ -6,10 +6,12 @@ class SFPeriodToggle extends StatefulWidget {
   EnumPeriodVisualization currentPeriodVisualization;
   Function(EnumPeriodVisualization) onChanged;
   String? customText;
+  List<String>? labels;
   SFPeriodToggle({
     required this.currentPeriodVisualization,
     required this.onChanged,
     this.customText,
+    this.labels,
   });
 
   @override
@@ -20,13 +22,14 @@ class _SFPeriodToggleState extends State<SFPeriodToggle> {
   @override
   Widget build(BuildContext context) {
     return SFToggle(
-      [
-        "Hoje",
-        "Nesse mês",
-        widget.currentPeriodVisualization == EnumPeriodVisualization.Custom
-            ? widget.customText!
-            : "Personalizado"
-      ],
+      widget.labels ??
+          [
+            EnumPeriodVisualization.Today.value,
+            EnumPeriodVisualization.CurrentMonth.value,
+            widget.currentPeriodVisualization == EnumPeriodVisualization.Custom
+                ? widget.customText!
+                : EnumPeriodVisualization.Custom.value,
+          ],
       widget.currentPeriodVisualization.index,
       (newPeriod) => widget.onChanged(
         EnumPeriodVisualization.values.elementAt(

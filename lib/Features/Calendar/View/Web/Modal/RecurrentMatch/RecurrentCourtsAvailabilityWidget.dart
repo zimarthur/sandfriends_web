@@ -92,10 +92,10 @@ class RecurrentCourtsAvailabilityWidget extends StatelessWidget {
                             opDay.weekday == getSFWeekday(day.weekday))
                         .allowReccurrent;
                     if (dayMatch.recurrentMatches!.any((recMatch) =>
-                        recMatch.idStoreCourt == court.idStoreCourt)) {
+                        recMatch.court.idStoreCourt == court.idStoreCourt)) {
                       recurrentMatch = dayMatch.recurrentMatches!.firstWhere(
                         (recMatch) =>
-                            recMatch.idStoreCourt ==
+                            recMatch.court.idStoreCourt ==
                             Provider.of<DataProvider>(context, listen: false)
                                 .courts[index]
                                 .idStoreCourt,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Authentication/Login/Repository/LoginRepoImp.dart';
+import 'package:sandfriends_web/Features/Coupons/View/Web/CouponsScreenWeb.dart';
 import 'package:sandfriends_web/Features/Help/View/HelpScreen.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Menu/Model/DrawerItem.dart';
@@ -268,6 +269,14 @@ class MenuProvider extends ChangeNotifier {
       icon: r"assets/icon/user_group.svg",
       requiresAdmin: false,
       widgetWeb: PlayersScreenWeb(),
+      widgetMobile: PlayersScreenMobile(),
+      mainDrawer: true,
+    ),
+    DrawerItem(
+      title: "Cupons de desconto",
+      icon: r"assets/icon/discount.svg",
+      requiresAdmin: true,
+      widgetWeb: CouponsScreenWeb(),
       widgetMobile: PlayersScreenMobile(),
       mainDrawer: true,
     ),

@@ -93,7 +93,7 @@ class CourtsAvailabilityWidget extends StatelessWidget {
                         match.court.idStoreCourt == court.idStoreCourt);
                     AppRecurrentMatch? recurrentMatch =
                         recurrentMatches.firstWhereOrNull((recMatch) =>
-                            recMatch.idStoreCourt == court.idStoreCourt);
+                            recMatch.court.idStoreCourt == court.idStoreCourt);
 
                     return Padding(
                       padding: EdgeInsets.only(

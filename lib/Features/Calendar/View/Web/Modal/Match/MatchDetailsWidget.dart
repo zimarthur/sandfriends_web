@@ -144,8 +144,8 @@ class MatchDetailsWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: match.selectedPayment ==
                                       SelectedPayment.PayInStore
-                                  ? needsPaymentBackground
-                                  : paidBackground,
+                                  ? redBg
+                                  : greenBg,
                               borderRadius: BorderRadius.circular(
                                 defaultBorderRadius,
                               ),
@@ -158,8 +158,8 @@ class MatchDetailsWidget extends StatelessWidget {
                               style: TextStyle(
                                 color: match.selectedPayment ==
                                         SelectedPayment.PayInStore
-                                    ? needsPaymentText
-                                    : paidText,
+                                    ? redText
+                                    : greenText,
                               ),
                             ),
                           ),

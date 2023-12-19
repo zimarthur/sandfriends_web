@@ -101,8 +101,8 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                                         Expanded(
                                           child: HomeKpi(
                                             iconPath: r"assets/icon/court.svg",
-                                            iconColor: forecast,
-                                            backgroundColor: forecast50,
+                                            iconColor: blueText,
+                                            backgroundColor: blueBg,
                                             title: "Partidas hoje",
                                             value: viewModel.matches.length,
                                             lastValue: 400,

@@ -115,8 +115,8 @@ class _FinancesScreenWebState extends State<FinancesScreenWeb> {
                                     value:
                                         "R\$ ${viewModel.expectedRevenue.toStringAsFixed(2).replaceAll(".", ",")}",
                                     iconPath: r"assets/icon/forecast.svg",
-                                    iconColor: forecast,
-                                    iconColorBackground: forecast50,
+                                    iconColor: blueText,
+                                    iconColorBackground: blueBg,
                                   ),
                                   const SizedBox(
                                     height: defaultPadding,

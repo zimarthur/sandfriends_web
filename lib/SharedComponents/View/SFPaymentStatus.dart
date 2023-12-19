@@ -14,9 +14,8 @@ class SFPaymentStatus extends StatelessWidget {
         vertical: defaultPadding / 4,
       ),
       decoration: BoxDecoration(
-          color: selectedPayment == SelectedPayment.PayInStore
-              ? needsPaymentBackground
-              : paidBackground,
+          color:
+              selectedPayment == SelectedPayment.PayInStore ? redBg : greenBg,
           borderRadius: BorderRadius.circular(
             defaultBorderRadius,
           )),
@@ -26,8 +25,8 @@ class SFPaymentStatus extends StatelessWidget {
             : "Pago",
         style: TextStyle(
             color: selectedPayment == SelectedPayment.PayInStore
-                ? needsPaymentText
-                : paidText,
+                ? redText
+                : greenText,
             fontSize: 12),
       ),
     );

@@ -113,14 +113,14 @@ class RecurrentMatchDetailsWidget extends StatelessWidget {
                                 vertical: defaultPadding / 4,
                                 horizontal: defaultPadding / 2),
                             decoration: BoxDecoration(
-                              color: paidBackground,
+                              color: greenBg,
                               borderRadius: BorderRadius.circular(
                                 defaultBorderRadius,
                               ),
                             ),
                             child: Text(
                               "Pago",
-                              style: TextStyle(color: paidText),
+                              style: TextStyle(color: greenText),
                             ),
                           ),
                         ],

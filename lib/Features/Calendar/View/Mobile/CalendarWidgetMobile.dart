@@ -292,8 +292,8 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                         borderRadius: BorderRadius.circular(
                           defaultBorderRadius,
                         ),
-                        border: Border.all(color: paidText, width: 2),
-                        color: paidBackground,
+                        border: Border.all(color: greenText, width: 2),
+                        color: greenBg,
                       ),
                       child: Center(
                         child: Text(
@@ -305,7 +305,7 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
                               ? ""
                               : "+",
                           style: TextStyle(
-                            color: paidText,
+                            color: greenText,
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                           ),
