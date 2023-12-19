@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Coupons/Model/CouponsTableCallback.dart';
 import 'package:sandfriends_web/Features/Coupons/Repository/CouponsRepo.dart';
 import 'package:sandfriends_web/Features/Coupons/Repository/CouponsRepoImp.dart';
+import 'package:sandfriends_web/Features/Coupons/View/Web/AddCouponModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/Features/Players/Model/PlayersDataSource.dart';
 import 'package:sandfriends_web/Features/Players/Model/PlayersTableCallback.dart';
@@ -179,5 +180,14 @@ class CouponsViewModel extends ChangeNotifier {
 
   void closeModal(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
+  }
+
+  void openAddCouponModal(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      AddCouponModal(
+        onReturn: () => closeModal(context),
+        onCreateCoupon: (coupon) {},
+      ),
+    );
   }
 }

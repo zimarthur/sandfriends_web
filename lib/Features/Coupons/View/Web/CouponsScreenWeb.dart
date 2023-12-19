@@ -58,9 +58,9 @@ class _CouponsScreenWebState extends State<CouponsScreenWeb> {
                   SFButton(
                     buttonLabel: "Adicionar Cupom",
                     buttonType: ButtonType.Primary,
-                    onTap: () {},
+                    onTap: () => viewModel.openAddCouponModal(context),
                     iconFirst: true,
-                    iconPath: r"assets/icon/user_plus.svg",
+                    iconPath: r"assets/icon/discount_add.svg",
                     textPadding: const EdgeInsets.symmetric(
                       vertical: defaultPadding,
                       horizontal: defaultPadding * 2,
