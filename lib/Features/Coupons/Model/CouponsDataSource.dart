@@ -161,8 +161,8 @@ class CouponsDataSource extends DataGridSource {
             child: Row(
               children: [
                 SvgPicture.asset(
-                  r"assets/icon/delete.svg",
-                  color: red,
+                  r"assets/icon/block.svg",
+                  color: textDarkGrey,
                 ),
                 SizedBox(
                   width: defaultPadding,
@@ -170,7 +170,7 @@ class CouponsDataSource extends DataGridSource {
                 Text(
                   'Dasabilitar',
                   style: TextStyle(
-                    color: red,
+                    color: textDarkGrey,
                   ),
                 ),
               ],

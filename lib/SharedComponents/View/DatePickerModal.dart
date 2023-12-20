@@ -9,10 +9,16 @@ class DatePickerModal extends StatefulWidget {
   Function(DateTime, DateTime?) onDateSelected;
   VoidCallback onReturn;
   bool allowFutureDates;
+  bool allowPastDates;
+  String? title;
+  String? actionButtonTitle;
   DatePickerModal({
     required this.onDateSelected,
     required this.onReturn,
     this.allowFutureDates = true,
+    this.allowPastDates = true,
+    this.title,
+    this.actionButtonTitle,
   });
 
   @override
@@ -44,7 +50,7 @@ class _DatePickerModalState extends State<DatePickerModal> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Busca Personalizada",
+            widget.title ?? "Busca Personalizada",
             style: TextStyle(
               color: primaryBlue,
               fontWeight: FontWeight.bold,
@@ -87,6 +93,7 @@ class _DatePickerModalState extends State<DatePickerModal> {
             height: defaultPadding,
           ),
           DatePicker(
+            allowPastDates: widget.allowPastDates,
             multiDate: true,
             onMultiDateSelected: (dates) {
               setState(() {
@@ -117,7 +124,7 @@ class _DatePickerModalState extends State<DatePickerModal> {
               ),
               Expanded(
                 child: SFButton(
-                  buttonLabel: "Filtrar",
+                  buttonLabel: widget.actionButtonTitle ?? "Filtrar",
                   buttonType: ButtonType.Primary,
                   onTap: () {
                     if (startDate != null) {

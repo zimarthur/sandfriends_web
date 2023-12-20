@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Web/Match/DatePicker.dart';
 import 'package:sandfriends_web/Features/Calendar/ViewModel/CalendarViewModel.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Coupon.dart';
 import 'package:sandfriends_web/SharedComponents/Model/EnumDiscountType.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Gender.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Rank.dart';
+import 'package:sandfriends_web/SharedComponents/View/DatePickerModal.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
@@ -16,6 +18,8 @@ import '../../../../../SharedComponents/View/SFButton.dart';
 import '../../../../../SharedComponents/View/SFTextfield.dart';
 import '../../../../../Utils/Constants.dart';
 import '../../../../SharedComponents/Model/Player.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class AddCouponModal extends StatefulWidget {
   VoidCallback onReturn;
@@ -36,6 +40,14 @@ class _AddCouponModalState extends State<AddCouponModal> {
   int couponValue = 0;
   DateTime? startDate;
   DateTime? endDate;
+  late Hour startingHour;
+  late Hour endingHour;
+  bool onDatePicker = false;
+
+  bool get canAddCoupon =>
+      couponController.text.isNotEmpty &&
+      startDate != null &&
+      couponValueController.text.isNotEmpty;
 
   List<Hour> availableHours = [];
   final formKey = GlobalKey<FormState>();
@@ -47,260 +59,357 @@ class _AddCouponModalState extends State<AddCouponModal> {
   void initState() {
     availableHours =
         Provider.of<DataProvider>(context, listen: false).availableHours;
-
+    startingHour = availableHours.first;
+    endingHour = availableHours.last;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      width: Responsive.isMobile(context) ? width * 0.95 : 500,
-      padding: const EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: secondaryPaper,
-        borderRadius: BorderRadius.circular(defaultBorderRadius),
-        border: Border.all(
-          color: divider,
-          width: 1,
-        ),
-      ),
-      child: Form(
-        key: formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Criar novo cupom",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: textBlue,
-                ),
+    return onDatePicker
+        ? DatePickerModal(
+            onDateSelected: (start, end) {
+              setState(() {
+                startDate = start;
+                endDate = end;
+                onDatePicker = false;
+              });
+            },
+            onReturn: () => setState(() {
+              onDatePicker = false;
+            }),
+            title: "Selecione a data de início e fim do cupom",
+            actionButtonTitle: "Selecionar",
+            allowPastDates: false,
+          )
+        : Container(
+            width: Responsive.isMobile(context) ? width * 0.95 : 500,
+            padding: const EdgeInsets.all(defaultPadding),
+            decoration: BoxDecoration(
+              color: secondaryPaper,
+              borderRadius: BorderRadius.circular(defaultBorderRadius),
+              border: Border.all(
+                color: divider,
+                width: 1,
               ),
-              const SizedBox(
-                height: defaultPadding / 2,
-              ),
-              Text(
-                "Alavanque suas vendas e faça com que novos jogadores conheçam sua quadras com cupons de desconto",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: textDarkGrey,
-                ),
-              ),
-              const SizedBox(
-                height: defaultPadding * 2,
-              ),
-              Row(
-                children: [
-                  const Expanded(flex: 1, child: Text("Nome do cupom:")),
-                  Expanded(
-                    flex: 2,
-                    child: SFTextField(
-                      labelText: "",
-                      hintText: "SAND10",
-                      pourpose: TextFieldPourpose.Standard,
-                      controller: couponController,
-                      onChanged: (newName) {
-                        setState(() {
-                          couponCode = newName;
-                        });
-                      },
-                      validator: (a) => emptyCheck(a, "Digite o nome do cupom"),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: defaultPadding,
-              ),
-              Row(
-                children: [
-                  Expanded(flex: 2, child: Text("Valor do cupom:")),
-                  Expanded(
-                    flex: 1,
-                    child: SFTextField(
-                      labelText: "",
-                      pourpose: TextFieldPourpose.Numeric,
-                      controller: couponValueController,
-                      validator: (a) {},
-                      textAlign: TextAlign.center,
-                      prefixText:
-                          discountType == EnumDiscountType.Fixed ? "R\$" : null,
-                      sufixText: discountType == EnumDiscountType.Percentage
-                          ? "%"
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: defaultPadding,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () => setState(() {
-                      discountType = EnumDiscountType.Fixed;
-                    }),
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          defaultBorderRadius,
+            ),
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          r"assets/icon/discount_add.svg",
+                          height: 30,
                         ),
-                        border: discountType == EnumDiscountType.Fixed
-                            ? Border.all(color: primaryBlue, width: 2)
-                            : Border.all(
-                                color: divider,
-                              ),
-                        color: discountType == EnumDiscountType.Fixed
-                            ? blueBg
-                            : null,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "R\$",
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        Text(
+                          "Criar novo cupom",
                           style: TextStyle(
-                            color: discountType == EnumDiscountType.Fixed
-                                ? blueText
-                                : textDarkGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: textBlue,
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: defaultPadding / 2,
+                    ),
+                    Text(
+                      "Alavanque suas vendas e faça com que novos jogadores conheçam sua quadras com cupons de desconto",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: textDarkGrey,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: defaultPadding / 2,
-                  ),
-                  InkWell(
-                    onTap: () => setState(() {
-                      discountType = EnumDiscountType.Percentage;
-                    }),
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          defaultBorderRadius,
-                        ),
-                        border: discountType == EnumDiscountType.Percentage
-                            ? Border.all(color: primaryBlue, width: 2)
-                            : Border.all(
-                                color: divider,
-                              ),
-                        color: discountType == EnumDiscountType.Percentage
-                            ? blueBg
-                            : null,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "%",
-                          style: TextStyle(
-                            color: discountType == EnumDiscountType.Percentage
-                                ? blueText
-                                : textDarkGrey,
+                    const SizedBox(
+                      height: defaultPadding * 2,
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(child: Text("Nome do cupom:")),
+                        Expanded(
+                          child: SFTextField(
+                            labelText: "",
+                            hintText: "Ex: SAND10",
+                            textAlign: TextAlign.end,
+                            pourpose: TextFieldPourpose.Standard,
+                            controller: couponController,
+                            onChanged: (newName) {
+                              setState(() {
+                                couponCode = newName;
+                              });
+                            },
+                            validator: (a) =>
+                                emptyCheck(a, "Digite o nome do cupom"),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: defaultPadding,
-              ),
-              Row(
-                children: [
-                  Expanded(flex: 2, child: Text("Valor do cupom:")),
-                  Expanded(
-                    flex: 1,
-                    child: SFTextField(
-                      labelText: "",
-                      pourpose: TextFieldPourpose.Numeric,
-                      controller: couponValueController,
-                      validator: (a) {},
-                      textAlign: TextAlign.center,
-                      prefixText:
-                          discountType == EnumDiscountType.Fixed ? "R\$" : null,
-                      sufixText: discountType == EnumDiscountType.Percentage
-                          ? "%"
-                          : null,
+                    const SizedBox(
+                      height: defaultPadding,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: defaultPadding,
-              ),
-              Row(
-                children: [
-                  Expanded(child: Text("Data de validade:")),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: defaultPadding / 2,
-                      horizontal: defaultPadding,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        defaultBorderRadius,
-                      ),
-                      border: startDate != null && endDate != null
-                          ? Border.all(color: primaryBlue, width: 2)
-                          : Border.all(
-                              color: divider,
+                    Row(
+                      children: [
+                        Expanded(child: Text("Datas válidas:")),
+                        InkWell(
+                          onTap: () => setState(() {
+                            onDatePicker = true;
+                          }),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: defaultPadding / 2,
+                              horizontal: defaultPadding,
                             ),
-                      color:
-                          startDate != null && endDate != null ? blueBg : null,
-                    ),
-                    child: Center(
-                      child: Text(
-                        startDate != null && endDate != null
-                            ? ""
-                            : "Selecionar data",
-                        style: TextStyle(
-                          color: startDate != null && endDate != null
-                              ? blueText
-                              : textDarkGrey,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                defaultBorderRadius,
+                              ),
+                              border: startDate != null
+                                  ? Border.all(color: primaryBlue, width: 2)
+                                  : Border.all(
+                                      color: divider,
+                                    ),
+                              color: startDate != null ? blueBg : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                startDate != null
+                                    ? "${DateFormat("dd/MM/yyyy").format(startDate!)}" +
+                                        "${endDate != null ? " - ${DateFormat('dd/MM/yyyy').format(endDate!)}" : ""}"
+                                    : "Selecionar data",
+                                style: TextStyle(
+                                  color: startDate != null
+                                      ? blueText
+                                      : textDarkGrey,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 2 * defaultPadding,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: SFButton(
-                      buttonLabel: "Voltar",
-                      buttonType: ButtonType.Secondary,
-                      onTap: widget.onReturn,
+                    const SizedBox(
+                      height: defaultPadding,
                     ),
-                  ),
-                  const SizedBox(
-                    width: defaultPadding,
-                  ),
-                  Expanded(
-                    child: SFButton(
-                      buttonLabel: "Adicionar cupom",
-                      buttonType: ButtonType.Primary,
-                      onTap: () {},
+                    Row(
+                      children: [
+                        Text(
+                          "Horários válidos:",
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Text(
+                          "Entre",
+                          style: TextStyle(color: textDarkGrey),
+                        ),
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        SFDropdown(
+                          labelText: startingHour.hourString,
+                          items: availableHours
+                              .where((hour) => hour.hour < endingHour.hour)
+                              .map((hour) => hour.hourString)
+                              .toList(),
+                          validator: (a) {
+                            return null;
+                          },
+                          onChanged: (newStartingHour) {
+                            setState(() {
+                              startingHour = availableHours.firstWhere(
+                                  (element) =>
+                                      element.hourString == newStartingHour);
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        Text(
+                          "e",
+                          style: TextStyle(color: textDarkGrey),
+                        ),
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        SFDropdown(
+                          labelText: endingHour.hourString,
+                          items: availableHours
+                              .where((hour) => hour.hour > startingHour.hour)
+                              .map((hour) => hour.hourString)
+                              .toList(),
+                          validator: (newEndingHour) {
+                            return null;
+                          },
+                          onChanged: (newEndingHour) {
+                            setState(() {
+                              endingHour = availableHours.firstWhere(
+                                  (element) =>
+                                      element.hourString == newEndingHour);
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Text("Valor do cupom:")),
+                        Expanded(
+                          child: SFTextField(
+                            labelText: "",
+                            pourpose: TextFieldPourpose.Numeric,
+                            controller: couponValueController,
+                            validator: (a) {
+                              if (a == null || a.isEmpty) {
+                                return "Digite o valor do cupom";
+                              }
+                              int? value = int.tryParse(a);
+                              if (value == null) {
+                                return "Digite um número válido";
+                              } else if (value <= 0 || value > 100) {
+                                return "Entre 1 e 100";
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            prefixText: discountType == EnumDiscountType.Fixed
+                                ? "R\$"
+                                : null,
+                            sufixText:
+                                discountType == EnumDiscountType.Percentage
+                                    ? "%"
+                                    : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () => setState(() {
+                            discountType = EnumDiscountType.Fixed;
+                          }),
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                defaultBorderRadius,
+                              ),
+                              border: discountType == EnumDiscountType.Fixed
+                                  ? Border.all(color: primaryBlue, width: 2)
+                                  : Border.all(
+                                      color: divider,
+                                    ),
+                              color: discountType == EnumDiscountType.Fixed
+                                  ? blueBg
+                                  : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "R\$",
+                                style: TextStyle(
+                                  color: discountType == EnumDiscountType.Fixed
+                                      ? blueText
+                                      : textDarkGrey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        InkWell(
+                          onTap: () => setState(() {
+                            discountType = EnumDiscountType.Percentage;
+                          }),
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                defaultBorderRadius,
+                              ),
+                              border:
+                                  discountType == EnumDiscountType.Percentage
+                                      ? Border.all(color: primaryBlue, width: 2)
+                                      : Border.all(
+                                          color: divider,
+                                        ),
+                              color: discountType == EnumDiscountType.Percentage
+                                  ? blueBg
+                                  : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "%",
+                                style: TextStyle(
+                                  color: discountType ==
+                                          EnumDiscountType.Percentage
+                                      ? blueText
+                                      : textDarkGrey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    const SizedBox(
+                      height: 2 * defaultPadding,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SFButton(
+                            buttonLabel: "Voltar",
+                            buttonType: ButtonType.Secondary,
+                            onTap: widget.onReturn,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: defaultPadding,
+                        ),
+                        Expanded(
+                          child: SFButton(
+                            buttonLabel: "Adicionar cupom",
+                            buttonType: canAddCoupon
+                                ? ButtonType.Primary
+                                : ButtonType.Disabled,
+                            onTap: () {
+                              if (canAddCoupon) {
+                                if (formKey.currentState?.validate() == true) {}
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

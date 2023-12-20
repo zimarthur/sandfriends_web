@@ -69,29 +69,24 @@ class _CouponsScreenWebState extends State<CouponsScreenWeb> {
                 ],
               ),
               SizedBox(
-                height: height * 0.03,
+                height: defaultPadding * 2,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SFPeriodToggle(
-                    labels: [
-                      EnumPeriodVisualization.CurrentMonth.value,
-                      EnumPeriodVisualization.Custom.value,
-                    ],
-                    currentPeriodVisualization: viewModel.periodVisualization,
-                    customText: viewModel.customDateTitle,
-                    onChanged: (newPeriod) => viewModel.setPeriodVisualization(
-                      context,
-                      newPeriod,
+                  Text(
+                    "Ordenar por: ",
+                    style: TextStyle(
+                      color: textDarkGrey,
                     ),
                   ),
-                  Expanded(
-                    child: Container(),
+                  SizedBox(
+                    width: defaultPadding / 2,
                   ),
                 ],
               ),
               SizedBox(
-                height: height * 0.01,
+                height: defaultPadding,
               ),
               Expanded(
                 child: LayoutBuilder(

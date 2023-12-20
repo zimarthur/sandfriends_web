@@ -11,11 +11,13 @@ class DatePicker extends StatefulWidget {
   Function(List<DateTime?>)? onMultiDateSelected;
   bool multiDate;
   bool allowFutureDates;
+  bool allowPastDates;
   DatePicker({
     this.onDateSelected,
     this.onMultiDateSelected,
     this.multiDate = false,
     this.allowFutureDates = true,
+    this.allowPastDates = true,
   });
 
   @override
@@ -31,9 +33,11 @@ class _DatePickerState extends State<DatePicker> {
       config: CalendarDatePicker2Config(
         firstDayOfWeek: 1,
         weekdayLabels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-        firstDate: Provider.of<DataProvider>(context, listen: false)
-            .store!
-            .approvalDate,
+        firstDate: widget.allowPastDates == false
+            ? DateTime.now()
+            : Provider.of<DataProvider>(context, listen: false)
+                .store!
+                .approvalDate,
         calendarType: widget.multiDate
             ? CalendarDatePicker2Type.range
             : CalendarDatePicker2Type.single,
