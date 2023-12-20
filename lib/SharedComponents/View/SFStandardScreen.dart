@@ -33,8 +33,6 @@ class SFStandardScreen extends StatefulWidget {
 class _SFStandardScreenState extends State<SFStandardScreen> {
   @override
   Widget build(BuildContext context) {
-    print("Responsive.isMobile(context) " +
-        Responsive.isMobile(context).toString());
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -46,10 +44,12 @@ class _SFStandardScreenState extends State<SFStandardScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [primaryBlue, primaryLightBlue])),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [primaryBlue, primaryLightBlue],
+                ),
+              ),
               height: height,
               width: width,
               child: Center(

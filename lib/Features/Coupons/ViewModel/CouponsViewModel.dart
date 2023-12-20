@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Coupons/Model/CouponsTableCallback.dart';
+import 'package:sandfriends_web/Features/Coupons/Model/EnumOrderByCoupon.dart';
 import 'package:sandfriends_web/Features/Coupons/Repository/CouponsRepo.dart';
 import 'package:sandfriends_web/Features/Coupons/Repository/CouponsRepoImp.dart';
 import 'package:sandfriends_web/Features/Coupons/View/Web/AddCouponModal.dart';
@@ -35,20 +36,42 @@ class CouponsViewModel extends ChangeNotifier {
   List<String> sportsFilters = [];
 
   final List<Coupon> _coupons = [];
-  List<Coupon> get coupons => _coupons;
+  List<Coupon> get coupons {
+    switch (couponOrderBy) {
+      case EnumOrderByCoupon.DateAscending:
+        _coupons.sort((a, b) => a.endingDate.compareTo(b.endingDate));
+        break;
+      case EnumOrderByCoupon.DateDescending:
+        _coupons.sort((a, b) => b.endingDate.compareTo(a.endingDate));
+        break;
+      case EnumOrderByCoupon.MostUsed:
+        _coupons.sort((a, b) => b.timesUsed.compareTo(a.timesUsed));
+        break;
+    }
+    return _coupons;
+  }
 
   CouponsDataSource? couponsDataSource;
 
   void initViewModel(BuildContext context) {
+    _coupons.clear();
+    Provider.of<DataProvider>(context, listen: false).coupons.forEach((coupon) {
+      _coupons.add(coupon);
+    });
+    setCouponsDataSource(context);
+    notifyListeners();
+  }
+
+  List<EnumOrderByCoupon> availableCouponOrderBy = orderByCouponOptions;
+  EnumOrderByCoupon couponOrderBy = EnumOrderByCoupon.DateDescending;
+  void setCouponOrderBy(BuildContext context, String newOrder) {
+    couponOrderBy = availableCouponOrderBy
+        .firstWhere((element) => element.text == newOrder);
     setCouponsDataSource(context);
     notifyListeners();
   }
 
   void setCouponsDataSource(BuildContext context) {
-    _coupons.clear();
-    Provider.of<DataProvider>(context, listen: false).coupons.forEach((coupon) {
-      _coupons.add(coupon);
-    });
     couponsDataSource = CouponsDataSource(
       coupons: coupons,
       tableCallback: (callback, coupon, context) {

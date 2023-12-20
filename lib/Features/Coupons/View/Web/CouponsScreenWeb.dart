@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandfriends_web/Features/Coupons/Model/EnumOrderByCoupon.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFBarChart.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
@@ -83,6 +84,18 @@ class _CouponsScreenWebState extends State<CouponsScreenWeb> {
                   SizedBox(
                     width: defaultPadding / 2,
                   ),
+                  SFDropdown(
+                      labelText: viewModel.couponOrderBy.text,
+                      items: viewModel.availableCouponOrderBy
+                          .map((e) => e.text)
+                          .toList(),
+                      validator: (value) {},
+                      onChanged: (newOrder) => newOrder != null
+                          ? viewModel.setCouponOrderBy(
+                              context,
+                              newOrder,
+                            )
+                          : null),
                 ],
               ),
               SizedBox(
