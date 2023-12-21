@@ -54,10 +54,6 @@ class CouponsViewModel extends ChangeNotifier {
   CouponsDataSource? couponsDataSource;
 
   void initViewModel(BuildContext context) {
-    _coupons.clear();
-    Provider.of<DataProvider>(context, listen: false).coupons.forEach((coupon) {
-      _coupons.add(coupon);
-    });
     setCouponsDataSource(context);
     notifyListeners();
   }
@@ -72,6 +68,10 @@ class CouponsViewModel extends ChangeNotifier {
   }
 
   void setCouponsDataSource(BuildContext context) {
+    _coupons.clear();
+    Provider.of<DataProvider>(context, listen: false).coupons.forEach((coupon) {
+      _coupons.add(coupon);
+    });
     couponsDataSource = CouponsDataSource(
       coupons: coupons,
       tableCallback: (callback, coupon, context) {
@@ -143,15 +143,9 @@ class CouponsViewModel extends ChangeNotifier {
         Map<String, dynamic> responseBody = json.decode(
           response.responseBody!,
         );
-        Coupon updatedCoupon = Coupon.fromJson(
-          responseBody["Coupon"],
-          Provider.of<DataProvider>(context, listen: false).availableHours,
-        );
-        _coupons
-            .firstWhere((coupon) => coupon.idCoupon == updatedCoupon.idCoupon)
-            .isValid = updatedCoupon.isValid;
+        Provider.of<DataProvider>(context, listen: false)
+            .setCoupons(responseBody);
         setCouponsDataSource(context);
-        notifyListeners();
         Provider.of<MenuProvider>(context, listen: false)
             .setMessageModal("Cupom atualizado!", null, true);
       } else if (response.responseStatus ==
@@ -164,43 +158,6 @@ class CouponsViewModel extends ChangeNotifier {
     });
   }
 
-  // void searchCustomMatches(BuildContext context) {
-  //   Provider.of<MenuProvider>(context, listen: false).setModalLoading();
-  //   financesRepo
-  //       .searchCustomMatches(
-  //           context,
-  //           Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
-  //           customStartDate!,
-  //           customEndDate)
-  //       .then((response) {
-  //     if (response.responseStatus == NetworkResponseStatus.success) {
-  //       Map<String, dynamic> responseBody = json.decode(
-  //         response.responseBody!,
-  //       );
-  //       customMatches.clear();
-  //       for (var match in responseBody['Matches']) {
-  //         customMatches.add(
-  //           AppMatch.fromJson(
-  //             match,
-  //             Provider.of<DataProvider>(context, listen: false).availableHours,
-  //             Provider.of<DataProvider>(context, listen: false).availableSports,
-  //           ),
-  //         );
-  //       }
-  //       Provider.of<MenuProvider>(context, listen: false).closeModal();
-  //       periodVisualization = EnumPeriodVisualization.Custom;
-  //       setFinancesDataSource();
-  //       notifyListeners();
-  //     } else if (response.responseStatus ==
-  //         NetworkResponseStatus.expiredToken) {
-  //       Provider.of<MenuProvider>(context, listen: false).logout(context);
-  //     } else {
-  //       Provider.of<MenuProvider>(context, listen: false)
-  //           .setMessageModalFromResponse(response);
-  //     }
-  //   });
-  // }
-
   void closeModal(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
   }
@@ -209,8 +166,35 @@ class CouponsViewModel extends ChangeNotifier {
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       AddCouponModal(
         onReturn: () => closeModal(context),
-        onCreateCoupon: (coupon) {},
+        onCreateCoupon: (coupon) => addCoupon(context, coupon),
       ),
     );
+  }
+
+  void addCoupon(BuildContext context, Coupon coupon) {
+    Provider.of<MenuProvider>(context, listen: false).setModalLoading();
+    couponsRepo
+        .addCoupon(
+            context,
+            Provider.of<DataProvider>(context, listen: false).loggedAccessToken,
+            coupon)
+        .then((response) {
+      if (response.responseStatus == NetworkResponseStatus.success) {
+        Map<String, dynamic> responseBody = json.decode(
+          response.responseBody!,
+        );
+        Provider.of<DataProvider>(context, listen: false)
+            .setCoupons(responseBody);
+        setCouponsDataSource(context);
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModal("Cupom adicionado!", null, true);
+      } else if (response.responseStatus ==
+          NetworkResponseStatus.expiredToken) {
+        Provider.of<MenuProvider>(context, listen: false).logout(context);
+      } else {
+        Provider.of<MenuProvider>(context, listen: false)
+            .setMessageModalFromResponse(response);
+      }
+    });
   }
 }

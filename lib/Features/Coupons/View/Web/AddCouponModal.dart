@@ -36,8 +36,8 @@ class AddCouponModal extends StatefulWidget {
 
 class _AddCouponModalState extends State<AddCouponModal> {
   String couponCode = "";
+  String couponValue = "";
   EnumDiscountType discountType = EnumDiscountType.Fixed;
-  int couponValue = 0;
   DateTime? startDate;
   DateTime? endDate;
   late Hour startingHour;
@@ -45,15 +45,12 @@ class _AddCouponModalState extends State<AddCouponModal> {
   bool onDatePicker = false;
 
   bool get canAddCoupon =>
-      couponController.text.isNotEmpty &&
-      startDate != null &&
-      couponValueController.text.isNotEmpty;
+      couponCode.isNotEmpty && startDate != null && couponValue.isNotEmpty;
 
   List<Hour> availableHours = [];
   final formKey = GlobalKey<FormState>();
   TextEditingController couponController = TextEditingController();
   TextEditingController couponValueController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -61,7 +58,24 @@ class _AddCouponModalState extends State<AddCouponModal> {
         Provider.of<DataProvider>(context, listen: false).availableHours;
     startingHour = availableHours.first;
     endingHour = availableHours.last;
+    couponController.addListener(() {
+      setState(() {
+        couponCode = couponController.text;
+      });
+    });
+    couponValueController.addListener(() {
+      setState(() {
+        couponValue = couponValueController.text;
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    couponController.removeListener(() {});
+    couponValueController.removeListener(() {});
+    super.dispose();
   }
 
   @override
@@ -399,7 +413,26 @@ class _AddCouponModalState extends State<AddCouponModal> {
                                 : ButtonType.Disabled,
                             onTap: () {
                               if (canAddCoupon) {
-                                if (formKey.currentState?.validate() == true) {}
+                                if (formKey.currentState?.validate() == true) {
+                                  widget.onCreateCoupon(
+                                    Coupon(
+                                      idCoupon: 0,
+                                      couponCode: couponController.text,
+                                      value: double.parse(
+                                        couponValueController.text,
+                                      ),
+                                      discountType: discountType,
+                                      isValid: true,
+                                      creationDate: DateTime.now(),
+                                      startingDate: startDate!,
+                                      endingDate: endDate ?? startDate!,
+                                      hourBegin: startingHour,
+                                      hourEnd: endingHour,
+                                      timesUsed: 0,
+                                      profit: 0,
+                                    ),
+                                  );
+                                }
                               }
                             },
                           ),

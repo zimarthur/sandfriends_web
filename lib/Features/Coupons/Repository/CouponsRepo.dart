@@ -10,4 +10,10 @@ class CouponsRepo {
     Coupon coupon,
     bool disable,
   ) async {}
+
+  Future<NetworkResponse?> addCoupon(
+    BuildContext context,
+    String accessToken,
+    Coupon coupon,
+  ) async {}
 }

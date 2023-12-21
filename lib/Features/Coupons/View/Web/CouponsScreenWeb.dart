@@ -70,7 +70,7 @@ class _CouponsScreenWebState extends State<CouponsScreenWeb> {
                 ],
               ),
               SizedBox(
-                height: defaultPadding * 2,
+                height: defaultPadding,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -99,7 +99,7 @@ class _CouponsScreenWebState extends State<CouponsScreenWeb> {
                 ],
               ),
               SizedBox(
-                height: defaultPadding,
+                height: defaultPadding / 2,
               ),
               Expanded(
                 child: LayoutBuilder(

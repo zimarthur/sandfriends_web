@@ -107,7 +107,7 @@ class Coupon {
       isValid: json["IsValid"],
       timesUsed: json["TimesUsed"],
       profit: double.parse(
-        json["Profit"],
+        json["Profit"].toString(),
       ),
     );
   }

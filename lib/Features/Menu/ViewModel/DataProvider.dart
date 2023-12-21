@@ -319,38 +319,6 @@ class DataProvider extends ChangeNotifier {
         ),
       );
     }
-    coupons.add(
-      Coupon(
-        idCoupon: 2,
-        couponCode: "Sand20",
-        value: 20,
-        discountType: EnumDiscountType.Fixed,
-        isValid: true,
-        creationDate: DateTime(2023, 10, 1),
-        startingDate: DateTime(2023, 9, 1),
-        endingDate: DateTime(2023, 10, 1),
-        hourBegin: Hour(hour: 10, hourString: "10:00"),
-        hourEnd: Hour(hour: 20, hourString: "20:00"),
-        timesUsed: 4,
-        profit: 360,
-      ),
-    );
-    coupons.add(
-      Coupon(
-        idCoupon: 2,
-        couponCode: "Sand50",
-        value: 50,
-        discountType: EnumDiscountType.Percentage,
-        isValid: true,
-        creationDate: DateTime(2023, 9, 1),
-        startingDate: DateTime(2023, 9, 1),
-        endingDate: DateTime(2023, 12, 25),
-        hourBegin: Hour(hour: 10, hourString: "12:00"),
-        hourEnd: Hour(hour: 20, hourString: "18:00"),
-        timesUsed: 3,
-        profit: 90,
-      ),
-    );
   }
 
   bool _hasUnseenNotifications = false;

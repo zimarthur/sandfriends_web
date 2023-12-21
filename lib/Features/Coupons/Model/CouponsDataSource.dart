@@ -38,7 +38,7 @@ class CouponsDataSource extends DataGridSource {
                     coupon.startingDate,
                   )} - ${DateFormat("dd/MM/yy").format(
                     coupon.endingDate,
-                  )}\n${coupon.endingDate.difference(coupon.startingDate).inDays} dia(s)",
+                  )}",
                   style: TextStyle(
                     fontSize: 12,
                   ),
