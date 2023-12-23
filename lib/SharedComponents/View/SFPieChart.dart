@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
+import 'package:sandfriends_web/Utils/Responsive.dart';
+import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import 'dart:math' as math;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class SFPieChart extends StatefulWidget {
   List<PieChartItem> pieChartItems;
-  bool showLabels;
+  String? title;
+  bool labelsFirst;
 
   SFPieChart({
     super.key,
     required this.pieChartItems,
-    required this.showLabels,
+    this.title,
+    this.labelsFirst = false,
   });
 
   @override
@@ -44,41 +48,46 @@ class _SFPieChartState extends State<SFPieChart> {
         : LayoutBuilder(
             builder: (layoutContext, layoutConstraints) {
               return Row(
+                textDirection: widget.labelsFirst ? TextDirection.rtl : null,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    height: layoutConstraints.maxHeight,
+                    width: layoutConstraints.maxHeight,
                     child: PieChart(
                       PieChartData(
                         centerSpaceRadius: layoutConstraints.maxHeight * 0.1,
                         pieTouchData: PieTouchData(
                           touchCallback:
                               (FlTouchEvent event, pieTouchResponse) {
-                            if (widget.showLabels) {
-                              setState(() {
-                                if (!event.isInterestedForInteractions ||
-                                    pieTouchResponse == null ||
-                                    pieTouchResponse.touchedSection == null) {
-                                  touchedIndex = -1;
-                                  return;
-                                } else {
-                                  touchedIndex = pieTouchResponse
-                                      .touchedSection!.touchedSectionIndex;
-                                  if (touchedIndex >= 0) {
-                                    _scrollController.scrollTo(
-                                        index: touchedIndex,
-                                        duration:
-                                            const Duration(milliseconds: 150));
-                                  }
+                            setState(() {
+                              if (!event.isInterestedForInteractions ||
+                                  pieTouchResponse == null ||
+                                  pieTouchResponse.touchedSection == null) {
+                                touchedIndex = -1;
+                                return;
+                              } else {
+                                touchedIndex = pieTouchResponse
+                                    .touchedSection!.touchedSectionIndex;
+                                if (touchedIndex >= 0) {
+                                  _scrollController.scrollTo(
+                                      index: touchedIndex,
+                                      duration:
+                                          const Duration(milliseconds: 150));
                                 }
-                              });
-                            }
+                              }
+                            });
                           },
                         ),
                         sections: <PieChartSectionData>[
                           for (int i = 0; i < widget.pieChartItems.length; i++)
                             PieChartSectionData(
-                              title: widget.showLabels
-                                  ? "${(widget.pieChartItems[i].value * 100 / chartValuesSum).toStringAsFixed(0)}%"
-                                  : "",
+                              titleStyle: TextStyle(
+                                color: textWhite,
+                                fontSize:
+                                    Responsive.isMobile(context) ? 10 : null,
+                              ),
+                              title:
+                                  "${(widget.pieChartItems[i].value * 100 / chartValuesSum).toStringAsFixed(0)}%",
                               value: widget.pieChartItems[i].value,
                               color: widget.pieChartItems[i].color,
                               radius: i == touchedIndex
@@ -92,77 +101,83 @@ class _SFPieChartState extends State<SFPieChart> {
                       swapAnimationCurve: Curves.linear, // Optional
                     ),
                   ),
-                  if (widget.showLabels)
-                    Padding(
-                      padding: const EdgeInsets.all(defaultPadding / 2),
-                      child: SizedBox(
-                        width: 200,
-                        child: ScrollablePositionedList.builder(
-                          itemScrollController: _scrollController,
-                          itemCount: widget.pieChartItems.length,
-                          itemBuilder: (context, index) {
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              padding: index == touchedIndex
-                                  ? const EdgeInsets.all(defaultPadding / 2)
-                                  : const EdgeInsets.all(0),
-                              decoration: BoxDecoration(
-                                  color: index == touchedIndex
-                                      ? secondaryBack
-                                      : secondaryPaper,
-                                  border: index == touchedIndex
-                                      ? Border.all(color: primaryBlue, width: 2)
-                                      : const Border(),
-                                  borderRadius: BorderRadius.circular(
-                                      defaultBorderRadius)),
-                              child: Column(
+                  SizedBox(
+                    width: widget.labelsFirst ? 0 : defaultPadding * 2,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.title != null)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: defaultPadding / 2),
+                            child: Text(
+                              widget.title!,
+                              style: TextStyle(
+                                color: textDarkGrey,
+                              ),
+                            ),
+                          ),
+                        Expanded(
+                          child: ScrollablePositionedList.builder(
+                            itemScrollController: _scrollController,
+                            itemCount: widget.pieChartItems.length,
+                            itemBuilder: (context, index) {
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  Container(
+                                    height: defaultPadding,
+                                    width: defaultPadding,
+                                    decoration: BoxDecoration(
+                                      color: widget.pieChartItems[index].color,
+                                      borderRadius: BorderRadius.circular(
+                                        4,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: defaultPadding / 2,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        height: 10,
-                                        width: 10,
-                                        color:
-                                            widget.pieChartItems[index].color,
+                                      Text(
+                                        "${widget.pieChartItems[index].name} (${(widget.pieChartItems[index].value * 100 / chartValuesSum).toStringAsFixed(0)}%)",
+                                        style: TextStyle(
+                                          color: touchedIndex == index
+                                              ? widget
+                                                  .pieChartItems[index].color
+                                              : textDarkGrey,
+                                          fontSize: 12,
+                                          fontWeight: touchedIndex == index
+                                              ? FontWeight.bold
+                                              : null,
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        width: defaultPadding,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          widget.pieChartItems[index].name,
-                                          overflow: TextOverflow.ellipsis,
+                                      Text(
+                                        widget.pieChartItems[index].isPrice
+                                            ? widget.pieChartItems[index].value
+                                                .formatPrice()
+                                            : widget.pieChartItems[index].value
+                                                .toStringAsFixed(0),
+                                        style: TextStyle(
+                                          color: textLightGrey,
+                                          fontSize: 10,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  if (index == touchedIndex)
-                                    Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: defaultPadding + 10,
-                                        ),
-                                        Expanded(
-                                          child: AutoSizeText(
-                                            "${widget.pieChartItems[index].prefix == null ? "" : "${widget.pieChartItems[index].prefix} "}${widget.pieChartItems[index].value.toString()} (${(widget.pieChartItems[index].value * 100 / chartValuesSum).toStringAsFixed(0)}%)",
-                                            minFontSize: 8,
-                                            maxFontSize: 18,
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              color: textDarkGrey,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                 ],
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                  ),
                 ],
               );
             },
@@ -174,8 +189,11 @@ class PieChartItem {
   String name;
   double value;
   Color? color;
-  String? prefix;
+  bool isPrice;
 
   PieChartItem(
-      {required this.name, required this.value, this.prefix, this.color});
+      {required this.name,
+      required this.value,
+      this.isPrice = false,
+      this.color});
 }

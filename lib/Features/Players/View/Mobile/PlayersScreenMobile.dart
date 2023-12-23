@@ -10,6 +10,7 @@ import 'package:sandfriends_web/Features/Players/ViewModel/PlayersViewModel.dart
 import 'package:sandfriends_web/Features/Rewards/View/Mobile/PlayerCalendarFilter.dart';
 import 'package:sandfriends_web/SharedComponents/Model/EnumPeriodVisualization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFPieChartMobile.dart';
 import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import '../../../../SharedComponents/View/SFPieChart.dart';
 import '../../../../Utils/Constants.dart';
@@ -24,12 +25,27 @@ class PlayersScreenMobile extends StatefulWidget {
 
 class PlayersScreenMobileState extends State<PlayersScreenMobile> {
   final PlayersViewModel viewModel = PlayersViewModel();
+  final scrollController = ScrollController();
+  int indexPieChart = 0;
   bool isExpanded = false;
 
   @override
   void initState() {
     viewModel.initViewModel(context);
+    scrollController.addListener(() {
+      setState(() {
+        indexPieChart = (scrollController.offset /
+                scrollController.position.viewportDimension)
+            .floor();
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(() {});
+    super.dispose();
   }
 
   void expand() {
@@ -118,6 +134,61 @@ class PlayersScreenMobileState extends State<PlayersScreenMobile> {
                                         height: defaultPadding,
                                       ),
 
+                                      SizedBox(
+                                        height: 120,
+                                        child: LayoutBuilder(
+                                          builder: (_, layoutConstraints) {
+                                            return ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  viewModel.pieChartKpis.length,
+                                              physics: PageScrollPhysics(),
+                                              controller: scrollController,
+                                              itemBuilder: (context, index) {
+                                                return SizedBox(
+                                                  height: layoutConstraints
+                                                      .maxHeight,
+                                                  width: layoutConstraints
+                                                      .maxWidth,
+                                                  child: SFPieChartMobile(
+                                                    pieChartItems: viewModel
+                                                        .pieChartKpis[index]
+                                                        .pieChartitems,
+                                                    title: viewModel
+                                                        .pieChartKpis[index]
+                                                        .title,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        height: defaultPadding,
+                                        padding: EdgeInsets.only(
+                                            top: defaultPadding / 2),
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                viewModel.pieChartKpis.length,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemBuilder: (_, index) {
+                                              return Container(
+                                                height: defaultPadding,
+                                                width: defaultPadding,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: index == indexPieChart
+                                                      ? textBlue
+                                                      : divider,
+                                                ),
+                                              );
+                                            }),
+                                      ),
                                       // FinancePercentages(
                                       //   matchValue: viewModel.revenueFromMatch,
                                       //   matchPercentage:
@@ -132,7 +203,7 @@ class PlayersScreenMobileState extends State<PlayersScreenMobile> {
                                         height: defaultPadding,
                                       ),
                                       Text(
-                                        "Partidas",
+                                        "Jogadores",
                                         style: TextStyle(
                                           color: textDarkGrey,
                                         ),

@@ -261,7 +261,7 @@ class FinancesViewModel extends ChangeNotifier {
           PieChartItem(
             name: key,
             value: value.toDouble(),
-            prefix: "R\$",
+            isPrice: true,
             color: key == "Mensalista" ? primaryLightBlue : primaryBlue,
           ),
         );

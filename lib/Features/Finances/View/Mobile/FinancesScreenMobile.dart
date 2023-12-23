@@ -7,6 +7,7 @@ import 'package:sandfriends_web/Features/Finances/ViewModel/FinancesViewModel.da
 import 'package:sandfriends_web/Features/Rewards/View/Mobile/PlayerCalendarFilter.dart';
 import 'package:sandfriends_web/SharedComponents/Model/EnumPeriodVisualization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/SharedComponents/View/SFPieChartMobile.dart';
 import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import '../../../../SharedComponents/View/SFPieChart.dart';
 import '../../../../Utils/Constants.dart';
@@ -158,15 +159,12 @@ class FinancesScreenMobileState extends State<FinancesScreenMobile> {
                                   SizedBox(
                                     height: defaultPadding,
                                   ),
-                                  FinancePercentages(
-                                    matchValue: viewModel.revenueFromMatch,
-                                    matchPercentage:
-                                        viewModel.revenueFromMatchPercentage,
-                                    recurrentMatchValue:
-                                        viewModel.revenueFromRecurrentMatch,
-                                    recurrentMatchPercentage: viewModel
-                                        .revenueFromRecurrentMatchPercentage,
-                                    pieChartItems: viewModel.pieChartItems,
+                                  SizedBox(
+                                    height: 120,
+                                    child: SFPieChartMobile(
+                                      title: "Modalidade",
+                                      pieChartItems: viewModel.pieChartItems,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: defaultPadding,

@@ -136,7 +136,6 @@ class _RewardsScreenWebState extends State<RewardsScreenWeb> {
                                 title: "Recompensas mais recolhidas",
                                 child: SFPieChart(
                                   pieChartItems: viewModel.pieChartItems,
-                                  showLabels: true,
                                 ),
                               ),
                               const SizedBox(

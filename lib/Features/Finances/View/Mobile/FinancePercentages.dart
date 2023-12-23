@@ -132,7 +132,6 @@ class FinancePercentages extends StatelessWidget {
               width: layoutConstraints.maxHeight,
               child: SFPieChart(
                 pieChartItems: pieChartItems,
-                showLabels: false,
               ),
             );
           }),
