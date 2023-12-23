@@ -26,7 +26,7 @@ const error = Color.fromRGBO(248, 113, 113, 1);
 const success = Color.fromRGBO(3, 152, 85, 1);
 const success50 = Color.fromRGBO(236, 253, 243, 1);
 
-const blueText = Color.fromRGBO(68, 76, 231, 1);
+const blueText = textBlue;
 const blueBg = Color.fromRGBO(238, 244, 255, 1);
 const greenBg = Color.fromRGBO(236, 253, 243, 1);
 const greenText = Color.fromRGBO(2, 122, 72, 1);

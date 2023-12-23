@@ -23,10 +23,15 @@ class Coupon {
     if (discountType == EnumDiscountType.Fixed) {
       return value.formatPrice();
     } else {
-      return "$value%";
+      return "${value.toStringAsFixed(0)}%";
     }
   }
 
+  String get hourDescription =>
+      "${hourBegin.hourString} - ${hourEnd.hourString}";
+
+  String get dateDescription =>
+      "${DateFormat('dd/MM').format(startingDate)} - ${DateFormat('dd/MM').format(endDateTime)}";
   DateTime get startDateTime => DateFormat("dd/MM/yyyy HH:mm").parse(
         "${DateFormat('dd/MM/yyyy').format(
           startingDate,
@@ -39,19 +44,22 @@ class Coupon {
         )} ${hourEnd.hourString}",
       );
 
-  bool get isDateExpired {
+  bool get isValidToday {
     DateTime now = DateTime.now();
     DateTime start = startDateTime;
     DateTime end = endDateTime;
 
-    return now.isBefore(start) || now.isAfter(end);
+    return now.isAfter(start) && now.isBefore(end);
   }
+
+  bool get canBeDisabled =>
+      isValidToday || DateTime.now().isBefore(startDateTime);
 
   EnumCouponStatus get couponStatus {
     if (!isValid) {
       return EnumCouponStatus.Invalid;
     } else {
-      if (!isDateExpired) {
+      if (isValidToday) {
         return EnumCouponStatus.Valid;
       } else if (DateTime.now().isAfter(endDateTime)) {
         return EnumCouponStatus.Expired;

@@ -51,6 +51,7 @@ class Player {
       rank: availableRanks.firstWhere(
         (rank) => rank.idRankCategory == parsedJson["IdRankCategory"],
       ),
+      photo: parsedJson["Photo"],
     );
   }
   factory Player.fromStorePlayerJson(
@@ -95,6 +96,7 @@ class Player {
       isStorePlayer: refPlayer.isStorePlayer,
       sport: refPlayer.sport,
       rank: refPlayer.rank,
+      photo: refPlayer.photo,
     );
   }
 }

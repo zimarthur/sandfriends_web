@@ -15,6 +15,7 @@ import '../../../Utils/LocalStorageWeb.dart'
 import '../../../Utils/PageStatus.dart';
 import 'package:collection/collection.dart';
 
+import '../../Coupons/View/Mobile/CouponsScreenMobile.dart';
 import '../../Home/View/Web/HomeScreenWeb.dart';
 import '../../Home/View/Mobile/HomeScreenMobile.dart';
 import '../../MyCourts/View/Web/MyCourtsScreenWeb.dart';
@@ -271,14 +272,17 @@ class MenuProvider extends ChangeNotifier {
       widgetWeb: PlayersScreenWeb(),
       widgetMobile: PlayersScreenMobile(),
       mainDrawer: true,
+      availableMobile: true,
     ),
     DrawerItem(
       title: "Cupons de desconto",
       icon: r"assets/icon/discount.svg",
       requiresAdmin: true,
       widgetWeb: CouponsScreenWeb(),
-      widgetMobile: PlayersScreenMobile(),
+      widgetMobile: CouponsScreenMobile(),
       mainDrawer: true,
+      availableMobile: true,
+      isNew: true,
     ),
     DrawerItem(
       title: "Meu perfil",

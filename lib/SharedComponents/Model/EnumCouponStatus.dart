@@ -22,13 +22,13 @@ extension EnumCouponStatusColorText on EnumCouponStatus {
   Color get textColor {
     switch (this) {
       case EnumCouponStatus.Valid:
-        return greenText;
+        return blueText;
       case EnumCouponStatus.Expired:
         return redText;
       case EnumCouponStatus.Invalid:
-        return textWhite;
+        return textBlack;
       case EnumCouponStatus.Unavailable:
-        return blueText;
+        return textDarkGrey;
     }
   }
 }
@@ -37,13 +37,13 @@ extension EnumCouponStatusColorBg on EnumCouponStatus {
   Color get textBg {
     switch (this) {
       case EnumCouponStatus.Valid:
-        return greenBg;
+        return blueText;
       case EnumCouponStatus.Expired:
         return redBg;
       case EnumCouponStatus.Invalid:
-        return textBlack;
+        return textWhite;
       case EnumCouponStatus.Unavailable:
-        return blueBg;
+        return textLightGrey;
     }
   }
 }

@@ -12,6 +12,7 @@ import 'package:sandfriends_web/Features/Players/Model/PlayersDataSource.dart';
 import 'package:sandfriends_web/Features/Players/Model/PlayersTableCallback.dart';
 import 'package:sandfriends_web/Features/Players/Repository/PlayersRepoImp.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Coupon.dart';
+import 'package:sandfriends_web/SharedComponents/Model/EnumCouponStatus.dart';
 import 'package:sandfriends_web/SharedComponents/Model/EnumPeriodVisualization.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:intl/intl.dart';
@@ -37,19 +38,29 @@ class CouponsViewModel extends ChangeNotifier {
 
   final List<Coupon> _coupons = [];
   List<Coupon> get coupons {
+    List<Coupon> filteredCoupons = _coupons;
+    if (showOnlyActiveCoupons) {
+      filteredCoupons =
+          filteredCoupons.where((coupon) => coupon.isValidToday).toList();
+    }
     switch (couponOrderBy) {
       case EnumOrderByCoupon.DateAscending:
-        _coupons.sort((a, b) => a.endingDate.compareTo(b.endingDate));
+        filteredCoupons.sort((a, b) => a.endingDate.compareTo(b.endingDate));
         break;
       case EnumOrderByCoupon.DateDescending:
-        _coupons.sort((a, b) => b.endingDate.compareTo(a.endingDate));
+        filteredCoupons.sort((a, b) => b.endingDate.compareTo(a.endingDate));
         break;
       case EnumOrderByCoupon.MostUsed:
-        _coupons.sort((a, b) => b.timesUsed.compareTo(a.timesUsed));
+        filteredCoupons.sort((a, b) => b.timesUsed.compareTo(a.timesUsed));
         break;
     }
-    return _coupons;
+
+    return filteredCoupons;
   }
+
+  int get currentCoupons => coupons
+      .where((coupon) => coupon.couponStatus == EnumCouponStatus.Valid)
+      .length;
 
   CouponsDataSource? couponsDataSource;
 
@@ -123,6 +134,19 @@ class CouponsViewModel extends ChangeNotifier {
       onReturn: () =>
           Provider.of<MenuProvider>(context, listen: false).closeModal(),
     ));
+  }
+
+  bool editMode = false;
+  void toggleEdit() {
+    editMode = !editMode;
+    notifyListeners();
+  }
+
+  bool showOnlyActiveCoupons = false;
+  void toggleShowOnlyActiveCoupons(BuildContext context) {
+    showOnlyActiveCoupons = !showOnlyActiveCoupons;
+    setCouponsDataSource(context);
+    notifyListeners();
   }
 
   void enableDisableCoupon(

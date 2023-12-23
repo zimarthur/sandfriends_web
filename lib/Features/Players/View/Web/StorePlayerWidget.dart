@@ -5,7 +5,7 @@ import 'package:sandfriends_web/SharedComponents/Model/Rank.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFDropDown.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
 import 'package:sandfriends_web/Utils/Validators.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../SharedComponents/Model/Court.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../SharedComponents/Model/Sport.dart';
@@ -101,13 +101,25 @@ class _StorePlayerWidgetState extends State<StorePlayerWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                isEditingPlayer ? "Editar jogador" : "Adicionar jogador",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: textBlue,
-                ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    r"assets/icon/user_plus.svg",
+                    height: 30,
+                    color: primaryBlue,
+                  ),
+                  SizedBox(
+                    width: defaultPadding / 2,
+                  ),
+                  Text(
+                    isEditingPlayer ? "Editar jogador" : "Adicionar jogador",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: textBlue,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: defaultPadding / 2,

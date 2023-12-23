@@ -151,9 +151,7 @@ class CouponsDataSource extends DataGridSource {
       tooltip: "",
       itemBuilder: (BuildContext context) {
         List<PopupMenuItem> items = [];
-        print(!coupon.isValid);
-        print(DateTime.now().isAfter(coupon.endDateTime));
-        print(!coupon.isDateExpired);
+
         if (coupon.couponStatus == EnumCouponStatus.Valid ||
             coupon.couponStatus == EnumCouponStatus.Unavailable) {
           items.add(PopupMenuItem(
@@ -177,9 +175,7 @@ class CouponsDataSource extends DataGridSource {
             ),
           ));
         }
-        if (!coupon.isValid &&
-            (!coupon.isDateExpired ||
-                DateTime.now().isAfter(coupon.endDateTime))) {
+        if (!coupon.isValid && coupon.canBeDisabled) {
           items.add(
             PopupMenuItem(
               value: CouponsTableCallback.Enable,

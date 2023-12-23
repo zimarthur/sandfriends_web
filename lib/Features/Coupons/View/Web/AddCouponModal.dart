@@ -150,10 +150,13 @@ class _AddCouponModalState extends State<AddCouponModal> {
                     ),
                     Row(
                       children: [
-                        const Expanded(child: Text("Nome do cupom:")),
+                        if (!Responsive.isMobile(context))
+                          Expanded(child: Text("Nome do cupom:")),
                         Expanded(
                           child: SFTextField(
-                            labelText: "",
+                            labelText: Responsive.isMobile(context)
+                                ? "Nome do cupom"
+                                : "",
                             hintText: "Ex: SAND10",
                             textAlign: TextAlign.end,
                             pourpose: TextFieldPourpose.Standard,
@@ -173,8 +176,11 @@ class _AddCouponModalState extends State<AddCouponModal> {
                       height: defaultPadding,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text("Datas válidas:")),
+                        Responsive.isMobile(context)
+                            ? Expanded(child: Container())
+                            : Expanded(child: Text("Datas válidas:")),
                         InkWell(
                           onTap: () => setState(() {
                             onDatePicker = true;
@@ -217,9 +223,10 @@ class _AddCouponModalState extends State<AddCouponModal> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "Horários válidos:",
-                        ),
+                        if (!Responsive.isMobile(context))
+                          Text(
+                            "Horários válidos:",
+                          ),
                         Expanded(
                           child: Container(),
                         ),
@@ -281,10 +288,13 @@ class _AddCouponModalState extends State<AddCouponModal> {
                     ),
                     Row(
                       children: [
-                        Expanded(child: Text("Valor do cupom:")),
+                        if (!Responsive.isMobile(context))
+                          Expanded(child: Text("Valor do cupom:")),
                         Expanded(
                           child: SFTextField(
-                            labelText: "",
+                            labelText: Responsive.isMobile(context)
+                                ? "Valor do cupom"
+                                : "",
                             pourpose: TextFieldPourpose.Numeric,
                             controller: couponValueController,
                             validator: (a) {
