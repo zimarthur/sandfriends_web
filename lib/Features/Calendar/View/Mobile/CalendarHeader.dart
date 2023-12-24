@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../Utils/Constants.dart';
 import '../../../../Utils/SFDateTime.dart';
 import '../../../Menu/View/Mobile/SFStandardHeader.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CalendarHeader extends StatelessWidget {
   const CalendarHeader({super.key});
@@ -13,15 +14,55 @@ class CalendarHeader extends StatelessWidget {
     CalendarViewModel viewModel = Provider.of<CalendarViewModel>(context);
     return SFStandardHeader(
       title: "Calendário",
-      leftWidget: Container(
-        padding: EdgeInsets.only(left: defaultPadding),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "${monthsPortuguese[getSFMonthIndex(viewModel.selectedDay)]}/${viewModel.selectedDay.year.toString().substring(2)}",
-          style: TextStyle(
-            color: textWhite,
+      leftWidget: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: defaultPadding),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "${monthsPortuguese[getSFMonthIndex(viewModel.selectedDay)]}/${viewModel.selectedDay.year.toString().substring(2)}",
+              style: TextStyle(
+                color: textWhite,
+              ),
+            ),
           ),
-        ),
+          Expanded(
+            child: Container(),
+          ),
+          InkWell(
+            onTap: () => viewModel.onTapColorsDescription(context),
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  defaultBorderRadius / 2,
+                ),
+                border: Border.all(color: textWhite),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    match,
+                    recurrentMatch,
+                    secondaryYellowDark,
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "?",
+                  style: TextStyle(
+                    color: textWhite,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(),
+          ),
+        ],
       ),
       rightWidget: areInTheSameDay(DateTime.now(), viewModel.selectedDay)
           ? Container()

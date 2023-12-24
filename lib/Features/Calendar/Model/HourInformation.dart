@@ -16,8 +16,6 @@ class HourInformation {
   Hour timeBegin;
   Hour timeEnd;
   Court court;
-  int selectedRow;
-  int selectedColumn;
 
   AppMatch? refMatch;
   AppRecurrentMatch? refRecurrentMatch;
@@ -33,8 +31,6 @@ class HourInformation {
     required this.court,
     required this.timeBegin,
     required this.timeEnd,
-    required this.selectedColumn,
-    required this.selectedRow,
     this.refMatch,
     this.refRecurrentMatch,
   });

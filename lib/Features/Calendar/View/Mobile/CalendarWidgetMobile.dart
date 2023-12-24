@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/DayMatch.dart';
-import 'package:sandfriends_web/Features/Calendar/Model/HourInformation.dart';
-import 'package:sandfriends_web/Features/Calendar/View/Mobile/HourInformationWidget.dart';
-import 'package:sandfriends_web/Utils/TypesExtensions.dart';
-import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
-import 'package:provider/provider.dart';
-import '../../../../SharedComponents/Model/Hour.dart';
-import '../../../../Utils/Constants.dart';
-import '../../../../Utils/SFDateTime.dart';
-import '../../ViewModel/CalendarViewModel.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Mobile/CalendarEvent.dart';
+import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
+import 'package:sandfriends_web/Utils/Constants.dart';
 
+import '../../../../SharedComponents/Model/Hour.dart';
+import '../../Model/CalendarDailyCourtMatch.dart';
+import '../../ViewModel/CalendarViewModel.dart';
+import '../Web/Calendar/Day/SFCalendarDay.dart';
+import 'HourInformationWidget.dart';
+
+double hourColumnWidth = 50;
+double rowHeight = 80;
 const double minCellWidth = 150;
-const double hoursColumnWidth = 50;
+double columnWidth = minCellWidth;
+double calendarLeftPadding = defaultPadding / 2;
 
 class CalendarWidgetMobile extends StatefulWidget {
   CalendarViewModel viewModel;
-  CalendarWidgetMobile({required this.viewModel, super.key});
+  CalendarWidgetMobile({
+    required this.viewModel,
+    super.key,
+  });
 
   @override
   State<CalendarWidgetMobile> createState() => _CalendarWidgetMobileState();
@@ -30,11 +35,23 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
   late final Animation<Offset> _slideAnimation =
       Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero)
           .animate(_slideAnimationController);
+  final headerController = ScrollController();
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      double usefulWidth = MediaQuery.of(context).size.width -
+          calendarLeftPadding -
+          hourColumnWidth;
+      setState(() {
+        columnWidth =
+            (usefulWidth / widget.viewModel.courts.length) < minCellWidth
+                ? minCellWidth
+                : (usefulWidth / widget.viewModel.courts.length);
+      });
+
       widget.viewModel.horizontalController.addListener(() {
+        headerController.jumpTo(widget.viewModel.horizontalController.offset);
         disposeHourInfo();
       });
       widget.viewModel.verticalController.addListener(() {
@@ -62,34 +79,184 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        disposeHourInfo();
-      },
+    return Padding(
+      padding: EdgeInsets.only(
+        left: calendarLeftPadding,
+      ),
       child: Column(
         children: [
           Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(left: defaultPadding),
-                child:
-                    LayoutBuilder(builder: (layoutContext, layoutConstraints) {
-                  return TableView.builder(
-                    rowCount:
-                        widget.viewModel.selectedDayWorkingHours.length + 1,
-                    columnCount: widget.viewModel.courts.length + 1,
-                    columnBuilder: (index) =>
-                        _buildColumnSpan(index, layoutConstraints.maxWidth),
-                    rowBuilder: _buildRowSpan,
-                    cellBuilder: _buildCell,
-                    pinnedRowCount: 1,
-                    pinnedColumnCount: 1,
-                    verticalDetails: ScrollableDetails.vertical(
+            child: LayoutBuilder(builder: (_, layoutConstraints) {
+              List<Hour> hours = widget.viewModel.selectedDayWorkingHours;
+              List<Court> courts = widget.viewModel.courts;
+              return Stack(
+                children: [
+                  SizedBox(
+                    height: layoutConstraints.maxHeight,
+                    width: layoutConstraints.maxWidth,
+                    child: SingleChildScrollView(
                       controller: widget.viewModel.verticalController,
+                      child: Stack(
+                        children: [
+                          Column(
+                            children: [
+                              for (int hourIndex = 0;
+                                  hourIndex < hours.length + 1;
+                                  hourIndex++)
+                                Container(
+                                  width: layoutConstraints.maxWidth,
+                                  height: rowHeight,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: textLightGrey,
+                                        width: 2,
+                                      ),
+                                    ),
+                                  ),
+                                  padding:
+                                      EdgeInsets.only(top: defaultPadding / 2),
+                                  child: SizedBox(
+                                    width: 50,
+                                    child: Text(
+                                      hourIndex == 0
+                                          ? ""
+                                          : hours[hourIndex - 1].hourString,
+                                      style: TextStyle(
+                                        color: textDarkGrey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 50,
+                              ),
+                              Expanded(
+                                child: LayoutBuilder(builder:
+                                    (layoutContext, layoutConstraints) {
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    controller:
+                                        widget.viewModel.horizontalController,
+                                    child: Row(
+                                      children: [
+                                        for (int courtIndex = 0;
+                                            courtIndex < courts.length;
+                                            courtIndex++)
+                                          Builder(builder: (context) {
+                                            List<DayMatch> dayMatches = widget
+                                                .viewModel.selectedDayMatches
+                                                .firstWhere((dayMatch) =>
+                                                    dayMatch
+                                                        .court.idStoreCourt ==
+                                                    courts[courtIndex]
+                                                        .idStoreCourt)
+                                                .dayMatches;
+                                            return Column(
+                                              children: [
+                                                for (int dayMatchIndex = 0;
+                                                    dayMatchIndex <
+                                                        dayMatches.length + 1;
+                                                    dayMatchIndex++)
+                                                  dayMatchIndex == 0
+                                                      ? SizedBox(
+                                                          width: columnWidth,
+                                                          height: rowHeight,
+                                                        )
+                                                      : Container(
+                                                          width: columnWidth,
+                                                          height: dayMatches[
+                                                                          dayMatchIndex -
+                                                                              1]
+                                                                      .match !=
+                                                                  null
+                                                              ? rowHeight *
+                                                                  dayMatches[
+                                                                          dayMatchIndex -
+                                                                              1]
+                                                                      .match!
+                                                                      .matchDuration
+                                                              : dayMatches[dayMatchIndex -
+                                                                              1]
+                                                                          .recurrentMatch !=
+                                                                      null
+                                                                  ? rowHeight *
+                                                                      dayMatches[dayMatchIndex -
+                                                                              1]
+                                                                          .recurrentMatch!
+                                                                          .recurrentMatchDuration
+                                                                  : rowHeight,
+                                                          child: CalendarEvent(
+                                                            court: courts[
+                                                                courtIndex],
+                                                            dayMatch: dayMatches[
+                                                                dayMatchIndex -
+                                                                    1],
+                                                            viewModel: widget
+                                                                .viewModel,
+                                                            onTapDayMatch: () {
+                                                              _slideAnimationController
+                                                                  .forward();
+                                                            },
+                                                          ),
+                                                        )
+                                              ],
+                                            );
+                                          })
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    horizontalDetails: ScrollableDetails.horizontal(
-                        controller: widget.viewModel.horizontalController),
-                  );
-                })),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: hourColumnWidth,
+                    ),
+                    decoration: BoxDecoration(
+                      color: secondaryBack,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: textLightGrey,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    height: rowHeight,
+                    child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: headerController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: courts.length,
+                        itemBuilder: (context, courtIndex) {
+                          return Container(
+                            width: columnWidth,
+                            height: rowHeight,
+                            alignment: Alignment.center,
+                            child: Text(
+                              courts[courtIndex].description,
+                              style: TextStyle(
+                                color: primaryBlue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              );
+            }),
           ),
           if (widget.viewModel.showHourInfoMobile)
             HourInformationWidget(
@@ -102,264 +269,6 @@ class _CalendarWidgetMobileState extends State<CalendarWidgetMobile>
             ),
         ],
       ),
-    );
-  }
-
-  Widget _buildCell(BuildContext context, TableVicinity vicinity) {
-    int realRowIndex = vicinity.row - 1;
-    int realColumnIndex = vicinity.column - 1;
-
-    if (vicinity.column == 0) {
-      if (vicinity.row == 0) {
-        return Container();
-      } else {
-        return Text(
-          widget.viewModel.selectedDayWorkingHours[realRowIndex].hourString,
-          style: TextStyle(
-            color: textDarkGrey,
-          ),
-        );
-      }
-    } else if (vicinity.row == 0) {
-      return Center(
-        child: Text(
-          widget.viewModel.courts[realColumnIndex].description,
-          style: TextStyle(
-            color: primaryBlue,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      );
-    }
-    Hour displayHour = widget.viewModel.selectedDayWorkingHours[realRowIndex];
-    DayMatch displayDayMatch = widget
-        .viewModel.selectedDayMatchesMobile[realColumnIndex].dayMatches
-        .lastWhere(
-            (dayMatch) => dayMatch.startingHour.hour <= displayHour.hour);
-    bool hasEvent =
-        displayDayMatch.match != null || displayDayMatch.recurrentMatch != null;
-
-    if (hasEvent) {
-      Color widgetColor = displayDayMatch.match != null
-          ? displayDayMatch.match!.blocked
-              ? secondaryYellowDark
-              : !displayDayMatch.match!.isFromRecurrentMatch
-                  ? primaryBlue
-                  : primaryLightBlue
-          : displayDayMatch.recurrentMatch!.blocked
-              ? secondaryYellowDark
-              : primaryLightBlue;
-      return InkWell(
-        onTap: () {
-          _slideAnimationController.forward();
-          widget.viewModel.onTapHour(
-            HourInformation(
-              match: displayDayMatch.match != null,
-              recurrentMatch: displayDayMatch.recurrentMatch != null,
-              creatorName: displayDayMatch.match != null &&
-                      !displayDayMatch.match!.isFromRecurrentMatch
-                  ? "Partida de ${displayDayMatch.match!.matchCreatorName}"
-                  : "Mensalista de ${displayDayMatch.match != null ? displayDayMatch.match!.matchCreatorName : displayDayMatch.recurrentMatch!.creatorName}",
-              timeBegin: displayDayMatch.match != null
-                  ? displayDayMatch.match!.startingHour
-                  : displayDayMatch.recurrentMatch!.startingHour,
-              timeEnd: displayDayMatch.match != null
-                  ? displayDayMatch.match!.endingHour
-                  : displayDayMatch.recurrentMatch!.endingHour,
-              sport: displayDayMatch.match != null
-                  ? displayDayMatch.match!.sport
-                  : displayDayMatch.recurrentMatch!.sport,
-              cost: displayDayMatch.match != null
-                  ? displayDayMatch.match!.cost
-                  : displayDayMatch.recurrentMatch!.matchCost,
-              payInStore: displayDayMatch.match != null
-                  ? displayDayMatch.match!.payInStore
-                  : displayDayMatch.recurrentMatch!.payInStore,
-              selectedColumn: vicinity.column,
-              selectedRow: vicinity.row,
-              refMatch: displayDayMatch.match,
-              refRecurrentMatch: displayDayMatch.recurrentMatch,
-              court: widget.viewModel.courts[realColumnIndex],
-            ),
-          );
-        },
-        child: Container(
-          margin: EdgeInsets.all(
-            defaultPadding / 4,
-          ),
-          padding: EdgeInsets.all(
-            defaultPadding / 2,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              defaultBorderRadius,
-            ),
-            color: widgetColor.withAlpha(64),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 5,
-                decoration: BoxDecoration(
-                  color: widgetColor,
-                  borderRadius: BorderRadius.circular(
-                    defaultBorderRadius,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: defaultPadding / 2,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayDayMatch.match != null
-                          ? displayDayMatch.match!.matchCreatorName
-                          : displayDayMatch.recurrentMatch!.creatorName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: widgetColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      displayDayMatch.match != null
-                          ? displayDayMatch.match!.sport!.description
-                          : displayDayMatch.recurrentMatch!.sport!.description,
-                      style: TextStyle(
-                        color: textDarkGrey,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return InkWell(
-        onTap: () {
-          _slideAnimationController.forward();
-          widget.viewModel.onTapHour(
-            HourInformation(
-              creatorName: "Horário disponível",
-              timeBegin: widget.viewModel.selectedDayWorkingHours[realRowIndex],
-              timeEnd: widget.viewModel.availableHours.firstWhere((hour) =>
-                  hour.hour >
-                  widget.viewModel.selectedDayWorkingHours[realRowIndex].hour),
-              selectedColumn: vicinity.column,
-              selectedRow: vicinity.row,
-              freeHour: true,
-              court: widget.viewModel.courts[realColumnIndex],
-            ),
-          );
-        },
-        child: widget.viewModel.hourInformation != null
-            ? widget.viewModel.hourInformation!.selectedColumn ==
-                        vicinity.column &&
-                    widget.viewModel.hourInformation!.selectedRow ==
-                        vicinity.row
-                ? InkWell(
-                    onTap: () {
-                      if (!isHourPast(
-                        widget.viewModel.selectedDay,
-                        widget.viewModel.selectedDayWorkingHours[realRowIndex],
-                      )) {
-                        widget.viewModel.setAddMatchWidget(
-                          context,
-                          widget.viewModel.courts[realColumnIndex],
-                          widget
-                              .viewModel.selectedDayWorkingHours[realRowIndex],
-                          widget.viewModel.availableHours.firstWhere((hour) =>
-                              hour.hour >
-                              widget.viewModel
-                                  .selectedDayWorkingHours[realRowIndex].hour),
-                        );
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(
-                        defaultPadding / 4,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          defaultBorderRadius,
-                        ),
-                        border: Border.all(color: greenText, width: 2),
-                        color: greenBg,
-                      ),
-                      child: Center(
-                        child: Text(
-                          isHourPast(
-                            widget.viewModel.selectedDay,
-                            widget.viewModel
-                                .selectedDayWorkingHours[realRowIndex],
-                          )
-                              ? ""
-                              : "+",
-                          style: TextStyle(
-                            color: greenText,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container()
-            : Container(),
-      );
-    }
-  }
-
-  TableSpan _buildColumnSpan(int index, double maxWidth) {
-    const TableSpanDecoration decoration = TableSpanDecoration(
-      border: TableSpanBorder(),
-    );
-
-    switch (index) {
-      case 0:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(hoursColumnWidth),
-        );
-      default:
-        double columnWidth = (((maxWidth - hoursColumnWidth) /
-                    widget.viewModel.courts.length) <
-                minCellWidth)
-            ? minCellWidth
-            : ((maxWidth - hoursColumnWidth) / widget.viewModel.courts.length);
-
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: FixedTableSpanExtent(columnWidth),
-          onEnter: (_) => print('Entered column $index'),
-        );
-    }
-  }
-
-  TableSpan _buildRowSpan(int index) {
-    final TableSpanDecoration decoration = TableSpanDecoration(
-      color: secondaryBack,
-      border: const TableSpanBorder(
-        trailing: BorderSide(
-          width: 2,
-          color: textLightGrey,
-        ),
-      ),
-    );
-
-    return TableSpan(
-      backgroundDecoration: decoration,
-      extent: const FixedTableSpanExtent(60),
-      padding: TableSpanPadding.all(defaultPadding / 2),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/Model/CalendarWeeklyDayMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/Repository/CalendarRepoImp.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal/AddMatchModal.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Mobile/ColorsDescriptionModa.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/BlockHourWidget.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Web/Modal/CancelOptionsModal.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
@@ -648,10 +649,10 @@ class CalendarViewModel extends ChangeNotifier {
     } else {
       _showHourInfoMobile = !_showHourInfoMobile;
     }
-    if (!_showHourInfoMobile && hourInformation != null) {
-      hourInformation!.selectedRow = 0;
-      hourInformation!.selectedColumn = 0;
-    }
+    // if (!_showHourInfoMobile && hourInformation != null) {
+    //   hourInformation!.selectedRow = 0;
+    //   hourInformation!.selectedColumn = 0;
+    // }
     notifyListeners();
   }
 
@@ -1210,5 +1211,13 @@ class CalendarViewModel extends ChangeNotifier {
 
   void returnMainView(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
+  }
+
+  onTapColorsDescription(BuildContext context) {
+    Provider.of<MenuProvider>(context, listen: false).setModalForm(
+      ColorsDescriptionModal(
+        onReturn: () => returnMainView(context),
+      ),
+    );
   }
 }

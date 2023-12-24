@@ -36,6 +36,12 @@ const redText = Color.fromRGBO(181, 71, 8, 1);
 const red = Colors.red;
 const green = Color.fromRGBO(37, 211, 102, 1);
 
+const match = primaryBlue;
+const matchBg = Color.fromRGBO(197, 208, 242, 1);
+
+const recurrentMatch = primaryLightBlue;
+const recurrentMatchBg = Color.fromRGBO(182, 233, 237, 1);
+
 const defaultPadding = 16.0;
 const defaultBorderRadius = 16.0;
 

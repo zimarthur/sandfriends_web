@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/CalendarDatePickerMobile.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/CalendarHeader.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/CalendarWidgetMobile.dart';
+import 'package:sandfriends_web/Features/Calendar/View/Mobile/CalendarWidgetMobile.dart';
 import 'package:sandfriends_web/Features/Menu/View/Mobile/SFStandardHeader.dart';
 import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import '../../../../Utils/Constants.dart';
@@ -47,11 +48,7 @@ class _CalendarScreenMobileState extends State<CalendarScreenMobile> {
                     child: Column(
                   children: [
                     CalendarDatePickerMobile(),
-                    Expanded(
-                      child: CalendarWidgetMobile(
-                        viewModel: viewModel,
-                      ),
-                    ),
+                    Expanded(child: CalendarWidgetMobile(viewModel: viewModel)),
                   ],
                 ))
               ],

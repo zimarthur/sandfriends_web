@@ -42,12 +42,14 @@ class _HomeHeaderState extends State<HomeHeader> {
         ).image,
       );
       if (paletteGenerator.dominantColor != null) {
-        setState(() {
-          dominantColor = paletteGenerator.dominantColor!.color;
-          if (paletteGenerator.vibrantColor != null) {
-            secondColor = paletteGenerator.vibrantColor!.color;
-          }
-        });
+        if (mounted) {
+          setState(() {
+            dominantColor = paletteGenerator.dominantColor!.color;
+            if (paletteGenerator.vibrantColor != null) {
+              secondColor = paletteGenerator.vibrantColor!.color;
+            }
+          });
+        }
       }
     }
   }
