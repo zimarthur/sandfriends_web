@@ -86,6 +86,7 @@ class CalendarRepoImp implements CalendarRepo {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
@@ -101,6 +102,7 @@ class CalendarRepoImp implements CalendarRepo {
           "IdStorePlayer": idPlayer,
           "IdSport": idSport,
           "BlockedReason": obs,
+          "Price": price,
         },
       ),
     );
@@ -142,6 +144,7 @@ class CalendarRepoImp implements CalendarRepo {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) async {
     NetworkResponse response = await _apiService.postResponse(
       context,
@@ -157,6 +160,7 @@ class CalendarRepoImp implements CalendarRepo {
           "IdStorePlayer": idPlayer,
           "IdSport": idSport,
           "BlockedReason": obs,
+          "Price": price,
         },
       ),
     );

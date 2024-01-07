@@ -297,17 +297,12 @@ class _AddCouponModalState extends State<AddCouponModal> {
                                 : "",
                             pourpose: TextFieldPourpose.Numeric,
                             controller: couponValueController,
-                            validator: (a) {
-                              if (a == null || a.isEmpty) {
-                                return "Digite o valor do cupom";
-                              }
-                              int? value = int.tryParse(a);
-                              if (value == null) {
-                                return "Digite um número válido";
-                              } else if (value <= 0 || value > 100) {
-                                return "Entre 1 e 100";
-                              }
-                            },
+                            validator: (a) => priceValidator(
+                              a,
+                              "Digite o valor do cupom",
+                              min: 1,
+                              max: 100,
+                            ),
                             textAlign: TextAlign.center,
                             prefixText: discountType == EnumDiscountType.Fixed
                                 ? "R\$"

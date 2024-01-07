@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import '../../../../../SharedComponents/Model/Court.dart';
 import '../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../SharedComponents/Model/Player.dart';
@@ -26,6 +27,7 @@ class AddMatchModalGeneral extends StatefulWidget {
   List<Sport> sports;
   bool hasSelectedMatchType;
   Function(bool) setHasSelectedMatchType;
+  HourPrice currentHourPrice;
 
   AddMatchModalGeneral({
     required this.onSelected,
@@ -41,6 +43,7 @@ class AddMatchModalGeneral extends StatefulWidget {
     required this.sports,
     required this.hasSelectedMatchType,
     required this.setHasSelectedMatchType,
+    required this.currentHourPrice,
     super.key,
   });
 
@@ -49,6 +52,17 @@ class AddMatchModalGeneral extends StatefulWidget {
 }
 
 class _AddMatchModalGeneralState extends State<AddMatchModalGeneral> {
+  String price = "";
+  TextEditingController priceController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    price = widget.currentHourPrice.price.toString();
+    priceController.text = price;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -90,56 +104,81 @@ class _AddMatchModalGeneralState extends State<AddMatchModalGeneral> {
             double spacer = defaultPadding;
             double collapsedHeight = (constraints.maxHeight - spacer) / 2;
             double expandedHeight = constraints.maxHeight;
-            return Column(
-              children: [
-                AddMatchDetails(
-                  title: "Partida avulsa",
-                  subTitle:
-                      "Reserve o horário somente no dia e horário selecionado.",
-                  matchType: CalendarType.Match,
-                  selectedMatchType: widget.selectedMatchType,
-                  onTap: () => widget.onSelectMatchType(CalendarType.Match),
-                  height: widget.hasSelectedMatchType
-                      ? widget.selectedMatchType == CalendarType.Match
-                          ? expandedHeight
-                          : 0
-                      : collapsedHeight,
-                  isExpanded: widget.hasSelectedMatchType &&
-                      widget.selectedMatchType == CalendarType.Match,
-                  obsController: widget.obsController,
-                  sports: widget.sports,
-                  selectedSport: widget.selectedSport,
-                  selectedPlayer: widget.selectedPlayer,
-                  onTapSelectPlayer: (player) =>
-                      widget.onTapSelectPlayer(player),
-                ),
-                if (!widget.hasSelectedMatchType)
-                  SizedBox(
-                    height: spacer,
+            return Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  AddMatchDetails(
+                    title: "Partida avulsa",
+                    subTitle:
+                        "Reserve o horário somente no dia e horário selecionado.",
+                    matchType: CalendarType.Match,
+                    selectedMatchType: widget.selectedMatchType,
+                    onTap: () {
+                      widget.onSelectMatchType(CalendarType.Match);
+                      setState(() {
+                        price = widget.currentHourPrice.price.toString();
+                        priceController.text = price;
+                      });
+                    },
+                    priceController: priceController,
+                    height: widget.hasSelectedMatchType
+                        ? widget.selectedMatchType == CalendarType.Match
+                            ? expandedHeight
+                            : 0
+                        : collapsedHeight,
+                    isExpanded: widget.hasSelectedMatchType &&
+                        widget.selectedMatchType == CalendarType.Match,
+                    obsController: widget.obsController,
+                    sports: widget.sports,
+                    selectedSport: widget.selectedSport,
+                    selectedPlayer: widget.selectedPlayer,
+                    onTapSelectPlayer: (player) =>
+                        widget.onTapSelectPlayer(player),
+                    onChangePrice: (newPrice) => setState(() {
+                      price = newPrice;
+                    }),
                   ),
-                AddMatchDetails(
-                  title: "Partida mensalista",
-                  subTitle:
-                      "Deixe esse horário reservado recorrentemente todas semanas nesse dia e horário.",
-                  matchType: CalendarType.RecurrentMatch,
-                  selectedMatchType: widget.selectedMatchType,
-                  onTap: () =>
-                      widget.onSelectMatchType(CalendarType.RecurrentMatch),
-                  height: widget.hasSelectedMatchType
-                      ? widget.selectedMatchType == CalendarType.RecurrentMatch
-                          ? expandedHeight
-                          : 0
-                      : collapsedHeight,
-                  isExpanded: widget.hasSelectedMatchType &&
-                      widget.selectedMatchType == CalendarType.RecurrentMatch,
-                  obsController: widget.obsController,
-                  sports: widget.sports,
-                  selectedSport: widget.selectedSport,
-                  selectedPlayer: widget.selectedPlayer,
-                  onTapSelectPlayer: (player) =>
-                      widget.onTapSelectPlayer(player),
-                ),
-              ],
+                  if (!widget.hasSelectedMatchType)
+                    SizedBox(
+                      height: spacer,
+                    ),
+                  AddMatchDetails(
+                    title: "Partida mensalista",
+                    subTitle:
+                        "Deixe esse horário reservado recorrentemente todas semanas nesse dia e horário.",
+                    matchType: CalendarType.RecurrentMatch,
+                    selectedMatchType: widget.selectedMatchType,
+                    onTap: () {
+                      widget.onSelectMatchType(CalendarType.RecurrentMatch);
+                      setState(() {
+                        price = (widget.currentHourPrice.recurrentPrice ??
+                                widget.currentHourPrice.price)
+                            .toString();
+                        priceController.text = price;
+                      });
+                    },
+                    priceController: priceController,
+                    height: widget.hasSelectedMatchType
+                        ? widget.selectedMatchType ==
+                                CalendarType.RecurrentMatch
+                            ? expandedHeight
+                            : 0
+                        : collapsedHeight,
+                    isExpanded: widget.hasSelectedMatchType &&
+                        widget.selectedMatchType == CalendarType.RecurrentMatch,
+                    obsController: widget.obsController,
+                    sports: widget.sports,
+                    selectedSport: widget.selectedSport,
+                    selectedPlayer: widget.selectedPlayer,
+                    onTapSelectPlayer: (player) =>
+                        widget.onTapSelectPlayer(player),
+                    onChangePrice: (newPrice) => setState(() {
+                      price = newPrice;
+                    }),
+                  ),
+                ],
+              ),
             );
           }),
         ),
@@ -170,9 +209,11 @@ class _AddMatchModalGeneralState extends State<AddMatchModalGeneral> {
                         : "Continuar",
                     buttonType: ButtonType.Primary,
                     onTap: () {
+                      print("price ${price}");
                       if (!widget.hasSelectedMatchType) {
                         widget.setHasSelectedMatchType(true);
-                      } else if (widget.selectedPlayer != null) {
+                      } else if (widget.selectedPlayer != null &&
+                          formKey.currentState?.validate() == true) {
                         widget.onSelected(
                           BlockMatch(
                             isRecurrent: widget.selectedMatchType ==
@@ -185,6 +226,7 @@ class _AddMatchModalGeneralState extends State<AddMatchModalGeneral> {
                                     sport.description == widget.selectedSport)
                                 .idSport,
                             player: widget.selectedPlayer!,
+                            price: double.parse(price),
                           ),
                         );
                       }

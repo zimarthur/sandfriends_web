@@ -25,9 +25,10 @@ class BlockHourWidget extends StatefulWidget {
   Hour hour;
   Court court;
   VoidCallback onReturn;
-  Function(Player, int, String) onBlock;
+  Function(Player, int, String, double) onBlock;
   List<Sport> sports;
   VoidCallback onAddNewPlayer;
+  double standardPrice;
 
   BlockHourWidget({
     required this.isRecurrent,
@@ -38,6 +39,7 @@ class BlockHourWidget extends StatefulWidget {
     required this.onBlock,
     required this.sports,
     required this.onAddNewPlayer,
+    required this.standardPrice,
   });
 
   @override
@@ -49,6 +51,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
   final formKey = GlobalKey<FormState>();
   TextEditingController obsController = TextEditingController();
   TextEditingController playerController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool onPlayerSelection = false;
   Player? selectedPlayer;
@@ -56,6 +59,7 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
   @override
   void initState() {
     selectedSport = widget.sports.first.description;
+    priceController.text = widget.standardPrice.toString();
     super.initState();
   }
 
@@ -229,44 +233,74 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                     ))
                   else
                     Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(flex: 1, child: Text("Esporte:")),
-                              SFDropdown(
-                                labelText: selectedSport,
-                                items: widget.sports
-                                    .map((e) => e.description)
-                                    .toList(),
-                                validator: (value) {},
-                                onChanged: (p0) {
-                                  setState(() {
-                                    selectedSport = p0!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Gostaria de deixar alguma observação?",
-                                style: TextStyle(
-                                  color: textDarkGrey,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(flex: 1, child: Text("Esporte:")),
+                                    SFDropdown(
+                                      labelText: selectedSport,
+                                      items: widget.sports
+                                          .map((e) => e.description)
+                                          .toList(),
+                                      validator: (value) {},
+                                      onChanged: (p0) {
+                                        setState(() {
+                                          selectedSport = p0!;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SFTextField(
-                                labelText: "",
-                                pourpose: TextFieldPourpose.Multiline,
-                                minLines: 3,
-                                maxLines: 3,
-                                controller: obsController,
-                                validator: (a) {},
-                              ),
-                            ],
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        "Preço:",
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: SFTextField(
+                                        labelText: "",
+                                        pourpose: TextFieldPourpose.Numeric,
+                                        controller: priceController,
+                                        validator: (a) => priceValidator(
+                                          a,
+                                          "Digite o valor da partida",
+                                        ),
+                                        prefixText: "R\$",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Gostaria de deixar alguma observação?",
+                                      style: TextStyle(
+                                        color: textDarkGrey,
+                                      ),
+                                    ),
+                                    SFTextField(
+                                      labelText: "",
+                                      pourpose: TextFieldPourpose.Multiline,
+                                      minLines: 3,
+                                      maxLines: 3,
+                                      controller: obsController,
+                                      validator: (a) {},
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -304,6 +338,9 @@ class _BlockHourWidgetState extends State<BlockHourWidget> {
                                   (sport) => sport.description == selectedSport)
                               .idSport,
                           obsController.text,
+                          double.parse(
+                            priceController.text,
+                          ),
                         );
                       }
                     },

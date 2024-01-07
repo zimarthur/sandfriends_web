@@ -32,6 +32,7 @@ class CalendarRepo {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) async {}
 
   Future<NetworkResponse?> unblockHour(
@@ -51,5 +52,6 @@ class CalendarRepo {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) async {}
 }

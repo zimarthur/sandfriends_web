@@ -4,6 +4,7 @@ import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/Utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sandfriends_web/Utils/SFDateTime.dart';
+import 'package:sandfriends_web/Utils/TypesExtensions.dart';
 import '../../../../../../SharedComponents/Model/AppMatch.dart';
 import '../../../../../../SharedComponents/Model/Hour.dart';
 import '../../../../../../SharedComponents/Model/Sport.dart';
@@ -35,7 +36,7 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
   bool isOnHover = false;
 
   late String title;
-  late String subtitle;
+  late String sport;
   late bool blocked;
   late String startingHour;
   late String endingHour;
@@ -52,7 +53,7 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
       endingHour = widget.match!.endingHour.hourString;
       title =
           "${widget.match!.isFromRecurrentMatch ? "Mensalista" : "Partida"} de ${widget.match!.matchCreatorName}";
-      subtitle = widget.match!.sport!.description;
+      sport = widget.match!.sport!.description;
       if (blocked) {
         observation = widget.match!.blockedReason;
       } else {
@@ -63,7 +64,7 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
       canBlockUnblock = !isHourPast(
               widget.selectedDate, widget.recurrentMatch!.startingHour) ||
           widget.calendarType == CalendarType.RecurrentMatch;
-      subtitle = widget.recurrentMatch!.sport!.description;
+      sport = widget.recurrentMatch!.sport!.description;
       startingHour = widget.recurrentMatch!.startingHour.hourString;
       endingHour = widget.recurrentMatch!.endingHour.hourString;
       observation = blocked ? widget.recurrentMatch!.blockedReason : "";
@@ -143,13 +144,36 @@ class _MatchHourWidgetState extends State<MatchHourWidget> {
                         ],
                       ),
                       Text(
-                        "$startingHour - $endingHour",
-                        style: TextStyle(color: textDarkGrey),
+                        "$startingHour - $endingHour | $sport",
+                        style: TextStyle(
+                          color: textDarkGrey,
+                          fontSize: 12,
+                        ),
                       ),
-                      Text(
-                        subtitle,
-                        style: TextStyle(color: textDarkGrey),
-                      ),
+                      if (widget.match != null)
+                        Row(
+                          children: [
+                            Text(
+                              widget.match!.cost.formatPrice(),
+                              style: TextStyle(
+                                color: textDarkGrey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(
+                              width: defaultPadding / 4,
+                            ),
+                            widget.match!.payInStore
+                                ? SvgPicture.asset(
+                                    r"assets/icon/needs_payment.svg",
+                                    height: 15,
+                                  )
+                                : SvgPicture.asset(
+                                    r"assets/icon/already_paid.svg",
+                                    height: 15,
+                                  )
+                          ],
+                        ),
                     ],
                   ),
                   if (isOnHover && blocked && canBlockUnblock)

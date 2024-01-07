@@ -6,6 +6,7 @@ import '../../../../../SharedComponents/View/SFDropDown.dart';
 import '../../../../../SharedComponents/View/SFTextfield.dart';
 import '../../../../../SharedComponents/View/SelectPlayer.dart';
 import '../../../../../Utils/Constants.dart';
+import '../../../../../Utils/Validators.dart';
 import '../../../Model/CalendarType.dart';
 
 class AddMatchDetails extends StatefulWidget {
@@ -21,6 +22,8 @@ class AddMatchDetails extends StatefulWidget {
   String selectedSport;
   Player? selectedPlayer;
   Function(Player?) onTapSelectPlayer;
+  Function(String) onChangePrice;
+  TextEditingController priceController;
 
   AddMatchDetails(
       {required this.title,
@@ -35,6 +38,8 @@ class AddMatchDetails extends StatefulWidget {
       required this.selectedSport,
       required this.selectedPlayer,
       required this.onTapSelectPlayer,
+      required this.onChangePrice,
+      required this.priceController,
       super.key});
 
   @override
@@ -42,8 +47,6 @@ class AddMatchDetails extends StatefulWidget {
 }
 
 class _AddMatchDetailsState extends State<AddMatchDetails> {
-  final addMatchKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -104,6 +107,7 @@ class _AddMatchDetailsState extends State<AddMatchDetails> {
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 alignment: Alignment.centerLeft,
@@ -140,80 +144,102 @@ class _AddMatchDetailsState extends State<AddMatchDetails> {
                           padding: const EdgeInsets.only(
                             top: defaultPadding,
                           ),
-                          child: Form(
-                            key: addMatchKey,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: defaultPadding / 2),
-                                    child: Row(
-                                      children: [
-                                        Text("Jogador:"),
-                                        SizedBox(
-                                          width: defaultPadding,
-                                        ),
-                                        Expanded(
-                                          child: SelectPlayer(
-                                            player: widget.selectedPlayer,
-                                            onTap: () =>
-                                                widget.onTapSelectPlayer(
-                                              widget.selectedPlayer,
-                                            ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: defaultPadding / 2),
+                                  child: Row(
+                                    children: [
+                                      Text("Jogador:"),
+                                      SizedBox(
+                                        width: defaultPadding,
+                                      ),
+                                      Expanded(
+                                        child: SelectPlayer(
+                                          player: widget.selectedPlayer,
+                                          onTap: () => widget.onTapSelectPlayer(
+                                            widget.selectedPlayer,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: defaultPadding / 2),
-                                    child: Row(
-                                      children: [
-                                        Text("Esporte:"),
-                                        SizedBox(
-                                          width: defaultPadding / 2,
-                                        ),
-                                        Expanded(
-                                            child: SFDropdown(
-                                          align: Alignment.centerRight,
-                                          labelText: widget.selectedSport,
-                                          items: widget.sports
-                                              .map((e) => e.description)
-                                              .toList(),
-                                          validator: (value) {},
-                                          onChanged: (p0) {
-                                            setState(() {
-                                              widget.selectedSport = p0!;
-                                            });
-                                          },
-                                        )),
-                                      ],
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Observação:",
-                                        style: TextStyle(
-                                          color: textDarkGrey,
-                                        ),
-                                      ),
-                                      SFTextField(
-                                        labelText: "",
-                                        pourpose: TextFieldPourpose.Multiline,
-                                        minLines: 3,
-                                        maxLines: 3,
-                                        controller: widget.obsController,
-                                        validator: (a) {},
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: defaultPadding / 2),
+                                  child: Row(
+                                    children: [
+                                      Text("Esporte:"),
+                                      SizedBox(
+                                        width: defaultPadding / 2,
+                                      ),
+                                      Expanded(
+                                          child: SFDropdown(
+                                        align: Alignment.centerRight,
+                                        labelText: widget.selectedSport,
+                                        items: widget.sports
+                                            .map((e) => e.description)
+                                            .toList(),
+                                        validator: (value) {},
+                                        onChanged: (p0) {
+                                          setState(() {
+                                            widget.selectedSport = p0!;
+                                          });
+                                        },
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: defaultPadding / 2),
+                                  child: Row(
+                                    children: [
+                                      Expanded(child: Text("Preço:")),
+                                      SizedBox(
+                                        width: defaultPadding / 2,
+                                      ),
+                                      Expanded(
+                                        child: SFTextField(
+                                          labelText: "",
+                                          pourpose: TextFieldPourpose.Numeric,
+                                          textAlign: TextAlign.center,
+                                          controller: widget.priceController,
+                                          onChanged: (a) =>
+                                              widget.onChangePrice(a),
+                                          validator: (a) => priceValidator(
+                                            a,
+                                            "Digite o valor da partida",
+                                          ),
+                                          prefixText: "R\$",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Observação:",
+                                      style: TextStyle(
+                                        color: textDarkGrey,
+                                      ),
+                                    ),
+                                    SFTextField(
+                                      labelText: "",
+                                      pourpose: TextFieldPourpose.Multiline,
+                                      minLines: 3,
+                                      maxLines: 3,
+                                      controller: widget.obsController,
+                                      validator: (a) {},
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),

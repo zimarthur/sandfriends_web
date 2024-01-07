@@ -9,6 +9,7 @@ class BlockMatch {
   Player player;
   String observation;
   int idSport;
+  double price;
 
   BlockMatch({
     required this.isRecurrent,
@@ -17,5 +18,6 @@ class BlockMatch {
     required this.player,
     required this.observation,
     required this.idSport,
+    required this.price,
   });
 }

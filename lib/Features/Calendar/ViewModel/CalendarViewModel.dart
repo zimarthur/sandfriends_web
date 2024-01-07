@@ -16,6 +16,7 @@ import 'package:sandfriends_web/Features/Players/View/Web/StorePlayerWidget.dart
 import 'package:sandfriends_web/Remote/NetworkResponse.dart';
 import 'package:sandfriends_web/SharedComponents/Model/AppRecurrentMatch.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Court.dart';
+import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/Model/OperationDay.dart';
 import 'package:sandfriends_web/SharedComponents/Model/StoreWorkingHours.dart';
 import 'package:sandfriends_web/Utils/Responsive.dart';
@@ -735,6 +736,7 @@ class CalendarViewModel extends ChangeNotifier {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
@@ -747,6 +749,7 @@ class CalendarViewModel extends ChangeNotifier {
       idPlayer,
       idSport,
       obs,
+      price,
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
@@ -804,6 +807,7 @@ class CalendarViewModel extends ChangeNotifier {
     int idPlayer,
     int idSport,
     String obs,
+    double price,
   ) {
     Provider.of<MenuProvider>(context, listen: false).setModalLoading();
     calendarRepo
@@ -816,6 +820,7 @@ class CalendarViewModel extends ChangeNotifier {
       idPlayer,
       idSport,
       obs,
+      price,
     )
         .then((response) {
       if (response.responseStatus == NetworkResponseStatus.success) {
@@ -967,15 +972,35 @@ class CalendarViewModel extends ChangeNotifier {
     Court court,
     Hour hour,
   ) {
+    int standardPrice = Provider.of<DataProvider>(context, listen: false)
+        .courts
+        .firstWhere(
+          (loopCourt) => loopCourt.idStoreCourt == court.idStoreCourt,
+        )
+        .operationDays
+        .firstWhere(
+          (opDay) =>
+              opDay.weekday ==
+              getSFWeekday(
+                selectedDay.weekday,
+              ),
+        )
+        .prices
+        .firstWhere(
+          (hourPrice) => hourPrice.startingHour.hour == hour.hour,
+        )
+        .price;
+
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       BlockHourWidget(
         isRecurrent: false,
         court: court,
         day: selectedDay,
         hour: hour,
+        standardPrice: standardPrice.toDouble(),
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
-        onBlock: (player, idSport, obs) => blockHour(
+        onBlock: (player, idSport, obs, price) => blockHour(
           context,
           court.idStoreCourt!,
           selectedDay,
@@ -983,6 +1008,7 @@ class CalendarViewModel extends ChangeNotifier {
           player.id!,
           idSport,
           obs,
+          price,
         ),
         onAddNewPlayer: () => genericAddNewPlayer(
           context,
@@ -999,16 +1025,38 @@ class CalendarViewModel extends ChangeNotifier {
 
   void setRecurrentBlockHourWidget(
       BuildContext context, Court court, Hour hour) {
+    HourPrice standardPrice = Provider.of<DataProvider>(context, listen: false)
+        .courts
+        .firstWhere(
+          (loopCourt) => loopCourt.idStoreCourt == court.idStoreCourt,
+        )
+        .operationDays
+        .firstWhere(
+          (opDay) => opDay.weekday == selectedWeekday,
+        )
+        .prices
+        .firstWhere(
+          (hourPrice) => hourPrice.startingHour.hour == hour.hour,
+        );
     Provider.of<MenuProvider>(context, listen: false).setModalForm(
       BlockHourWidget(
         isRecurrent: true,
         court: court,
         day: selectedDay,
+        standardPrice: standardPrice.recurrentPrice?.toDouble() ??
+            standardPrice.price.toDouble(),
         sports:
             Provider.of<DataProvider>(context, listen: false).availableSports,
         hour: hour,
-        onBlock: (player, idSport, obs) => recurrentBlockHour(
-            context, court.idStoreCourt!, hour, player.id!, idSport, obs),
+        onBlock: (player, idSport, obs, price) => recurrentBlockHour(
+          context,
+          court.idStoreCourt!,
+          hour,
+          player.id!,
+          idSport,
+          obs,
+          price,
+        ),
         onAddNewPlayer: () => genericAddNewPlayer(
           context,
           () => setRecurrentBlockHourWidget(
@@ -1077,6 +1125,24 @@ class CalendarViewModel extends ChangeNotifier {
     CalendarType? calendarType,
   }) {
     if (!isHourPast(selectedDay, timeBegin)) {
+      HourPrice standardPrice =
+          Provider.of<DataProvider>(context, listen: false)
+              .courts
+              .firstWhere(
+                (loopCourt) => loopCourt.idStoreCourt == court.idStoreCourt,
+              )
+              .operationDays
+              .firstWhere(
+                (opDay) =>
+                    opDay.weekday ==
+                    getSFWeekday(
+                      selectedDay.weekday,
+                    ),
+              )
+              .prices
+              .firstWhere(
+                (hourPrice) => hourPrice.startingHour.hour == timeBegin.hour,
+              );
       Provider.of<MenuProvider>(context, listen: false).setModalForm(
         AddMatchModal(
           onReturn: () => returnMainView(context),
@@ -1089,6 +1155,7 @@ class CalendarViewModel extends ChangeNotifier {
                 blockMatch.player.id!,
                 blockMatch.idSport,
                 blockMatch.observation,
+                blockMatch.price,
               );
             } else {
               blockHour(
@@ -1099,6 +1166,7 @@ class CalendarViewModel extends ChangeNotifier {
                 blockMatch.player.id!,
                 blockMatch.idSport,
                 blockMatch.observation,
+                blockMatch.price,
               );
             }
           },
@@ -1116,6 +1184,7 @@ class CalendarViewModel extends ChangeNotifier {
           timeBegin: timeBegin,
           timeEnd: timeEnd,
           initCalendarType: calendarType,
+          currentHourPrice: standardPrice,
         ),
       );
     }

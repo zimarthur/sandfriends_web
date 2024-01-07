@@ -22,7 +22,7 @@ extension EnumCouponStatusColorText on EnumCouponStatus {
   Color get textColor {
     switch (this) {
       case EnumCouponStatus.Valid:
-        return blueText;
+        return match;
       case EnumCouponStatus.Expired:
         return redText;
       case EnumCouponStatus.Invalid:
@@ -37,7 +37,7 @@ extension EnumCouponStatusColorBg on EnumCouponStatus {
   Color get textBg {
     switch (this) {
       case EnumCouponStatus.Valid:
-        return blueText;
+        return matchBg;
       case EnumCouponStatus.Expired:
         return redBg;
       case EnumCouponStatus.Invalid:

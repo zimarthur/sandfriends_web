@@ -4,6 +4,7 @@ import 'package:sandfriends_web/Features/Calendar/Model/BlockMatch.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal/AddMatchDetails.dart';
 import 'package:sandfriends_web/Features/Calendar/View/Mobile/AddMatchModal/AddMatchModalGeneral.dart';
 import 'package:sandfriends_web/Features/Menu/ViewModel/DataProvider.dart';
+import 'package:sandfriends_web/SharedComponents/Model/HourPrice.dart';
 import 'package:sandfriends_web/SharedComponents/View/PlayersSelection.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFButton.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFTextfield.dart';
@@ -26,10 +27,12 @@ class AddMatchModal extends StatefulWidget {
   Court court;
   Function(CalendarType) onAddNewPlayer;
   CalendarType? initCalendarType;
+  HourPrice currentHourPrice;
 
   AddMatchModal({
     required this.onReturn,
     required this.onSelected,
+    required this.currentHourPrice,
     required this.timeBegin,
     required this.timeEnd,
     required this.court,
@@ -79,7 +82,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
         boxShadow: const [BoxShadow(blurRadius: 1, color: primaryDarkBlue)],
       ),
       width: width * 0.9,
-      height: height * 0.7,
+      height: height * 0.8,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,6 +150,7 @@ class _AddMatchModalState extends State<AddMatchModal> {
                         hasSelectedMatchType = p0;
                       });
                     },
+                    currentHourPrice: widget.currentHourPrice,
                   )
                 : Column(
                     children: [

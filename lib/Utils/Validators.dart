@@ -116,3 +116,19 @@ String? lettersValidator(String? value, String onNull) {
     }
   }
 }
+
+String? priceValidator(String? value, String? onNull, {int? min, int? max}) {
+  if (value == null || value.isEmpty) {
+    return onNull ?? "Digite o valor";
+  }
+  int? parsed = int.tryParse(value);
+  if (parsed == null) {
+    return "Digite um número válido";
+  }
+  if (min != null && max != null) {
+    if (parsed <= min || parsed > max) {
+      return "Entre $min e $max";
+    }
+  }
+  return null;
+}
