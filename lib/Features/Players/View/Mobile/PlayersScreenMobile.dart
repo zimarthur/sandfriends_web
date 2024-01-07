@@ -234,6 +234,8 @@ class PlayersScreenMobileState extends State<PlayersScreenMobile> {
                                                     viewModel.players.length,
                                                 itemBuilder: (context, index) {
                                                   return PlayerItem(
+                                                    openWhatsApp: ()=>viewModel.openWhatsApp(context, viewModel
+                                                          .players[index]),
                                                       player: viewModel
                                                           .players[index]);
                                                 },

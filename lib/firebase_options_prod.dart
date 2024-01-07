@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -52,6 +49,14 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyACNkmqOyYaCZKYyDuZRDpYp1weZrI3aqI',
+    appId: '1:329100803665:android:1a81f3597ada3614af4270',
+    messagingSenderId: '329100803665',
+    projectId: 'sandfriends-prod',
+    storageBucket: 'sandfriends-prod.appspot.com',
+  );
+
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDT0kQqFx2InNi3bVKsmN0NhkbqyXhFK-Q',
     appId: '1:329100803665:ios:9e329b79adc0e97caf4270',
@@ -59,7 +64,7 @@ class DefaultFirebaseOptions {
     projectId: 'sandfriends-prod',
     storageBucket: 'sandfriends-prod.appspot.com',
     androidClientId: '329100803665-0l7lmmcdfoqkg0h9vjffqmsk79p4b531.apps.googleusercontent.com',
-    iosClientId: '329100803665-n566cd89i1hki8agb7qit1at2odbhgmg.apps.googleusercontent.com',
+    iosClientId: '329100803665-bqlce4fk9ggfaunifvgkhflg9nkuv822.apps.googleusercontent.com',
     iosBundleId: 'com.sandfriends.quadras.prod',
   );
 }

@@ -11,7 +11,8 @@ import 'package:sandfriends_web/SharedComponents/Model/Gender.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Player.dart';
 import 'package:sandfriends_web/SharedComponents/Model/Sport.dart';
 import 'package:sandfriends_web/SharedComponents/View/SFPieChart.dart';
-
+import 'package:sandfriends_web/Utils/LinkOpenerWeb.dart'
+    if (dart.library.io) 'package:sandfriends_web/Utils/LinkOpenerMobile.dart';
 import '../../../Remote/NetworkResponse.dart';
 import '../../Menu/ViewModel/MenuProvider.dart';
 import '../View/Web/StorePlayerWidget.dart';
@@ -265,5 +266,11 @@ class PlayersViewModel extends ChangeNotifier {
 
   void closeModal(BuildContext context) {
     Provider.of<MenuProvider>(context, listen: false).closeModal();
+  }
+
+  openWhatsApp(BuildContext context, Player player) {
+    if(player.phoneNumber != null){
+      openLink(context, "whatsapp://send?phone=${player.phoneNumber}");
+    }
   }
 }

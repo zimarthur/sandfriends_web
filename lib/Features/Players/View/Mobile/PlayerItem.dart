@@ -10,7 +10,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class PlayerItem extends StatelessWidget {
   Player player;
-  PlayerItem({required this.player, super.key});
+  VoidCallback openWhatsApp;
+  PlayerItem({required this.player,required this.openWhatsApp, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +88,21 @@ class PlayerItem extends StatelessWidget {
               SizedBox(
                 width: defaultPadding / 2,
               ),
-              SvgPicture.asset(
-                r"assets/icon/whatsapp.svg",
-                color: player.phoneNumber == null
-                    ? divider
-                    : player.phoneNumber!.isEmpty
-                        ? divider
-                        : greenText,
+              InkWell(
+                onTap: (){
+                  if(player.phoneNumber != null){
+                    openWhatsApp();
+                    
+                  }
+                },
+                child: SvgPicture.asset(
+                  r"assets/icon/whatsapp.svg",
+                  color: player.phoneNumber == null
+                      ? divider
+                      : player.phoneNumber!.isEmpty
+                          ? divider
+                          : greenText,
+                ),
               ),
             ],
           ),

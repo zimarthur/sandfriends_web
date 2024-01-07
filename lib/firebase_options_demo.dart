@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options_demo.dart';
+/// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -63,8 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '496096595246',
     projectId: 'sandfriends-demo-1e87f',
     storageBucket: 'sandfriends-demo-1e87f.appspot.com',
-    iosClientId:
-        '496096595246-qeuclkgc0t3og75euhko0sm3blbelb23.apps.googleusercontent.com',
+    androidClientId: '496096595246-kg0drt0sqti3bolq927nbgq0g9c0m66o.apps.googleusercontent.com',
+    iosClientId: '496096595246-67eqmoohovmo6krsibquothv2epo9jmd.apps.googleusercontent.com',
     iosBundleId: 'com.sandfriends.quadras.demo',
   );
 }

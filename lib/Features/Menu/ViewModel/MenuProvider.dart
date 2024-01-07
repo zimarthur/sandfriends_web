@@ -235,7 +235,6 @@ class MenuProvider extends ChangeNotifier {
       widgetMobile: const CalendarScreenMobile(),
       mainDrawer: true,
       availableMobile: true,
-      isNew: true,
     ),
     DrawerItem(
       title: "Recompensas",
@@ -273,6 +272,7 @@ class MenuProvider extends ChangeNotifier {
       widgetMobile: PlayersScreenMobile(),
       mainDrawer: true,
       availableMobile: true,
+      isNew: true,
     ),
     DrawerItem(
       title: "Cupons de desconto",

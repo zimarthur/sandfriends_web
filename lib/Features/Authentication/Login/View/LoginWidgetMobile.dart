@@ -48,9 +48,12 @@ class _LoginWidgetMobileState extends State<LoginWidgetMobile> {
               key: widget.viewModel.loginFormKey,
               child: Column(
                 children: [
-                  Image.asset(
-                    r'assets/full_logo_negative_284_courts.png',
-                    width: width * 0.8,
+                  InkWell(
+                    onTap: ()=> throw Exception("erro sandfriends 2"),
+                    child: Image.asset(
+                      r'assets/full_logo_negative_284_courts.png',
+                      width: width * 0.8,
+                    ),
                   ),
                   SizedBox(
                     height: defaultPadding * 2,
